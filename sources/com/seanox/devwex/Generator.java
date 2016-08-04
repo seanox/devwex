@@ -34,7 +34,6 @@ import java.util.Hashtable;
  *  Es k&oouml;nnen der komplette Inhalt oder auch nur einzelne Segmente
  *  bef&uuml;llt und herausgel&ouml;st werden.<br>
  *  <dir><b>Beschreibung der Syntax</b></dir>
- *  
  *  <table>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">

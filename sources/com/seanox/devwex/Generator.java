@@ -253,8 +253,6 @@ public class Generator {
         return this.prepare(bytes, null, null, 2);
     }
 
-
-    
     /**
      *  Bereitet in der &uuml;bergeben Vorlage alle Plazthalter zum angegebenen
      *  Scope bzw. Segment vor bzw. auf oder bereinigt diese.

@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Developing
- *  Copyright (C) 2013 Seanox Software Solutions
+ *  Copyright (C) 2016 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -36,12 +36,12 @@ import java.net.UnknownHostException;
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 1.2013.0606<br>
- *  Copyright (C) 2013 Seanox Software Solutions<br>
+ *  Remote 5.0 20160804<br>
+ *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 1.2013.0606
+ *  @version 5.0 20160804
  */
 public class Remote implements Runnable {
 

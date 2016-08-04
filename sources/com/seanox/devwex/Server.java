@@ -62,7 +62,7 @@ public class Server implements Runnable {
     /** Kennung und Bezeichnung des Servers */
     private volatile String caption;
 
-    /** Session Objekte der eingerichteten Verbindungen */
+    /** Listener der eingerichteten Verbindungen */
     private volatile Vector listener;
 
     /**
@@ -228,7 +228,7 @@ public class Server implements Runnable {
     /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
     public void run() {
 
-        Listener    session;
+        Listener    listener;
         Section     options;
         Thread      thread;
         Enumeration enumeration;
@@ -241,7 +241,7 @@ public class Server implements Runnable {
         int         loop;
         int         volume;
 
-        //die Sessions werden eingerichtet
+        //die Listener werden eingerichtet
         this.listener = new Vector(256, 256);
 
         //Initialisierung wird als Information ausgegeben
@@ -256,7 +256,7 @@ public class Server implements Runnable {
             volume = 0;
         }
 
-        //die initiale Anzahl zusaetzlicher Sessions wird angelegt
+        //die initiale Anzahl zusaetzlicher Listener wird angelegt
         count = 0;
 
         try {
@@ -268,33 +268,32 @@ public class Server implements Runnable {
                 enumeration = ((Vector)this.listener.clone()).elements();
                 while (enumeration.hasMoreElements() && !this.socket.isClosed()) {
 
-                    //objects = (Object[])this.sessions.get(loop);
                     objects = (Object[])enumeration.nextElement();
 
                     //der Thread wird ermittelt
                     thread = (Thread)objects[1];
 
-                    //ausgelaufene Sessions werden entfernt
+                    //ausgelaufene Listener werden entfernt
                     if (control && !thread.isAlive())
                         this.listener.remove(objects);
 
-                    //die Session wird ermittelt
-                    session = (Listener)objects[0];
+                    //der Listener wird ermittelt
+                    listener = (Listener)objects[0];
 
-                    //ueberzaehlige Sessions werden beendet
-                    if (control && session.available())
-                        session.isolate();
+                    //ueberzaehlige Listener werden beendet
+                    if (control && listener.available())
+                        listener.isolate();
 
-                    //laeuft der Thread nicht, wird die Session entfernt
-                    if (session.available() && thread.isAlive())
+                    //laeuft der Thread nicht, wird der Listener entfernt
+                    if (listener.available() && thread.isAlive())
                         control = true;
                 }
 
-                //die Anzahl der nachtraeglich einzurichtenden Sessions auf
+                //die Anzahl der nachtraeglich einzurichtenden Listener wird auf
                 //Basis der letzten Anzahl ermittelt
                 count = control ? 0 : volume <= 0 ? 1 : count +count +1;
 
-                //liegt keine freie Session vor, werden neue eingerichtet, die
+                //liegt kein freier Listener vor, werden neue eingerichtet, die
                 //Anzahl ist durch die Angabe vom MAXACCESS begrenzt, weitere
                 //Anfragen werden sonst im Backlog geparkt
                 for (loop = count; !this.socket.isClosed() && loop > 0; loop--) {
@@ -302,17 +301,17 @@ public class Server implements Runnable {
                     if (this.listener.size() >= volume && volume > 0)
                         break;
 
-                    //die Session wird eingerichtet
-                    session = new Listener(this.context, this.socket, (Initialize)this.initialize.clone());
+                    //derListener wird eingerichtet
+                    listener = new Listener(this.context, this.socket, (Initialize)this.initialize.clone());
 
-                    //der Thread der Session wird eingerichet, ueber den
+                    //der Thread der Listener wird eingerichet, ueber den
                     //Service wird dieser automatisch als Daemon verwendet
-                    thread = new Thread(session);
+                    thread = new Thread(listener);
 
-                    //die Session wird mit Thread registriert
-                    this.listener.add(new Object[] {session, thread});
+                    //der Listener wird mit Thread registriert
+                    this.listener.add(new Object[] {listener, thread});
                     
-                    //die Session wird als Thread gestartet
+                    //der Listener wird als Thread gestartet
                     thread.start();
                 }
 
@@ -326,7 +325,7 @@ public class Server implements Runnable {
         //das Beenden vom Server wird eingeleitet
         this.destroy();
         
-        //alle Sessions werden zwangsweise beendet
+        //alle Listener werden zwangsweise beendet
         enumeration = this.listener.elements();
         while (enumeration.hasMoreElements())
             ((Listener)((Object[])enumeration.nextElement())[0]).destroy();

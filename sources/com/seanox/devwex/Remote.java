@@ -267,14 +267,14 @@ public class Remote implements Runnable {
 
                 if (thread == null || !thread.isAlive()) {
 
-                    //der Socket wird fuer die Session eingerichtet
+                    //der Socket wird fuer den Listener eingerichtet
                     this.accept = this.socket.accept();
 
-                    //der Thread fuer die Session wird eingerichet, ueber den
+                    //der Thread fuer den Listener wird eingerichet, ueber den
                     //Service wird dieser automatisch als Daemon verwendet
                     thread = new Thread(this);
 
-                    //die Session wird als Thread gestartet
+                    //den Listener wird als Thread gestartet
                     thread.start();
                 }
 

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <style type="text/css">
+      body {
+        padding:0px; margin:0px; 
+        font:1em sans-serif; cursor:default;
+      }
+      body > div {
+        position:absolute; height:100%; width:100%; display:table;
+      }
+      body > div > div {
+        position:relative; padding:5% 10%; display:table-cell;
+      }
+      body > div > div:first-child {
+        width:25%;
+        background:#595755; border-right:1px solid #696766;
+      }
+      body > div > div:first-child * {
+        text-shadow:1px 1px #494744;
+      }
+      body > div > div:first-child > div {
+        position:absolute; bottom:0px; left:0px; margin:2em 2em;
+      }
+      body > div > div:first-child p {
+        margin:0px; white-space:nowrap; 
+        color:#CCCCCC; font-size:1.5em;
+      }
+      body > div > div:first-child p + p {
+        color:#999999; font-size:1.25em;  
+      }      
+      body > div > div:first-child p + p + p {
+        font-size:1em;      
+      }      
+      body > div > div + div {
+        width:75%; 
+        background:linear-gradient(to right, #393733 0px, #494744 3px); border-left:1px solid #393733;
+      }
+      body > div > div + div * {
+        color:#999999; text-shadow:1px 1px #393733;
+      }
+      body > div > div + div > div:first-child {
+        position:absolute; top:0px; left:0px; width:1px; height:100%;
+      }
+      body > div > div + div h1 {
+        color:#CCCCCC;
+      }
+      body > div > div + div h1 ~ h2 {
+        margin-top:-0.75em;
+      }
+      body > div > div + div p + p {
+        color:#CCCCCC; display:none;
+      }
+      body > div > div + div p + p[class~='#[status:http_status]'] {
+        display:block;
+      }
+    </style>
+  </head>
+  <body onselectstart="return false;" onmousedown="return false;">
+    <div>
+      <div>
+        <div>
+          <p>Seanox Devwex</p>
+          <p>Advanced Server Development</p>
+          <p>Seanox Software Solutions</p>
+        </div>
+      </div>
+      <div>
+        <h1>#[status:http_status_text]</h1>
+        <h2>Status #[status:http_status]</h2>
+        <p>
+          This class of status code 2xx indicates that the client's request was
+          successfully received, understood, and accepted.
+        </p>
+        <p class="201">
+          The request has been fulfilled and resulted in a new resource being created.
+          The newly created resource can be referenced by the URI(s) returned in
+          the entity of the response, with the most specific URI for the resource
+          given by a Location header field. The response SHOULD include an entity
+          containing a list of resource characteristics and location(s) from which
+          the user or user agent can choose the one most appropriate. The entity
+          format is specified by the media type given in the Content-Type header
+          field. The origin server MUST create the resource before returning the
+          201 status code. If the action cannot be carried out immediately, the
+          server SHOULD respond with 202 (Accepted) response instead.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

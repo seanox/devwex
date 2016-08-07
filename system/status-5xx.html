@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <style type="text/css">
+      body {
+        padding:0px; margin:0px; 
+        font:1em sans-serif; cursor:default;
+      }
+      body > div {
+        position:absolute; height:100%; width:100%; display:table;
+      }
+      body > div > div {
+        position:relative; padding:5% 10%; display:table-cell;
+      }
+      body > div > div:first-child {
+        width:25%;
+        background:#595755; border-right:1px solid #696766;
+      }
+      body > div > div:first-child * {
+        text-shadow:1px 1px #494744;
+      }
+      body > div > div:first-child > div {
+        position:absolute; bottom:0px; left:0px; margin:2em 2em;
+      }
+      body > div > div:first-child p {
+        margin:0px; white-space:nowrap; 
+        color:#CCCCCC; font-size:1.5em;
+      }
+      body > div > div:first-child p + p {
+        color:#999999; font-size:1.25em;  
+      }      
+      body > div > div:first-child p + p + p {
+        font-size:1em;      
+      }      
+      body > div > div + div {
+        width:75%; 
+        background:linear-gradient(to right, #393733 0px, #494744 3px); border-left:1px solid #393733;
+      }
+      body > div > div + div * {
+        color:#999999; text-shadow:1px 1px #393733;
+      }
+      body > div > div + div > div:first-child {
+        position:absolute; top:0px; left:0px; width:1px; height:100%;
+      }
+      body > div > div + div h1 {
+        color:#CCCCCC;
+      }
+      body > div > div + div h1 ~ h2 {
+        margin-top:-0.75em;
+      }
+      body > div > div + div p + p {
+        color:#CCCCCC; display:none;
+      }
+      body > div > div + div p + p[class~='#[status:http_status]'] {
+        display:block;
+      }
+    </style>
+  </head>
+  <body onselectstart="return false;" onmousedown="return false;">
+    <div>
+      <div>
+        <div>
+          <p>Seanox Devwex</p>
+          <p>Advanced Server Development</p>
+          <p>Seanox Software Solutions</p>
+        </div>
+      </div>
+      <div>
+        <h1>#[status:http_status_text]</h1>
+        <h2>Status #[status:http_status]</h2>
+        <p>
+          Response status codes beginning with the digit "5" indicate cases in which
+          the server is aware that it has erred or is incapable of performing the
+          request. Except when responding to a HEAD request, the server SHOULD include
+          an entity containing an explanation of the error situation, and whether
+          it is a temporary or permanent condition. User agents SHOULD display any
+          included entity to the user. These response codes are applicable to any
+          request method.
+        </p>
+        <p class="500"> 
+          The server encountered an unexpected condition which prevented it from
+          fulfilling the request.
+        </p>
+        <p class="501"> 
+          The server does not support the functionality required to fulfill the
+          request. This is the appropriate response when the server does not recognize
+          the request method and is not capable of supporting it for any resource.
+        </p>  
+        <p class="502"> 
+          The server, while acting as a gateway or proxy, received an invalid response
+          from the upstream server it accessed in attempting to fulfill the request.
+        </p> 
+        <p class="503"> 
+          The server is currently unable to handle the request due to a temporary
+          overloading or maintenance of the server. The implication is that this
+          is a temporary condition which will be alleviated after some delay. If
+          known, the length of the delay MAY be indicated in a Retry-After header.
+          If no Retry-After is given, the client SHOULD handle the response as it
+          would for a 500 response.
+        </p>  
+        <p class="504"> 
+          The server, while acting as a gateway or proxy, did not receive a timely
+          response from the upstream server specified by the URI (e.g. HTTP, FTP,
+          LDAP) or some other auxiliary server (e.g. DNS) it needed to access in
+          attempting to complete the request.
+        </p>  
+      </div>
+    </div>
+  </body>
+</html>

@@ -36,12 +36,12 @@ import java.net.UnknownHostException;
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 5.0 20160804<br>
+ *  Remote 5.0 20160811<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160804
+ *  @version 5.0 20160811
  */
 public class Remote implements Runnable {
 
@@ -91,7 +91,7 @@ public class Remote implements Runnable {
         this.socket.setSoTimeout(1000);
 
         //die Serverkennung wird zusammengestellt
-        this.caption = ("TCP ").concat(address.getHostAddress()).concat(":").concat(String.valueOf(port));
+        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
     }
 
     /**
@@ -192,8 +192,8 @@ public class Remote implements Runnable {
             //der Request wird ausgewertet
             string = buffer.toString().trim().toLowerCase();            
             
-            //STATE - die Serverliste wird zusammengestellt
-            if (string.equals("state")) {
+            //STATUS - die Serverliste wird zusammengestellt
+            if (string.equals("status")) {
 
                 string = Service.details();
 

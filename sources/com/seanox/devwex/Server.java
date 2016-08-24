@@ -41,12 +41,12 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20160804<br>
+ *  Server 5.0 20160811<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160804
+ *  @version 5.0 20160811
  */
 public class Server implements Runnable {
 
@@ -203,7 +203,7 @@ public class Server implements Runnable {
         this.socket.setSoTimeout(isolation <= 0 ? 250 : isolation);
 
         //die Serverkennung wird zusammengestellt
-        this.caption = ("TCP ").concat(address.getHostAddress()).concat(":").concat(String.valueOf(port));
+        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
     }
 
     /**

@@ -76,21 +76,21 @@ import java.util.StringTokenizer;
  *  <br>
  *      <dir>Beispiel</dir>
  *  <pre>
- *     Bsp. 001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
- *          002   PARAM-A                 = WERT-1         ;Kommentar
- *          003   PARAM-B             [+] = WERT-2; WERT-3
- *          004                           + WERT-4; WERT-5
- *          005   PARAM-C          [?][+] = WERT-6; WERT-7
- *          006   PARAM-E          [?]                     ;Kommentar
- *          007
- *          008 [0x53454354494F4E2D41]
- *          009   PARAM-A                 = 0x574552542D31 ;Kommentar
- *          010   0x504152414D2D42        = WERT-2         ;Kommentar 
- *          011   0x504152414D2D43    [+] = 0x574552542D33
- *          012   PARAM-D                 = 0x574552542D34
- *          013                           + 0x574552542D35
- *          014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
- *          015   0x504152414D2D45 [?]                     ;Kommentar
+ *     001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
+ *     002   PARAM-A                 = WERT-1         ;Kommentar
+ *     003   PARAM-B             [+] = WERT-2; WERT-3
+ *     004                           + WERT-4; WERT-5
+ *     005   PARAM-C          [?][+] = WERT-6; WERT-7
+ *     006   PARAM-E          [?]                     ;Kommentar
+ *     007
+ *     008 [0x53454354494F4E2D41]
+ *     009   PARAM-A                 = 0x574552542D31 ;Kommentar
+ *     010   0x504152414D2D42        = WERT-2         ;Kommentar 
+ *     011   0x504152414D2D43    [+] = 0x574552542D33
+ *     012   PARAM-D                 = 0x574552542D34
+ *     013                           + 0x574552542D35
+ *     014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
+ *     015   0x504152414D2D45 [?]                     ;Kommentar
  *  </pre>
  *      <dir>Zeile 001:</dir>
  *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Die Option
@@ -152,12 +152,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Initialize 4.0 20160808<br>
+ *  Initialize 5.0 20160808<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 4.0 20160808
+ *  @version 5.0 20160808
  */
 public class Initialize implements Cloneable {
 
@@ -329,9 +329,7 @@ public class Initialize implements Cloneable {
      *  Bestehende Sektionen werden entfernt und neu gesetzt.
      *  @param  name    Name der Sektion
      *  @param  section Sektion
-     *  @return die gesetzte Sektion
-     *  @throws IllegalArgumentException
-     *      In Fall eines ung&uuml;ltigen Namen der Sektion
+     *  @return ggf. zuvor zugeordnete Sektion, sonst <code>null</code>
      */
     public Section set(String name, Section section) {
         
@@ -348,7 +346,7 @@ public class Initialize implements Cloneable {
     /**
      *  Entfernt die angegebene Sektion aus Initialize.
      *  @param  name Name der zu entfernenden Sektion
-     *  @return die entfernte Sektion
+     *  @return ggf. zuvor zugeordnete Sektion, sonst <code>null</code>
      */
     public Section remove(String name) {
 
@@ -400,7 +398,6 @@ public class Initialize implements Cloneable {
      *  R&uuml;ckgabe einer Kopie von Initialize.
      *  @return eine Kopie von Initialize
      */
-    @Override
     public Object clone() {
 
         Initialize initialize;

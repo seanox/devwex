@@ -76,21 +76,21 @@ import java.util.StringTokenizer;
  *  <br>
  *      <dir>Beispiel</dir>
  *  <pre>
- *     Bsp. 001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
- *          002   PARAM-A                 = WERT-1         ;Kommentar
- *          003   PARAM-B             [+] = WERT-2; WERT-3
- *          004                           + WERT-4; WERT-5
- *          005   PARAM-C          [?][+] = WERT-6; WERT-7
- *          006   PARAM-E          [?]                     ;Kommentar
- *          007
- *          008 [0x53454354494F4E2D41]
- *          009   PARAM-A                 = 0x574552542D31 ;Kommentar
- *          010   0x504152414D2D42        = WERT-2         ;Kommentar 
- *          011   0x504152414D2D43    [+] = 0x574552542D33
- *          012   PARAM-D                 = 0x574552542D34
- *          013                           + 0x574552542D35
- *          014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
- *          015   0x504152414D2D45 [?]                     ;Kommentar
+ *     001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
+ *     002   PARAM-A                 = WERT-1         ;Kommentar
+ *     003   PARAM-B             [+] = WERT-2; WERT-3
+ *     004                           + WERT-4; WERT-5
+ *     005   PARAM-C          [?][+] = WERT-6; WERT-7
+ *     006   PARAM-E          [?]                     ;Kommentar
+ *     007
+ *     008 [0x53454354494F4E2D41]
+ *     009   PARAM-A                 = 0x574552542D31 ;Kommentar
+ *     010   0x504152414D2D42        = WERT-2         ;Kommentar 
+ *     011   0x504152414D2D43    [+] = 0x574552542D33
+ *     012   PARAM-D                 = 0x574552542D34
+ *     013                           + 0x574552542D35
+ *     014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
+ *     015   0x504152414D2D45 [?]                     ;Kommentar
  *  </pre>
  *      <dir>Zeile 001</dir>
  *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Die Option
@@ -152,12 +152,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Section 4.0 20160808<br>
+ *  Section 5.0 20160808<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 4.0 20160808
+ *  @version 5.0 20160808
  */
 public class Section implements Cloneable {
 
@@ -347,7 +347,8 @@ public class Section implements Cloneable {
      *  wird ein leerer oder ein optional angegebener alternativer Wert
      *  zur&uuml;ckgegeben. Im Smart-Modus wird ggf. ein neuer Schl&uuml;ssel
      *  mit dem alternativen oder einem leerer Wert erstellt. 
-     *  @param  name Name des Sch&uuml;ssels
+     *  @param  name      Name des Sch&uuml;ssels
+     *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
      *  @return der Wert des Sch&uuml;ssels, sonst ein leerer String bzw.
      *          alternativer Wert
      */
@@ -368,8 +369,9 @@ public class Section implements Cloneable {
 
     /**
      *  Setzt den Sch&uuml;ssel mit dem entsprechenden Wert.
-     *  @param name  Name des Sch&uuml;ssels
-     *  @param value Wert des Sch&uuml;ssels
+     *  @param  name  Name des Sch&uuml;ssels
+     *  @param  value Wert des Sch&uuml;ssels
+     *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
      */
      public String set(String name, String value) {
          
@@ -382,6 +384,7 @@ public class Section implements Cloneable {
      /**
       *  Entfernt den angegebenen Sch&uuml;ssel.
       *  @param name Name des zu entfernenden Sch&uuml;ssels
+      *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
       */
      public String remove(String name) {
 
@@ -393,7 +396,8 @@ public class Section implements Cloneable {
       *  F&uuml;hrt die Sch&uuml;ssel dieser und der &uuml;bergebenen Sektion
       *  zusammen. Bereits vorhandene Eintr&auml;ge werden &uuml;berschrieben,
       *  neue werden hinzugef&uuml;gt.
-      *  @param section zu &uuml;bernehmende Sektion
+      *  @param  section zu &uuml;bernehmende Sektion
+      *  @return die aktuelle Instanz mit den zusammgef&uuml;hrten Sektionen
       */
      public Section merge(Section section) {
          
@@ -430,7 +434,6 @@ public class Section implements Cloneable {
      *  R&uuml;ckgabe einer Kopie von Section.
      *  @return eine Kopie von Section
      */
-    @Override
     public Object clone() {
 
         Section section;

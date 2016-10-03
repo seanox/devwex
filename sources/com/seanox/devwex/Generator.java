@@ -33,7 +33,9 @@ import java.util.Hashtable;
  *  angegebene Namensr&auml;ume (Scopes) und basiert auf Wertetabellen.
  *  Es k&oouml;nnen der komplette Inhalt oder auch nur einzelne Segmente
  *  bef&uuml;llt und herausgel&ouml;st werden.<br>
- *  <dir><b>Beschreibung der Syntax</b></dir>
+ *  <dir>
+ *    <b>Beschreibung der Syntax</b>
+ *  </dir>
  *  <table>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
@@ -77,12 +79,12 @@ import java.util.Hashtable;
  *    </tr>
  *  </table>
  *  <br>
- *  Generator 3.0 20160804<br>
+ *  Generator 5.0 20160804<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 3.0 20160804
+ *  @version 5.0 20160804
  */
 public class Generator {
 

@@ -349,12 +349,12 @@ import java.util.Vector;
  *  Weitere Details zu Parametern ergeben sich durch die Implementierung vom
  *  Modul.<br>
  *  <br>
- *  Service 5.0 20160810<br>
+ *  Service 5.0 20161007<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160810
+ *  @version 5.0 20161007
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -892,7 +892,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 while (enumeration.hasMoreElements()) {
                     
                     //die Modul-Instanzen werden einzeln ermittelt
-                    object = ((Object[])enumeration.nextElement())[0];
+                    object = enumeration.nextElement();
                     
                     //die Modulkennung wird ueber Caption ermittelt
                     try {caption = object.getClass().getMethod("getCaption", new Class[0]).invoke(object, new Object[0]);
@@ -901,7 +901,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
                     
                     if (caption == null)
-                        caption = object;
+                        caption = object.getClass().getName();
 
                     //die Ausgabe wird zusammengesetzt
                     string = string.concat("XAPI: ").concat(String.valueOf(caption)).concat("\r\n");
@@ -927,7 +927,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
 
                     if (caption == null)
-                        caption = object;                        
+                        caption = object.getClass().getName();                      
 
                     //die Ausgabe wird zusammengesetzt
                     string = string.concat("SAPI: ").concat((String)caption).concat("\r\n");

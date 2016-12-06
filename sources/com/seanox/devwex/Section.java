@@ -127,7 +127,7 @@ import java.util.StringTokenizer;
  *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
  *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dname=wert</code> gesetzt werden.<br>
+ *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
  *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
  *  Schl&uuml;ssel ermnittelt, wird alternativ <code>WERT-6; WERT-7</code> als
  *  Wert verwendet.<br>
@@ -142,7 +142,7 @@ import java.util.StringTokenizer;
  *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-E</code> gesucht, wobei
  *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dname=wert</code> gesetzt werden.<br>
+ *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
  *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
  *  Schl&uuml;ssel ermnittelt, wird dieser Schl&uuml;ssel ignoriert, da auch
  *  kein alternativer Wert angegeben wurde.<br>
@@ -152,12 +152,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Section 5.0 20160808<br>
+ *  Section 5.0 20161206<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160808
+ *  @version 5.0 20161206
  */
 public class Section implements Cloneable {
 
@@ -277,6 +277,18 @@ public class Section implements Cloneable {
                         break;
                     }
                     
+                    //die System-Umgebungsvariablen werden unabhaengig von der
+                    //Gross- / Kleinschreibung nach dem Schuessel durchsucht
+                    iterator = System.getenv().keySet().iterator();
+                    while (value == null && iterator.hasNext()) {
+                        entry = (String)iterator.next();
+                        if (!label.equalsIgnoreCase(entry.trim()))
+                            continue;
+                        value = System.getenv(entry);
+                        value = value == null ? "" : value.trim();
+                        break;
+                    }
+                    
                     if (value != null) {
                         section.entries.put(label, value);
                         continue;
@@ -321,13 +333,13 @@ public class Section implements Cloneable {
     
     /**
      *  R&uuml;ckgabe <code>true</code> wenn der Sch&uuml;ssel ist.
-     *  @param  name Name des Sch&uuml;ssels
+     *  @param  key Name des Sch&uuml;ssels
      *  @return <code>true</code> wenn der Sch&uuml;ssel enthalten ist
      */
-    public boolean contains(String name) {
+    public boolean contains(String key) {
 
-        name = name == null ? "" : name.trim().toUpperCase();
-        return this.entries.containsKey(name);
+        key = key == null ? "" : key.trim().toUpperCase();
+        return this.entries.containsKey(key);
     }
 
     /**
@@ -335,11 +347,11 @@ public class Section implements Cloneable {
      *  bzw. kann nicht ermittelt werden, wird ein leerer String
      *  zur&uuml;ckgegeben. Im Smart-Modus wird ggf. ein neuer Schl&uuml;ssel
      *  mit einem leerer Wert erstellt. 
-     *  @param  name Name des Sch&uuml;ssels
+     *  @param  key Name des Sch&uuml;ssels
      *  @return der Wert des Sch&uuml;ssels, sonst ein leerer String
      */
-    public String get(String name) {
-        return this.get(name, null);
+    public String get(String key) {
+        return this.get(key, null);
     }
 
     /**
@@ -347,21 +359,21 @@ public class Section implements Cloneable {
      *  wird ein leerer oder ein optional angegebener alternativer Wert
      *  zur&uuml;ckgegeben. Im Smart-Modus wird ggf. ein neuer Schl&uuml;ssel
      *  mit dem alternativen oder einem leerer Wert erstellt. 
-     *  @param  name      Name des Sch&uuml;ssels
+     *  @param  key       Name des Sch&uuml;ssels
      *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
      *  @return der Wert des Sch&uuml;ssels, sonst ein leerer String bzw.
      *          alternativer Wert
      */
-    public String get(String name, String alternate) {
+    public String get(String key, String alternate) {
 
         String value;
         
-        name  = name == null ? "" : name.trim().toUpperCase();
-        value = (String)this.entries.get(name);
+        key  = key == null ? "" : key.trim().toUpperCase();
+        value = (String)this.entries.get(key);
         if (value == null) {
             value = alternate != null ? alternate : this.smart ? "" : null;
             if (value != null)
-                this.entries.put(name, value);
+                this.entries.put(key, value);
         }
         
         return value;
@@ -369,27 +381,27 @@ public class Section implements Cloneable {
 
     /**
      *  Setzt den Sch&uuml;ssel mit dem entsprechenden Wert.
-     *  @param  name  Name des Sch&uuml;ssels
+     *  @param  key   Name des Sch&uuml;ssels
      *  @param  value Wert des Sch&uuml;ssels
      *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
      */
-     public String set(String name, String value) {
+     public String set(String key, String value) {
          
-         name = name == null ? "" : name.trim().toUpperCase();
-         if (name.length() > 0)
-             return (String)this.entries.put(name, value == null ? "" : value.trim());
+         key = key == null ? "" : key.trim().toUpperCase();
+         if (key.length() > 0)
+             return (String)this.entries.put(key, value == null ? "" : value.trim());
          return null;
     }
 
      /**
       *  Entfernt den angegebenen Sch&uuml;ssel.
-      *  @param name Name des zu entfernenden Sch&uuml;ssels
+      *  @param  key Name des zu entfernenden Sch&uuml;ssels
       *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
       */
-     public String remove(String name) {
+     public String remove(String key) {
 
-         name = name == null ? "" : name.trim().toUpperCase();
-         return (String)this.entries.remove(name);
+         key = key == null ? "" : key.trim().toUpperCase();
+         return (String)this.entries.remove(key);
      }
      
      /**

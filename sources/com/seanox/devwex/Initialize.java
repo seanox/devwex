@@ -27,6 +27,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  *  Initialize, verarbeitet Initialisierungsdaten im INI-Format und stellt diese
@@ -127,7 +128,7 @@ import java.util.StringTokenizer;
  *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
  *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dname=wert</code> gesetzt werden.<br>
+ *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
  *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
  *  Schl&uuml;ssel ermnittelt, wird alternativ <code>WERT-6; WERT-7</code> als
  *  Wert verwendet.<br>
@@ -142,7 +143,7 @@ import java.util.StringTokenizer;
  *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-E</code> gesucht, wobei
  *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dname=wert</code> gesetzt werden.<br>
+ *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
  *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
  *  Schl&uuml;ssel ermnittelt, wird dieser Schl&uuml;ssel ignoriert, da auch
  *  kein alternativer Wert angegeben wurde.<br>
@@ -157,12 +158,15 @@ import java.util.StringTokenizer;
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160808
+ *  @version 5.0 20161126
  */
 public class Initialize implements Cloneable {
 
     /** Hashtable der Sektionen */
     private volatile LinkedHashMap entries;
+    
+    /** Hashtable der Ableitungen in den Sektionen (extends) */
+    private volatile LinkedHashMap follower;
     
     /** Option zum automatischen Anlegen nicht existierender Sektionen */
     private volatile boolean smart;
@@ -178,8 +182,9 @@ public class Initialize implements Cloneable {
      */
     public Initialize(boolean smart) {
         
-        this.entries = new LinkedHashMap();
-        this.smart   = smart;
+        this.entries  = new LinkedHashMap();
+        this.follower = new LinkedHashMap();
+        this.smart    = smart;
     }
 
     /**
@@ -224,6 +229,7 @@ public class Initialize implements Cloneable {
         String          section;
         StringTokenizer tokenizer;
         Iterator        iterator;
+        Vector          follower;
         
         String[]        strings;
         
@@ -256,13 +262,20 @@ public class Initialize implements Cloneable {
                 
                 //nur gueltige Sektionen werden geladen
                 if (section.length() == 0) continue;
+
+                //die Ableitungen werden eingerichtet
+                follower = (Vector)initialize.follower.get(section);
+                if (follower == null)
+                    follower = new Vector();
+                initialize.follower.put(section, follower);
                 
                 buffer = (StringBuffer)initialize.entries.getOrDefault(section, new StringBuffer());
                 initialize.entries.put(section, buffer);
                 
-                //ggf. existierende Ableitungen werden geladen
+                //ggf. existierende Ableitungen werden registriert und geladen
                 strings = strings[1].split("\\s+");
                 for (index = 0; index < strings.length; index++) {
+                    follower.add(strings[index]);
                     section = Initialize.decode(strings[index]);
                     if (initialize.entries.containsKey(section))
                         buffer.append("\r\n").append(initialize.entries.get(section));

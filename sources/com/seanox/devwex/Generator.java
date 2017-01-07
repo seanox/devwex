@@ -366,7 +366,7 @@ public class Generator {
             index = scope.indexOf(':'); 
             scope = scope.toLowerCase().trim();
             
-            if (scope.matches("^0x(?:[0-9A-Fa-f]{2})+$")) {
+            if (scope.matches("^0x([0-9a-f]{2})+$")) {
 
                 //Platzhalter mit maskierten Daten werden nur beim Release
                 //aufgeloest und sonst ignoriert

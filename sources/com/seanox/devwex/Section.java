@@ -24,7 +24,6 @@ package com.seanox.devwex;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -40,11 +39,9 @@ import java.util.StringTokenizer;
  *  Das verarbeitete INI-Format wurde zur klassischen Form erweitert. Die
  *  Unterteilung erfolgt auch hier in Sektionen, in denen zeilenweise
  *  Schl&uuml;ssel mit zugeh&ouml;rigen Werten abgelegt sind. Beim Namen von
- *  Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung nicht
- *  ber&uuml;cksichtig. Mehrfache Deklarationen werden zusammengef&uuml;hrt,
- *  bereits vorhandene Schl&uuml;ssel &uuml;berschrieben und neue
- *  hinzugef&uuml;gt. Dadurch k&ouml;nnen Sektionen auch geteilt werden, was die
- *  &Uuml;bersichtlichkeit aber meist erschwert.<br>
+ *  Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung ignoriert.
+ *  Gleichnamige Deklarationen f&uuml;hren zum &Uuml;berschreiben von Sektionen
+ *  und Werten.<br>
  *  <br>
  *  Als Erweiterung zum Orginalformat lassen sich Sektionen vererben. Dazu wird
  *  einer Sektion das Sch&uuml;sselwort <code>EXTENDS</code> gefolgt von Namen
@@ -152,12 +149,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Section 5.0 20161206<br>
+ *  Section 5.0 20161224<br>
  *  Copyright (C) 2016 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20161206
+ *  @version 5.0 20161224
  */
 public class Section implements Cloneable {
 
@@ -174,6 +171,11 @@ public class Section implements Cloneable {
     
     /** 
      *  Konstruktor, richtet Section ein.
+     *  Mit der Option <code>smart</code> kann ein smartes Verhalten aktiviert
+     *  werden, bei dem nicht existierende Schl&uuml;ssel automatisch mit der
+     *  ersten Anfrage angelegt werden. Die Methoden {@link #get(String)} und
+     *  {@link #get(String, String)} liefern dann nie <code>null</code> sondern
+     *  immer einen Wert, ggf. ist dieser dann leer.
      *  @param smart automatisches Anlegen nicht existierender Schl&uuml;ssel
      */
     public Section(boolean smart) {
@@ -190,51 +192,54 @@ public class Section implements Cloneable {
     private static String decode(String string) {
 
         string = string == null ? "" : string.trim();
-        if (string.length() > 0
-                && string.length() % 2 == 0
-                && string.matches("^0x[0-9A-Fa-f]+$")) {
-            string = new String(new BigInteger(string.substring(2), 16).toByteArray()).trim();
-        }
-    
+        if (string.matches("^(?i)0x([0-9a-f]{2})+$"))
+            return new String(new BigInteger(string.substring(2), 16).toByteArray()).trim();
         return string;
     }
     
     /**
      *  Erstellt ein Section-Objekt aus dem &uuml;bergebenen String.
-     *  @param  string zu parsender String
+     *  Das Parsen ignoriert ung&uuml;ltige Schl&uuml;ssel und Werte.
+     *  @param  text zu parsende Section
      *  @return das erstellte Section-Objekt
      */
-    public static Section parse(String string) {
-        return Section.parse(string, false);
+    public static Section parse(String text) {
+        return Section.parse(text, false);
     }
 
     /**
-     *  Erstellt ein Section-Objekt aus dem &uuml;bergebenen String.
-     *  @param  string zu parsender String
+     *  Erstellt ein Section-Objekt aus dem &uuml;bergebenen Text.
+     *  Das Parsen ignoriert ung&uuml;ltige Schl&uuml;ssel und Werte.
+     *  Mit der Option <code>smart</code> kann ein smartes Verhalten aktiviert
+     *  werden, bei dem nicht existierende Schl&uuml;ssel automatisch mit der
+     *  ersten Anfrage angelegt werden. Die Methoden {@link #get(String)} und
+     *  {@link #get(String, String)} liefern dann nie <code>null</code> sondern
+     *  immer einen Wert, ggf. ist dieser dann leer.
+     *  @param  text  zu parsende Sektion
      *  @param  smart automatisches Anlegen nicht existierender Schl&uuml;ssel
      *  @return das erstellte Section-Objekt
      */
-    public static Section parse(String string, boolean smart) {
+    public static Section parse(String text, boolean smart) {
         
-        Iterator        iterator;
+        Enumeration     enumeration;
         Section         section;
+        StringBuffer    buffer;
+        StringTokenizer tokenizer;
         String          line;
         String          entry;
         String          label;
         String          value;
-        StringBuffer    buffer;
-        StringTokenizer tokenizer;
         
         int             option;
 
         section = new Section(smart);
 
-        if (string == null) return section;
+        if (text == null) return section;
         
         buffer = null;
         option = 0;
 
-        tokenizer = new StringTokenizer(string, "\r\n");
+        tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
             
             //die naechste Zeile wird ermittelt
@@ -243,9 +248,9 @@ public class Section implements Cloneable {
             if (!line.startsWith("+")) {
                 
                 option = 0;
-                if (line.matches("^[^;=]+\\[\\s*\\+\\s*\\]"))
+                if (line.matches("^[^;=]+\\[\\s*\\+\\s*\\].*$"))
                     option |= 1;
-                if (line.matches("^[^;=]+\\[\\s*\\?\\s*\\]"))
+                if (line.matches("^[^;=]+\\[\\s*\\?\\s*\\].*$"))
                     option |= 2;
                 
                 //der Kommentarteil wird ggf. entfernt
@@ -259,18 +264,19 @@ public class Section implements Cloneable {
                 label = Section.decode(label).toUpperCase();
                 
                 //nur gueltige Schluessel werden geladen
-                if (label.length() <= 0) continue;
+                if (label.isEmpty())
+                    continue;
                 
                 if ((option & 2) != 0) {
                     
                     //der Wert wird direkt in Systemproperties gesucht
                     value = System.getProperty(label);
                     
-                    //die Systemproperties werden unabhaengig von der
+                    //die System-Properties werden unabhaengig von der
                     //Gross- / Kleinschreibung nach dem Schuessel durchsucht
-                    iterator = System.getProperties().keySet().iterator();
-                    while (value == null && iterator.hasNext()) {
-                        entry = (String)iterator.next();
+                    enumeration = Collections.enumeration(System.getProperties().keySet());
+                    while (value == null && enumeration.hasMoreElements()) {
+                        entry = (String)enumeration.nextElement();
                         if (!label.equalsIgnoreCase(entry.trim()))
                             continue;
                         value = System.getProperty(entry, "").trim();
@@ -279,9 +285,9 @@ public class Section implements Cloneable {
                     
                     //die System-Umgebungsvariablen werden unabhaengig von der
                     //Gross- / Kleinschreibung nach dem Schuessel durchsucht
-                    iterator = System.getenv().keySet().iterator();
-                    while (value == null && iterator.hasNext()) {
-                        entry = (String)iterator.next();
+                    enumeration = Collections.enumeration(System.getenv().keySet());
+                    while (value == null && enumeration.hasMoreElements()) {
+                        entry = (String)enumeration.nextElement();
                         if (!label.equalsIgnoreCase(entry.trim()))
                             continue;
                         value = System.getenv(entry);
@@ -290,13 +296,14 @@ public class Section implements Cloneable {
                     }
                     
                     if (value != null) {
-                        section.entries.put(label, value);
+                        section.entries.put(label, new StringBuffer(value));
                         continue;
                     }
                 }
                 
                 //der Wert wird ermittelt, ggf. dekodiert und optimiert
-                value = line.replaceAll("^([^;=]*?)((?:\\[\\s*.{0,1}\\s*\\]\\s*)*)(?:\\s*=\\s*(.+?)\\s*)*$", "$3");
+                value = line.trim();
+                value = value.replaceAll("^([^;=]*?)((?:\\[\\s*.{0,1}\\s*\\]\\s*)*)(?:\\s*=\\s*(.+?)\\s*)*$", "$3");
                 value = Section.decode(value);
                 
                 buffer = new StringBuffer(value);
@@ -307,16 +314,20 @@ public class Section implements Cloneable {
                 //Inhalt wird nur mit gueltigem Schluessel verarbeitet
 
                 //der Kommentarteil wird ggf. entfernt
-                if ((option & 1) == 0)
+                if ((option & 1) == 0 && line.contains(";"))
                     line = line.substring(0, Math.max(0, line.indexOf(';'))).trim();
-                
-                buffer.append(" ").append(Section.decode(line.substring(1)));
+
+                line = line.substring(1).trim();
+                if (!line.isEmpty())
+                    line = Section.decode(line);
+                if (!line.isEmpty())
+                    buffer.append(" ").append(Section.decode(line));                
             }
         }
         
-        iterator = section.entries.keySet().iterator();
-        while (iterator.hasNext()) {
-            entry = (String)iterator.next();
+        enumeration = Collections.enumeration(section.entries.keySet());
+        while (enumeration.hasMoreElements()) {
+            entry = (String)enumeration.nextElement();
             section.entries.put(entry, ((StringBuffer)section.entries.get(entry)).toString());
         }
 
@@ -327,7 +338,7 @@ public class Section implements Cloneable {
      *  R&uuml;ckgabe aller Sch&uuml;ssel als Enumeration.
      *  @return alle Sch&uuml;ssel als Enumeration
      */
-    public Enumeration elements() {
+    public synchronized Enumeration elements() {
         return Collections.enumeration(this.entries.keySet());
     }
     
@@ -336,39 +347,49 @@ public class Section implements Cloneable {
      *  @param  key Name des Sch&uuml;ssels
      *  @return <code>true</code> wenn der Sch&uuml;ssel enthalten ist
      */
-    public boolean contains(String key) {
+    public synchronized boolean contains(String key) {
 
-        key = key == null ? "" : key.trim().toUpperCase();
+        if (key != null)
+            key = key.toUpperCase().trim();
+        if (key == null || key.isEmpty())
+            return false;
         return this.entries.containsKey(key);
     }
 
     /**
      *  R&uuml;ckgabe des Wert zum Sch&uuml;ssel. Ist dieser nicht enthalten
-     *  bzw. kann nicht ermittelt werden, wird ein leerer String
-     *  zur&uuml;ckgegeben. Im Smart-Modus wird ggf. ein neuer Schl&uuml;ssel
+     *  bzw. kann nicht ermittelt werden, liefert die Methode <code>null</code>
+     *  und im Smart-Modus einen leeren Wert.
      *  mit einem leerer Wert erstellt. 
      *  @param  key Name des Sch&uuml;ssels
-     *  @return der Wert des Sch&uuml;ssels, sonst ein leerer String
+     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> und im
+     *          Smart-Modus einen leeren Wert
      */
-    public String get(String key) {
+    public synchronized String get(String key) {
         return this.get(key, null);
     }
 
     /**
-     *  R&uuml;ckgabe des Wert zum Schl&uuml;ssel. Ist dieser nicht enthalten,
-     *  wird ein leerer oder ein optional angegebener alternativer Wert
-     *  zur&uuml;ckgegeben. Im Smart-Modus wird ggf. ein neuer Schl&uuml;ssel
-     *  mit dem alternativen oder einem leerer Wert erstellt. 
+     *  R&uuml;ckgabe des Wert zum Schl&uuml;ssel. Ist dieser nicht enthalten
+     *  bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
+     *  Wert, sonst <code>null</code>. Im Smart-Modus wird ein nicht
+     *  existierender Schl&uuml;ssel mit einem leeren oder dem alternativen
+     *  Wert angelegt. Die Methode gibt dann einen leeren bzw. den alternativen
+     *  Wert zur&uuml;ck.
      *  @param  key       Name des Sch&uuml;ssels
      *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
-     *  @return der Wert des Sch&uuml;ssels, sonst ein leerer String bzw.
-     *          alternativer Wert
+     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> und im
+     *          Smart-Modus einen leeren bzw. den alternativen Wert
      */
-    public String get(String key, String alternate) {
+    public synchronized String get(String key, String alternate) {
 
         String value;
         
-        key  = key == null ? "" : key.trim().toUpperCase();
+        if (key != null)
+            key = key.toUpperCase().trim();
+        if (key == null || key.isEmpty())
+            return alternate;
+        
         value = (String)this.entries.get(key);
         if (value == null) {
             value = alternate != null ? alternate : this.smart ? "" : null;
@@ -380,17 +401,20 @@ public class Section implements Cloneable {
     }
 
     /**
-     *  Setzt den Sch&uuml;ssel mit dem entsprechenden Wert.
+     *  Setzt den Sch&uuml;ssel mit dem entsprechenden Wert. Sch&uuml;ssel und
+     *  Werte werden dabei gel&auml;ttet. Leere Sch&uuml;ssel sind nicht
+     *  zul&auml;ssig und f&uuml;hren zur {@link IllegalArgumentException}.
      *  @param  key   Name des Sch&uuml;ssels
      *  @param  value Wert des Sch&uuml;ssels
      *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
      */
-     public String set(String key, String value) {
+     public synchronized String set(String key, String value) {
          
-         key = key == null ? "" : key.trim().toUpperCase();
-         if (key.length() > 0)
-             return (String)this.entries.put(key, value == null ? "" : value.trim());
-         return null;
+         if (key != null)
+             key = key.toUpperCase().trim();
+         if (key == null || key.isEmpty())
+             throw new IllegalArgumentException();
+         return (String)this.entries.put(key, value == null ? "" : value.trim());
     }
 
      /**
@@ -398,31 +422,35 @@ public class Section implements Cloneable {
       *  @param  key Name des zu entfernenden Sch&uuml;ssels
       *  @return ggf. zuvor zugeordneter Wert, sonst <code>null</code>
       */
-     public String remove(String key) {
+     public synchronized String remove(String key) {
 
-         key = key == null ? "" : key.trim().toUpperCase();
+         if (key != null)
+             key = key.toUpperCase().trim();
+         if (key == null || key.isEmpty())
+             return null;
          return (String)this.entries.remove(key);
      }
      
      /**
       *  F&uuml;hrt die Sch&uuml;ssel dieser und der &uuml;bergebenen Sektion
       *  zusammen. Bereits vorhandene Eintr&auml;ge werden &uuml;berschrieben,
-      *  neue werden hinzugef&uuml;gt.
+      *  neue werden hinzugef&uuml;gt. Leere Sch&uuml;ssel sind dabei nicht
+      *  zul&auml;ssig und f&uuml;hren zur {@link IllegalArgumentException}.
       *  @param  section zu &uuml;bernehmende Sektion
       *  @return die aktuelle Instanz mit den zusammgef&uuml;hrten Sektionen
       */
-     public Section merge(Section section) {
+     public synchronized Section merge(Section section) {
          
-         Iterator iterator;
-         String   entry;
+         Enumeration enumeration;
+         String      entry;
          
-         if (section == null) return this;
+         if (section == null)
+             return this;
 
          //die Sektionen werden zusammengefasst oder ggf. neu angelegt
-         iterator = section.entries.keySet().iterator();
-         while (iterator.hasNext()) {
-             
-             entry = (String)iterator.next();
+         enumeration = Collections.enumeration(section.entries.keySet());
+         while (enumeration.hasMoreElements()) {
+             entry = (String)enumeration.nextElement();
              this.set(entry, section.get(entry));
          }
          
@@ -433,12 +461,12 @@ public class Section implements Cloneable {
      *  R&uuml;ckgabe der Anzahl von Eintr&auml;gen.
      *  @return die Anzahl der Eintr&auml;ge
      */
-    public int size() {
+    public synchronized int size() {
         return this.entries.size();
     }
 
     /** Setzt Section komplett zur&uuml;ck. */
-    public void clear() {
+    public synchronized void clear() {
         this.entries.clear();
     }
 
@@ -446,7 +474,7 @@ public class Section implements Cloneable {
      *  R&uuml;ckgabe einer Kopie von Section.
      *  @return eine Kopie von Section
      */
-    public Object clone() {
+    public synchronized Object clone() {
 
         Section section;
 

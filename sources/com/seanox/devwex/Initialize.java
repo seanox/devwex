@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2016 Seanox Software Solutions
+ *  Copyright (C) 2017 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -149,19 +149,19 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Initialize 5.0 20161224<br>
- *  Copyright (C) 2016 Seanox Software Solutions<br>
+ *  Initialize 5.0 20170120<br>
+ *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20161224
+ *  @version 5.0 20170120
  */
 public class Initialize implements Cloneable {
 
     /** Hashtable der Sektionen */
     private volatile LinkedHashMap entries;
     
-    /** Option zum automatischen Anlegen nicht existierender Sektionen */
+    /** Option zur Aktivierung vom Smart-Modus */
     private volatile boolean smart;
 
     /** Konstruktor, richtet Initialize ein.*/
@@ -171,7 +171,7 @@ public class Initialize implements Cloneable {
     
     /** 
      *  Konstruktor, richtet Initialize ein.
-     *  @param smart automatisches Anlegen nicht existierender Sektionen
+     *  @param smart aktiviert den smarten Modus
      */
     public Initialize(boolean smart) {
         
@@ -207,18 +207,28 @@ public class Initialize implements Cloneable {
      *  Ermittelt aus dem String die enthaltenen Sektionen.
      *  Das Parsen ignoriert ung&uuml;ltige Sektionen, Schl&uuml;ssel und Werte.
      *  R&uuml;ckgabe die ermittelten Sektionen als Initialize.
+     *  Mit der Option <code>smart</code> kann ein smartes Verhalten aktiviert
+     *  werden. Dadurch &uml;bernimmt {@link #parse(String, boolean)} nur
+     *  Schl&uuml;ssel mit Sektionen die nicht leer sind. Die Methoden
+     *  {@link #get(String)} verh&auml;lt sich bei nicht existierenden
+     *  Schl&uuml;sseln so, als l&auml;gen diese mit einer leeren Sektion vor
+     *  und liefert so nie <code>null</code>. Zudem reagiert im Smart-Modus
+     *  {@link #set(String, String)} bei einem leeren Wert wie die Methode
+     *  {@link #remove(String)} und entfernt den Schl&uuml;ssel.
      *  @param  text  zu parsender String
-     *  @param  smart automatisches Anlegen nicht existierender Sektionen
+     *  @param  smart aktiviert den smarten Modus
      *  @return die ermittelten Sektionen als Initialize
      */
     public static Initialize parse(String text, boolean smart) {
 
         Enumeration     enumeration;
         Initialize      initialize;
-        String          line;
-        String          section;
+        LinkedHashMap   entries;
         StringBuffer    buffer;
         StringTokenizer tokenizer;
+        String          line;
+        String          section;
+        String          value;
         
         String[]        strings;
         
@@ -229,7 +239,8 @@ public class Initialize implements Cloneable {
         if (text == null)
             return initialize;
 
-        buffer = null;
+        entries = new LinkedHashMap();
+        buffer  = null;
 
         tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
@@ -254,14 +265,14 @@ public class Initialize implements Cloneable {
                 if (section.isEmpty())
                     continue;
                 
-                initialize.entries.put(section, buffer);
+                entries.put(section, buffer);
                 
                 //ggf. existierende Ableitungen werden registriert und geladen
                 strings = strings[1].split("\\s+");
                 for (index = 0; index < strings.length; index++) {
                     section = Initialize.decode(strings[index]);
-                    if (initialize.entries.containsKey(section))
-                        buffer.append("\r\n").append(initialize.entries.get(section));
+                    if (entries.containsKey(section))
+                        buffer.append("\r\n").append(entries.get(section));
                 }
                 
             } else if (buffer != null) {
@@ -271,10 +282,12 @@ public class Initialize implements Cloneable {
             }
         }
         
-        enumeration = Collections.enumeration(initialize.entries.keySet());
+        enumeration = Collections.enumeration(entries.keySet());
         while (enumeration.hasMoreElements()) {
             section = (String)enumeration.nextElement();
-            initialize.entries.put(section, Section.parse(((StringBuffer)initialize.entries.get(section)).toString(), smart));
+            value   = ((StringBuffer)entries.get(section)).toString().trim();
+            if (!smart || !value.isEmpty())
+                initialize.entries.put(section, Section.parse(value, smart));
         }
 
         return initialize;
@@ -304,8 +317,12 @@ public class Initialize implements Cloneable {
 
     /**
      *  R&uuml;ckgabe der angegebenen Section.
+     *  Ist dieser der Schl&ouml;ssel nicht enthalten bzw. kann nicht ermittelt
+     *  werden, liefert die Methode <code>null</code> und im Smart-Modus eine
+     *  leere Sektion.
      *  @param  key Name der Section
-     *  @return die ermittelte Section, sonst <code>null</code> 
+     *  @return die ermittelte Section, sonst <code>null</code>  bzw. im
+     *          Smart-Modus eine leere Sektion
      */
     public synchronized Section get(String key) {
         
@@ -317,18 +334,19 @@ public class Initialize implements Cloneable {
             return null;
         
         section = (Section)this.entries.get(key);
-        if (section == null && this.smart) {
-            section = new Section(true);
-            this.entries.put(key, section);
-        }
-        
+        if (section == null && this.smart)
+            return new Section(true);
         return section;
     }
 
     /**
      *  Setzt die entsprechende Sektion mit dem angegebenen Inhalt.
      *  Bestehende Sektionen werden entfernt und neu gesetzt.
-     *  @param  key    Name der Sektion
+     *  Leere Sch&uuml;ssel sind nicht zul&auml;ssig und f&uuml;hren zur
+     *  {@link IllegalArgumentException}. Die Methode reagiert im Smart-Modus
+     *  zudem bei einem leeren Wert wie {@link #remove(String)} und entfernt
+     *  den Schl&uuml;ssel. 
+     *  @param  key     Name der Sektion
      *  @param  section Sektion
      *  @return ggf. zuvor zugeordnete Sektion, sonst <code>null</code>
      */
@@ -338,6 +356,8 @@ public class Initialize implements Cloneable {
             key = key.toUpperCase().trim();
         if (key == null || key.isEmpty())
             throw new IllegalArgumentException();
+        if (section == null && !this.smart)
+            return (Section)this.entries.remove(key);
         if (section == null)
             section = new Section(this.smart);
         return (Section)this.entries.put(key, section);

@@ -45,7 +45,7 @@ import java.util.Hashtable;
  *  </dir>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
  *  auf folgende Zeichen begrenzt:
- *      <dir>{@code a-z A-Z 0-9 _-}</dir>
+ *      <dir><code>a-z A-Z 0-9 _-</code></dir>
  *  <dir>
  *    <b>Struktur und Beschreibung der Platzhalter</b>
  *  </dir>

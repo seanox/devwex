@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2016 Seanox Software Solutions
+ *  Copyright (C) 2017 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -21,11 +21,9 @@
  */
 package com.seanox.devwex;
 
-import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
@@ -41,12 +39,12 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20160811<br>
- *  Copyright (C) 2016 Seanox Software Solutions<br>
+ *  Server 5.0 20170219<br>
+ *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160811
+ *  @version 5.0 20170219
  */
 public class Server implements Runnable {
 
@@ -76,15 +74,13 @@ public class Server implements Runnable {
         Enumeration       enumeration;
         InetAddress       address;
         KeyManagerFactory manager;
-        KeyStore          store;
+        KeyStore          keystore;
         SSLContext        context;
         String            buffer;
         String            string;
         StringTokenizer   tokenizer;
         Section           options;
         Section           section;
-        
-        byte[]            bytes;
 
         int               port;
         int               isolation;
@@ -159,28 +155,25 @@ public class Server implements Runnable {
         }
 
         //entsprechend dem Serverschema wird der ServerSocket eingerichtet
-        if (this.initialize.contains(this.context.concat("ssl"))) {
+        if (this.initialize.contains(this.context.concat(":ssl"))) {
 
             //die SSL Konfiguration wird ermittelt
-            options = this.initialize.get(this.context.concat("ssl"));
+            options = this.initialize.get(this.context.concat(":ssl"));
 
             //der Typ des KeyStores wird ermittelt, Standard ist JKS
-            store = KeyStore.getInstance(options.get("type"), "JKS");
+            keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
             
             //der SSL Algorithmus wird ermittelt, Standard ist SunX509
-            manager = KeyManagerFactory.getInstance(options.get("algorithm", "SunX509"));
-
+            manager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));
+            
             //das Passwort des KeyStores wird ermittelt
             string = options.get("password");
 
-            //der KeyStore Datenstrom wird ermittelt und eingerichtet
-            bytes = Files.readAllBytes(Paths.get(options.get("store"), new String[0]));
-            
             //der KeyStore wird geladen
-            store.load(new ByteArrayInputStream(bytes), string.toCharArray());
+            keystore.load(new FileInputStream(options.get("keystore")), string.toCharArray());
 
             //der KeyStore wird initialisiert
-            manager.init(store, string.toCharArray());
+            manager.init(keystore, string.toCharArray());
 
             //das SSL Protokoll wird ermittelt, Standard ist TLS
             context = SSLContext.getInstance(options.get("protocol", "TLS"));
@@ -315,7 +308,10 @@ public class Server implements Runnable {
                     thread.start();
                 }
 
-                Service.sleep(25);
+                try {Thread.sleep(25);
+                } catch (Throwable throwable) {
+                    this.destroy();
+                }
             }
 
         } catch (Throwable throwable) {

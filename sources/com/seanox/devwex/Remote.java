@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2016 Seanox Software Solutions
+ *  Copyright (C) 2017 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -22,26 +22,24 @@
 package com.seanox.devwex;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 /**
  *  Remote, stellt Client- und Server- Funktionalit&auml;ten f&uuml;r die auf
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 5.0 20160811<br>
- *  Copyright (C) 2016 Seanox Software Solutions<br>
+ *  Remote 5.0 20170123<br>
+ *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160811
+ *  @version 5.0 20170123
  */
 public class Remote implements Runnable {
 
@@ -56,23 +54,22 @@ public class Remote implements Runnable {
 
     /**
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     *  @param  name Name des Servers
-     *  @param  data Konfigurationsdaten des Servers
+     *  @param  server Name des Servers
+     *  @param  data   Konfigurationsdaten des Servers
      *  @throws Throwable bei fehlerhafter Einrichtung des Servers
      */
-    public Remote(String name, Object data) throws Throwable {
+    public Remote(String server, Object data) throws Throwable {
 
         InetAddress address;
-        String      string;
         Section     options;
 
         int         port;
 
         //der Servername wird uebernommen
-        name = (name == null) ? "" : name.trim();
+        server = server == null ? "" : server.trim();
         
         //die Konfiguration wird ermittelt
-        options = ((Initialize)data).get(name.concat(":bas"));
+        options = ((Initialize)data).get(server.concat(":bas"));
                 
         //der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));
@@ -81,8 +78,8 @@ public class Remote implements Runnable {
         }
 
         //die Hostadresse des Servers wird ermittelt
-        string  = options.get("address", "auto").toLowerCase();
-        address = string.equals("auto") ? null : InetAddress.getByName(string);
+        server  = options.get("address", "auto").toLowerCase();
+        address = server.equals("auto") ? null : InetAddress.getByName(server);
 
         //der ServerSocket wird eingerichtet
         this.socket = new ServerSocket(port, 0, address);
@@ -93,6 +90,14 @@ public class Remote implements Runnable {
         //die Serverkennung wird zusammengestellt
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
     }
+    
+    /**
+     *  R&uuml;ckgabe der Serverkennung.
+     *  @return die Serverkennung
+     */
+    public String getCaption() {
+        return this.caption;
+    }
 
     /**
      *  Sendet den Befehl per Telnet an den Server. R&uuml;ckgabe die Antwort
@@ -101,10 +106,9 @@ public class Remote implements Runnable {
      *  @param  port    Serverport
      *  @param  request Remoterequest
      *  @return der Response als ByteArray
-     *  @throws IOException beim fehlerhaftem Datenzugriff
-     *  @throws UnknownHostException bei fehlerhaften Verbindungsdaten
+     *  @throws Exception bei fehlerhaftem Datenzugriff
      */
-    public static byte[] call(String address, int port, String request) throws IOException {
+    public static byte[] call(String address, int port, String request) throws Exception {
 
         ByteArrayOutputStream buffer;
         Socket                socket;
@@ -114,30 +118,28 @@ public class Remote implements Runnable {
 
         int                   length;
 
-        if (request == null) return new byte[0];
+        //der Request wird vorbereitet
+        request = request == null ? "" : request.trim();
 
         //die Datenpuffer werden eingerichtet
         buffer = new ByteArrayOutputStream();
         bytes  = new byte[65535];
-
-        //initiale Einrichtung vom Socket
-        socket = null;
-
+        
+        //der Remotesocket wird eingerichtet
+        socket = new Socket(address, port);
+       
         try {
-
-            //der Remotesocket wird eingerichtet
-            socket = new Socket(address, port);
 
             //der Datenstrom wird eingerichtet
             input = socket.getInputStream();
-
+            
             //der Request wird ausgegeben
             socket.getOutputStream().write(request.concat("\r\n").getBytes());
 
             //der Response wird gelesen
             while ((length = input.read(bytes)) >= 0) {
                 buffer.write(bytes, 0, length);
-                Service.sleep(25);
+                Thread.sleep(25);
             }
 
         } finally {
@@ -190,7 +192,12 @@ public class Remote implements Runnable {
             }
 
             //der Request wird ausgewertet
-            string = buffer.toString().trim().toLowerCase();            
+            string = buffer.toString().toLowerCase().trim();    
+            
+            //der Response wird ueberprueft, kann keine Information ermittelt
+            //werden wird eine Standardinformation gesetzt
+            if (string.length() == 0)
+                string = "INFO: UNKNOWN COMMAND";            
             
             //STATUS - die Serverliste wird zusammengestellt
             if (string.equals("status")) {
@@ -206,13 +213,7 @@ public class Remote implements Runnable {
             } else if (string.equals("stop")) {
 
                 string = ("INFO: SERVICE STOP").concat(!Service.destroy() ? " FAILED" : "PED");
-
-            } else string = null;
-
-            //der Response wird ueberprueft, kann keine Information ermittelt
-            //werden wird eine Standardinformation gesetzt
-            if (string == null || string.length() == 0)
-                string = "INFO: UNKNOWN COMMAND";
+            }
 
             //der Response wird ausgegeben
             socket.getOutputStream().write(string.concat("\r\n").getBytes());
@@ -239,14 +240,6 @@ public class Remote implements Runnable {
 
             //keine Fehlerbehandlung erforderlich
         }
-    }
-
-    /**
-     *  R&uuml;ckgabe der Serverkennung.
-     *  @return die Serverkennung
-     */
-    public String getCaption() {
-        return this.caption;
     }
 
     /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
@@ -278,13 +271,16 @@ public class Remote implements Runnable {
                     thread.start();
                 }
 
-                Service.sleep(250);
+                try {Thread.sleep(250);
+                } catch (Throwable throwable) {
+                    this.destroy();
+                }                
 
-            } catch (SocketException throwable) {
+            } catch (SocketException exception) {
 
                 this.destroy();
 
-            } catch (InterruptedIOException throwable) {
+            } catch (InterruptedIOException exception) {
 
                 continue;
 
@@ -299,7 +295,10 @@ public class Remote implements Runnable {
                     //keine Fehlerbehandlung erforderlich
                 }
 
-                Service.sleep(25);
+                try {Thread.sleep(25);
+                } catch (Throwable throwable1) {
+                    this.destroy();
+                }
             }
         }
 

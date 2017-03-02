@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2016 Seanox Software Solutions
+ *  Copyright (C) 2017 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -349,12 +349,12 @@ import java.util.Vector;
  *  Weitere Details zu Parametern ergeben sich durch die Implementierung vom
  *  Modul.<br>
  *  <br>
- *  Service 5.0 20161007<br>
- *  Copyright (C) 2016 Seanox Software Solutions<br>
+ *  Service 5.0 20170302<br>
+ *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20161007
+ *  @version 5.0 20170302
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -409,20 +409,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     }
 
     /**
-     *  Wartet f&uuml;r die in Millisekunden angegebenen Dauer, unterbricht
-     *  jedoch nicht die Verarbeitung der laufenden Prozesse.
-     *  @param duration Dauer in Millisekunden
-     */
-    static void sleep(long duration) {
-
-        try {Thread.sleep(duration);
-        } catch (Throwable throwable) {
-
-            //keine Fehlerbehandlung erforderlich
-        }
-    }
-
-    /**
      *  L&auml;dt die per Name angegebene Klasse &uuml;ber den servereigenen
      *  ClassLoader. Ist dieser noch nicht eingerichtet wird <code>null</code>
      *  zur&uuml;ckgegeben. Kann die Klasse nicht geladen werden, f&uuml;hrt der
@@ -460,23 +446,22 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         Object  object;
         Service service;
         
-        service = Service.service;
-        if (service == null || module == null)
-            return null;
-        
-        synchronized (service.getClass()) {
+        synchronized (Service.class) {
+            
+            service = Service.service;
+            if (service == null || module == null)
+                return null;            
             
             //das Modul wird aus der Modulliste ermittelt, ist dieses noch nicht
             //registriert, wird es neu initialisiert und eingetragen
             object = service.modules.get(module);
-
-            if (object != null) return object;
+            if (object != null)
+                return object;
                 
             //die Instanz vom Modul wird optional eingerichtet
             //kann keine Instanz angelegt werden, wird die Klasse verwendet
             try {object = module.newInstance();
             } catch (InstantiationException exception) {
-                
                 object = module;
             }
 
@@ -518,8 +503,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public static boolean initialize(int modus) {
 
-        Class           source;
         ClassLoader     loader;
+        Class           source;
         Enumeration     enumeration;
         Object          object;
         Section         section;
@@ -552,7 +537,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             if (modus == Service.STOP
                     || modus == Service.RESTART) {
 
-                if (service.status != Service.RUN && service.status != UNKNOWN)
+                if (service.status != Service.RUN
+                        && service.status != UNKNOWN)
                     return false;
                 
                 Service.print(("SERVICE INITIALIZE ").concat(modus == Service.RESTART ? "RESTART" : "STOP"));
@@ -567,7 +553,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     //der Server wird zum Beenden aufgefordert
                     try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
                     } catch (Throwable throwable) {
-                 
                         Service.print(throwable);
                     }
                 }
@@ -583,10 +568,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     //das Beenden vom Modulen ist optional
                     try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
                     } catch (Throwable throwable) {
-                        
                         if (throwable instanceof NoSuchMethodException)
                             continue;
-
                         Service.print(throwable);
                     }
                 }
@@ -617,13 +600,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     if (service.server.size() != size)
                         timeout = System.currentTimeMillis() +65535;
                     
-                    Service.sleep(25);
+                    try {Thread.sleep(25);
+                    } catch (Throwable throwable) {
+                        break;
+                    }
                 }
 
                 if (service.server.size() > 0) {
-                    
                     Service.print("SERVICE STOP FAILED");
-                    
                     return false;
                 }
                 
@@ -663,7 +647,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                             if (!files[loop].isFile())
                                 continue;
 
-                            string = string.concat("\r\n").concat(files[loop].getPath());
+                            string = string.concat("\r\n\t").concat(files[loop].getPath());
                             files[loop] = files[loop].getCanonicalFile();
                             libraries.add(files[loop]);
                            
@@ -684,11 +668,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 loader = service.loader = new Loader(loader, libraries);
                 
                 //die aktuelle Konfiguration wird geladen
-                try {service.initialize = Initialize.parse(new String(Service.read(new File("devwex.ini"))), true);
+                try {service.initialize = Initialize.parse(new String(Files.readAllBytes(new File("devwex.ini").toPath())), true);
                 } catch (Throwable throwable) {
-
                     Service.print("SERVICE CONFIGURATION LOADING FAILED");
-
                     Service.print(throwable);
                 }
                 
@@ -719,13 +701,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         Service.call(source, buffer.substring(size).trim());
 
                     } catch (Throwable throwable) {
-
                         if (throwable instanceof ClassNotFoundException
                                 && buffer.matches("\\[\\s*\\*\\s*\\]"))
                             continue;
-                        
                         Service.print(String.format("MODULE %S INITIALIZE FAILED", new Object[] {string}));
-
                         Service.print(throwable);
                     }
                 }
@@ -735,7 +714,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 while (enumeration.hasMoreElements()) {
 
                     context = (String)enumeration.nextElement();
-                    buffer = context.replaceAll("(?i)(^server:(.*):bas$)|(^.*$)", "$2").trim();
+                    buffer  = context.replaceAll("(?i)(^server:(.*):bas$)|(^.*$)", "$2").trim();
                     if (buffer.length() <= 0)
                         continue;
                     
@@ -748,9 +727,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         string = service.initialize.get(context).get("connector");
                         
                         //die Server Klasse wird geladen
-                        if (string.length() == 0 && buffer.matches("(?i)remote"))
+                        if (string.length() <= 0 && buffer.matches("(?i)remote"))
                             source = Remote.class;
-                        else if (string.length() == 0)
+                        else if (string.length() <= 0)
                             source = Server.class;
                         else source = loader.loadClass(string);
 
@@ -785,21 +764,22 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     } catch (Throwable throwable) {
 
                         Service.print(String.format("SERVER %S INITIALIZE FAILED", new Object[] {buffer}));
-
                         Service.print(throwable);
 
-                        if (object != null) {
-
-                            //das Beenden des Servers wird angestossen
+                        //das Beenden des Servers wird angestossen
+                        if (object != null
+                                && !(object instanceof Constructor)) {
                             try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
                             } catch (Throwable error) {
-
                                 Service.print(error);
                             }
                         }
                     }
 
-                    Service.sleep(25);
+                    try {Thread.sleep(25);
+                    } catch (Throwable throwable) {
+                        break;
+                    }
                 }
                 
                 //wurde kein Server gefunden, wird eine Information ausgegeben
@@ -815,19 +795,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
                 //beim Restart wird Status READY gesetzt und die Methode verlassen
                 if (modus == Service.RESTART) {
-                    
                     service.status = Service.RUN;
-                    
                     return true;
                 }
                 
                 //beim Start wird ohne eingerichtete Server, der Service beendet
                 if (modus == Service.START && service.server.size() <= 0) {
-                    
                     service.status = Service.STOP;
-                    
                     Service.service = null;
-                    
                     return false;
                 }
                 
@@ -865,28 +840,24 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      *  @return der aktuelle und detaillierte Betriebsstatus
      */
     public static String details() {
-
+        
+        Enumeration enumeration;
         Object      object;
         Object      caption;
         Service     service;
         String      result;
-        String      string;
-        Enumeration enumeration;
         
         result = "VERS: #[ant:release-version]\r\n";
-
-        result = result.concat(String.format("\r\nTIME: %tF %<tT\r\n", new Object[] {new Date()}));
-        
-        service = Service.service;
+        result = result.concat(String.format("TIME: %tF %<tT\r\n", new Object[] {new Date()}));
      
-        if (service != null) {
+        synchronized (Service.class) {
 
-            result = result.concat(String.format("TIUP: %tF %<tT\r\n", new Object[] {new Date(service.timing)}));
+            service = Service.service;
 
-            synchronized (service.getClass()) {
+            if (service != null) {
+
+                result = result.concat(String.format("TIUP: %tF %<tT\r\n", new Object[] {new Date(service.timing)}));
                 
-                string  = "";  
-
                 //alle registrierten Module werden ermittelt
                 enumeration = service.modules.elements();
                 while (enumeration.hasMoreElements()) {
@@ -904,14 +875,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         caption = object.getClass().getName();
 
                     //die Ausgabe wird zusammengesetzt
-                    string = string.concat("XAPI: ").concat(String.valueOf(caption)).concat("\r\n");
+                    result = result.concat(String.format("XAPI: %s\r\n", new Object[] {caption}));
                 }
-                
-                string = string.trim();
-                if (string.length() > 0)
-                    result = result.concat("\r\n").concat(string).concat("\r\n");
-
-                string = "";
                 
                 //alle registrierten Server werden ermittelt
                 enumeration = service.server.elements();
@@ -930,12 +895,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         caption = object.getClass().getName();                      
 
                     //die Ausgabe wird zusammengesetzt
-                    string = string.concat("SAPI: ").concat((String)caption).concat("\r\n");
+                    result = result.concat(String.format("SAPI: %s\r\n", new Object[] {caption}));
                 }
-                
-                string = string.trim();
-                if (string.length() > 0)
-                    result = result.concat("\r\n").concat(string).concat("\r\n");
             }
         }
         
@@ -961,20 +922,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         //beim Service wird das Beenden eingeleitet
         return Service.initialize(Service.STOP);
     }
-    
-    /**
-     *  Liest die angegebene Datei ein.
-     *  R&uuml;ckgabe das ByteArray, im Fehlerfall ein leeres ByteArray.
-     *  @param  file zu lesenden Datei
-     *  @return das gelesene ByteArray, im Fehlerfall ein leeres ByteArray
-     */
-    private static byte[] read(File file) {
-        
-        try {return Files.readAllBytes(file.toPath());
-        } catch (Throwable throwable) {
-            return new byte[0];
-        }
-    }
 
     /**
      *  Haupteinsprung in die Anwendung.
@@ -990,57 +937,52 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         System.out.println("Seanox Devwex [Version #[ant:release-version]]");
         System.out.println("Copyright (C) #[ant:release-year] Seanox Software Solutions");
         System.out.println("Advanced Server Development\r\n");
-
-        //Kommando wird ermittelt
-        string = (options != null && options.length > 0) ? options[0].trim().toLowerCase() : "";
+        
+        //das Kommando wird ermittelt
+        string = options != null && options.length > 0 ? options[0].toLowerCase().trim() : "";
 
         Service.service = new Service();
         
         //der globale Exception Handler wird gesetzt
-        //Thread.setDefaultUncaughtExceptionHandler(Service.service);
+        Thread.setDefaultUncaughtExceptionHandler(Service.service);
         
         //die Option fuer die erweiterte Ausgabe wird ermittelt
         Service.verbose = string.endsWith("*");
         
         //START - starten der Serverdienste
         if (string.matches("start\\**")) {
-
             Service.initialize(Service.START);
-        
             return;
         }
 
-        //RESTART | STATE | STOP - die Kommandos werden an den Server
-        //gesendet und der Response als Result gesetzt
-        if (string.matches("(restart|state|stop)\\**")) {
+        //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
+        if (!string.matches("(restart|status|stop)\\**")) {
+            System.out.println("Usage: devwex [start|restart|status|stop][*]");
+            return;
+        }
+        
+        //RESTART | STATUS | STOP - die Kommandos werden an den Server
+        //gesendet und der Response als Result gesetzt        
+        
+        try {
+            
+            //die Konfiguration wird geladen
+            initialize = Initialize.parse(new String(Files.readAllBytes(new File("devwex.ini").toPath())), true);
+            
+            //die Konfiguration des Remote Access wird ermittelt
+            section = initialize.get("server:remote:bas");
 
-            try {
-
-                //die Konfiguration wird geladen
-                initialize = Initialize.parse(new String(Service.read(new File("devwex.ini"))), true);
-                
-                //die Konfiguration des Remote Access wird ermittelt
-                section = initialize.get("server:remote:bas");
-
-                //der Remoteausfruf wird ausgefuehrt
-                string = new String(Remote.call(section.get("address"), Integer.parseInt(section.get("port")), string));
-
-            } catch (Throwable throwable) {
-
-                string = "INFO: REMOTE ACCESS FAILED";
-            }
-
-            if (string.length() == 0)
-                string = "INFO: REMOTE ACCESS NOT AVAILABLE";
-
-            //der Result wird als Information ausgegeben
+            //der Remoteausfruf wird ausgefuehrt und ausgegeben
+            string = new String(Remote.call(section.get("address"), Integer.parseInt(section.get("port")), string));
+            if (string.length() <= 0)
+                string = "REMOTE ACCESS NOT AVAILABLE";
             System.out.println(string.trim());
             
-            return;
-        } 
-
-        //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
-        System.out.println("Usage: devwex [start|restart|state|stop][*]");
+        } catch (Throwable throwable) {
+            
+            System.out.println("REMOTE ACCESS FAILED");
+            throwable.printStackTrace(System.out);
+        }        
     }
     
     /**
@@ -1074,7 +1016,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         string = String.valueOf(object).trim();
 
-        if (string.length() == 0)
+        if (string.length() <= 0)
             return;
 
         synchronized (System.out.getClass()) {
@@ -1082,11 +1024,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             //der Zeitstempel wird ermittelt
             timing = String.format("%tF %<tT ", new Object[] {new Date()});
 
-            //der Informationstext wird bereinig
-            string = timing.concat(string).replaceAll("[\\x00-\\x09]+", " ").trim();
-
-            //Zeilenumbrueche werden mit Zeitstempel und Einrueckung formatiert
-            string = string.replaceAll("(?s)([\r\n]\\s*)+", String.format("%n%s... ", new Object[] {timing}));
+            //Zeilenumbrueche werden mit Zeitstempel versehen
+            string = timing.concat(string).replaceAll("(?s)([\r\n])+", ("$1").concat(timing));
             
             //die Folgezeilen werden nur im erweiterten Modus ausgegeben
             if (!Service.verbose)
@@ -1138,7 +1077,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 Service.destroy();
             
             while (Service.service != null)
-                Service.sleep(250);
+                try {Thread.sleep(250);
+                } catch (Throwable throwable) {
+                    break;
+                }
 
             return;
         }
@@ -1175,15 +1117,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             if (++count > timing && (Thread.activeCount() < threads
                     || (Runtime.getRuntime().freeMemory()  /0x100000) < free
                     || (Runtime.getRuntime().totalMemory() /0x100000) < total)) {
-
-                threads = Thread.activeCount();
-                free    = Runtime.getRuntime().freeMemory()  /0x100000;
-                total   = Runtime.getRuntime().totalMemory() /0x100000;
-
                 System.gc();
-
                 count = 0;
             }
+            
+            threads = Thread.activeCount();
+            free    = Runtime.getRuntime().freeMemory()  /0x100000;
+            total   = Runtime.getRuntime().totalMemory() /0x100000;   
 
             //die Option RELOAD wird ermittelt
             if (section.get("reload").toLowerCase().equals("on")
@@ -1195,7 +1135,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 Service.restart();
             }
 
-            Service.sleep(250);
+            try {Thread.sleep(250);
+            } catch (Throwable throwable) {
+                Service.destroy();
+            }
         }
 
         //Standardinformation wird ausgegeben
@@ -1209,7 +1152,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      *  @param thread    Thread
      *  @param throwable Throwable
      */
-    public  void uncaughtException(Thread thread, Throwable throwable) {
+    public void uncaughtException(Thread thread, Throwable throwable) {
         Service.print(throwable);
     }
 }

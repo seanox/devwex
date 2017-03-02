@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2016 Seanox Software Solutions
+ *  Copyright (C) 2017 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -38,12 +38,12 @@ import java.util.zip.ZipFile;
  *  Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
  *  k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.<br>
  *  <br>
- *  Loader 5.0 20160804<br>
- *  Copyright (C) 2016 Seanox Software Solutions<br>
+ *  Loader 5.0 20170302<br>
+ *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20160804
+ *  @version 5.0 20170302
  */
 public class Loader extends URLClassLoader {
     
@@ -96,7 +96,7 @@ public class Loader extends URLClassLoader {
         byte[]      bytes;
         
         name = (name == null) ? "" : name.trim();
-        if (name.length() == 0)
+        if (name.length() <= 0)
             return null;
 
         if (this.loader != null) {
@@ -158,7 +158,7 @@ public class Loader extends URLClassLoader {
         ZipFile  store;
 
         name = (name == null) ? "" : name.trim();
-        if (name.length() == 0)
+        if (name.length() <= 0)
             return null;
 
         if (this.loader != null) {
@@ -221,7 +221,7 @@ public class Loader extends URLClassLoader {
         byte[]          bytes;
 
         name = (name == null) ? "" : name.trim();
-        if (name.length() == 0)
+        if (name.length() <= 0)
             return null;
 
         source = (Class)this.classes.get(name);

@@ -39,17 +39,17 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170219<br>
+ *  Server 5.0 20170304<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170219
+ *  @version 5.0 20170304
  */
 public class Server implements Runnable {
 
     /** Konfiguration des Servers */
-    public volatile Initialize initialize;
+    private volatile Initialize initialize;
     
     /** Socket des Servers */
     private volatile ServerSocket socket;
@@ -65,29 +65,30 @@ public class Server implements Runnable {
 
     /**
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     *  @param  name Name des Servers
-     *  @param  data Konfigurationsdaten des Servers
+     *  @param  server Name des Servers
+     *  @param  data   Konfigurationsdaten des Servers
      *  @throws Throwable bei fehlerhafter Einrichtung des Servers
      */
-    public Server(String name, Object data) throws Throwable {
+    public Server(String server, Object data) throws Throwable {
 
-        Enumeration       enumeration;
-        InetAddress       address;
-        KeyManagerFactory manager;
-        KeyStore          keystore;
         SSLContext        context;
         String            buffer;
         String            string;
         StringTokenizer   tokenizer;
         Section           options;
         Section           section;
+        KeyStore          keystore;
+        KeyManagerFactory manager;
+        FileInputStream   filestream;
+        InetAddress       address;
+        Enumeration       enumeration;
 
-        int               port;
         int               isolation;
+        int               port;
         int               volume;
         
         //der Servername wird uebernommen
-        this.context = name == null ? "" : name.trim();
+        this.context = server == null ? "" : server.trim();
 
         //die Konfiguration wird eingerichtet
         this.initialize = (Initialize)((Initialize)data).clone();
@@ -96,7 +97,6 @@ public class Server implements Runnable {
         //Dazu bilden die Dateiendungen den Schluessel und der Mimetype den
         //Wert. Zur Konfiguration ist der Mimetype als Schluessel einfacher.
         
-        //die Mimetypes werden eingerichtet
         //die Mimetypes werden eingerichtet
         section = new Section(true);
 
@@ -133,8 +133,8 @@ public class Server implements Runnable {
         options = this.initialize.get(this.context.concat(":bas"));
 
         //die Hostadresse des Servers wird ermittelt
-        string  = options.get("address").toLowerCase();
-        address = string.equals("auto") ? null : InetAddress.getByName(string);
+        server  = options.get("address").toLowerCase();
+        address = server.equals("auto") ? null : InetAddress.getByName(server);
 
         //der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));

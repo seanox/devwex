@@ -24,7 +24,6 @@ package com.seanox.devwex;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,13 +35,8 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /**
- *  Service ist ein Container f&uuml;r Server, Services und Module mit den
- *  ben&ouml;tigten Mechanismen, APIs und Sequenzen zur Anbindung, Kontrolle und
- *  Steuerung.<br>
- *  <br>
- *  Server, Services und Module sind Erweiterungen. Sie verwenden eine Basis-API
- *  und werden durch Art und Zeitpunkt der Anbindung klassifiziert, wodurch sich
- *  die API entsprechend ihrer Verwendung erweitert.<br>
+ *  Service ist ein Container mit den ben&ouml;tigten Mechanismen, APIs und
+ *  Sequenzen zur Verwaltung und Ausf&uuml;hrung von Servern und Modulen.<br>
  *  <br>
  *  <dir>
  *    <b>Begriffe</b>
@@ -52,53 +46,28 @@ import java.util.Vector;
  *      Server
  *    </dir>
  *  </dir>
- *  Diese Form der Erweiterungen ist essentiell und stellt die nach aussen hin
- *  verf&uuml;gbaren Funktionen und Kommunikation bereit. Server werden in
- *  eigenst&auml;ndigen SERVER-Sektionen konfiguriert und &uuml;ber ihren Namen
- *  identifiziert und vom Application-ClassLoader als multiple Instanzen
- *  initialisiert.<br>
- *  Beim Start vom Service wird mindestens eine lauff&auml;hige Server-Instanz
- *  ben&ouml;tigt.<br>
- *  <br>
- *  <dir>
- *    <dir>
- *      Services
- *    </dir>
- *  </dir>
- *  Diese optionalen Erweiterungen f&uuml;r Hintergrundaktivit&auml;ten werden
- *  in der Sektion <code>INITIALIZE</code> konfiguriert und mit Start und
- *  Restart vom Service &uuml;ber den Application-ClassLoader initialisiert.
- *  Services werden &uuml;ber die Ausf&uuml;hrungsklasse identifiziert und
- *  werden vom Application-ClassLoader nur einmalig angebunden und
- *  initialisiert.<br>
+ *  Server sind eine essentiell Erweiterung und stellen die nach aussen hin
+ *  verf&uuml;gbaren Funktionen und Kommunikation bereit. Der Service
+ *  l&auml;ldt diese &uuml;ber den Application-ClassLoader und initialisiert
+ *  als multiple Instanzen. Dabei werden die Server &uuml;ber deren Namen
+ *  identifiziert und konfiguriert. Beim Start vom Service wird mindestens eine
+ *  lauff&auml;hige Server-Instanz ben&ouml;tigt.<br>
  *  <br>
  *  <dir>
  *    <dir>
  *      Module
  *    </dir>
  *  </dir>
- *  Diese optionalen Erweiterungen zur Bereitstellung von service-bezogenen
- *  Funktionalit&auml;ten haben keine definierte Form der Konfiguration. Die
- *  Initialisierung erfolgt individuell durch Server und Services mit Angabe der
- *  anzuwendenden Parameter. Module werden &uuml;ber die Ausf&uuml;hrungsklasse
- *  identifiziert und werden vom Application-ClassLoader nur einmalig angebunden
- *  und initialisiert.<br>
+ *  Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen stellen
+ *  nach aussen hin keine direkten Funktionen bereit. Sie werden &uuml;ber die
+ *  Ausf&uuml;hrungsklasse identifiziert und beim Start bzw. Restart vom
+ *  Service oder nachtr&auml;glich in Servern und Modulen &uuml;ber den
+ *  Application-ClassLoader geladen, initialisiert und konfiguriert. Module
+ *  sind globale Erweiterungen, die einmal instanziert und dann allen
+ *  Komponenten bereitgestellt werden.<br>
  *  Optional ist die Verwendung vom Context-ClassLoader auf dem Seanox Devwex
  *  SDK m&ouml;glich, womit Module auch in mehreren unabh&auml;ngigen Instanzen
  *  mit eigenem ClassLoader verwendet werden k&ouml;nnen.<br>
- *  <br>
- *  <dir>
- *    <dir>
- *      Anmerkung
- *    </dir>
- *  </dir>
- *  Der Service unterteilt alle Erweiterungen nur in die Kategorien: Server und
- *  Module. Services und Module unterscheiden sich nur &uuml;ber den Initiator.
- *  Services werden beim (Neu)Start aus der Sektion <code>INITIALIZE</code>
- *  ermittelt und geladen. Die Initialisierung von Modulen obliegt anderen
- *  Komponenten und erfolgt erst zur Laufzeit.<br>
- *  In der Nachfolgenden Dokumentation werden daher nur die Begriffe Server und
- *  Module verwendet.<br>
  *  <br>
  *  <dir>
  *    <b>Arbeitsweise</b>
@@ -109,7 +78,7 @@ import java.util.Vector;
  *  werden feste Sequenzen zum Laden und Entladen von Servern und Modulen
  *  durchlaufen, welche &uuml;ber diese Konfigurationsdatei ermittelt werden.<br>
  *  Im Betrieb &uuml;berwacht der Service Konfiguration, Server sowie Module und
- *  steuert den Garbage Collector f&uuml;r eine schneller Freigabe von
+ *  steuert den Garbage Collector f&uuml;r eine schnellere Freigabe von
  *  Ressourcen.<br>
  *  <br>
  *  <dir>
@@ -174,13 +143,14 @@ import java.util.Vector;
  *  </ul> 
  *  <dir>
  *    <dir>
- *      Modulaufruf
+ *      Manuelles Laden
  *    </dir>
  *  </dir>
  *  <ul>
  *    <li>
- *      Wenn das Modul noch nicht initialisiert wurde, wird es geladen und
- *      optional initialisiert, wenn diese implementiert wurde.
+ *      Server und Module k&ouml;nnen zur Laufzeit weitere Module nachladen.
+ *      Wurde es zwischenzeitlich noch geladen, wird es mit der ersten
+ *      Anforderung geladen und initialisiert.
  *  </ul>
  *  <dir>
  *    <dir>
@@ -349,12 +319,12 @@ import java.util.Vector;
  *  Weitere Details zu Parametern ergeben sich durch die Implementierung vom
  *  Modul.<br>
  *  <br>
- *  Service 5.0 20170302<br>
+ *  Service 5.0 20170304<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170302
+ *  @version 5.0 20170304
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -996,37 +966,32 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public static void print(Object object) {
 
-        String    string;
-        String    timing;
         Throwable throwable;
-
-        while (object instanceof InvocationTargetException
-                && (throwable = ((InvocationTargetException)object).getTargetException()) != null)
-            object = throwable;
-
+        String    string;
+        
         if (object instanceof Throwable) {
 
             if (!Service.verbose)
                 return;
-            
+
             throwable = ((Throwable)object);
-            object    = new StringWriter();
-            throwable.printStackTrace(new PrintWriter((Writer)object));
+            while (throwable instanceof InvocationTargetException
+                    && (object = ((InvocationTargetException)throwable).getTargetException()) != null)
+                throwable = ((Throwable)object);
+
+            object = new StringWriter();
+            throwable.printStackTrace(new PrintWriter((StringWriter)object));
         }
         
         string = String.valueOf(object).trim();
-
         if (string.length() <= 0)
             return;
 
         synchronized (System.out.getClass()) {
 
             //der Zeitstempel wird ermittelt
-            timing = String.format("%tF %<tT ", new Object[] {new Date()});
+            string = String.format("%tF %<tT %s", new Object[] {new Date(), string});
 
-            //Zeilenumbrueche werden mit Zeitstempel versehen
-            string = timing.concat(string).replaceAll("(?s)([\r\n])+", ("$1").concat(timing));
-            
             //die Folgezeilen werden nur im erweiterten Modus ausgegeben
             if (!Service.verbose)
                 string = string.replaceAll("(?s)[r\n].*$", "");

@@ -149,12 +149,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
  *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
  *  <br>
- *  Initialize 5.0 20170120<br>
+ *  Initialize 5.0 20170325<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170120
+ *  @version 5.0 20170325
  */
 public class Initialize implements Cloneable {
 
@@ -224,11 +224,11 @@ public class Initialize implements Cloneable {
         Enumeration     enumeration;
         Initialize      initialize;
         LinkedHashMap   entries;
-        StringBuffer    buffer;
-        StringTokenizer tokenizer;
         String          line;
         String          section;
         String          value;
+        StringBuffer    buffer;
+        StringTokenizer tokenizer;
         
         String[]        strings;
         

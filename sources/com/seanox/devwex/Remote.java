@@ -34,12 +34,12 @@ import java.net.SocketException;
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 5.0 20170302<br>
+ *  Remote 5.0 20170325<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170302
+ *  @version 5.0 20170325
  */
 public class Remote implements Runnable {
 
@@ -194,11 +194,6 @@ public class Remote implements Runnable {
             //der Request wird ausgewertet
             string = buffer.toString().toLowerCase().trim();    
             
-            //der Response wird ueberprueft, kann keine Information ermittelt
-            //werden wird eine Standardinformation gesetzt
-            if (string.length() <= 0)
-                string = "UNKNOWN COMMAND";            
-            
             //STATUS - die Serverliste wird zusammengestellt
             if (string.equals("status")) {
 
@@ -213,7 +208,8 @@ public class Remote implements Runnable {
             } else if (string.equals("stop")) {
 
                 string = ("SERVICE STOP").concat(!Service.destroy() ? " FAILED" : "PED");
-            }
+                
+            } else string = "UNKNOWN COMMAND";
 
             //der Response wird ausgegeben
             socket.getOutputStream().write(string.concat("\r\n").getBytes());

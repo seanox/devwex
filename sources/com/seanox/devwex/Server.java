@@ -39,12 +39,12 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170304<br>
+ *  Server 5.0 20170325<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170304
+ *  @version 5.0 20170325
  */
 public class Server implements Runnable {
 
@@ -170,8 +170,12 @@ public class Server implements Runnable {
             string = options.get("password");
 
             //der KeyStore wird geladen
-            keystore.load(new FileInputStream(options.get("keystore")), string.toCharArray());
-
+            filestream = new FileInputStream(options.get("keystore"));
+            try {keystore.load(filestream, string.toCharArray());
+            } finally {
+                filestream.close();
+            }
+            
             //der KeyStore wird initialisiert
             manager.init(keystore, string.toCharArray());
 
@@ -294,7 +298,7 @@ public class Server implements Runnable {
                     if (this.listener.size() >= volume && volume > 0)
                         break;
 
-                    //derListener wird eingerichtet
+                    //der Listener wird eingerichtet
                     listener = new Listener(this.context, this.socket, (Initialize)this.initialize.clone());
 
                     //der Thread der Listener wird eingerichet, ueber den

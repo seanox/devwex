@@ -319,12 +319,12 @@ import java.util.Vector;
  *  Weitere Details zu Parametern ergeben sich durch die Implementierung vom
  *  Modul.<br>
  *  <br>
- *  Service 5.0 20170304<br>
+ *  Service 5.0 20170325<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170304
+ *  @version 5.0 20170325
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -632,7 +632,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     Service.print(string);
                 
                 //der ClassLoader wird ermittelt
-                loader = service.getClass().getClassLoader();
+                loader = Service.class.getClassLoader();
 
                 //der ClassLoader wird (neu) eingerichtet
                 loader = service.loader = new Loader(loader, libraries);
@@ -1028,12 +1028,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         Section section;
 
         int     count;
-        int     timing;
-
-        long    free;
+        int     delta;
+        int     total;
+        
         long    modified;
-        long    total;
-        long    threads;
         
         //beim Einsprung per ShutdownHook wird das Beenden eingeleitet
         if (!this.equals(Service.service)) {
@@ -1052,43 +1050,43 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
         //die Konfigurationsdatei wird ermittelt
         file = new File("devwex.ini");
+        
+        //die Startzeit des Services wird gesetzt
+        this.timing = System.currentTimeMillis();
 
         //der Betriebsstatus wird gesetzt
         this.status = Service.RUN;
 
-        //die Startzeit des Services wird gesetzt
-        this.timing = System.currentTimeMillis();
-
-        threads = free = total = count = 0;
-        
         modified = file.lastModified();
 
+        count = 0;
+        delta = 0;
+        total = 0;
+        
         //ohne Server Instanzen wird der Service beendet
         //ausgenommen im Status INITIALIZE und RESTART
-        while (this.server.size() > 0 || this.status == Service.RESTART) {
+        while (this.server.size() > 0
+                || this.status == Service.RESTART) {
 
             //die Konfiguration wird ermittelt
             section = this.initialize.get("common");
-
-            //der Interval fuer das CLEANUP wird ermittelt und berrechnet
-            //als Standard werden 5 Sekunden verwendet
-            try {timing = (Integer.parseInt(section.get("cleanup")) /250) -1;
-            } catch (Throwable throwable) {
-                timing = 19;
-            }
-
-            //bei Aktivitaeten wird die Bereinigung zurueckgestellt
-            //und die Garbage Collection wird nur bei Bedarf angefordert
-            if (++count > timing && (Thread.activeCount() < threads
-                    || (Runtime.getRuntime().freeMemory()  /0x100000) < free
-                    || (Runtime.getRuntime().totalMemory() /0x100000) < total)) {
-                System.gc();
-                count = 0;
-            }
             
-            threads = Thread.activeCount();
-            free    = Runtime.getRuntime().freeMemory()  /0x100000;
-            total   = Runtime.getRuntime().totalMemory() /0x100000;   
+            //die Option CLEANUP wird ermittelt
+            if (section.get("cleanup").toLowerCase().equals("on"))
+                count = Thread.activeCount();
+            
+            if (total != count)
+                delta = delta << 1;
+            if (total > count)
+                delta = delta | 1;
+
+            if ((delta & 0xFF) == 0xFF)
+                System.gc();
+            if ((delta & 0xFF) == 0xFF)
+                delta = delta << 1;
+                
+            delta = delta & 0xFF;
+            total = count;
 
             //die Option RELOAD wird ermittelt
             if (section.get("reload").toLowerCase().equals("on")

@@ -108,12 +108,12 @@ import java.util.Hashtable;
  *  Kleinschreibung sowie fehlerhafte Platzhalter, Strukturen, Namensr&auml;ume
  *  und Schl&uuml;ssel.<br>
  *  <br>
- *  Generator 5.0 20170107<br>
+ *  Generator 5.0 20170326<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170107
+ *  @version 5.0 20170326
  */
 public class Generator {
 
@@ -370,8 +370,12 @@ public class Generator {
 
                 //Platzhalter mit maskierten Daten werden nur beim Release
                 //aufgeloest und sonst ignoriert
-                if (level > 1)
-                    value = new BigInteger(scope.substring(2), 16).toByteArray();
+                if (level > 1) {
+                    
+                    scope = ("ff").concat(scope.substring(2));
+                    value = new BigInteger(scope, 16).toByteArray();
+                    value = Arrays.copyOfRange(value, 2, value.length);
+                }
                 
             } else if (level > 1) {
 

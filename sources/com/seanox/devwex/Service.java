@@ -319,12 +319,12 @@ import java.util.Vector;
  *  Weitere Details zu Parametern ergeben sich durch die Implementierung vom
  *  Modul.<br>
  *  <br>
- *  Service 5.0 20170325<br>
+ *  Service 5.0 20170408<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170325
+ *  @version 5.0 20170408
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -450,8 +450,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     }
 
     /**
-     *  (Re)Initialisiert den Service und alle Server, wozu die folgenden
-     *  Betriebszust&auml;nde unterschieden werden:<br>
+     *  Initiiert eine Sequenze beim Server.
+     *  Folgende Sequenzen Sequenzen werden unterst&uuml;tzt:<br>
      *      <dir>START</dir>
      *  Ist der Serivce noch nicht eingerichtet, wird dieser initialisiert, der
      *  Klassenfad erweitertet, die Module geladen, die Server ermittelt und
@@ -468,10 +468,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      *  Klassenfad erweitertet, die Module geladen (wenn sich diese beenden
      *  liesen) und die Server neu initialisiert. In diesem Fall wird der
      *  Betriebzustand auf READY gesetzt und DESTROY verworfen.
-     *  @param  modus Betriebsmodus 
+     *  @param  modus Betriebsmodus
      *  @return <code>true</code> bei erfolgreicher Ausf&uuml;hrung
      */
-    public static boolean initialize(int modus) {
+    public static boolean initiate(int modus) {
 
         ClassLoader     loader;
         Class           source;
@@ -499,20 +499,24 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             timing = System.currentTimeMillis();
 
             //der Service wird gesetzt wenn keine statische Instanz vorliegt
-            if (Service.service == null)
+            if (Service.service == null) {
+
                 Service.service = new Service();
+                
+                //der globale Exception Handler wird gesetzt
+                Thread.setDefaultUncaughtExceptionHandler(Service.service);
+            }
             
             service = Service.service;
 
             if (modus == Service.STOP
                     || modus == Service.RESTART) {
 
-                if (service.status != Service.RUN
-                        && service.status != UNKNOWN)
+                if (service.status != Service.RUN)
                     return false;
                 
-                Service.print(("SERVICE INITIALIZE ").concat(modus == Service.RESTART ? "RESTART" : "STOP"));
-
+                Service.print(("SERVICE INITIATE ").concat(modus == Service.RESTART ? "RESTART" : "STOP"));
+                
                 //alle registrierten Server werden ermittelt
                 enumeration = service.server.elements();
                 while (enumeration.hasMoreElements()) {
@@ -589,12 +593,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             if (modus == Service.START
                     || modus == Service.RESTART) {
                 
-                if (service.status != Service.UNKNOWN
-                        && service.status != Service.RESTART)
+                if (service.status == Service.RUN)
                     return false;
                 
                 if (modus == Service.START)
-                    Service.print("SERVICE INITIALIZE START");
+                    Service.print("SERVICE INITIATE START");
 
                 string = "SERVICE RESOURCES LOADING";
                 
@@ -770,7 +773,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 }
                 
                 //beim Start wird ohne eingerichtete Server, der Service beendet
-                if (modus == Service.START && service.server.size() <= 0) {
+                if (modus == Service.START
+                        && service.server.size() <= 0) {
                     service.status = Service.STOP;
                     Service.service = null;
                     return false;
@@ -788,7 +792,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     Service.print("SERVICE START FAILED");                               
                     Service.print(throwable);
                     
-                    Service.initialize(Service.STOP);
+                    Service.initiate(Service.STOP);
                     
                     //Standardinformation wird ausgegeben
                     Service.print("SERVICE STOPPED");
@@ -880,7 +884,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     public static boolean restart() {
 
         //beim Service wird das Beenden eingeleitet
-        return Service.initialize(Service.RESTART);
+        return Service.initiate(Service.RESTART);
     }
 
     /**
@@ -890,7 +894,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     public static boolean destroy() {
 
         //beim Service wird das Beenden eingeleitet
-        return Service.initialize(Service.STOP);
+        return Service.initiate(Service.STOP);
     }
 
     /**
@@ -899,9 +903,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public static void main(String options[]) {
         
-        Initialize initialize;
-        Section    section;
-        String     string;
+        Section section;
+        String  string;
         
         //Ausgabeinformation wird zusammen gestellt und ausgegeben
         System.out.println("Seanox Devwex [Version #[ant:release-version]]");
@@ -911,17 +914,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         //das Kommando wird ermittelt
         string = options != null && options.length > 0 ? options[0].toLowerCase().trim() : "";
 
-        Service.service = new Service();
-        
-        //der globale Exception Handler wird gesetzt
-        Thread.setDefaultUncaughtExceptionHandler(Service.service);
-        
         //die Option fuer die erweiterte Ausgabe wird ermittelt
         Service.verbose = string.endsWith("*");
         
         //START - starten der Serverdienste
         if (string.matches("start\\**")) {
-            Service.initialize(Service.START);
+            Service.initiate(Service.START);
             return;
         }
 
@@ -937,10 +935,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         try {
             
             //die Konfiguration wird geladen
-            initialize = Initialize.parse(new String(Files.readAllBytes(new File("devwex.ini").toPath())), true);
-            
-            //die Konfiguration des Remote Access wird ermittelt
-            section = initialize.get("server:remote:bas");
+            //und die Konfiguration vom Remote Access ermittelt
+            string  = new String(Files.readAllBytes(new File("devwex.ini").toPath()));
+            section = Initialize.parse(string, true).get("server:remote:bas");
 
             //der Remoteausfruf wird ausgefuehrt und ausgegeben
             string = new String(Remote.call(section.get("address"), Integer.parseInt(section.get("port")), string));
@@ -1004,7 +1001,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     /**
      *  R&uuml;ckgabe vom aktuellen Betriebsstatus.
      *  @return der aktuelle Betriebsstatus
-     *  @see    {@link #UNKNOWN}, {@link #INITIALIZE}, {@link #READY},
+     *  @see    {@link #UNKNOWN}, {@link #START}, {@link #RUN},
      *          {@link #RESTART}, {@link #STOP}
      */
     public static int status() {
@@ -1024,7 +1021,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public void run() {
 
-        File    file;
+        File    file; 
         Section section;
 
         int     count;
@@ -1047,15 +1044,15 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
             return;
         }
-
-        //die Konfigurationsdatei wird ermittelt
-        file = new File("devwex.ini");
         
         //die Startzeit des Services wird gesetzt
         this.timing = System.currentTimeMillis();
 
         //der Betriebsstatus wird gesetzt
         this.status = Service.RUN;
+        
+        //die Konfigurationsdatei wird ermittelt
+        file = new File("devwex.ini");
 
         modified = file.lastModified();
 
@@ -1063,10 +1060,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         delta = 0;
         total = 0;
         
-        //ohne Server Instanzen wird der Service beendet
-        //ausgenommen im Status INITIALIZE und RESTART
-        while (this.server.size() > 0
-                || this.status == Service.RESTART) {
+        while (this.status < Service.STOP) {
 
             //die Konfiguration wird ermittelt
             section = this.initialize.get("common");
@@ -1080,11 +1074,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             if (total > count)
                 delta = delta | 1;
 
-            if ((delta & 0xFF) == 0xFF)
+            if ((delta & 0xFF) == 0xFF) 
                 System.gc();
             if ((delta & 0xFF) == 0xFF)
                 delta = delta << 1;
-                
+
             delta = delta & 0xFF;
             total = count;
 

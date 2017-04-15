@@ -143,8 +143,10 @@
               element = element.trim()
               if (!element)
                   return;
+              
               var title = element.match(/^[^\r\n]+/) || "Others";
               var data  = element.match(/^\s*data:image[^\r\n]+/gm) || [];
+              
               var root = document.querySelector("header");
               root.innerHTML += "<h2>" + title + "</h2>";
               data.forEach(function(element, index, array) {

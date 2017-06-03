@@ -59,12 +59,12 @@ import java.util.TimeZone;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Listener 5.0 20170408<br>
+ *  Listener 5.0 20170528<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170408
+ *  @version 5.0 20170528
  */
 class Listener implements Runnable {
   
@@ -107,8 +107,8 @@ class Listener implements Runnable {
     /** virtuelle Verzeichnisse des Servers */
     private volatile Section references;
     
-    /** Mimetypes des Servers */
-    private volatile Section mimetypes;
+    /** Mediatypes des Servers */
+    private volatile Section mediatypes;
 
     /** Statuscodes des Servers */
     private volatile Section statuscodes;
@@ -119,8 +119,8 @@ class Listener implements Runnable {
     /** Header des Requests */
     private volatile String header;
 
-    /** Mimetype des Requests */
-    private volatile String mimetype;
+    /** Mediatype des Requests */
+    private volatile String mediatype;
 
     /** Resource des Requests */
     private volatile String resource;
@@ -867,7 +867,7 @@ class Listener implements Runnable {
         
         //optional wird die Bereichskennung ermittelt
         realm = reference.replaceAll("^(.*(\\[\\s*(?i)realm:([^\\[\\]]*?)\\s*\\]).*)|.*$", "$3");
-        realm = realm.replace("\"", " ").trim();
+        realm = realm.replace("\"", "\\\"");
         this.fields.set("auth_realm", realm);
         
         digest = string.contains("[d]");
@@ -1379,7 +1379,7 @@ class Listener implements Runnable {
         //die serverseitig festen Umgebungsvariablen werden gesetzt
         this.environment.set("server_port", String.valueOf(this.socket.getLocalPort()));
         this.environment.set("server_protocol", "HTTP/1.0");
-        this.environment.set("server_software", "Seanox-Devwex/#[ant:release-version]");
+        this.environment.set("server_software", "Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
 
         this.environment.set("document_root", this.docroot);
 
@@ -1599,11 +1599,11 @@ class Listener implements Runnable {
         this.environment.set("path_translated", string);
 
         //handelt es sich bei der Ressource um ein Modul wird keine Zuweisung
-        //fuer das (X)CGI und den Mimetype vorgenommen
+        //fuer das (X)CGI und den Mediatype vorgenommen
         if (connect || this.resource.toUpperCase().contains("[M]")) {
 
-            this.mimetype = this.options.get("mimetype");
-            this.gateway  = this.resource;
+            this.mediatype = this.options.get("mediatype");
+            this.gateway   = this.resource;
 
             return;
         }
@@ -1643,19 +1643,19 @@ class Listener implements Runnable {
             }
         }
         
-        //der Mimetype wird ermittelt
-        this.mimetype = this.mimetypes.get(entry);
+        //der Mediatype wird ermittelt
+        this.mediatype = this.mediatypes.get(entry);
 
         //kann dieser nicht festgelegt werden wird der Standardeintrag aus den
         //Server Basisoptionen eingetragen
-        if (this.mimetype.length() <= 0) this.mimetype = this.options.get("mimetype");
+        if (this.mediatype.length() <= 0) this.mediatype = this.options.get("mediatype");
 
-        //die vom Client unterstuetzten Mimetypes werden ermittelt
+        //die vom Client unterstuetzten Mediatypes werden ermittelt
         shadow = this.fields.get("http_accept");
         
         if (shadow.length() > 0) {
 
-            //es wird geprueft ob der Client den Mimetype unterstuetzt,
+            //es wird geprueft ob der Client den Mediatype unterstuetzt,
             //ist dies nicht der Fall, wird STATUS 406 gesetzt
             tokenizer = new StringTokenizer(shadow.toLowerCase().replace(';', ','), ",");
             
@@ -1664,11 +1664,11 @@ class Listener implements Runnable {
                 if (tokenizer.hasMoreTokens()) {
 
                     string = tokenizer.nextToken().trim();
-                    if (string.equals(this.mimetype) || string.equals("*/*") || string.equals("*"))
+                    if (string.equals(this.mediatype) || string.equals("*/*") || string.equals("*"))
                         break;
-                    cursor = this.mimetype.indexOf("/");
-                    if (cursor >= 0 && (string.equals(this.mimetype.substring(0, cursor +1).concat("*"))
-                            || string.equals(("*").concat(this.mimetype.substring(cursor)))))
+                    cursor = this.mediatype.indexOf("/");
+                    if (cursor >= 0 && (string.equals(this.mediatype.substring(0, cursor +1).concat("*"))
+                            || string.equals(("*").concat(this.mediatype.substring(cursor)))))
                         break;
                     
                 } else this.status = 406;
@@ -1690,7 +1690,7 @@ class Listener implements Runnable {
         string = String.valueOf(this.status);
         string = ("HTTP/1.0 ").concat(string).concat(" ").concat(this.statuscodes.get(string)).trim();
         if (this.options.get("identity").toLowerCase().equals("on"))
-            string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version]");
+            string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
         string = string.concat("\r\n").concat(Listener.dateFormat("'Date: 'E, dd MMM yyyy HH:mm:ss z", new Date(), "GMT"));
         string = string.concat("\r\n").concat(String.join("\r\n", header));
 
@@ -2149,7 +2149,7 @@ class Listener implements Runnable {
             entries[2] = String.format("%tF %<tT", new Object[] {new Date(file.lastModified())});
 
             //die Groesse wird ermittelt, nicht aber bei Verzeichnissen
-            string = file.isDirectory() ? "-" : String.format("%,d", new Object[] {Long.valueOf(file.length())});
+            string = file.isDirectory() ? "-" : String.format(Locale.US, "%,d", new Object[] {Long.valueOf(file.length())});
             
             //die Groesse wird an der ersten Stelle mit dem Character erweitert
             //welches sich aus der Laenge der Groesse ergibt um diese nach
@@ -2204,9 +2204,9 @@ class Listener implements Runnable {
             
             string = entries[4];
             if (!string.equals("-")) {
-                string = this.mimetypes.get(string);
+                string = this.mediatypes.get(string);
                 if (string.length() <= 0)
-                    string = this.options.get("mimetype");
+                    string = this.options.get("mediatype");
             } else string = "";
 
             values.put("mime", string);
@@ -2309,8 +2309,8 @@ class Listener implements Runnable {
                 header.add(("Accept-Ranges: bytes"));
                 
                 //wenn verfuegbar wird der Content-Type gesetzt
-                if (this.mimetype.length() > 0)
-                    header.add(("Content-Type: ").concat(this.mimetype));
+                if (this.mediatype.length() > 0)
+                    header.add(("Content-Type: ").concat(this.mediatype));
 
                 //ggf. wird der partielle Datenbereich gesetzt
                 if (this.status == 206)
@@ -2385,7 +2385,7 @@ class Listener implements Runnable {
             //bei Verzeichnissen und der INDEX OFF wird STATUS 403 gesetzt
             if (Listener.cleanOptions(this.options.get("index")).toLowerCase().equals("on")) {
                 
-                header.add(("Content-Type: ").concat(this.mimetypes.get("html")));
+                header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
 
                 //die Verzeichnisstruktur wird bei METHOD:GET generiert
                 if (method.equals("get")) {
@@ -2659,7 +2659,7 @@ class Listener implements Runnable {
 
         //bei Bedarf wird im Header CONTENT-TYPE / CONTENT-LENGTH  gesetzt
         if (bytes.length > 0) {
-            header.add(("Content-Type: ").concat(this.mimetypes.get("html")));
+            header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
             header.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
         }
         
@@ -2914,7 +2914,7 @@ class Listener implements Runnable {
             this.docroot  = "";
             this.gateway  = "";
             this.resource = "";
-            this.mimetype = "";
+            this.mediatype = "";
             this.sysroot  = "";
 
             //die Felder vom Header werde eingerichtet
@@ -2928,7 +2928,7 @@ class Listener implements Runnable {
             this.options     = (Section)this.initialize.get(this.context.concat(":bas")).clone();
             this.references  = (Section)this.initialize.get(this.context.concat(":ref")).clone();
             this.statuscodes = (Section)this.initialize.get("statuscodes").clone();
-            this.mimetypes   = (Section)this.initialize.get("mimetypes").clone();
+            this.mediatypes  = (Section)this.initialize.get("mediatypes").clone();
 
             //die zu verwendende Blockgroesse wird ermittelt
             try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));

@@ -39,12 +39,12 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170325<br>
+ *  Server 5.0 20170528<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170325
+ *  @version 5.0 20170528
  */
 public class Server implements Runnable {
 
@@ -93,26 +93,26 @@ public class Server implements Runnable {
         //die Konfiguration wird eingerichtet
         this.initialize = (Initialize)((Initialize)data).clone();
 
-        //Die Mimetypes werden fuer einen schnelleren Zugriff umgeschrieben.
-        //Dazu bilden die Dateiendungen den Schluessel und der Mimetype den
-        //Wert. Zur Konfiguration ist der Mimetype als Schluessel einfacher.
+        //Die Mediatypes werden fuer einen schnelleren Zugriff umgeschrieben.
+        //Dazu bilden die Dateiendungen den Schluessel und der Mediatype den
+        //Wert. Zur Konfiguration ist der Mediatype als Schluessel einfacher.
         
-        //die Mimetypes werden eingerichtet
+        //die Mediatypes werden eingerichtet
         section = new Section(true);
 
-        //die Mimetypes werden ermittelt
-        options = this.initialize.get("mimetypes");
+        //die Mediatypes werden ermittelt
+        options = this.initialize.get("mediatypes");
 
         if (options != null) {
 
             //die Contenttypes werden ermittelt
             enumeration = options.elements();
     
-            //die Mimetypes werden entsprechend den Dateiendungen aufgebaut
+            //die Mediatypes werden entsprechend den Dateiendungen aufgebaut
             //unvollstaendige Eintraege werden nicht beruecksichtig
             while (enumeration.hasMoreElements()) {
     
-                //der Mimetype wird ermittelt
+                //der Mediatype wird ermittelt
                 string = (String)enumeration.nextElement();
     
                 //die Dateiendungen werden ermittelt
@@ -124,7 +124,7 @@ public class Server implements Runnable {
                 }
             }
     
-            //die Mimetypes werden uberschrieben
+            //die Mediatypes werden uberschrieben
             options.clear();
             options.merge(section);
         }

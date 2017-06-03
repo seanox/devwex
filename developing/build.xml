@@ -1,0 +1,243 @@
+<?xml version="1.0" ?>
+<project name="devwex" default="usage" basedir=".">
+  <target name="usage">
+    <echo>                                                    </echo>
+    <echo> the following targets are available ...            </echo>
+    <echo>                                                    </echo>
+    <echo>   compile  compile and build classes               </echo>
+    <echo>   archive  compile, build classes and make archives</echo>
+    <echo>            for distribution and developing         </echo>
+    <echo>   clean    removed all workfiles                   </echo>
+  </target>
+    
+  <property name="workspace" value=".."/>
+  <property name="workspace.sources" value="${workspace}/sources"/>
+  <property name="workspace.classes" value="${workspace}/program/classes"/>
+  <property name="workspace.program" value="${workspace}/program"/>
+  
+  <property name="build" value="${workspace}/build"/>
+  <property name="build.sources" value="${build}/sources"/>
+  <property name="build.sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
+  <property name="build.classes" value="${build}/classes"/>
+  <property name="build.extension" value="${workspace}/developing/extension"/>
+  <property name="build.project" value="${build}/${ant.project.name}"/>
+  
+  <property name="release" value="${workspace}/release"/>
+  <property name="release.version" value="5.0"/>
+  <property name="release.date" value="20170710"/>  
+  
+  <property name="releases" value="${workspace}/releases"/>
+  
+  <property name="compile.target" value="5"/>
+  <property name="compile.source" value="5"/>
+  <property name="compile.debug" value="off"/>
+  <property name="compile.optimize" value="on"/>
+  <property name="compile.deprecation" value="on"/>
+  
+  <target name="compress" if="windows">
+    <delete file="${workspace.program}/${ant.project.name}.jar"/>
+    <unzip src="${build.extension}/compress.zip" dest="${build}"/>
+    <property name="compress1" value="a ${workspace.program}/${ant.project.name}.jar"/>
+    <property name="compress2" value="-tzip -mm=Deflate -mx9 -md=64k -mfb=128 -mpass=10"/>
+    <property name="compress3" value="${build.classes}/com"/>
+    <exec executable="${build}/7z/7za.exe">
+      <arg line="${compress1} ${compress2} ${compress3}"/>
+    </exec>
+  </target> 
+  
+  <target name="compile">
+    <delete dir="${build}"/> 
+    <mkdir dir="${build.sources}"/>    
+    <copy todir="${build.sources}">
+      <fileset dir="${workspace.sources}"/>
+    </copy>    
+    <replace dir="${build}" includes="${build.sources.filter}"
+      token="#[ant:release-year]" value="${release.year}"/>
+    <replace dir="${build}" includes="${build.sources.filter}"
+      token="#[ant:release-month]" value="${release.month}"/>
+    <replace dir="${build}" includes="${build.sources.filter}"
+      token="#[ant:release-day]" value="${release.day}"/>
+    <replace dir="${build}" includes="${build.sources.filter}"
+      token="#[ant:release-date]" value="${release.date}"/>
+    <replace dir="${build}" includes="${build.sources.filter}"
+      token="#[ant:release-version]" value="${release.version}"/>    
+    <mkdir dir="${build.classes}"/>    
+    <javac srcdir="${build.sources}" destdir="${build.classes}" 
+      source="${compile.source}" target="${compile.target}" includeantruntime="false"
+      debug="${compile.debug}" optimize="${compile.optimize}" deprecation="${compile.deprecation}"/>
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build.classes}"/>
+    </touch>
+    <zip destfile="${workspace.program}/${ant.project.name}.jar"
+      basedir="${build.classes}" compress="true" filesonly="true"/>    
+    <condition property="windows" value="true">
+      <os family="windows"/>
+    </condition>
+    <condition property="windows" value="true">
+      <os family="unix"/>
+    </condition>   
+    <antcall target="compress"/>
+    <delete dir="${build}"/>
+  </target>  
+  
+  <target name="keystore">
+    <delete file="${workspace.program}/keystore"/>
+    <property name="options1" value="-genkey -alias ${ant.project.name} -keystore '${workspace.program}/keystore' -keyalg RSA"/>
+    <property name="options2" value="-dname 'CN=127.0.0.1, C=DE' -validity 365"/>
+    <property name="options3" value="-keypass changeIt -storepass changeIt"/>
+    <exec executable="keytool">
+      <arg line="${options1} ${options2} ${options3}"/>
+    </exec>
+  </target>  
+  
+  <target name="archive" depends="compile,keystore">
+    <delete dir="${build}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build.project}"/>
+    <copy file="${workspace}/system/common.css" tofile="${build}/temp"/>
+    <replaceregexp file="${build}/temp" match="^|([\r\n]+)" flags="g" replace="\1      "/>
+    <loadfile property="css" srcFile="${build}/temp"/>
+    <delete file="${build}/temp"/>  
+    <copy todir="${build.project}/documents">
+      <fileset dir="${workspace}/documents">
+        <include name="index.html"/>
+      </fileset>
+    </copy>    
+    <replace dir="${build.project}/documents" includes="index.html"
+      token="&lt;link rel=&quot;stylesheet&quot; href=&quot;/system/common.css&quot;/&gt;"
+      value="&lt;style type=&quot;text/css&quot;&gt;${line.separator}${css}${line.separator}    &lt;/style&gt;"/>
+    <copy todir="${build.project}/manuals">
+      <fileset dir="${workspace}/manuals">
+        <include name="seanox-${ant.project.name}_??.html"/>
+      </fileset>
+    </copy>
+    <replace dir="${build.project}/manuals" includes="seanox-${ant.project.name}_??.html"
+      token="&lt;link rel=&quot;stylesheet&quot; href=&quot;/system/common.css&quot;/&gt;"
+      value="&lt;style type=&quot;text/css&quot;&gt;${line.separator}${css}${line.separator}    &lt;/style&gt;"/>
+    <mkdir dir="${build.project}/storage"/>
+    <copy file="${workspace}/LICENSE" tofile="${build.project}/license.txt"/>
+    <copy file="${workspace}/developing/release.txt" todir="${build.project}"/>
+    <copy todir="${build.project}/program">
+      <fileset dir="${workspace}/program">
+        <include name="${ant.project.name}.bat"/>
+        <include name="${ant.project.name}.ini"/>
+        <include name="${ant.project.name}.jar"/>
+        <include name="${ant.project.name}.sh"/>
+        <include name="keystore"/>
+      </fileset>
+    </copy>  
+    <copy todir="${build.project}/system">
+      <fileset dir="${workspace}/system">
+        <include name="index.html"/>
+        <include name="status-?xx.html"/>
+      </fileset>
+    </copy>    
+    <replace dir="${build.project}/system" includes="status-?xx.html"
+      token="&lt;link rel=&quot;stylesheet&quot; href=&quot;/system/common.css&quot;/&gt;"
+      value="&lt;style type=&quot;text/css&quot;&gt;${line.separator}${css}${line.separator}    &lt;/style&gt;"/>
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build}"/>
+    </touch>
+    <delete file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
+    <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}.zip"
+      basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/>
+    <touch datetime="${release.date}" pattern="yyyyMMdd"
+      file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
+    
+    <delete dir="${build}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build.project}"/>
+    <copy todir="${build.project}/.settings">
+      <fileset dir="${workspace}/.settings"/>
+    </copy>
+    <copy todir="${build.project}/developing">
+      <fileset dir="${workspace}/developing">
+        <include name="extension/**"/>
+        <include name="mediatypes/**"/>
+        <include name="build.xml"/>
+        <include name="${ant.project.name}.ini"/>
+        <include name="release.txt"/>
+      </fileset>
+    </copy> 
+    <copy todir="${build.project}/documents">
+      <fileset dir="${workspace}/documents">
+        <include name="index.html"/>
+        <include name="index.css"/>
+      </fileset>
+    </copy>    
+    <copy todir="${build.project}/manuals">
+      <fileset dir="${workspace}/manuals">
+        <include name="seanox-${ant.project.name}_??.html"/>
+        <include name="seanox-${ant.project.name}_??.css"/>
+      </fileset>
+    </copy>    
+    <copy todir="${build.project}/program">
+      <fileset dir="${workspace}/program">
+        <include name="${ant.project.name}.bat"/>
+        <include name="${ant.project.name}.ini"/>
+        <include name="${ant.project.name}.sh"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.project}/sources">
+      <fileset dir="${workspace}/sources">
+        <include name="/**"/>
+      </fileset>
+    </copy>    
+    <mkdir dir="${build.project}/storage"/>
+    <copy todir="${build.project}/system">
+      <fileset dir="${workspace}/system">
+        <include name="common.html"/>
+        <include name="index.html"/>
+        <include name="index.css"/>
+        <include name="status-?xx.html"/>
+        <include name="status-?xx.css"/>
+      </fileset>
+    </copy>    
+    <copy todir="${build.project}" file="${workspace}/.classpath"/>  
+    <copy todir="${build.project}" file="${workspace}/.project"/>  
+    <copy tofile="${build.project}/.license" file="${workspace}/LICENSE"/>  
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build}"/>
+    </touch>    
+    <delete file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+    <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"
+      basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/>
+    <touch datetime="${release.date}" pattern="yyyyMMdd"
+      file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+    <delete dir="${build}"/>
+  </target>
+  
+  <target name="clean">
+    <delete includeemptydirs="true">
+      <fileset dir="${workspace}">
+        <exclude name=".settings/**"/>
+        <exclude name="developing/extension/**"/>
+        <exclude name="developing/mediatypes/**"/>
+        <exclude name="developing/build.xml"/>
+        <exclude name="developing/${ant.project.name}.ini"/>
+        <exclude name="developing/release.txt"/>
+        <exclude name="documents/index.html"/>
+        <exclude name="documents/index.css"/>
+        <exclude name="manuals/seanox-${ant.project.name}_??.html"/>
+        <exclude name="manuals/seanox-${ant.project.name}_??.css"/>
+        <exclude name="manuals/seanox-${ant.project.name}.css"/>
+        <exclude name="program/${ant.project.name}.bat"/>
+        <exclude name="program/${ant.project.name}.ini"/>
+        <exclude name="program/${ant.project.name}.jar"/>
+        <exclude name="program/${ant.project.name}.sh"/>
+        <exclude name="program/keystore"/>
+        <exclude name="releases/seanox-${ant.project.name}*.zip"/>
+        <exclude name="sources/com/seanox/${ant.project.name}/*.*"/>
+        <exclude name="storage"/>
+        <exclude name="system/common.*"/>
+        <exclude name="system/index.*"/>
+        <exclude name="system/status-?xxx.*"/>
+        <exclude name=".classpath"/>        
+        <exclude name=".gitignore"/>        
+        <exclude name=".project"/>        
+        <exclude name="LICENSE"/>
+        <exclude name="*.md"/>
+      </fileset>
+    </delete>
+  </target>
+</project>

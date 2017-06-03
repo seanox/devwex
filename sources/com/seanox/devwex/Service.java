@@ -353,7 +353,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     private static volatile boolean verbose;
 
     /** Konstante mit der aktuellen Version des Services */
-    public static final String VERSION = "#[ant:release-version]";
+    public static final String VERSION = "#[ant:release-version] #[ant:release-date]";
 
     /** Konstante f&uuml;r den Betriebsstatus Unbekannt */
     public static final int UNKNOWN = 0;
@@ -757,7 +757,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 //wurde kein Server gefunden, wird eine Information ausgegeben
                 if (service.server.size() <= 0)
-                    Service.print("SERVICE NO SERVER AVAILABLE");
+                    Service.print("SERVICE SERVER NOT AVAILABLE");
 
                 //die Dauer des Startvorgangs wird ermittelt
                 timing = (System.currentTimeMillis() -timing) /1000;
@@ -821,7 +821,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         Service     service;
         String      result;
         
-        result = "VERS: #[ant:release-version]\r\n";
+        result = "VERS: #[ant:release-version] #[ant:release-date]\r\n";
         result = result.concat(String.format("TIME: %tF %<tT\r\n", new Object[] {new Date()}));
      
         synchronized (Service.class) {
@@ -907,7 +907,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         String  string;
         
         //Ausgabeinformation wird zusammen gestellt und ausgegeben
-        System.out.println("Seanox Devwex [Version #[ant:release-version]]");
+        System.out.println("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]");
         System.out.println("Copyright (C) #[ant:release-year] Seanox Software Solutions");
         System.out.println("Advanced Server Development\r\n");
         

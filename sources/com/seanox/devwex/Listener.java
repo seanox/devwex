@@ -1064,7 +1064,7 @@ class Listener implements Runnable {
                         || (method.equals("ends")
                                 && control != (valueA.endsWith(string)
                                         || valueB.endsWith(string)))
-                        || (method.equals("matches")
+                        || (method.equals("match")
                                 && control != (valueA.matches(string)
                                         || valueB.matches(string)))
                         || (method.equals("empty")
@@ -2015,9 +2015,8 @@ class Listener implements Runnable {
     }
     
     /**
-     *  Erstellt auf Basis des Templates <code>index.html</code> oder der
-     *  Referenz <code>SYSTEM:INDEX</code> vom angeforderten Verzeichnisse des
-     *  Dateisystems eine navigierbare HTML-Seite.
+     *  Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
+     *  <code>index.html</code> eine navigierbare HTML-Seite.
      *  @param  directory Verzeichnis des Dateisystems
      *  @param  query     Option der Sortierung
      *  @return das Verzeichnisse als navigierbares HTML

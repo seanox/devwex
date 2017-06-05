@@ -4,7 +4,1080 @@
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <title>Seanox Devwex</title>
     <link rel="stylesheet" href="seanox-devwex.css"/>
+    <script src="seanox-devwex.js"></script>
   </head>
   <body>
+    <header>
+      TODO
+    </header>
+    <nav>
+      TODO
+    </nav>
+    <section>
+      <article>
+        <h1>Beschreibung</h1>
+        <p>
+          Devwex ist ein minimalistische Laufzeit-Container mit einer modularen
+          Architektur f&uuml;r (Web)Server und Anwendungen. Die enthaltenen
+          Server-Instanzen unterst&uuml;tzen das HTTP u.a. mit virtuellen Hosts,
+          Filtern, Modulen, SSL/TLS, XCGI/CGI1.1, Direcory Index, Templates und
+          einem auf Telnet basierenden Fernzugriff zur Container-Steuerung.<br>
+          Weitere Server und Module/Anwendungen lassen sich &uuml;ber die
+          verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container mit den
+          Servern ist eine reine Java-Implementierung Umsetzungen und durch
+          entsprechende Laufzeitumgebungen auf vielen Betriebssystem verwendbar.        
+        </p>
+      </article>
+      <article>
+        <h1>Lizenzbedingungen</h1>
+        <p>
+          Seanox Software Solutions ist ein Open-Source-Projekt, im Folgenden
+          Seanox Software Solutions oder kurz Seanox genannt.
+        </p>
+        <p>
+          Diese Software unterliegt der Version 2 der GNU General Public
+          License.
+        </p>
+        <p>
+          Copyright (C) #[ant:release-year] Seanox Software Solutions
+        </p>
+        <p>
+          This program is free software; you can redistribute it and/or modify
+          it under the terms of version 2 of the GNU General Public License as
+          published by the Free Software Foundation.
+        </p>
+        <p>
+          This program is distributed in the hope that it will be useful, but
+          WITHOUT ANY WARRANTY; without even the implied warranty of
+          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+          General Public License for more details.
+        </p>
+        <p>
+          You should have received a copy of the GNU General Public License
+          along with this program; if not, write to the Free Software
+          Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+          02110-1301, USA.        
+        </p>     
+      </article>
+      <article>
+        <h1>Merkmale</h1>
+        TODO
+        <h2>Architektur</h2>
+        TODO
+        <h2>Customizing</h2>
+        TODO
+        <h2>Erweiterbarkeit</h2>
+        TODO
+        <h2>Konfiguration</h2>
+        TODO
+        <h2>Kontrolle</h2>
+        TODO
+        <h2>Schnittstellen</h2>
+        TODO
+        <h2>Sicherheit</h2>
+        TODO
+        <h2>Virtualisierung</h2>
+        TODO
+      </article>     
+      <article>
+        <h1>Systemanforderung</h1>
+        <h2>Software</h2>
+        <ul>
+          <li>Java Runtime 8.x oder h&ouml;her</li>
+        </ul>
+        <h2>Hardware (Minimum)</h2>
+        <ul>
+          <li>Prozessor 200 MHz</li>
+          <li>Speicher 64 MB</li>
+          <li>Netzwerk 10 MB/s</li>                    
+        </ul>       
+      </article>
+      <article>
+        <h1>Installation</h1>
+        TODO
+      </article>
+      <article>
+        <h1>Konfiguration</h1>
+        TODO
+        <h1>Konfigurationsdatei</h1>
+        <p>
+          Das verwendete INI-Format ist eine kompatible Erweiterung zum
+          klassischen Format. Es ist ebenfalls zeilenbasiert und verwendet
+          Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim Namen
+          von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung 
+          ignoriert. Gleichnamige Deklarationen f&uuml;hren zum
+          &Uuml;berschreiben von Sektionen und Schl&uuml;sseln.
+        </p>
+        <p>
+          In der Erweiterung lassen sich u.a. Sektionen vererben. Dazu folgt
+          einer Sektion das Sch&uuml;sselwort <code>EXTENDS</code> und gefolgt
+          von den Namen referenzierter Sektionen. Damit &uuml;bernimmt die
+          Sektion alle Schl&uuml;ssel und Werte der referenzierten Sektionen und
+          kann diese erweitern oder &uuml;berschreiben.
+        </p>
+        <p>
+          Das Zuweisen von Werten zu Schl&uuml;sseln in einer Sektion erfolgt
+          mit dem Gleichheitszeichen. Abweichend vom Orginalformat, kann die
+          Zuweisung in der Folgezeile ohne erneute Angabe des Schl&uuml;ssels
+          durch die Verwendung vom Pluszeichen fortgesetzt werden. Werte lassen
+          sich zudem fest, variabel und optional zuweisen.<br>
+          Durch die Option <code>[?]</code> am Ende eines Schl&uuml;ssels, wird
+          nach einem gleichnamigen Schl&uuml;ssel in den System-Properties der
+          Java-Laufzeitumgebung gesucht. Kann keiner ermittelt werden, wird der
+          optional angegebene Wert verwendet. Ohne Wert gilt ein solcher
+          Schl&uuml;ssel als nicht angegeben und wird ignoriert.
+        </p>
+        <p>
+          Kommentare beginnen mit einem Semikolon, sind optional und lassen sich
+          an jeder beliebigen Stelle in einer Zeile verwenden. Die nachfolgenden
+          Zeichen sind somit kein Bestandteil von Sektion, Schl&uuml;ssel oder
+          Wert.<br>
+          Mit der Option <code>[+]</code> am Ende eines Schl&uuml;ssels, kann
+          die Verwendung von Kommentaren f&uuml;r diesen Schl&uuml;ssel
+          deaktiviert und das Semikolon im Wert verwendet werden.
+        </p>
+        <p>
+          Sektionen, Schl&uuml;ssel und Werte unterst&uuml;tzen auch eine
+          hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>, 
+          gefolgt von der hexadezimalen Zeichenfolge. Diese Schreibweise kann
+          immer nur auf das komplette Element angewandt werden. Die Kombination
+          oder Unterbrechung ist nicht m&ouml;glich.
+        </p>
+        <pre>
+          [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
+            PARAM-A                 = WERT-1         ;Kommentar
+            PARAM-B             [+] = WERT-2; WERT-3
+                                    + WERT-4; WERT-5
+            PARAM-C          [?][+] = WERT-6; WERT-7
+            PARAM-E          [?]                     ;Kommentar
+          
+          [0x53454354494F4E2D41]
+            PARAM-A                 = 0x574552542D31 ;Kommentar
+            0x504152414D2D42        = WERT-2         ;Kommentar 
+            0x504152414D2D43    [+] = 0x574552542D33
+            PARAM-D                 = 0x574552542D34
+                                    + 0x574552542D35
+            PARAM-E          [?][+] = 0x574552542D363B20574552542D37
+            0x504152414D2D45 [?]                     ;Kommentar
+        </pre>
+        <section>
+          <b>Zeile 1</b>
+          <p>
+            Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Das
+            Schl&uuml;sselwort <code>EXTENDS</code> verweist auf die Ableitung
+            von den Sektionen <code>SECTION-A</code> und <code>SECTION-B</code>.
+            Somit basiert <code>SECTION</code> auf den Schl&uuml;sseln und
+            Werten der Sektionen <code>SECTION-A</code> und
+            <code>SECTION-B</code>. Ab dem Semikolon werden die nachfolgenden
+            Zeichen als Kommentar interpretiert.
+          </p>       
+        </section> 
+        <section>
+          <b>Zeile 2</b>
+          <p>
+            Dem Schl&uuml;ssel <code>PARAM-A</code> wird der Wert
+            <code>WERT-1</code> zugewiesen. Die nachfolgenden Zeichen werden ab
+            dem Semikolon als Kommentar interpretiert.        
+          </p>       
+        </section>       
+        <section>
+          <b>Zeile 3</b>
+          <p>
+            Dem Schl&uuml;ssel <code>PARAM-B</code> wird
+            <code>WERT-2; WERT-3</code> als Wert zugewiesen. Durch die Option
+            <code>[+]</code> am Ende vom Schl&uuml;ssel wird der Zeilenkommentar
+            abgeschaltet und alle Zeichen f&uuml;r die Wertzuweisung verwendet.
+            Die Angabe eines Kommentars ist in dieser Zeile nicht m&ouml;glich.
+          </p>       
+        </section>       
+        <section>
+          <b>Zeile 4</b>
+          <p>
+            Die Wertzuweisung von Zeile 3 wird fortgesetzt und der Wert
+            <code>WERT-4; WERT-5</code> dem bestehenden Wert vom Schl&uuml;ssel
+            <code>PARAM-B</code> hinzugef&uuml;gt. Die Option <code>[+]</code>
+            aus Zeile 3 wird ebenfalls in Zeile 4 &uuml;bernommen, womit auch
+            hier der Zeilenkommentar abgeschaltet ist und alle Zeichen als
+            Wertzuweisung verwendet werden. Die Eingabe eines Kommentars ist in
+            dieser Zeile nicht m&ouml;glich. Weitere vorangestellte Optionen
+            sind nicht m&ouml;glich.
+          </p>       
+        </section>       
+        <section>
+          <b>Zeile 5</b>
+          <p>
+            Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code>
+            ist dynamisch. In den System-Properties der Java-Laufzeitumgebung
+            wird dazu nach dem gleichnamigen Schl&uuml;ssel <code>PARAM-C</code>
+            gesucht, wobei die Gross- und Kleinschreibung ignoriert wird. Der
+            Schl&uuml;ssel muss dazu Bestandteil der Laufzeitumgebung sein oder
+            kann beim Programmstart in der Form <code>-Dschluessel=wert</code>
+            gesetzt werden.<br>
+            Enthalten die System-Properties der Java-Laufzeitumgebung keinen
+            entsprechenden Schl&uuml;ssel, wird alternativ
+            <code>WERT-6; WERT-7</code> als Wert verwendet.<br>
+            Durch die Kombination mit der Option <code>[+]</code> am Ende vom
+            Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle
+            Zeichen f&uuml;r die Wertzuweisung verwendet. Die Angabe eines
+            Kommentars ist in dieser Zeile nicht m&ouml;glich.
+          </p>       
+        </section>       
+        <section>
+          <b>Zeile 6</b>
+          <p>
+            Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code>
+            ist dynamisch. In den System-Properties der Java-Laufzeitumgebung
+            wird dazu nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die
+            Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss
+            dazu Bestandteil der Laufzeitumgebung sein oder kann beim           
+            Programmstart in der Form <code>-Dschluessel=wert</code> gesetzt
+            werden.<br>
+            Enthalten die System-Properties der Java-Laufzeitumgebung keinen
+            entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert,
+            da auch kein alternativer Wert angegeben wurde.<br>
+            Kommentare werden in dieser Zeile unterst&uuml;tzt.
+          </p>       
+        </section>       
+        <section>
+          <b>Zeile 8 - 15</b>
+          <p>
+            Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
+            Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.
+          </p>
+        </section>       
+        TODO
+        <h2>Basisoptionen</h2>
+        TODO
+        <h2>Initialisierung</h2>
+        TODO
+        <h2>Serverkonfiguration</h2>
+        TODO
+        <h3>Hypertext Transfer Protocol</h3>
+        TODO
+        <h4>Server</h4>
+        TODO
+        <h4>Secure Socket Layer / Transport Layer Security</h4>
+        TODO
+        <h4>Virtuelle Hosts</h4>
+        TODO
+        <h4>Filter</h4>
+        <p>
+          Die Zugriffe auf Server und virtuelle Hosts k&ouml;nnen &uuml;ber
+          individuelle Regeln gesteuert werden, wozu die eingehenden Anfragen
+          (Requests) vor der Verarbeitung gegen diese Regeln gepr&uuml;ft
+          werden. Individuelle Fehlerseiten, automatische Weiterleitungen und
+          Module werden dabei unterst&uuml;tzt.<br>
+        </p>
+        <p>
+          Das Schema zur Formulierung der Filter:
+        </p>
+        <pre>NAME = METHODE BEDINGUNG FUNKTION VARIABLE WERT [A] ... &gt; VERWEIS [R]</pre>
+        <p>
+          Den Filtern stehen alle CGI-Umgebungsvariablen mit deren Werte in ggf.
+          kodierter und dekodierter Form zur Verf&uuml;gung. Die Gross- und
+          Kleinschreibung wird bei den Variablen wie auch den Werten ignoriert.
+          Die Angabe von einem Verweise ist dabei optional.        
+        </p>
+        <p>
+          &Uuml;bersicht der Elemente vom Filter-Ausdruck
+        </p>        
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Wert</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>NAME</td>
+            <td>...</td>
+            <td>frei w&auml;hlbar</td>
+          </tr>
+          <tr>
+            <td>METHODE</td>
+            <td>GET|POST|PUT|ALL|...</td>
+            <td>auf die zu reagierende HTTP-Methode</td>
+          </tr>        
+          <tr>
+            <td>BEDINGUNG</td>
+            <td>IS|NOT|ALWAYS</td>
+            <td>Bedingung</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>IS</td>
+            <td>Der Filter spricht an, wenn die Bedinung erf&uuml;llt ist.</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>NOT</td>
+            <td>
+              Der Filter spricht an, wenn die Bedinung nicht erf&uuml;llt ist.
+            </td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>ALWAYS</td>
+            <td>
+              Der Filter spricht immer an.<br>
+              Die Angabe von Funktion und Wert ist bei dieser Bedingung nicht
+              erforderlich.
+            </td>
+          </tr>
+          <tr>
+            <td>FUNKTION</td>
+            <td>STARTS|EQUALS|CONTAINS|ENDS|EMPTY</td>
+            <td>Art des Vergleichs</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>STARTS</td>
+            <td>Der Wert der Variablen beginnt mit dem Vergleichswert.</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>EQUALS</td>
+            <td>Der Wert der Variablen entspricht dem Vergleichswert.</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>CONTAINS</td>
+            <td>Der Wert der Variablen enth&auml;lt den Vergleichswert.</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>ENDS</td>
+            <td>Der Wert der Variablen endet mit dem Vergleichswert.</td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>EMPTY</td>
+            <td>
+              Der Wert der Variablen ist leer oder die Variable exisiert nicht.<br>
+              Die Angabe von Funktion und Wert ist bei dieser Bedingung nicht
+              erforderlich.
+            </td>
+          </tr>        
+          <tr>
+            <td></td>
+            <td>MATCHES</td>
+            <td>
+              Der Wert der Variablen entspricht dem Vergleichswert als
+              regul&auml;ren Ausdruck.
+            </td>
+          </tr>           
+          <tr>
+            <td>VARIABLE</td>
+            <td>...</td>
+            <td>
+              Zu pr&uuml;fende Variable.<br>
+              Dem Filter stehen alle CGI-Variablen zur Verf&uuml;gung.
+            </td>
+          </tr>           
+          <tr>
+            <td>WERT</td>
+            <td>...</td>
+            <td>Vergleichswert</td>
+          </tr>
+          <tr>
+            <td>OPTION</td>
+            <td>[A] [R] [M]</td>
+            <td>zus&auml;tzliche Optionen zur Steuerung des Filters</td>
+          </tr>                      
+          <tr>
+            <td></td>
+            <td>[A]</td>
+            <td>Logische Und-Verkn&uuml;pfung mehrerer Bedingungen.</td>
+          </tr>                      
+          <tr>
+            <td></td>
+            <td>[R]</td>
+            <td>Verweis f&uuml;r eine Weiterleitung.</td>
+          </tr> 
+          <tr>
+            <td></td>
+            <td>[M]</td>
+            <td>
+              Verweis auf die Verwendung von einem HTTP-Modul verwiesen.<br>
+              Das Ansprechen des Moduls ist dabei kein finaler Schritt. Ein
+              Beenden der Filtersequenz erfolgt hier nur, wenn ein Modul den
+              Response-Status &auml;ndert und/oder Daten an den Client sendet.
+            </td>
+          </tr>           
+        </table>    
+        <p>
+          Beispiel f&uuml;r einen Request:
+        </p>
+        <pre>
+          GET /directory/file.cgi?value=123 HTTP/1.1
+          Host: www.xxx.zzz
+          Accept-Encoding: gzip, deflate
+          Accept-Language: de
+          Accept: */*
+          User-Agent: Browser
+        </pre>                
+        <p>
+          Die CGI-Variablen und Werte sind abh&auml;ngig vom Request-Header. Der
+          Request-Body wird f&uuml;r Filtern nicht ausgelesen, womit Daten und
+          Parameter wie z.B. bei der HTTP-Methode <code>POST</code>
+          im Body &uuml;bergeben werden, nicht zur Verf&uuml;gung stehen.   
+        </p> 
+        TODO
+        <section>
+          <pre>FILTER-A = GET NOT EQUALS HTTP_ACCEPT_LANGUAGE EN</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn im Request-Header
+            der Parameter <code>Accept-Language</code> nicht <code>EN</code>
+            entspricht.
+          </p>
+        </section>        
+        <section>
+          <pre>FILTER-B = GET IS EQUALS HTTP_ACCEPT_LANGUAGE EN</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn im Request-Header
+            der Parameter <code>Accept-Language</code> dem Wert <code>EN</code>
+            entspricht.          
+          </p>
+        </section>                
+        <section>
+          <pre>FILTER-C = GET IS CONTAINS HTTP_ACCEPT_LANGUAGE EN</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn im Request-Header
+            der Parameter <code>Accept-Language</code> den Wert <code>E</code>
+            enth&auml;lt.          
+          </p>
+        </section>                
+        <section>
+          <pre>FILTER-D = GET IS STARTS REMOTE_ADDR 192.168.</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>REMOTE_ADDR</code> mit <code>192.168.</code> beginnt.
+          </p>
+        </section>
+        <section>
+          <pre>FILTER-E = GET IS ENDS SCRIPT_URL .dat</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>SCRIPT_URL</code> mit <code>.dat</code> endet.
+          </p>
+        </section>
+        <section>
+          <pre>FILTER-F = GET IS MATCH REQUEST_URI \.do$</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>SCRIPT_URL</code> dem regulären Ausdruck <code>(?i).do$</code>
+            entspricht und somit auf <code>.do</code> endet. 
+          </p>
+        </section>        
+        <section>
+          <pre>FILTER-G = GET IS CONTAINS REQUEST_URI /documents [A] GET IS EMPTY HTTP_REFERER</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>REQUEST_URI</code> den Wert <code>/documents</code>
+            enth&auml;lt und der Request-Parameter <code>REFERER</code> leer
+            ist.
+          </p>
+        </section>
+        TODO Testen: Kein Redirect, Inhalt wird direkt angezeigt
+        <section>
+          <pre>FILTER-H = GET IS CONTAINS REQUEST_URI /private &gt; ../system/status-403.html</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>REQUEST_URI</code> den Wert <code>/private</code>
+            enth&auml;lt. In diesem Fall wird der Inhalt der Datei
+            <code>../system/status-403.html</code> angezeigt.
+          </p>
+        </section>
+        <section>
+          <pre>FILTER-I = GET IS CONTAINS REQUEST_URI /private &gt; http://www.xxx.zzz/403.php [R]</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>REQUEST_URI</code> den Wert <code>/private</code>
+            enth&auml;lt. In diesem Fall erfolgt die Weiterleitung zur Adresse
+            <code>http://www.xxx.zzz/403.php</code>.
+          </p>
+        </section>
+        <section>
+          <pre>FILTER-J = GET IS ENDS REQUEST_URI .do &gt; example.Connector [A:...] [B:...] [M]</pre>
+          <p>
+            Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
+            <code>REQUEST_URI</code> mit dem Wert <code>.do</code> endet. In
+            diesem Fall wird das Modul <code>Connector</code> aus dem Paket
+            <code>example</code>, welches sich im Klassenpfad vom Server
+            befinden muss, mit den zus&auml;tzlichen Parametern <code>A</code>
+            und <code>B</code> aufgerufen.
+          </p>
+        </section>
+        <section>
+          <pre>FILTER-K = ALL ALWAYS &gt; example.Connector [A:...] [B:...] [M]</pre>
+          <p>
+            Bei allen Anfragen wird das Modul <code>Connector</code> aus dem
+            Paket <code>example</code>, welches sich im Klassenpfad vom Server
+            befinden muss, mit den zus&auml;tzlichen Parametern <code>A</code>
+            und <code>B</code> aufgerufen.
+          </p>
+        </section>
+        TODO        
+        <h4>Virtuelle Verzeichnisse / Pfade</h4>
+        TODO
+        <h4>Basic- / Digest- Access Authentication</h4>
+        TODO
+        <h4>Umgebungsvariablen</h4>
+        <p>
+          Mit Umgebungsvariablen stellen Betriebssystem und Laufzeitumgebung
+          einer Anwendung essentielle und zus&auml;tzliche System- und
+          Laufzeit-Informationen bereit.
+        </p>
+        <p>
+          Als Erweiterung der Umgebungsvariablen vom Betriebssystem und
+          Laufzeitumgebung werden in dieser Sektion f&uuml;r das CGI und XCGI
+          zus&auml;tzlich ben&ouml;tigte Umgebungsvariablen definiert.
+        </p>
+        <p>
+          Das Schema zur Formulierung der Umgebungsvariablen<br>
+        </p>
+        <pre>PARAMETER = WERT</pre>
+        <p>
+          Beispiele f&uuml;r die Einrichtung Umgebungsvariablen<br>
+        </p>
+        <pre>WEBSERVER = DEVWEX</pre>
+        <p>
+          Die Umgebungsvariable <code>WEBSERVER</code> wird mit dem Wert
+          <code>DEVWEX</code> festgelegt.
+        </p>
+        <section>
+          <b>Hinweis</b>
+          <p>
+            XCGI/CGI-Anwendungen ermitteln System- und Laufzeit-Informationen
+            &uuml;ber die Umgebungsvariablen. Essentielle Umgebungsvariablen wie
+            <code>SYSTEMDRIVE</code>, <code>SYSTEMROOT</code>, <code>PATH</code>
+            und f&uuml;r PHP <code>REDIRECT_STATUS = 302</code> sollten daher in
+            der Konfigurationsdatei <code>devwex.ini</code> gesetzt werden.
+          </p>
+        </section>
+        <section>
+          <b>Tipp</b>
+          <p>
+            Die Option <code>[?]</code> am Ende eines Schl&uuml;ssels
+            kennzeichnet diesen als dynamisch. Dazu wird der Schl&uuml;ssel mit
+            seinem Wert beim Programmstart &uuml;ber als Startargument oder
+            ind en System-Properties festgelegt. Systemrelevante Variablen, wie
+            <code>PATH</code> und f&uuml;r Windows <code>SYSTEMDRIVE</code>
+            sowie <code>SYSTEMROOT</code> lassen sich &uuml;ber diesen Weg
+            &uuml;bergeben. Weitere Informationen dazu sind im Abschnitt 
+            <a href="#Configuration">Konfigurationsdatei</a> enthalten.            
+          </p>
+        </section>
+        <h4>Common Gateway Interface</h4>
+        <p>
+          Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen und
+          Anwendungen wird die Spezifikation 1.1 des Common Gateway Interfaces
+          und somit PHP, Perl, Python und andere unterst&uuml;tz. Optional steht
+          auch FastCGI zur Verf&uuml;gung.
+        </p>
+        <p>
+          Mit dem XCGI ist eine weitere an das CGI angelehnte Schnittstelle
+          verf&uuml;gbar. Grundprinzip und Arbeitsweise entsprechen denen CGI.
+          Auch beim XCGI erfolgt die Kommunikation &uuml;ber den Standard-I/O
+          und die serverrelevanten Informationen werden als Umgebungsvariablen
+          &uuml;bermittelt. Hier unterscheidet sich jedoch die Form der
+          &Uuml;bermittlung. So werden die Umgebungsvariablen beim CGI &uuml;ber 
+          die Laufzeitumgebung und beim XCGI &uuml;ber den Datenstrom
+          bereitgestellt. Vergleichbar mit dem CGI wird auch beim XCGI der
+          Request-Body per Standard-I/O &uuml;bertragen. Die Umgebungsvariablen
+          werden beim XCGI dem Request-Body vorangestellt. Der Aufbau ist
+          vergleichbar mit dem vom HTTP-Request. Der Datenstrom beginnt
+          zeilenweise mit den Umgebungsvariablen, es folgen die Zeichenfolge
+          <code>[CRLFCRLF]</code> und dann der Request-Body.
+        </p>
+        <p>
+          Beispiel eines XCGI-Request:
+        </p>
+        <pre>
+          SERVER_PORT=80
+          SERVER_PROTOCOL=HTTP/1.0
+          CONTENT_LENGTH=25
+          CONTENT_TYPE=application/x-www-form-urlencoded
+          REQUEST=POST /example.xcgi HTTP/1.1
+          REQUEST_METHOD=POST
+          REMOTE_ADDR=127.0.0.1
+          REMOTE_PORT=64638
+          UNIQUE_ID=MHU014XLD048AN1A
+          SCRIPT_NAME=/example.xcgi
+          SCRIPT_URL=/example.xcgi
+          HTTP_HOST=127.0.0.1
+          HTTP_USER_AGENT=Mozilla/5.0
+          HTTP_CONTENT_TYPE=application/x-www-form-urlencoded
+          HTTP_CONTENT_LENGTH=25
+          SCRIPT_URI=http://127.0.0.1/example.xcgi
+          SCRIPT_FILENAME=c:/xcgi/example.xcgi
+          PATH_TRANSLATED=c:/xcgi/example.xcgi
+          REQUEST_URI=/example.xcgi
+          GATEWAY_INTERFACE=CGI/1.1
+          
+          Content of Request(-Body)
+        </pre>
+        <p>
+          Der Vorteil vom XCGI liegt in der einfachen &Uuml;bermittelung der
+          Umgebungsvariablen. Somit k&ouml;nnen auch Anwendungen genutzt werden,
+          welche keine exklusive Umgebung besitzen oder keinen Zugriff auf die
+          Umgebungsvariablen vom Betriebssystem haben.<br>
+        </p>
+        <p>Schema zur Formulierung vom Common Gateway Interface:</p>
+        <pre>DATEIERWEITERUNG = METHODEN &gt; ANWENDUNG [OPTION]</pre>
+        <p>&Uuml;bersicht der verf&uuml;gbaren Optionen:</p>
+        <table>
+          <tr>
+            <th>Option</th>
+            <th>Beispielwert</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>[C]</td>
+            <td>.../application/test.cgi</td>
+            <td>voller Pfad inkl. Dateiname und Dateiendung </td>
+          </tr>
+          <tr>
+            <td>[P]</td>
+            <td>.../application/</td>
+            <td>Pfad</td>
+          </tr>
+          <tr>
+            <td>[N]</td>
+            <td>test</td>
+            <td>Dateiname ohne Endung</td>
+          </tr>
+          <tr>
+            <td>[X]</td>
+            <td></td>
+            <td>Verwendung vom XCGI</td>
+          </tr>
+          <tr>
+            <td>[M]</td>
+            <td></td>
+            <td>Verwendung vom Modulen</td>
+          </tr>           
+        </table>
+        <p>Beispiele f&uuml;r die Einrichtung von Common Gateway Interface:</p>
+        <section>
+          <pre>CGI = POST GET &gt; c:/cgi/bin/example.exe</pre>
+          <p>
+            Die Dateiendung <code>cgi</code> wird der Anwendung Example
+            zugewiesen, die bei Anfragen mit der Dateiendung <code>cgi</code>
+            im Pfad gestartet wird. Der Pfad zur Scriptdatei wird hier &uuml;ber
+            die Umgebungsvariablen <code>SCRIPT_FILENAME</code> und
+            <code>PATH_TRANSLATED</code> &uuml;bergeben.
+          </p>
+        </section>
+        <section>
+          <pre>CGI = POST GET &gt; c:/cgi/bin/example.exe [C]</pre>
+          <p>
+            Die Dateiendung <code>cgi</code> wird der Anwendung Example
+            zugewiesen, die bei Anfragen mit der Dateiendung <code>cgi</code> im
+            Pfad gestartet wird. Dder Pfad zur Scriptdatei wird hier der
+            Anwendung als Startargument &uuml;bergeben.
+          </p>
+        </section>
+        <section>
+          <pre>CGI = POST GET &gt; c:/cgi/bin/example.exe [X]</pre>
+          <p>
+            Die Dateiendung <code>cgi</code> wird der Anwendung Example
+            zugewiesen, die bei Anfragen mit der Dateiendung <code>cgi</code> im
+            Pfad unter Verwendung vom XCGI gestartet wird. Der Pfad zur
+            Scriptdatei wird auch hier &uuml;ber die Umgebungsvariablen
+            <code>SCRIPT_FILENAME</code> und
+            <code>PATH_TRANSLATED</code> &uuml;bergeben
+          </p>
+        </section>
+        <p>
+          Beispiel f&uuml;r den Einsatz von PHP, Perl, Java und native
+          Web-Anwendungen:
+        </p>
+        <section>
+          <pre>PHP = POST GET &gt; c:/php/php.exe</pre>
+          <p>
+            Der Dateierweiterung <code>php</code> wird PHP als CGI-Anwendung
+            zugewiesen.
+          </p>
+        </section>
+        <section>
+          <pre>CGI = POST GET &gt; c:/perl/bin/perl.exe [C]</pre>
+          <p>
+            Der Dateierweiterung <code>php</code> wird Perl als CGI-Anwendung
+            zugewiesen.
+          </p>
+        </section>
+        <section>
+          <pre>JAR = POST GET &gt; java -jar [C] [X]</pre>
+          <p>
+            Der Dateierweiterung <code>jar</code> wird Java als XCGI-Anwendung
+            zugewiesen.
+          </p>
+        </section>
+        <section>
+          <pre>EXE = POST GET &gt; [C]</pre>
+          <p>
+            Mit der Dateierweiterung <code>exe</code> wird jede
+            Windows-Anwendung als CGI-Anwendung ausgef&uuml;hrt.
+          </p>
+        </section>         
+        <section>
+          <pre>EXE = POST GET &gt; [C] [X]</pre>
+          <p>
+            Mit der Dateierweiterung <code>exe</code> wird jede
+            Windows-Anwendung als XCGI-Anwendung ausgef&uuml;hrt.
+          </p>
+        </section>        
+        <section>
+          <pre>CMD = POST GET &gt; [C]</pre>
+          <p>
+            Mit der Dateierweiterung <code>cmd</code> wird jedes Batch-Skript
+            als CGI-Anwendung ausgef&uuml;hrt.
+          </p>
+        </section>
+        <p>
+          Neben XCGI und CGI k&ouml;nnen auch Module &uuml;ber den Gateway
+          eingerichtet werden.<br>
+          Anders als beim XCGI und CGI, werden Module nicht als externe
+          Anwendung geladen, sondern &uuml;ber die Modul-API (MAPI) direkt in
+          der Laufzeitumgebung des Servers ausgef&uuml;hrt. Sehr schnelle
+          Zugriffszeiten und ein direkter Zugang und Zugriff auf die Komponenten
+          vom Laufzeit-Container sind dabei von Vorteil.
+        </p>
+        <p>Beispiel f&uuml;r die Einrichtung von Modulen:</p>
+        <section>
+          <pre>SSX = POST GET &gt; com.seanox.ssx.Connector [M]</pre>
+          <p>
+            Die Dateierweiterung <code>ssx</code> wird dem im Klassenpfad
+            befindlichen Modul <code>com.seanox.ssx.Connector</code> zugewiesen.
+          </p>
+        </section>
+        <p>&Uuml;bersicht bereitgestellter Umgebungsvariablen (Auswahl)</p>
+        <table>
+          <tr>
+            <th>Umgebungsvariable</th>
+            <th>Beispielwert</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>CONTENT_LENGTH</td>
+            <td>1000</td>
+            <td>L&auml;nge vom &uuml;bertragenen Request-Body in Bytes</td>
+          </tr>
+          <tr>
+            <td>CONTENT_TYPE</td>
+            <td>text/plain</td>
+            <td>Mediatype der mit dem Request &uuml;bertragenen Daten</td>
+          </tr>
+          <tr>
+            <td>DOCUMENT_ROOT</td>
+            <td>.../devwex/documents</td>
+            <td>physischer Pfad vom Wurzelverzeichnis der Web-Dokumente</td>
+          </tr>
+          <tr>
+            <td>GATEWAY_INTERFACE</td>
+            <td>CGI/1.1</td>
+            <td>Version der vom Server unterst&uuml;tzten CGI-Schnittstelle</td>
+          </tr>
+          <tr>
+            <td>HTTP_ACCEPT</td>
+            <td>*/*</td>
+            <td>Liste der vom Client unterst&uuml;tzten  vom Mediatypen</td>
+          </tr>
+          <tr>
+            <td>HTTP_ACCEPT_ENCODING</td>
+            <td>gzip, deflate</td>
+            <td>Liste der vom Client unterst&uuml;tzten Kodierungsmethoden</td>
+          </tr>
+          <tr>
+            <td>HTTP_ACCEPT_LANGUAGE</td>
+            <td>de</td>
+            <td>Liste der vom Client unterst&uuml;tzten Landessprachen</td>
+          </tr>
+          <tr>
+            <td>HTTP_CONNECTION</td>
+            <td>Keep-Alive</td>
+            <td>Status der HTTP-Verbindung zwischen Server und Client</td>
+          </tr>          
+          <tr>
+            <td>HTTP_HOST</td>
+            <td>experimental.seanox.com</td>
+            <td>
+              Domain-Namen oder IP-Adresse der vom Client angeforderten
+              Zieladresse
+            </td>
+          </tr>
+          <tr>
+            <td>HTTP_USER_AGENT</td>
+            <td>Mozilla/4.0 (compatible; ...)</td>
+            <td>Produkt- und Versionsinformationen des Clients</td>
+          </tr>
+          <tr>
+            <td>MODULE_OPTS</td>
+            <td>...ssi.Connector [allow:all] [M]</td>
+            <td>Modulaufruf mit allen Parametern</td>
+          </tr>
+          <tr>
+            <td>PATH</td>
+            <td>...</td>
+            <td>
+              Liste von Pfaden f&uuml;r die Suche nach Ressourcen und
+              Anwendungen, wird optional &uuml;ber <code>[SERVER:ENV]</code>
+              gesetzt
+            </td>
+          </tr>
+          <tr>
+            <td>PATH_ABSOLUTE</td>
+            <td>/example.ssi</td>
+            <td>reale Pfadangabe der URL bei absoluten Pfaden</td>
+          </tr>
+          <tr>
+            <td>PATH_BASE</td>
+            <td>/example.ssi/folder/...</td>
+            <td>komplette Pfadangabe der URL</td>
+          </tr>
+          <tr>
+            <td>PATH_INFO</td>
+            <td>/folder/...</td>
+            <td>erweiterte Pfadangabe der URL bei absoluten Pfaden</td>
+          </tr>
+          <tr>
+            <td>PATH_TRANSLATED</td>
+            <td>.../devwex/documents/example.ssi</td>
+            <td>physischer Pfad der aufgerufenen Ressource im Dateisystem</td>
+          </tr>
+          <tr>
+            <td>QUERY_STRING</td>
+            <td>parameter=name</td>
+            <td>Liste der mit dem Request-URI &uuml;bergebenen Parameter</td>
+          </tr>
+          <tr>
+            <td>REMOTE_ADDR</td>
+            <td>sirius.seanox.com</td>
+            <td>Name oder IP-Adresse vom Client</td>
+          </tr>
+          <tr>
+            <td>REMOTE_PORT</td>
+            <td>1573</td>
+            <td>Port vom Clients</td>
+          </tr>
+          <tr>
+            <td>REQUEST_METHOD</td>
+            <td>POST</td>
+            <td>HTTP-Methoden der Anfrage</td>
+          </tr>
+          <tr>
+            <td>REQUEST_URI</td>
+            <td>/example.ssi/...?parameter=name</td>
+            <td>Pfad der HTTP-Anfrage inklusive &uuml;bergebener Parameter</td>
+          </tr>
+          <tr>
+            <td>SCRIPT_FILENAME</td>
+            <td>.../devwex/documents/example.ssi</td>
+            <td>physischer Pfad der aufgerufenen Ressource im Dateisystem</td>
+          </tr>
+          <tr>
+            <td>SCRIPT_NAME</td>
+            <td>/example.ssi/...</td>
+            <td>HTTP-Pfad der aufgerufenen Ressource</td>
+          </tr>
+          <tr>
+            <td>SCRIPT_URI</td>
+            <td>http://...seanox.com/example.ssi/...</td>
+            <td>kompletter HTTP-Pfad der aufgerufenen Ressource</td>
+          </tr>
+          <tr>
+            <td>SCRIPT_URL</td>
+            <td>/example.ssi</td>
+            <td>relativer Pfad in der HTTP-Anfrage zur angeforderten Ressource</td>
+          </tr>
+          <tr>
+            <td>SERVER_NAME</td>
+            <td>experimental.seanox.com</td>
+            <td>Name oder IP-Adresse des Servers im Netzwerk</td>
+          </tr>
+          <tr>
+            <td>SERVER_PORT</td>
+            <td>80</td>
+            <td>Port des aufgerufenen Servers</td>
+          </tr>
+          <tr>
+            <td>SERVER_PROTOCOL</td>
+            <td>HTTP/1.0</td>
+            <td>Version des vom Server unterst&uuml;tzten HTTP-Protokolls</td>
+          </tr>
+          <tr>
+            <td>SERVER_SOFTWARE</td>
+            <td>Seanox-Devwex/...</td>
+            <td>Produktbezeichnung der installierten Server-Software</td>
+          </tr>
+          <tr>
+            <td>SYSTEMDRIVE</td>
+            <td>C:</td>
+            <td>
+              Laufwerk des Betriebssystem, wird f&uuml;r Microsoft Windows
+              optional &uuml;ber <code>[SERVER:ENV]</code> gesetzt
+            </td>
+          </tr>
+          <tr>
+            <td>SYSTEMROOT</td>
+            <td>C:\Windows</td>
+            <td>
+              Pfad vom Betriebssystem, wird f&uuml;r Microsoft Windows
+              optional &uuml;ber <code>[SERVER:ENV]</code> gesetzt
+            </td>
+          </tr>
+          <tr>
+            <td>UNIQUE_ID</td>
+            <td>FEK2VFTY26DHI584C5</td>
+            <td>auf den Request bezogene eindeutige Identifikationsnummer</td>
+          </tr>
+        </table>
+        <section>
+          <b>Tipp</b>
+          <p>
+            Endet in der Konfigurationsdatei ein Schl&uuml;ssel mit der Option
+            <code>[+]</code>, wird der komplette Inhalt einer Zeile verwendet.
+          </p>
+          <p>
+            Beispiel:
+          </p>
+          <pre>PATH [+] = ./documents;./libraries;./system</pre>
+        </section>        
+        <section>
+          <b>Tipp</b>
+          <p>
+            Das Arbeitsverzeichnis der CGI-Anwendungen ist das Verzeichnis von
+            dem aus Devwex gestartet wurde. Sollen z.B. Konfigurationsdateien
+            wie die <code>php.ini</code> ber&uuml;cksichtigt werden, sollten
+            diese im Arbeitsverzeichnis von Devwex abgelegt werden.
+          </p>
+        </section>        
+        <section>
+          <b>Tipp</b>
+          <p>
+            Mit der Installation von PHP muss die Konfigurationsdatei
+            <code>php.ini</code> in das Arbeitsverzeichnis von Devwex abgelegt
+            oder dem PHP der Pfad mit dem Startparameter <code>-c</code>
+            mitgeteilt werden.
+          </p>
+        </section>
+        <section>
+          <b>Hinweis</b>
+          <p>
+            Ab Version 4.x von PHP ist Konfiguration der Parameter
+            <code>cgi.rfc2616_headers = 1</code> f&uuml;r die korrekte Funktion
+            der PHP-Funktion <code>header();</code>, f&uuml;r die Sicherheit
+            bei der Ausf&uuml;hrungs <code>cgi.force_redirect = 0</code> und die
+            und <code>cgi.redirect_status_env = 302</code> erforderlich.<br>
+            Letzteres kann alternativ in der Sektion <code>[SERVER:ENV]</code>
+            der Konfigurationsdatei <code>devwex.ini</code> durch
+            <code>REDIRECT_STATUS = 302</code> gesetzt werden.
+          </p>
+        </section>        
+        <section>
+          <b>Hinweis</b>
+          <p>
+            XCGI/CGI-Anwendungen und Skripte k&ouml;nnen in allen Verzeichnissen
+            vom <code>DOCROOT</code> genutzt werden. Ein spezielles
+            <code>CGI-BIN</code> ist nicht vorgesehen.
+          </p>
+        </section>        
+        <section>
+          <b>Tipp</b>
+          <p>
+            Ausf&uuml;hrbare Windows-Anwendungen (<code>*.exe</code>,
+            <code>*.com</code>) k&ouml;nnen unter Windows auch mit einer
+            alternativen Dateiendung verwendet werden. Werden z.B. XCGI/CGI
+            als Windows-Anwendungen (<code>*.exe</code> oder <code>*.com</code>)
+            eingesetzt, kann f&uuml;r diese eine beliebige Dateiendung verwenden
+            werden. So l&auml;sst sich zum Beispiel die Datei
+            <code>example.exe</code> in <code>example.cgi</code> umbennen und
+            verwenden. Die Konfiguration gestaltet sich dann wie folgt:
+          </p>
+          <pre>CGI = POST GET &gt; [C]</pre>
+          <p>
+            Auf diese Art werden nicht pauschal alle Windows-Anwendungen beim
+            HTTP-Zugriff ausgef&uuml;hrt. 
+          </p>
+        </section>        
+        <section>
+          <b>Tipp</b>
+          <p>
+            Mit dem Methoden-Alias <code>ALL</code> werden alle eingehenden
+            HTTP-Methoden an das CGI weitergegeben. Der Alias umgeht dabei aber
+            nicht die Einschr&auml;kung von <code>[SERVER:BAS] METHODS</code>.  
+          </p>
+        </section>        
+        <h2>Statuscodes</h2>
+        <p>
+          Der Server quittiert alle HTTP-Anfragen mit einem Statuscode und
+          informiert so den Client &uuml;ber den Verarbeitung der Anfrage.
+          Prim&auml;r ist der Serverstatus ein numerischer Wert mit einer
+          optionalen Nachrich (Message).<br>
+          Statuscodes sind global und werden von allen Servern und virtuellen
+          Hosts verwendet.
+        </p>
+        <p>Schema zur Formulierung eines Statuscodes:</p>
+        <samp>
+          CODE = TEXT
+        </samp>        
+        <p>Beispiele f&uuml;r Statuscodes:</p>
+        <samp>
+          404 = Document Not Found
+        </samp>    
+        <p>Header vom Response:</p>                  
+        <samp>
+          HTTP/1.0 404 Document Not Found
+        </samp> 
+        <h2>Mediatypes</h2> 
+        <p>
+          Der Mediatype, auch Internet-Media-Type, Content-Type und MIME-Type
+          (Multipurpose Internet Mail Extensions) genannt, klassifiziert die mit
+          der Serverantwort (Response) &uuml;bermittelten Daten durch Zuordung
+          von Medientypen und Subtypen.<br>
+          In der Konfiguration wird den Mediatypen eine durch Leerzeichen
+          getrennte Liste von Dateierweiterungen zugewiesen. Die Zuweisung ist
+          global und wird von allen Servern und virtuellen Hosts verwendet.          
+        </p>
+        <p>Schema zur Formulierung eines Mediatypes:</p>
+        <samp>
+          MEDIATYPE = DATEIERWEITERUNG DATEIERWEITERUNG ...
+        </samp>
+        <p>Beispiel f&uuml;r die Mediatype-Zuweisung:</p>
+        <samp>
+          text/html = html htm shtml
+        </samp>
+        Der Mediatype <code>text/html</code> wird den Dateierweiterung
+        <code>*.html</code>, <code>*.htm</code> zugrwiesen.    
+      </article>
+      <article>
+        <h1>Fern&uuml;berwachung</h1>
+        TODO
+      </article>      
+      <article>
+        <h1>Entwicklung</h1>
+        TODO
+        <h2>Allgemeines</h2>
+        TODO
+        <h2>Einrichtung</h2>
+        TODO
+        <h2>Architektur</h2>
+        TODO
+        <h2>Sequenzen</h2>
+        TODO
+        <h2>Erweiterung</h2>
+        TODO
+        <h2>Server</h2>
+        TODO
+        <h2>Module</h2>
+        TODO
+        <h2>WebSocket</h2>
+        TODO
+        <h2>Entwicklungsumgebung (SDK)</h2>
+        TODO
+      </article>
+    </section>
+    <footer>
+    </footer>
   </body>
 </html>

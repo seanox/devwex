@@ -36,40 +36,42 @@ import java.util.StringTokenizer;
  *  Kombination von Initialize mit Section verwendet werden. So basiert die
  *  nachfolgende Beschreibung auf der Kombination beider Komponenten.<br>
  *  <br>
- *  Das verarbeitete INI-Format wurde zur klassischen Form erweitert. Die
- *  Unterteilung erfolgt auch hier in Sektionen, in denen zeilenweise
- *  Schl&uuml;ssel mit zugeh&ouml;rigen Werten abgelegt sind. Beim Namen von
- *  Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung ignoriert.
- *  Gleichnamige Deklarationen f&uuml;hren zum &Uuml;berschreiben von Sektionen
- *  und Werten.<br>
+ *  Das für die Konfiguration verwendete INI-Format ist eine kompatible
+ *  Erweiterung zum klassischen Format. Es ist ebenfalls zeilenbasiert und
+ *  verwendet Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim
+ *  Namen von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung
+ *  ignoriert. Gleichnamige Deklarationen f&uuml;hren zum &Uuml;berschreiben
+ *  von Sektionen und Schl&uuml;sseln.<br>
  *  <br>
- *  Als Erweiterung zum Orginalformat lassen sich Sektionen vererben. Dazu wird
- *  einer Sektion das Sch&uuml;sselwort <code>EXTENDS</code> gefolgt von Namen
- *  referenzierter Sektionen nachgestellt. Damit &uuml;bernimmt die abgeleitete
- *  Sektion alle Schl&uuml;ssel und Werte der referenzierten Sektionen und kann
- *  diese erweitern oder &uuml;berschreiben.<br>
+ *  In der Erweiterung lassen sich u.a. Sektionen vererben. Dazu folgt einer
+ *  Sektion das Sch&uuml;sselwort <code>EXTENDS</code> und gefolgt von den
+ *  Namen referenzierter Sektionen. Damit &uuml;bernimmt die Sektion alle
+ *  Schl&uuml;ssel und Werte der referenzierten Sektionen und kann diese
+ *  erweitern oder &uuml;berschreiben.<br>
  *  <br>
- *  Das Zuweisen eines Wertes zu einem Schl&uuml;ssel in einer Sektion erfolgt
- *  &uuml;ber das Gleichheitszeichen. Abweichend vom Orginalformat, kann die
- *  Zuweisung in der Folgezeile ohne erneute Angabe des Schl&uuml;ssels und
- *  durch die Verwendung des Pluszeichens fortgesetzt werden. Werte lassen sich
- *  zudem fest, variabel und optional zuweisen. Durch die zus&auml;tzliche
- *  Option <code>[?]</code> am Ende eines Schl&uuml;ssels, wird f&uuml;r diesen
- *  Schl&uuml;ssel den Wert &uuml;ber die System-Properties der
- *  Java-Laufzeitumgebung zu ermitteln. Kann kein Wert ermittelt werden, wird
- *  der optional eingetragene zugewiesen. Ohne Wert gilt ein Schl&uuml;ssel als
- *  nicht angegeben und wird dann ignoriert.<br>
+ *  Das Zuweisen von Werten zu Schl&uuml;sseln in einer Sektion erfolgt mit dem
+ *  Gleichheitszeichen. Abweichend vom Orginalformat, kann die Zuweisung in der
+ *  Folgezeile ohne erneute Angabe des Schl&uuml;ssels durch die Verwendung vom
+ *  Pluszeichen fortgesetzt werden. Werte lassen sich zudem fest, variabel und
+ *  optional zuweisen.<br>
+ *  Durch die Option <code>[?]</code> am Ende eines Schl&uuml;ssels, wird nach
+ *  einem gleichnamigen Schl&uuml;ssel in den System-Properties der
+ *  Java-Laufzeitumgebung gesucht. Kann keiner ermittelt werden, wird der
+ *  optional angegebene Wert verwendet. Ohne Wert gilt ein solcher
+ *  Schl&uuml;ssel als nicht angegeben und wird ignoriert.<br>
  *  <br>
- *  Kommentare beginnen mit einem Semikolon und sind optional. Wiederum
- *  Abweichend vom Orginalformat kann ein Kommentar an jeder beliebigen Stelle
- *  in einer Zeile verwendet werden. Die nachfolgenden Zeichen sind somit kein
- *  Bestandteil von Sektion, Schl&uuml;ssel oder Wert.<br>
+ *  Kommentare beginnen mit einem Semikolon, sind optional und lassen sich an
+ *  jeder beliebigen Stelle in einer Zeile verwenden. Die nachfolgenden Zeichen
+ *  sind somit kein Bestandteil von Sektion, Schl&uuml;ssel oder Wert.<br>
+ *  Mit der Option <code>[+]</code> am Ende eines Schl&uuml;ssels, kann die
+ *  Verwendung von Kommentaren f&uuml;r diesen Schl&uuml;ssel deaktiviert und
+ *  das Semikolon im Wert verwendet werden.<br>
  *  <br>
- *  F&uuml;r Sektionen, Schl&uuml;ssel und Werte wird auch eine hexadezimale
- *  Schreibweise unterst&uuml;tzt. Diese beginnt mit <code>0x...</code>, gefolgt
+ *  Sektionen, Schl&uuml;ssel und Werte unterst&uuml;tzen auch eine
+ *  hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>, gefolgt
  *  von der hexadezimalen Zeichenfolge. Diese Schreibweise kann immer nur auf
- *  das komplette Element anwenden. Die Kombination oder Unterbrechung ist nicht
- *  m&ouml;glich.<br>
+ *  das komplette Element angewandt werden. Die Kombination oder Unterbrechung
+ *  ist nicht m&ouml;glich.<br>
  *  <br>
  *      <dir>Beispiel</dir>
  *  <pre>
@@ -89,65 +91,65 @@ import java.util.StringTokenizer;
  *     014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
  *     015   0x504152414D2D45 [?]                     ;Kommentar
  *  </pre>
- *      <dir>Zeile 001</dir>
- *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Die Option
- *  <code>EXTENDS</code> verweist auf die Ableitung von den Sektionen
- *  <code>SECTION-A</code> und <code>SECTION-B</code>. Somit basiert die
+ *      <dir>Zeile 1</dir>
+ *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Das
+ *  Schl&uuml;sselwort <code>EXTENDS</code> verweist auf die Ableitung von den
+ *  Sektionen <code>SECTION-A</code> und <code>SECTION-B</code>. Somit basiert
  *  <code>SECTION</code> auf den Schl&uuml;sseln und Werten der Sektionen
  *  <code>SECTION-A</code> und <code>SECTION-B</code>. Ab dem Semikolon werden
  *  die nachfolgenden Zeichen als Kommentar interpretiert.<br>
  *  <br>
- *      <dir>Zeile 002</dir>
+ *      <dir>Zeile 2</dir>
  *  Dem Schl&uuml;ssel <code>PARAM-A</code> wird der Wert <code>WERT-1</code>
  *  zugewiesen. Die nachfolgenden Zeichen werden ab dem Semikolon als Kommentar
  *  interpretiert.<br>
  *  <br>
- *      <dir>Zeile 003</dir>
+ *      <dir>Zeile 3</dir>
  *  Dem Schl&uuml;ssel <code>PARAM-B</code> wird <code>WERT-2; WERT-3</code> als
  *  Wert zugewiesen. Durch die Option <code>[+]</code> am Ende vom
  *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
- *  f&uuml;r die Wertzuweisung verwendet. Die Eingabe eines Kommentars ist in
+ *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
  *  dieser Zeile nicht m&ouml;glich.<br>
  *  <br>
- *      <dir>Zeile 004</dir>
- *  Die Wertzuweisung von Zeile 003 wird fortgesetzt und der Wert
+ *      <dir>Zeile 4</dir>
+ *  Die Wertzuweisung von Zeile 3 wird fortgesetzt und der Wert
  *  <code>WERT-4; WERT-5</code> dem bestehenden Wert vom Schl&uuml;ssel
  *  <code>PARAM-B</code> hinzugef&uuml;gt. Die Option <code>[+]</code> aus
- *  Zeile 003 wird ebenfalls in Zeile 004 &uuml;bernommen, womit auch hier
- *  der Zeilenkommentar abgeschaltet ist und alle Zeichen als Wertzuweisung
+ *  Zeile 3 wird ebenfalls in Zeile 4 &uuml;bernommen, womit auch hier der
+ *  Zeilenkommentar abgeschaltet ist und alle Zeichen als Wertzuweisung
  *  verwendet werden. Die Eingabe eines Kommentars ist in dieser Zeile nicht
  *  m&ouml;glich. Weitere vorangestellte Optionen sind nicht m&ouml;glich.<br>
  *  <br>
- *      <dir>Zeile 005</dir>
- *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code> erfolgt
- *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu nach
- *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
- *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
+ *      <dir>Zeile 5</dir>
+ *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code> ist
+ *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
+ *  nach dem gleichnamigen Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
+ *  die Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
  *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
- *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
- *  Schl&uuml;ssel ermnittelt, wird alternativ <code>WERT-6; WERT-7</code> als
- *  Wert verwendet.<br>
+ *  Enthalten die System-Properties der Java-Laufzeitumgebung keinen
+ *  entsprechenden Schl&uuml;ssel, wird alternativ <code>WERT-6; WERT-7</code>
+ *  als Wert verwendet.<br>
  *  Durch die Kombination mit der Option <code>[+]</code> am Ende vom
  *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
- *  f&uuml;r die Wertzuweisung verwendet. Die Eingabe eines Kommentars ist in
+ *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
  *  dieser Zeile nicht m&ouml;glich.<br>
  *  <br>
- *      <dir>Zeile 006</dir>
- *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code> erfolgt
- *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu nach
- *  einem Wert f&uuml;r zum Schl&uuml;ssel <code>PARAM-E</code> gesucht, wobei
- *  die Gross- und Kleinschreibung ignoriert wird. Dazu muss der Schl&uuml;ssel
- *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
- *  Wird in den System-Properties der Java-Laufzeitumgebung kein entsprechender
- *  Schl&uuml;ssel ermnittelt, wird dieser Schl&uuml;ssel ignoriert, da auch
- *  kein alternativer Wert angegeben wurde.<br>
+ *      <dir>Zeile 6</dir>
+ *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code> ist
+ *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
+ *  nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die Gross- und
+ *  Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu Bestandteil
+ *  der Laufzeitumgebung sein oder kann beim Programmstart in der Form
+ *  <code>-Dschluessel=wert</code> gesetzt werden.<br>
+ *  Enthalten die System-Properties der Java-Laufzeitumgebung keinen
+ *  entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert, da
+ *  auch kein alternativer Wert angegeben wurde.<br>
  *  Kommentare werden in dieser Zeile unterst&uuml;tzt.<br>
  *  <br>
- *      <dir>Zeile 008 - 015</dir>
- *  Analog den Beispielen aus Zeile 001 - 006 wird für Sektionen, Schl&uuml;ssel
- *  und Werte die hexadezimale Schreibweise unterst&uuml;tzt.<br>
+ *      <dir>Zeile 8 - 15</dir>
+ *  Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
+ *  Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.<br>
  *  <br>
  *  Section 5.0 20170120<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>

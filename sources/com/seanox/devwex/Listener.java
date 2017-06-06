@@ -2910,11 +2910,11 @@ class Listener implements Runnable {
 
             this.control = true;
 
-            this.docroot  = "";
-            this.gateway  = "";
-            this.resource = "";
+            this.docroot   = "";
+            this.gateway   = "";
+            this.resource  = "";
             this.mediatype = "";
-            this.sysroot  = "";
+            this.sysroot   = "";
 
             //die Felder vom Header werde eingerichtet
             this.fields = new Section(true);

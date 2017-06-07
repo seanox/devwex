@@ -420,8 +420,69 @@
           Request-Body wird f&uuml;r Filtern nicht ausgelesen, womit Daten und
           Parameter wie z.B. bei der HTTP-Methode <code>POST</code>
           im Body &uuml;bergeben werden, nicht zur Verf&uuml;gung stehen.   
-        </p> 
-        TODO
+        </p>
+        <p>
+          &Uuml;bersicht der verf&uuml;gbaren Variablen:
+        </p>
+        <table>
+          <tr>
+            <th>Parameter</th>
+            <th>CGI-Variable</th>
+            <th>Wert</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>Request</td>
+            <td>REQUEST_METHOD</td>
+            <td>GET</td>
+            <td>HTTP-Methoden der Anfrage</td>
+          </tr>           
+          <tr>
+            <td>Request</td>
+            <td>REQUEST_URI</td>
+            <td>/directory/file.cgi?value=123</td>
+            <td>Pfad der HTTP-Anfrage inklusive übergebener Parameter</td>
+          </tr>           
+          <tr>
+            <td>Request</td>
+            <td>QUERY_STRING</td>
+            <td>value=123</td>
+            <td>Liste der mit dem Request-URI übergebenen Parameter</td>
+          </tr> 
+          <tr>
+            <td>Host</td>
+            <td>HTTP_HOST</td>
+            <td>www.xxx.zzz</td>
+            <td>Domain-Namen oder IP-Adresse der vom Client angeforderten Zieladresse </td>
+          </tr>             
+          <tr>
+            <td>Accept-Encoding</td>
+            <td>HTTP_ACCEPT_ENCODING</td>
+            <td>de</td>
+            <td>Liste der vom Client unterstützten Kodierungsmethoden</td>
+          </tr>    
+          <tr>
+            <td>Accept-Language</td>
+            <td>HTTP_ACCEPT_LANGUAGE</td>
+            <td>Liste der vom Client unterstützten Landessprachen</td>
+            <td>TODO</td>
+          </tr>          
+          <tr>
+            <td>Accept</td>
+            <td>HTTP_ACCEPT</td>
+            <td>*/*</td>
+            <td>Liste der vom Client unterstützten vom Mediatypen</td>
+          </tr>
+          <tr>
+            <td>User-Agent</td>
+            <td>HTTP_USER_AGENT</td>
+            <td>Browser</td>
+            <td>Produkt- und Versionsinformationen des Clients</td>
+          </tr>
+        </table>           
+        <p>
+          Beispiele f&uuml;r Filter:
+        </p>
         <section>
           <pre>FILTER-A = GET NOT EQUALS HTTP_ACCEPT_LANGUAGE EN</pre>
           <p>
@@ -516,7 +577,85 @@
           </p>
         </section>
         TODO        
-        <h4>Virtuelle Verzeichnisse / Pfade</h4>
+        <h4>Virtuelle Pfade / Verzeichnisse</h4>
+        <p>
+          Virtuelle Pfade sind ein Alias f&uuml;r physische Elemente im
+          Dateisystem mit denen sich unabh&auml;ngig von der Quellstruktur neue
+          Datei- und Verzeichnisstrukturen aufbauen oder bestehende
+          ver&auml;ndern lassen.
+        </p>
+        <p>
+          Das Schema zur Formulierung der virtuellen Verzeichnisse
+        </p>
+        <pre>NAME = VIRTUELL &gt; PHYSISCH [OPTION]</pre>
+        <p>
+          &Uuml;bersicht der Optionen:
+        </p>        
+        <table>
+          <tr>
+            <th>Option</th>
+            <th>Bedeutung</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>[A]</td>
+            <td>Absolute</td>
+            <td>
+              Definiert einen virtuellen Teilpfad der auf physische
+              Verzeichnisse oder Dateien verweist. Beginnt der Pfad einer
+              Anfrage mit diesem virtuellen Teilpfad, wird die so definierte
+              Ressource verwendet. Bei Verweisen auf Skripte oder Modul, 
+              &ouml;nnen dieses die zus&auml;tzlichen Pfadinformationen
+              auswerten und anwenden.
+            </td>
+          </tr>
+          <tr>
+            <td>[C]</td>
+            <td>Forbidden</td>
+            <td>
+              Diese Option sperrt den Zugriff auf virtuelle und physische Pfade.
+              Die Sperre wirkt bei Verzeichnissen prim&auml;r auf das
+              Verzeichnis selbst und alle Unterverzeichnis.
+            </td>
+          </tr> 
+          <tr>
+            <td>[R]</td>
+            <td>Redirect</td>
+            <td>
+              Diese Option richtet f&uuml;r virtuelle und physische Verzeichnis
+              sowie Dateien eine automatische Weiterleitung zu einer angegebenen
+              Adresse ein.
+            </td>
+          </tr>    
+          <tr>
+            <td>[M]</td>
+            <td>Module</td>
+            <td>
+              Legt einen virtuellen Teilpfad f&uuml;r ein Modul fest. Beginnt
+              der Pfad einer Anfrage mit diesem virtuellen Teilpfad, wird das so
+              definierte Modul verwendet, womit HTTP-Module als Webanwendung
+              eingebunden werden. Module k&ouml;nnen die zus&auml;tzlichen
+              Pfadinformationen auswerten und anwenden.
+            </td>
+          </tr> 
+          <tr>
+            <td>[X]</td>
+            <td>Extension</td>
+            <td>
+              TODO Testen
+            
+              Nur in Verbindung mit der Option <code>[M]</code> kann die
+              Modulnutzung erweitert werden, womit dann unabh&auml;ngig vom
+              Server-Parameter <code>METHODS</code> alle angefragten
+              HTTP-Methoden an das Modul weitergereicht werden. Hilfreich ist
+              diese Option wenn ein Modul die bestehenden HTTP-Methoden
+              erweitert.
+              <p><b>Wichtig</b></p>
+              Mit dieser Option wird <code>[SERVER:BAS] METHODS</code> f&uuml;r
+              diesen virtuellen Pfad aufgehoben.  
+            </td>
+          </tr>                                      
+        </table>
         TODO
         <h4>Basic- / Digest- Access Authentication</h4>
         TODO

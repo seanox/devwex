@@ -1,0 +1,72 @@
+body {
+  padding:0em; margin:0em; 
+  color:#CCCCCC; background:#494744; font:1em sans-serif; cursor:default;
+}
+
+pre, code, samp, ol {
+  font-size:1.25em; color:#FFFFFF;
+}
+
+body > section {
+  padding:5% 10%;
+}
+body section section {
+  display:block; margin:1em 0em 1em 0em; padding:0em 1em 0em 1em; 
+  border:1px solid #999999;
+}
+body section section > *:first-child {
+  display:block; margin:1em 0em 1em 0em;
+  font-weight:bold;
+}
+
+body section article table {
+  border-spacing:0px; border-collapse:collapse;
+  border-bottom:2px solid #FFAA44;
+}
+body section article table tr th + th,
+body section article table tr td + td {
+  padding-left:2em;
+}
+
+body section article table tr th {
+  position:relative; text-align:right; 
+  border-bottom:2px solid #FFAA44;
+}
+
+body section article table tr th,
+body section article table tr td {
+  text-align:left; vertical-align:top; padding:0.5em;
+}
+body section article table tr td {
+  font:1.25em monospace; color:#FFFFFF;
+}
+body section article table tr td + td {
+  font:1.25em monospace; color:#CCCCCC;
+}
+body section article table tr td:last-of-type {
+  font:1em sans-serif; color:#CCCCCC;
+}
+
+body section article table tr:nth-child(even) {
+  background:#595755;
+}
+
+body section article table tbody tr + tr td {
+  border-top:1px solid #777777;
+}
+
+body section article ol.code {
+  display:block; margin:1em 0em 1em 0em; padding:1em; 
+  background:#595755; list-style:inside none; border:1px solid #999999;
+  counter-reset:item;
+}
+body section article ol.code li {
+  display:block; white-space:pre;
+  font:1em monospace;
+}
+body section article ol.code li:before { 
+  margin-right:1em;
+  color:#999999;
+  counter-increment:item;
+  content:counters(item, '.', decimal-leading-zero);
+}

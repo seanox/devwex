@@ -59,12 +59,12 @@ import java.util.TimeZone;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Listener 5.0 20170528<br>
+ *  Listener 5.0 20170608<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170528
+ *  @version 5.0 20170608
  */
 class Listener implements Runnable {
   
@@ -770,9 +770,7 @@ class Listener implements Runnable {
                     }
                 }
 
-                //nur absolute Referenzen duerfen auf Dateien verweisen
-                if ((source != null && source.isDirectory())
-                        || virtual || connect) {
+                if (source != null || virtual || connect) {
 
                     location  = target;
                     options   = rules;

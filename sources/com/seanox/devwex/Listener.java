@@ -59,12 +59,12 @@ import java.util.TimeZone;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Listener 5.0 20170608<br>
+ *  Listener 5.0 20170609<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170608
+ *  @version 5.0 20170609
  */
 class Listener implements Runnable {
   
@@ -743,6 +743,18 @@ class Listener implements Runnable {
                     || (connect && target.length() <= 0)
                     || (rules.length() <= 0 && target.length() <= 0))
                 continue;
+            
+            //ggf. wird der Alias um Slash erweitert, damit spaeter DOCROOT
+            //und Alias einen plausiblen Pfad ergeben
+            if (alias.length() > 0
+                    && !alias.startsWith("/"))
+                alias = ("/").concat(alias);            
+            
+            //ggf. wird der Alias als Target uebernommen, wenn kein Target
+            //angegeben wurde, z.B. wenn fuer einen realen Pfad nur Optionen
+            //festgelegt werden
+            if (target.length() <= 0)
+                target = this.docroot.concat(alias);
 
             //das Ziel wird mit / abgeschlossen um auch Referenzen zwischen /a
             //und /a/ ermitteln zu koennen
@@ -757,7 +769,7 @@ class Listener implements Runnable {
                 //optional wird die Sperrung des Verzeichnis ermittelt
                 forbidden = string.contains("[C]");
 
-                if (!connect && target.length() > 0) {
+                if (!connect) {
 
                     //die Zieldatei wird eingerichtet
                     //der absolute Pfad wird ermittelt

@@ -45,6 +45,8 @@
       Konvertierung: Parameter-A wird zu http_parameter_a
       Neu ist die CGI-Variable request, dieser entspricht der ersten Zeile vom HTTP-Request.
       Bsp. GET /... HTTP/1.0
+  CR: HTTP Virtual Paths - Optimierung
+      - Virtuelle Pfade für einzelne Dateien wird wieder unterstützt         
   CR: HTTP MIMETYPES - Umbenannt in MEDIATYPES
   CR: HTTP SERVER:BAS/VIRTUAL:BAS - MIMETYPE umbenannt in MEDIATYPE
   CR: HTTP VIRTUAL:BAS - SERVER definiert welche Server den virtuellen Host verwenden dürfen

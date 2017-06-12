@@ -257,6 +257,12 @@
         <h4>Server</h4>
         TODO
         <h4>Secure Socket Layer / Transport Layer Security</h4>
+        <p>
+          Zur gesicherten &Uuml;bertragung von Daten werden Secure Socket Layer
+          (SSL) und Transport Layer Security (TLS) unterst&uuml;tzt. Die
+          Zuweisung der Zertifikate ist f&uuml;r die physischen Hosts einzeln
+          und gemeinsam m&ouml;glich.
+        </p>
         TODO
         <h4>Virtuelle Hosts</h4>
         TODO
@@ -441,37 +447,40 @@
             <td>Request</td>
             <td>REQUEST_URI</td>
             <td>/directory/file.cgi?value=123</td>
-            <td>Pfad der HTTP-Anfrage inklusive übergebener Parameter</td>
+            <td>Pfad der HTTP-Anfrage inklusive &uuml;bergebener Parameter</td>
           </tr>           
           <tr>
             <td>Request</td>
             <td>QUERY_STRING</td>
             <td>value=123</td>
-            <td>Liste der mit dem Request-URI übergebenen Parameter</td>
+            <td>Liste der mit dem Request-URI &uuml;bergebenen Parameter</td>
           </tr> 
           <tr>
             <td>Host</td>
             <td>HTTP_HOST</td>
             <td>www.xxx.zzz</td>
-            <td>Domain-Namen oder IP-Adresse der vom Client angeforderten Zieladresse </td>
+            <td>
+              Domain-Namen oder IP-Adresse der vom Client angeforderten
+              Zieladresse
+            </td>
           </tr>             
           <tr>
             <td>Accept-Encoding</td>
             <td>HTTP_ACCEPT_ENCODING</td>
             <td>de</td>
-            <td>Liste der vom Client unterstützten Kodierungsmethoden</td>
+            <td>Liste der vom Client unterst&uuml;tzten Kodierungsmethoden</td>
           </tr>    
           <tr>
             <td>Accept-Language</td>
             <td>HTTP_ACCEPT_LANGUAGE</td>
-            <td>Liste der vom Client unterstützten Landessprachen</td>
+            <td>Liste der vom Client unterst&uuml;tzten Landessprachen</td>
             <td>TODO</td>
           </tr>          
           <tr>
             <td>Accept</td>
             <td>HTTP_ACCEPT</td>
             <td>*/*</td>
-            <td>Liste der vom Client unterstützten vom Mediatypen</td>
+            <td>Liste der vom Client unterst&uuml;tzten vom Mediatypen</td>
           </tr>
           <tr>
             <td>User-Agent</td>
@@ -525,8 +534,9 @@
           <pre>FILTER-F = GET IS MATCH REQUEST_URI \.do$</pre>
           <p>
             Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
-            <code>SCRIPT_URL</code> dem regulären Ausdruck <code>(?i).do$</code>
-            entspricht und somit auf <code>.do</code> endet. 
+            <code>SCRIPT_URL</code> dem regul&auml;ren Ausdruck
+            <code>(?i).do$</code> entspricht und somit auf <code>.do</code>
+            endet. 
           </p>
         </section>        
         <section>
@@ -577,17 +587,38 @@
           </p>
         </section>
         TODO        
-        <h4>Virtuelle Pfade / Verzeichnisse</h4>
+        <h4>Virtuelle Pfade (Aliasing and Redirection)</h4>
         <p>
-          Virtuelle Pfade sind ein Alias f&uuml;r physische Elemente im
-          Dateisystem mit denen sich unabh&auml;ngig von der Quellstruktur neue
-          Datei- und Verzeichnisstrukturen aufbauen oder bestehende
-          ver&auml;ndern lassen.
+          Virtuelle Pfade sind ein Alias f&uuml;r physische Elemente in einem
+          Dateisystem mit denen sich unabh&auml;ngig vom Dateisystem neue Datei-
+          und Verzeichnisstrukturen aufbauen oder bestehende ver&auml;ndern
+          lassen. Neben dem Dateisystem werden auch Module und Weiterleitungen
+          (Redirections) als Ziel unterst&uuml;tzt.
+        </p>
+        <section>
+          <b>Wichtig</b>
+          <p>
+            Ist das Ziel ein relativer Pfad im lokalen Dateisystem, bezieht sich
+            dieser der Pfad immer auf Ausf&uuml;hrungsverzeichnis vom Server.
+          </p>
+        </section>           
+        <p>
+          Das Schema zur Formulierung der virtueller Pfade:
+        </p>
+        <pre>NAME = VIRTUELLER PFAD &gt; ZIEL [OPTION]</pre>
+        <p>
+          Die Angabe von einem Ziel ist nur f&uuml;r Module und Weiterleitungen
+          zwingend erforderlich.<br>
+          Reale Pfade, denen nur zus&auml;tliche Option zugewiesen werden,
+          k&ouml;nnen auch ohne Zielt verwendet werden.
         </p>
         <p>
-          Das Schema zur Formulierung der virtuellen Verzeichnisse
+          Beispiel:
         </p>
-        <pre>NAME = VIRTUELL &gt; PHYSISCH [OPTION]</pre>
+        <pre>
+          EXAMPLE-LANG = /directory/file.txt &gt; ./documents/directory/file.txt [C]
+          EXAMPLE-KURZ = /directory/file.txt [C]
+        </pre>
         <p>
           &Uuml;bersicht der Optionen:
         </p>        
@@ -640,25 +671,214 @@
           </tr> 
           <tr>
             <td>[X]</td>
-            <td>Extension</td>
+            <td>Method Extension</td>
             <td>
-              TODO Testen
-            
-              Nur in Verbindung mit der Option <code>[M]</code> kann die
-              Modulnutzung erweitert werden, womit dann unabh&auml;ngig vom
-              Server-Parameter <code>METHODS</code> alle angefragten
-              HTTP-Methoden an das Modul weitergereicht werden. Hilfreich ist
-              diese Option wenn ein Modul die bestehenden HTTP-Methoden
-              erweitert.
-              <p><b>Wichtig</b></p>
-              Mit dieser Option wird <code>[SERVER:BAS] METHODS</code> f&uuml;r
-              diesen virtuellen Pfad aufgehoben.  
+              Nur in Verbindung mit der Option <code>[M]</code>, &ouml;ffnet die
+              Zusatzoption <code>[X]</code> die Beschr&auml;nkung durch
+              <code>[SERVER:BAS] METHODS</code>. So werden &uuml;ber den
+              virtuellen Path alle angefragten HTTP-Methoden an ein Modul
+              weitergreicht. 
             </td>
-          </tr>                                      
+          </tr>
+          <tr>
+            <td>[D]</td>
+            <td>Digest Access Authentication</td>
+            <td>
+              Nur in Verbindung mit der Option <code>[ACC]</code>, aktivert die
+              Zusatzoption <code>[D]</code> die Verwendung der Digest Access
+              Authentication.
+            </td>
+          </tr>
+          <tr>
+            <td>[ACC:...]</td>
+            <td>Authentication</td>
+            <td>
+              Diese Option aktiviert die Verwendung der
+              Basic-Access-Authentication. Optional kann in Kombination mit der
+              Option <code>[D]</code> die Digest-Access-Authentication aktiviert
+              werden.<br>
+              In beiden F&auml;llen erfolgt die Autorisierung gegen die
+              Access-Conntrol-List in der Sektionen <code>[SERVER:ACC]</code>
+              / <code>[VIRTUAL:ACC]</code>.
+            </td>
+          </tr>          
         </table>
-        TODO
-        <h4>Basic- / Digest- Access Authentication</h4>
-        TODO
+        <p>
+          Beispiele f&uuml;r den Einsatz virtueller Pfade:
+        </p>
+        <section>
+          <pre>DIRECTION-A = /system &gt; ../system</pre>
+          <p>
+            F&uuml;r Anfragen mit dem Pfad <code>/system</code> wird das
+            physische Verzeichnis <code>../system</code> verwendet.
+          </p>
+        </section>          
+        <section>
+          <pre>DIRECTION-A = /system/test.xml &gt; ../system/test.php</pre>
+          <p>
+            F&uuml;r Anfragen mit dem Pfad <code>/system/test.xml</code> wird
+            physisch <code>../system/test.php</code> verwendet.
+          </p>
+        </section>          
+        <section>
+          <pre>DIRECTION-B = /doc &gt; ../documents [A]</pre>
+          <p>
+            Der Pfad <code>/doc</code> wurde absolute definiert. Somit wird
+            f&uuml;r alle Anfragen, welche mit <code>/doc</code> beginne, wie
+            z.B <code>/documents</code>, <code>/documentation</code> oder
+            <code>/doc/test.cgi?cmd=123</code>, das physische Verzeichnis
+            <code>../documents</code> verwendet.
+          </p>
+        </section> 
+        <section>
+          <pre>DIRECTION-C = /test &gt; http://www.xxx.zzz [R]</pre>
+          <p>
+            Anfragen vom Pfad <code>/test</code> werden mit einer Weiterleitung
+            zu <code>http://www.xxx.zzz</code> beantwortet.
+          </p>
+        </section>            
+        <section>
+          <pre>DIRECTION-D = /control &gt; example.Connector [M]</pre>
+          <p>
+            Der Pfad <code>/control</code> verweist auf die Modul-Klasse
+            <code>Connector</code> aus dem Paket <code>example</code>, welches
+            sich im Klassenpfad vom Server befinden muss.
+          </p>
+        </section>             
+        <section>
+          <pre>DIRECTION-E = /program [C]</pre>
+          <p>
+            Der Zugriff auf das Verzeichnis <code>/program</code> wird
+            verboten.
+          </p>
+        </section>
+        <h4>Basic-Access-Authentication / Digest-Access-Authentication</h4>
+        <p>
+          Basic-Access-Authentication (BAA) und Digest-Access-Authentication
+          (DAA) sind zwei von verschiedenen Verfahren, mit denen sich ein Nutzer
+          gegen&uuml;ber einem Webserver bzw. einer Webanwendung authentisieren
+          kann. Empfohlen wird hier die Verwendung der
+          Digest-Access-Authentication, da diese im Unterschied zur
+          Basic-Access-Authentication das Passwort nicht direkt, sondern zum
+          Schutz vor Rekonstruktion nur in Form einer Pr&uuml;fsumme bzw. eines
+          Fingerabdrucks &uuml;bermittelt.
+        </p>
+        <p>
+          Die Konfiguration der Basic- / Digest-Access-Authentication besteht
+          aus einem virtuellen bzw. physischen Pfad in den Sektion
+          <code>[SERVER:REF]</code> bzw. <code>[VIRTUAL:REF]</code>, wo mit
+          <code>[acc:...]</code> der Verweis auf die Berechtigungen und optional
+          die Beschreibung zum Bereich (Realm) und bei Bedarf mit der Option
+          <code>[D]</code> die Nutzung der Digest-Access-Authentication
+          festgelegt werden.<br>
+          Eine Sonderfuntion stellt dabei <code>[acc:none]</code> dar, da diese
+          Angabe die &uuml;bergeordnete Autorisierung f&uuml;r den angegebenen
+          Pfad und alle untergeordneten Pfade aufhebt.<br>
+          Werden in der selben Definition weitere g&uuml;ltige ACC-Referenzen
+          angeben, wird <code>[acc:none]</code> ignoriert.<br>
+          Die Berechtigungen werden in der eigenst&auml;ndigen Sektion
+          <code>[SERVER:ACC] </code> bzw. <code>[VIRTUAL:ACC]</code> definiert
+          und setzen sich aus einer oder mehreren Gruppen mit
+          Einzelbberechtigungen, bestehend aus Benutzer und Passwort, zusammen.
+        </p>
+        <p>
+          Beispiele f&uuml;r Basic-Access-Authentication:
+        </p>
+        <pre>
+          [SERVER:X:REF]                                                          
+            ACCESS-A = /access                     [acc:group-a] [realm:Section-A]
+            ACCESS-B = /access/section             [acc:group-b] [realm:Section-B]
+            ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C]
+            ACCESS-N = /access/public              [acc:none]                     
+
+            ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [...
+        </pre>
+        <p>
+          Beispiele f&uuml;r Digest-Access-Authentication:<br>
+          Die Option <code>[D]</code> macht den Unterschied.        
+        </p>
+        <pre>
+          [SERVER:X:REF]  
+            ACCESS-A = /access                     [acc:group-a] [realm:Section-A] [D]
+            ACCESS-B = /access/section             [acc:group-b] [realm:Section-B] [D]
+            ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C] [D]
+            ACCESS-N = /access/public              [acc:none]     
+            
+            ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [D] [...      
+        </pre>
+        <p>
+          Beispiele f&uuml;r die Definition der Zugangsdaten:
+        </p>
+        <pre>
+          [SERVER:X:ACC]
+            GROUP-A = ua:pa ub:pb uc:pc 
+            GROUP-B = ua:pa ub:pbb 
+            GROUP-C = uc:pcc 
+            
+            GROUP-X = user:password user:password ...      
+        </pre>
+        <p>
+          Das Verzeichnis <code>/access</code> mit alle Unterverzeichnissen ist
+          nur f&uuml;r autorisierte Benutzer und mit Passwort zug&auml;nglich.
+          Ausgenommen davon ist das Verzeichnis <code>/access/public</code> und
+          dessen Unterverzeichnisse.        
+        </p>
+        <section>
+          <b>ACCESS-A</b>
+          <p>
+            Auf das Verzeichnis <code>/access</code> k&ouml;nnen nur die
+            Benutzer <code>"ua"</code> und dem Passwort <code>"pa"</code>,
+            <code>"ub"</code> und dem Passwort <code>"pb"</code> sowie
+            <code>"uc"</code> mit dem Passwort <code>"pc"</code> zugreifen. Auch
+            der Zugriff auf alle Unterverzeichnisse, ist mit Ausnahme von
+            <code>/access/section</code> und 
+            <code>/access/section/protected</code>, nur f&uuml;r diese Benutzer
+            m&ouml;glich.
+          </p>       
+        </section> 
+        <section>
+          <b>ACCESS-B</b>
+          <p>
+            Das Verzeichnis <code>/access/section</code> mit allen
+            Unterverzeichnissen kann von den Benutzern <code>"ua"</code> mit dem
+            Passwort <code>"pa"</code> und <code>"ub"</code> mit dem Passwort
+            <code>"pbb"</code> verwendet werden.
+          </p>       
+        </section>
+        <section>
+          <b>ACCESS-C</b>
+          <p>
+            Der Zugriff auf das Verzeichnis
+            <code>/access/section/protected</code> ist ausschliesslich f&uuml;r
+            den Benutzer <code>"uc"</code> mit dem Passwort <code>"pcc"</code>
+            m&ouml;glich.
+          </p>       
+        </section>
+        <section>
+          <b>ACCESS-N</b>
+          <p>
+            F&uuml;r das Verzeichnis <code>/access/public</code> wird die Basic-
+            / Digest-Access-Authentication aufgehoben und kann ohne Login und
+            Passwort genutzt und Unterverzeichnisse wieder mit Basic Access
+            Authentication versehen werden.
+          </p>       
+        </section>
+        <section>
+          <b>Hinweis</b>
+          <p>
+            Bei Benutzern und Passw&ouml;rtern wird Gross- und Kleinschreibung
+            ber&uuml;cksichtigt. Die Verwendung von Doppelpunkt und Leerzeichen
+            ist nicht m&ouml;glich.
+          </p>       
+        </section>
+        <section>
+          <b>Hinweis</b>
+          <p>
+            Die Basic- / Digest-Access-Authentication l&auml;sst sich bis auf
+            Dateien anwenden. Bei einigen Browsern f&uuml;hrt dies jedoch zur
+            erneuten Nachfrage auf Verzeichnisebene.
+          </p>       
+        </section>
         <h4>Umgebungsvariablen</h4>
         <p>
           Mit Umgebungsvariablen stellen Betriebssystem und Laufzeitumgebung

@@ -1,4 +1,5 @@
 5.0.0 2017xxxx
+  BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager
   BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis
       Die Ressource ist ein Directory, wenn keine Content-Length gesendet wird.
       Ob die URL auf Slash endet oder nicht, ist egal.
@@ -40,6 +41,7 @@
       - Erweiterung um die Verwendung von CGI-Variablen auch im Dateinamen
   CR: HTTP Filter - Überarbeitung/Optimierung/Erweiterung
       - Erweiterung um "matches" und die Verwendung von RegEx
+      - Umstellung der AND-Verknuepfung von [A] auf [+]
       - Umstellung auf die ausschliessliche Verwendung von CGI-Variablen
       Alle Request-Parameter / Header-Parameter werden als CGI-Variablen (http_...) bereitgestellt.
       Konvertierung: Parameter-A wird zu http_parameter_a
@@ -60,6 +62,11 @@
   CR: HTTP SERVER:SSL
       - STORE umbenannt in KEYSTORE
       - neues Standard-Passwort für den Keystore: changeIt
+      - Erweiterung um die Umgebungsvariable AUTH_CERT zur Prüfung eingehender Zertifikate
+        bei der Client-Authentication / Mutual-Authentication
+      - CLIENTAUTH: Erweiterung um die Option AUTO für eine tollerantes Verhalten
+        bei ungültigen oder fehlenden Zertifikaten (Request wird vom Server beantwortet,
+        ggf. mit einer Fehlerseite)     
   CR: Initialize - Überarbeitung/Optimierung/Erweiterung
       - Erweiterung um multiples EXTENDS
       - Erweiterung um die Verarbeitung von Hex-Daten (Maskierung von Daten/Zeichen)

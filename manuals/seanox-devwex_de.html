@@ -258,14 +258,327 @@
         TODO
         <h4>Secure Socket Layer / Transport Layer Security</h4>
         <p>
-          Zur gesicherten &Uuml;bertragung von Daten werden Secure Socket Layer
-          (SSL) und Transport Layer Security (TLS) unterst&uuml;tzt. Die
-          Zuweisung der Zertifikate ist f&uuml;r die physischen Hosts einzeln
-          und gemeinsam m&ouml;glich.
+          Zur gesicherten &Uuml;bertragung von Daten werden Transport Layer
+          Security (TLS) und Secure Socket Layer (SSL) unterst&uuml;tzt.<br>
+          Beide Verfahren basieren auf der Verwendung von Zertifikaten, die
+          jedem physischen Host einzeln zugewiesen und gemeinsam genutzt werden.
         </p>
-        TODO
-        <h4>Virtuelle Hosts</h4>
-        TODO
+        <p>
+          F&uuml;r die Verwaltung &ouml;ffentlicher und privater
+          Schl&uuml;sselpaare sowie alle Zertifikate, die erforderlich sind, um
+          eine Kette von Vertrauen abzubilden und die Vertrauensw&uml;rdigkeit
+          von Zertifikaten festzulegen, unterst&uuml;tzt Java u.a. dateibasierte
+          Keystores als Schl&uuml;ssel- und Zertifikatsspeicher.
+        </p>
+        <p>
+        </p>
+        <p>
+          <strong>
+            Java unterscheidet zwischen dem Keystrore, f&uuml;r  private
+            Schl&uuml;ssel und Zertifikate, sowie dem Truststore, f&uuml;r
+            CA-Zertifikate vertrauensw&uuml;rdiger Zertifizierungsstellen.<br>
+            Bei Seanox Devwex entf&auml;llt diese Unterscheidung und so wird nur
+            ein Keystore f&uuml;r beides verwendet.
+          </strong>             
+        </p>
+        <p>
+          <strong>
+            Die Verwendung von Aliasen im Keystore ist m&ouml;glich, wird von
+            Seanox Devwex aber nicht unterst&uuml;tzt. Daher wird die
+            Konfiguration von dedizierten Keystores empfohlen.
+          </strong>             
+        </p>
+        <p>
+          <strong>
+            TLS und SSL sind bei Java Bestandteil vom Verbindungaufbau und damit
+            an physische Hosts gebunden. Die Verwendung von Zertifikaten
+            f&uuml;r virtuelle Host wird damit erschwert und funktioniert nur
+            f&uuml;r Sub-Domains. F&uuml;r die Bereitstellung unterschiedlichen
+            Domains ist die Verwendung von physischen Hosts mit virtuellen
+            IP-Adressen empfehlenswert.
+          </strong>             
+        </p>
+        <p>
+          &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
+        </p>          
+        <table>
+          <tr>
+            <th>Schl&uuml;ssel</th>
+            <th>Wert</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>PROTOCOL</td>
+            <td>TLS|TLSv1|TLSv1.1|TLSv1.2|SSL|SSLv2|SSLv3|...</td>
+            <td>
+              Protokoll: <code>TLS</code> (Transport Layer Security),
+              <code>SSL</code> (Secure Socket Layer)<br>
+              Standardwert wenn nicht angegeben: <code>TLS</code>
+            </td>
+          </tr>
+          <tr>
+            <td>CLIENTAUTH</td>
+            <td>OFF|ON|AUTO</td>
+            <td>
+              (De)Aktivierung der Client-Autorisierung<br>
+              <code>ON</code> verlangt zwingend eine Client-Autorisierung. Ohne
+              wird die Verbindung zum Client beendet.<br>
+              <code>AUTO</code> verlangt eine optionale Client-Autorisierung und
+              &uuml;berl&auml;sst die Entscheidung zur Autorisierung dem Client
+              und der Server etabliert die Verbindung auch dann, wenn der Client
+              keine Autorisierung &uuml;bermittelt.<br>
+              Standardwert wenn nicht angegeben: <code>OFF</code><br>
+            </td>
+          </tr>          
+          <tr>
+            <td>KEYSTORE</td>
+            <td>...</td>
+            <td>
+              Pfad der Keystore-Datei
+            </td>
+          </tr>
+          <tr>
+            <td>TYPE</td>
+            <td>JCEKS|JKS|DKS|PKCS11|PKCS12|...</td>
+            <td>
+              Type vom verwendeten Keystore.<br>
+              Standardwert: <code>JKS</code> (wenn nicht angegeben)
+            </td>
+          </tr> 
+          <tr>
+            <td>ALGORITHM</td>
+            <td>SunX509|PKIX|...</td>
+            <td>
+              Algorithmus der Verschl&uuml;sselung vom Keystore.<br>
+              Standardwert: <code>SunX509</code> (wenn nicht angegeben)
+            </td>
+          </tr>                           
+          <tr>
+            <td>PASSWORD</td>
+            <td>...</td>
+            <td>
+              Passwort f&uuml;r den Keystore.
+            </td>
+          </tr>        
+        </table>
+        <p>
+          Die Konfiguration und Verwendung der Zertifikate, ausgehend davon,
+          dass sich die Keystore-Datei im Devwex-Arbeitsverzeichnis
+          <code>./devwex/program</code> befindet.<br>
+          Der Port ist frei w&auml;hlbar; als Standard wird f&uuml;r HTTPS der
+          Port 443 verwendet.
+        </p>
+        <pre>
+          [SERVER:X:BAS]
+            PORT       = 443
+            ...
+
+          [SERVER:X:SSL]
+            PROTOCOL   = TLS
+            CLIENTAUTH = OFF
+
+            KEYSTORE   = keystore
+            TYPE       = JKS
+            ALGORITHM  = SunX509
+            PASSWORD   = changeIt
+            ...
+        </pre>
+        <p>
+          Durch die automatisch vergebenen Standardwerte gen&uuml;gt meist die
+          folgende Konfiguration:
+        </p>              
+        <pre>
+          [SERVER:X:BAS]
+            PORT       = 443
+            ...
+
+          [SERVER:X:SSL]
+            KEYSTORE   = keystore
+            PASSWORD   = changeIt
+        </pre>
+        <p>
+          Zum Erzeugen und Verwalten von Schl&uuml;sseln und Zertifikaten stellt
+          Oracle das Dienstprogramm Keytool bereit.<br>
+          Nachfolgend wird nur die einfache Erzeugung selbst erstellter
+          Server-Zertifikate beschrieben. Details zum Dienstprogramm sind bitte
+          der Dokumentation zum verwendeten JRE zu entnehmen.
+        </p>
+        <p>
+          Beispiel zur Erstellung vom Server-Zertifikate im Keystore:
+        </p>
+        <pre>
+          ./java/bin/keytool -genkey -keyalg RSA -keysize 2048 -validity 365
+                             -alias Server -dname "CN=127.0.0.1"
+                             -keystore keystore -keypass changeIt -storepass changeIt
+        </pre>
+        <p>
+          Wird beim Keytool kein Zielverzeichnis mit <code>-keystore</code>
+          angegeben wird das generierte Zertifikat als <code>.keystore</code>
+          Datei im Benutzerverzeichnis abgelegt. Je nach Betriebssystem werden
+          unterschiedliche Benutzerverzeichnisse verwendet. Bei Windows kann
+          dies z.B. <code>C:\Users\&lt;Benutzer&gt;\.keystore</code> oder bei
+          Unix-basierenden System <code>/home/&lt;benutzer&gt;/.keystore</code>
+          sein.<br>
+          Die erstellte Keystore-Datei kann beliebig umbenannt und im
+          Dateisystem verschoben werden.
+        </p>
+        <h4>Client-Authentication / Mutual-Authentication</h4>
+        <p>
+          Diese Art der Autorisierung, die &uuml;ber <code>CLIENTAUTH</code>
+          aktiviert wird, basiert auf Zertifikaten. Beim Verbindungsaufbau
+          handeln Server und Client den Austausch von Zertifikaten aus. Der
+          Server akzeptiert dabei nur ihm bekannte Zertifikate.<br>
+          Das Verhalten vom Server und die Etablierung der Verbindung kann
+          hierbei durch <code>ON</code> strikt und mit <code>AUTO</code>
+          tollerant eingerichtet werden.<br>
+          Beim strikten Verhalten wird die &Uuml;bermittlung eines g&uuml;ltigen
+          Zertifikates verlangt. Ohne wird die Verbindung ohne Antwort vom
+          Server geschlossen.<br>
+          Beim tolleraten Verhalten wird die Verbindung immer etabliert. Hier
+          liegt es dann an der Server-Konfiguration, wie sich der Server
+          verh&auml;llt wenn kein oder kein passendes Zertifikat
+          &uuml;bermittelt. Ohne weitere Server-Konfiguration entspricht das
+          Verhaltem der Konfiguration <code>CLIENTAUTH = OFF</code>. Der Server
+          hat aber die M&ouml;glichkeit &uuml;ber Filter auf fehlende oder nicht
+          passende Zertifikat zu reagieren. Authentifiziert sich ein Client
+          mittels einem bekannten Zertifikats, wird die Umgebungsvariable
+          <code>AUTH_CERT</code> mit den Zertifikat-Attributen bereit gestellt.
+          Ist die Umgebungsvariable <code>AUTH_CERT</code> nicht gesetzt bzw.
+          leer, kann von einer Anfrage ohne passendem Zertifikat ausgegangen
+          werden und eine Fehlerseite an den Client gesendet werden.
+        </p>
+        <p>
+          Beispiel f&uuml;r einen Filter zur Pr&uuml;fung auf g&uuml;ltige
+          Zertifikate:
+        </p>
+        <pre>
+          [SERVER:X:SSL]
+            ...
+            CLIENTAUTH  = AUTO
+            ...        
+          [SERVER:X:FLT]
+            CLIENT-AUTH = ALL IS EMPTY AUTH_CERT
+        </pre>                
+        <p>
+          Server- und Client-Zertifikate lassen sich wie folgt selbst erstellen:
+        </p>
+        <pre>
+          ./java/bin/keytool -genkeypair -alias Server -keyalg RSA -keysize 2048 -validity 365
+                             -dname 'CN=Server'
+                             -keystore server.jks -keypass changeIt -storepass changeIt
+        </pre>        
+        <pre>
+          ./java/bin/keytool -exportcert -alias Server -file server.cer
+                             -keystore server.jks -storepass changeIt
+        </pre>
+        <p>
+          Der Keystore f&uuml;r den Client wird erstellt und das
+          &ouml;ffentliche Client-Zertifikat exportiert.<br>
+          Beides ist in diesem Beispiel nur tempor&auml;r und wird im weiteren
+          Verlauf f&uuml;r die die Erstellung vom Server-Keysore und zum Export
+          vom Client-Zertifikat ben&ouml;tigt.
+        </p>        
+        <pre>
+          ./java/bin/keytool -genkeypair -alias Client -keyalg RSA -keysize 2048 -validity 365
+                             -dname 'CN=Client'
+                             -keystore client.jks -keypass changeIt -storepass changeIt
+        </pre>
+        <pre>
+          ./java/bin/keytool -exportcert -alias Client -file client.cer
+                             -keystore client.jks -storepass changeIt
+        </pre>
+        <p>
+          Die Keystores vom Server und Client werden gegenseitig migriert.<br>
+          Somit wird nur der Server-Keystore ben&ouml;tigt.         
+        </p>
+        <pre>
+          ./java/bin/keytool -importcert -alias Client -file client.cer 
+                             -keystore server.jks -storepass changeIt
+                             -noprompt
+        </pre>
+        <pre>
+          ./java/bin/keytool -importcert -alias Server -file server.cer
+                             -keystore client.jks -storepass changeIt
+                             -noprompt
+        </pre>
+        <p>
+          Abschliessend werden das Server- und Client-Zertifikat als
+          <code>PKCS12</code> exporiert.<br>
+          Die Datei <code>client.p12</code> wird sp&auml;ter f&uuml;r den Client
+          zur Autorisierung beim Server ben&ouml;tigt. Das Server-Zertifikat
+          kann ignoriert werden.
+        </p>
+        <pre>
+          ./java/bin/keytool -importkeystore
+                             -srckeystore server.jks -srcstorepass changeIt
+                             -destkeystore server.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt 
+                             -noprompt
+        </pre>
+        <pre>
+          ./java/bin/keytool -importkeystore -alias ClientA
+                             -srckeystore client.jks -srcstorepass changeIt
+                             -destkeystore client.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt
+                             -noprompt
+        </pre>
+        <h4>Virtuelle Hosts / Virtual Hosting</h4>
+        <p>
+          Beim Virtual Hosting &uml;bernimmt ein Server die Anfragen zu
+          verschieden Domains und/oder Hosts. Der Server besitzt dabei eine
+          Basiskonfiguration, die sich entsprechend der Anfrage f&uml;r eine
+          Domain oder einen Host dynamisch anpasst, womit sich das Verhalten vom
+          Server so &auml;ndert, als wenn die Anfrage von einem
+          eigenst&auml;ndig konfigurierten Server entgegengenommen wird.
+        </p>
+        <p>
+          Beispiel eines Request f&uuml;r einen virtuellen Host:
+        </p>
+        <pre>
+          GET /directory/file.cgi?value=123 HTTP/1.1
+          Accept-Encoding: gzip, deflate
+          Accept-Language: de
+          Accept: */*  
+          User-Agent: Browser  
+          Host: example.local  
+        </pre>
+        <p>
+          Zu diesem Beispiel m&uuml;ssen die Sektionen f&uuml;r den virtuellen
+          Host wie folgt in der Konfigurationsdatei angelegt werden.        
+        </p>
+        <pre>
+          [VIRTUAL:EXAMPLE.COM:BAS]
+            ...
+          [VIRTUAL:EXAMPLE.COM:FLT]
+            ...
+          [VIRTUAL:EXAMPLE.COM:REF]
+            ...
+          [VIRTUAL:EXAMPLE.COM:ACC]
+            ...
+          [VIRTUAL:EXAMPLE.COM:ENV]
+            ...
+          [VIRTUAL:EXAMPLE.COM:CGI]
+            ...
+        </pre>
+        <p>
+          Die Konfiguration virtueller Hosts gleicht der von Servern.<br>
+          Die Einstellungen <code>CONNECTOR</code>, <code>ADDRESS</code>,
+          <code>PORT</code>, <code>SERVICE</code>, <code>BACKLOG</code>,
+          <code>MAXACCESS</code> und <code>ISOLATION</code> f&uuml;r den Service
+          und den Connector entfallen hier.        
+        </p>
+        <p>
+          Virtuelle Host sind eigenst&auml;ndige Konfigurationen, die
+          prim&auml;r allen Servern zur Verf&uuml;gung stehen.<br>
+          &Uuml;ber <code>[VIRTUAL:BAS] SERVER</code> kann die Verwendung der
+          Konfiguration auf bestimmte Server beschränkt werden.
+        </p>
+        <p>
+          Beispiel f&uuml;r die Beschr&auml;nktung auf einzelne Server:
+        </p>        
+        <pre>
+          [VIRTUAL:X:BAS]
+            SERVER = SERVER:A SERVER:B SERVER:C
+            ...
+        </pre>                
         <h4>Filter</h4>
         <p>
           Die Zugriffe auf Server und virtuelle Hosts k&ouml;nnen &uuml;ber
@@ -277,7 +590,7 @@
         <p>
           Das Schema zur Formulierung der Filter:
         </p>
-        <pre>NAME = METHODE BEDINGUNG FUNKTION VARIABLE WERT [A] ... &gt; VERWEIS [R]</pre>
+        <pre>NAME = METHODE BEDINGUNG FUNKTION VARIABLE WERT [+] ... &gt; VERWEIS [R]</pre>
         <p>
           Den Filtern stehen alle CGI-Umgebungsvariablen mit deren Werte in ggf.
           kodierter und dekodierter Form zur Verf&uuml;gung. Die Gross- und
@@ -285,7 +598,7 @@
           Die Angabe von einem Verweise ist dabei optional.        
         </p>
         <p>
-          &Uuml;bersicht der Elemente vom Filter-Ausdruck
+          &Uuml;bersicht der Elemente vom Filter-Ausdruck:
         </p>        
         <table>
           <tr>
@@ -386,12 +699,12 @@
           </tr>
           <tr>
             <td>OPTION</td>
-            <td>[A] [R] [M]</td>
+            <td>[+] [R] [M]</td>
             <td>zus&auml;tzliche Optionen zur Steuerung des Filters</td>
           </tr>                      
           <tr>
             <td></td>
-            <td>[A]</td>
+            <td>[+]</td>
             <td>Logische Und-Verkn&uuml;pfung mehrerer Bedingungen.</td>
           </tr>                      
           <tr>
@@ -540,7 +853,7 @@
           </p>
         </section>        
         <section>
-          <pre>FILTER-G = GET IS CONTAINS REQUEST_URI /documents [A] GET IS EMPTY HTTP_REFERER</pre>
+          <pre>FILTER-G = GET IS CONTAINS REQUEST_URI /documents [+] GET IS EMPTY HTTP_REFERER</pre>
           <p>
             Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
             <code>REQUEST_URI</code> den Wert <code>/documents</code>
@@ -1109,7 +1422,7 @@
             befindlichen Modul <code>com.seanox.ssx.Connector</code> zugewiesen.
           </p>
         </section>
-        <p>&Uuml;bersicht bereitgestellter Umgebungsvariablen (Auswahl)</p>
+        <p>&Uuml;bersicht bereitgestellter Umgebungsvariablen (Auswahl):</p>
         <table>
           <tr>
             <th>Umgebungsvariable</th>

@@ -82,11 +82,10 @@
   
   <target name="keystore">
     <delete file="${workspace.program}/keystore"/>
-    <property name="options1" value="-genkey -alias ${ant.project.name} -keystore '${workspace.program}/keystore' -keyalg RSA"/>
-    <property name="options2" value="-dname 'CN=127.0.0.1, C=DE' -validity 365"/>
-    <property name="options3" value="-keypass changeIt -storepass changeIt"/>
     <exec executable="keytool">
-      <arg line="${options1} ${options2} ${options3}"/>
+      <arg line="-genkey -alias Server -dname 'CN=127.0.0.1'
+        -keystore '${workspace.program}/keystore' -keypass changeIt -storepass changeIt
+        -keyalg RSA -keysize 2048 -validity 365"/>
     </exec>
   </target>  
   

@@ -49,6 +49,8 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import javax.net.ssl.SSLSocket;
+
 /**
  *  Listener, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
  *  diese entsprechend der HTTP-Methode und protokolliert den Zugriff.<br>
@@ -59,12 +61,12 @@ import java.util.TimeZone;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Listener 5.0 20170609<br>
+ *  Listener 5.0 20170702<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170609
+ *  @version 5.0 20170702
  */
 class Listener implements Runnable {
   
@@ -1013,7 +1015,7 @@ class Listener implements Runnable {
             //verlassen. Somit wird das Ende der Schleife nur erreicht, wenn
             //keine der Bedingungen versagt hat und damit alle zutreffen.
             
-            rules = new StringTokenizer(Listener.textReplace(string, "[A]", "\00"), "\00");
+            rules = new StringTokenizer(Listener.textReplace(string, "[+]", "\00"), "\00");
             while (rules.hasMoreTokens()) {
 
                 //die Filterbeschreibung wird ermittelt
@@ -1171,7 +1173,14 @@ class Listener implements Runnable {
 
         //der Datenpuffer wird zum Auslesen vom Header eingerichtet
         buffer = new ByteArrayOutputStream(65535);
+        
+        if ((this.socket instanceof SSLSocket))
+            try {this.fields.set("auth_cert", ((SSLSocket)this.socket).getSession().getPeerPrincipal().getName());
+            } catch (Throwable throwable) {
 
+                //keine Fehlerbehandlung erforderlich
+            }
+        
         try {
 
             //das SO-Timeout wird fuer den Serversocket gesetzt

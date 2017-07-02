@@ -32,6 +32,7 @@ import java.util.Vector;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  *  Server stellt als physischer Host, den Zugriff im Netzwerk f&uuml;r eine
@@ -39,12 +40,12 @@ import javax.net.ssl.SSLServerSocket;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170528<br>
+ *  Server 5.0 20170701<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170528
+ *  @version 5.0 20170701
  */
 public class Server implements Runnable {
 
@@ -71,21 +72,22 @@ public class Server implements Runnable {
      */
     public Server(String server, Object data) throws Throwable {
 
-        SSLContext        context;
-        String            buffer;
-        String            string;
-        StringTokenizer   tokenizer;
-        Section           options;
-        Section           section;
-        KeyStore          keystore;
-        KeyManagerFactory manager;
-        FileInputStream   filestream;
-        InetAddress       address;
-        Enumeration       enumeration;
+        TrustManagerFactory trustmanager;
+        SSLContext          context;
+        String              buffer;
+        String              string;
+        StringTokenizer     tokenizer;
+        Section             options;
+        Section             section;
+        KeyStore            keystore;
+        KeyManagerFactory   keymanager;
+        FileInputStream     input;
+        InetAddress         address;
+        Enumeration         enumeration;
 
-        int               isolation;
-        int               port;
-        int               volume;
+        int                 volume;
+        int                 port;
+        int                 isolation;
         
         //der Servername wird uebernommen
         this.context = server == null ? "" : server.trim();
@@ -163,33 +165,43 @@ public class Server implements Runnable {
             //der Typ des KeyStores wird ermittelt, Standard ist JKS
             keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
             
-            //der SSL Algorithmus wird ermittelt, Standard ist SunX509
-            manager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));
-            
             //das Passwort des KeyStores wird ermittelt
             string = options.get("password");
 
             //der KeyStore wird geladen
-            filestream = new FileInputStream(options.get("keystore"));
-            try {keystore.load(filestream, string.toCharArray());
+            input = new FileInputStream(options.get("keystore"));
+            try {keystore.load(input, string.toCharArray());
             } finally {
-                filestream.close();
+                input.close();
             }
             
-            //der KeyStore wird initialisiert
-            manager.init(keystore, string.toCharArray());
+            //der KeyManager wird eingerichtet, Standard ist SunX509
+            keymanager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));            
+            
+            //der KeyManager wird initialisiert
+            keymanager.init(keystore, string.toCharArray());
+            
+            //der TrustManager wird eingerichtet, Standard ist SunX509
+            trustmanager = TrustManagerFactory.getInstance(options.get("algorithm", TrustManagerFactory.getDefaultAlgorithm()));
+            
+            //der TrustManager wird initialisiert
+            trustmanager.init(keystore);
 
             //das SSL Protokoll wird ermittelt, Standard ist TLS
             context = SSLContext.getInstance(options.get("protocol", "TLS"));
 
-            //der SecureContext wird mit KeyManager(n) initialisiert
-            context.init(manager.getKeyManagers(), null, null);
+            //der SecureContext wird mit Key- und TrustManager(n) initialisiert
+            context.init(keymanager.getKeyManagers(), trustmanager.getTrustManagers(), null);
 
             //der Socket wird mit Adresse bzw. automatisch eingerichtet
             this.socket = context.getServerSocketFactory().createServerSocket(port, volume, address);
-
-            ((SSLServerSocket)this.socket).setNeedClientAuth(options.get("clientauth").toLowerCase().equals("on"));
-
+            
+            //WICHTIG - Need und Want muessen unabhaenig gesetzt werden
+            if (options.get("clientauth").toLowerCase().equals("on"))
+                ((SSLServerSocket)this.socket).setNeedClientAuth(true);
+            if (options.get("clientauth").toLowerCase().equals("auto"))
+                ((SSLServerSocket)this.socket).setWantClientAuth(true);
+            
         } else {
 
             //der Socket wird mit Adresse bzw. automatisch eingerichtet

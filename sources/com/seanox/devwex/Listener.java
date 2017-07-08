@@ -34,6 +34,7 @@ import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
@@ -1160,17 +1161,6 @@ class Listener implements Runnable {
         int                   digit;
         int                   offset;
 
-        long                  duration;
-
-        //die maximale Ladezeit fuer den Request wird ermittelt
-        try {duration = Long.parseLong(this.options.get("slicing"));
-        } catch (Throwable throwable) {
-            duration = 0;
-        }
-
-        //der zeitliche Verfall des Requests wird ermittelt
-        if (duration > 0) duration += System.currentTimeMillis();
-
         //der Datenpuffer wird zum Auslesen vom Header eingerichtet
         buffer = new ByteArrayOutputStream(65535);
         
@@ -1183,7 +1173,7 @@ class Listener implements Runnable {
         
         try {
 
-            //das SO-Timeout wird fuer den Serversocket gesetzt
+            //das SO-Timeout wird fuer den ServerSocket gesetzt
             this.socket.setSoTimeout((int)this.timeout);
 
             //die Datenstroeme werden eingerichtet
@@ -1250,16 +1240,13 @@ class Listener implements Runnable {
                 //der Request wird auf kompletter Header geprueft
                 if (cursor == 4 || digit < 0)
                     break;
-
-                //die maximale Uebertragungszeit des Request wird ueberwacht
-                if (duration > 0 && duration < System.currentTimeMillis()) {
-                    this.status = 408;
-                    break;
-                }
             }
 
         } catch (Throwable throwable) {
+            
             this.status = 400;
+            if (throwable instanceof SocketTimeoutException)
+                this.status = 408;
         }
         
         //der Header wird vorrangig fuer die Schnittstellen gesetzt
@@ -1284,7 +1271,7 @@ class Listener implements Runnable {
         this.fields.set("req_method", shadow);
 
         //ohne HTTP-Methode ist die Anfrage ungueltig, somit STATUS 400
-        if (shadow.length() <= 0 && this.status < 500) this.status = 400;
+        if (shadow.length() <= 0 && this.status <= 0) this.status = 400;
 
         //Protokoll und Version vom Request werden ermittelt aber ignoriert
         offset = string.lastIndexOf(' ');
@@ -1374,7 +1361,7 @@ class Listener implements Runnable {
         }
 
         //das aktuelle Arbeitsverzeichnis wird ermittelt
-        file = Listener.fileCanonical(new File("."));
+        file   = Listener.fileCanonical(new File("."));
         string = file != null ? file.getPath().replace('\\', '/') : ".";
         if (string.endsWith("/"))
             string = string.substring(0, string.length() -1);
@@ -1607,8 +1594,10 @@ class Listener implements Runnable {
         //die aktuelle Methode wird in der Liste der zulaessigen gesucht, ist
         //nicht enthalten, wird STATUS 405 gesetzt, ausgenommen sind Module
         //mit der Option [X], da an diese alle Methoden weitergereicht werden
-        if (((digit & (2 | 16)) != (2 | 16)) && this.status != 400 && this.status < 500
-                && !shadow.contains((" ").concat(string).concat(" "))) this.status = 405;
+        if (((digit & (2 | 16)) != (2 | 16))
+                && !shadow.contains((" ").concat(string).concat(" "))
+                && this.status <= 0)
+            this.status = 405;
         
         this.resource = this.filter();
 
@@ -2974,11 +2963,11 @@ class Listener implements Runnable {
             //der Interrupt wird ermittelt
             try {this.interrupt = Long.parseLong(this.options.get("interrupt"));
             } catch (Throwable throwable) {
-                this.interrupt = 25;
+                this.interrupt = 10;
             }
 
             if (this.interrupt < 0)
-                this.interrupt = 25;
+                this.interrupt = 10;
 
             try {this.socket = socket.accept();
             } catch (InterruptedIOException exception) {

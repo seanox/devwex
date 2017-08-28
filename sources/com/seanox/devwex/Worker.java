@@ -53,7 +53,7 @@ import java.util.TimeZone;
 import javax.net.ssl.SSLSocket;
 
 /**
- *  Listener, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
+ *  Worker, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
  *  diese entsprechend der HTTP-Methode und protokolliert den Zugriff.<br>
  *  <br>
  *  Hinweis zum Thema Fehlerbehandlung - Die Verarbeitung der Requests soll so
@@ -62,19 +62,19 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Listener 5.0 20170702<br>
+ *  Worker 5.0 20170702<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
  *  @version 5.0 20170702
  */
-class Listener implements Runnable {
+class Worker implements Runnable {
   
     /** Server Context */
     private volatile String context;
 
-    /** Socket vom Listener */
+    /** Socket vom Worker */
     private volatile Socket socket;
 
     /** Socket des Servers */
@@ -156,12 +156,12 @@ class Listener implements Runnable {
     private volatile long volume;
 
     /**
-     *  Konstruktor, richtet den Listener mit Socket ein.
+     *  Konstruktor, richtet den Worker mit Socket ein.
      *  @param context    Server Context
      *  @param socket     Socket mit dem eingegangen Request
      *  @param initialize Server Konfiguraiton
      */
-    Listener(String context, ServerSocket socket, Initialize initialize) {
+    Worker(String context, ServerSocket socket, Initialize initialize) {
 
         this.context    = context;
         this.mount      = socket;
@@ -519,7 +519,7 @@ class Listener implements Runnable {
         if (resource.isDirectory()) {
             files = resource.listFiles();
             for (loop = 0; loop < files.length; loop++) {
-                if (!Listener.fileDelete(files[loop]))
+                if (!Worker.fileDelete(files[loop]))
                     return false;
             }
         }
@@ -601,49 +601,44 @@ class Listener implements Runnable {
     }
 
     /**
-     *  L&auml;dt ein Modul, initialisiert dieses gegebenfalls und ruft die
-     *  Methode <code>Module.bind(Object object, int type)</code> auf.
-     *  Scheitert die Ausf&uuml;hrung, wird <code>STATUS 500</code> gesetzt
-     *  R&uuml;ckgabe <code>true</code> wenn die Ressource geladen und
-     *  aufgerufen werden konnte, sonst <code>false</code>.
+     *  Ruft eine Modul-Methode auf.
+     *  Wenn erforderlich wird das Modul zuvor geladen und initialisiert.
+     *  Module werden global geladen und initialisiert. Ist ein Modul beim
+     *  Aufruf der Methode noch nicht geladen, erfolgt dieses ohne Angabe von
+     *  Parametern mit der ersten Anforderung.<br>
+     *  Soll ein Modul mit Parametern initalisiert werden, muss das Modul in
+     *  der Sektion <code>INITIALIZE</code> deklariert oder &uuml;ber den
+     *  Context-ClassLoader vom Devwex-Module-SDK geladen werden.
+     *  R&uuml;ckgabe <code>true</code> wenn die Ressource geladen und die
+     *  Methode erfolgreich aufgerufen wurde.
      *  @param  resource Resource
-     *  @param  type     Modultyp
+     *  @param  invoke   Methode
      *  @return <code>true</code>, im Fehlerfall <code>false</code>
      */
-    private boolean call(String resource, int type) {
+    private boolean invoke(String resource, String invoke) throws Exception {
 
-        Class  source;
-        Method method;
         Object object;
+        Method method;
         String string;
 
-        try {
+        if (invoke == null
+                || invoke.trim().length() <= 0)
+            return false;
+        
+        object = Service.load(Service.load(resource), null);
+        if (object == null)
+            return false;
 
-            if (resource.trim().length() <= 0)
-                return false;
-            
-            string = this.environment.get("module_opts");
-            object = Service.call(Service.load(resource), string.length() > 0 ? string : null);
-            source = object.getClass();
-
-            if (object instanceof Class) {
-                source = (Class)object;
-                object = null;
-            }
-
-            //die Methode fuer den Einsprung in das Modul wird ermittelt
-            method = source.getMethod("bind", new Class[] {Object.class, Integer.TYPE});
-
-            //die Methode fuer den Einsprung in das Modul wird aufgerufen
-            method.invoke(object, new Object[] {this, new Integer(type)});
-            
-        } catch (Throwable throwable) {
-
-            this.status = 500;
-
-            Service.print(throwable);
-        }
-
+        string = this.environment.get("module_opts");
+        if (string.length() <= 0)
+            string = null;
+        
+        //die Methode fuer den Modul-Einsprung wird ermittelt
+        method = object.getClass().getMethod(invoke, new Class[] {Object.class, String.class});
+        
+        //die Methode fuer den Modul-Einsprung wird aufgerufen
+        method.invoke(object, new Object[] {this, string});
+        
         return true;
     }
 
@@ -730,8 +725,8 @@ class Listener implements Runnable {
                 rules = rules.substring(cursor +2).trim();
             }
 
-            target = Listener.cleanOptions(rules);
-            alias  = Listener.fileNormalize(alias);
+            target = Worker.cleanOptions(rules);
+            alias  = Worker.fileNormalize(alias);
             
             //die Optionen werden ermittelt
             string  = rules.toUpperCase();
@@ -777,7 +772,7 @@ class Listener implements Runnable {
                     //die Zieldatei wird eingerichtet
                     //der absolute Pfad wird ermittelt
                     //Verzeichnisse werden ggf. mit Slash beendet
-                    source = Listener.fileCanonical(new File(target));
+                    source = Worker.fileCanonical(new File(target));
                     if (source != null) {
                         target = source.getPath().replace('\\', '/');
                         if (source.isDirectory() && !target.endsWith("/"))
@@ -929,7 +924,7 @@ class Listener implements Runnable {
             shadow = section.get("username");
 
             buffer = shadow.concat(":").concat(realm).concat(":");
-            string = Listener.textHash(this.environment.get("request_method").concat(":").concat(section.get("uri")));
+            string = Worker.textHash(this.environment.get("request_method").concat(":").concat(section.get("uri")));
             string = (":").concat(section.get("nonce")).concat(":").concat(section.get("nc")).concat(":").concat(section.get("cnonce")).concat(":").concat(section.get("qop")).concat(":").concat(string);
 
             tokenizer = new StringTokenizer(access);
@@ -944,8 +939,8 @@ class Listener implements Runnable {
                     access = access.substring(shadow.length() +1);
                 else continue;
                 
-                access = Listener.textHash(buffer.concat(access));
-                access = Listener.textHash(access.concat(string));
+                access = Worker.textHash(buffer.concat(access));
+                access = Worker.textHash(access.concat(string));
                 if (target.equals(access)) {
                     this.fields.set("auth_user", shadow);
                     return;
@@ -1008,7 +1003,8 @@ class Listener implements Runnable {
             string = this.filters.get((String)enumeration.nextElement());
             cursor = string.indexOf('>');
             buffer = cursor >= 0 ? string.substring(cursor +1).trim() : "";
-            string = cursor >= 0 ? string.substring(0, cursor) : string;
+            if (cursor >= 0)
+                string = string.substring(0, cursor);
             
             //Die Auswertung der Filter erfolgt nach dem Auschlussprinzip.
             //Dazu werden alle Regeln einer Zeile in einer Schleife einzeln
@@ -1016,7 +1012,7 @@ class Listener implements Runnable {
             //verlassen. Somit wird das Ende der Schleife nur erreicht, wenn
             //keine der Bedingungen versagt hat und damit alle zutreffen.
             
-            rules = new StringTokenizer(Listener.textReplace(string, "[+]", "\00"), "\00");
+            rules = new StringTokenizer(Worker.textReplace(string, "[+]", "\00"), "\00");
             while (rules.hasMoreTokens()) {
 
                 //die Filterbeschreibung wird ermittelt
@@ -1060,7 +1056,7 @@ class Listener implements Runnable {
                     //der zu pruefende Wert wird ermittelt
                     string = this.environment.get(string);
                     valueA = string.toLowerCase();
-                    valueB = Listener.textDecode(valueA);
+                    valueB = Worker.textDecode(valueA);
                     
                     //der zu pruefende Wert/Ausdruck wird ermittelt
                     string = words.hasMoreTokens() ? words.nextToken() : "";
@@ -1089,7 +1085,7 @@ class Listener implements Runnable {
                 }
                     
                 //die Anweisung wird ermittelt
-                string = Listener.cleanOptions(buffer);
+                string = Worker.cleanOptions(buffer);
                 
                 //wurde ein Modul definiert, wird es optional im Hintergrund
                 //als Filter- oder Process-Modul ausgefuehrt, die Verarbeitung
@@ -1099,7 +1095,7 @@ class Listener implements Runnable {
                     control = this.control;
                     status  = this.status;
                     this.environment.set("module_opts", buffer);
-                    this.call(string, 1);
+                    this.invoke(string, "filter");
                     if (this.control != control
                             || this.status != status)
                         return this.resource;
@@ -1118,7 +1114,7 @@ class Listener implements Runnable {
                 //Location zurueckgegeben
                 if (string.length() > 0) {
                     
-                    file = Listener.fileCanonical(new File(buffer));
+                    file = Worker.fileCanonical(new File(buffer));
                     if (file != null && file.exists())
                         return file.getPath();
                 }
@@ -1291,11 +1287,12 @@ class Listener implements Runnable {
         this.fields.set("req_query", shadow);
 
         //der Pfad wird dekodiert
-        shadow = Listener.textDecode(string);
+        shadow = Worker.textDecode(string);
         
         //der Pfad wird ausgeglichen /abc/./def/../ghi/ -> /abc/ghi
-        string = Listener.fileNormalize(shadow);
-        string = shadow.endsWith("/") && !string.endsWith("/") ? string.concat("/") : string;
+        string = Worker.fileNormalize(shadow);
+        if (shadow.endsWith("/") && !string.endsWith("/"))
+            string = string.concat("/");
 
         this.fields.set("req_path", string);
 
@@ -1354,20 +1351,20 @@ class Listener implements Runnable {
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 
             //das Timeout der Connection wird ermittelt
-            try {this.timeout = Long.parseLong(Listener.cleanOptions(string));
+            try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
             } catch (Throwable throwable) {
                 this.timeout = 0;
             }
         }
 
         //das aktuelle Arbeitsverzeichnis wird ermittelt
-        file   = Listener.fileCanonical(new File("."));
+        file   = Worker.fileCanonical(new File("."));
         string = file != null ? file.getPath().replace('\\', '/') : ".";
         if (string.endsWith("/"))
             string = string.substring(0, string.length() -1);
 
         //das Systemverzeichnis wird ermittelt
-        file = Listener.fileCanonical(new File(this.options.get("sysroot")));
+        file = Worker.fileCanonical(new File(this.options.get("sysroot")));
         this.sysroot = file != null ? file.getPath().replace('\\', '/') : string;
         if (this.sysroot.endsWith("/"))
             this.sysroot = this.sysroot.substring(0, this.sysroot.length() -1);
@@ -1375,7 +1372,7 @@ class Listener implements Runnable {
             this.sysroot = string;
 
         //das Dokumentenverzeichnis wird ermittelt
-        file = Listener.fileCanonical(new File(this.options.get("docroot")));
+        file = Worker.fileCanonical(new File(this.options.get("docroot")));
         this.docroot = file != null ? file.getPath().replace('\\', '/') : string;
         if (this.docroot.endsWith("/"))
             this.docroot = this.docroot.substring(0, this.docroot.length() -1);
@@ -1430,7 +1427,7 @@ class Listener implements Runnable {
         digit |= string.contains("[R]") ?  4 : 0;
         digit |= string.contains("[C]") ?  8 : 0;
         digit |= string.contains("[X]") ? 16 : 0;
-
+        
         virtual = (digit & 1) != 0;
         connect = (digit & (2|4)) != 0;
 
@@ -1441,7 +1438,7 @@ class Listener implements Runnable {
         if ((this.status == 0 || this.status == 404) && (digit & 8) != 0) this.status = 403;
         if ((this.status == 0 || this.status == 404) && (digit & 2) != 0) this.status = 0;
         if ((this.status == 0 || this.status == 404) && (digit & (2|4)) == 4) {
-            this.environment.set("script_uri", Listener.cleanOptions(this.resource));
+            this.environment.set("script_uri", Worker.cleanOptions(this.resource));
             this.status = 302;
         }
         
@@ -1463,7 +1460,7 @@ class Listener implements Runnable {
         this.environment.set("remote_user", this.fields.get("auth_user"));
         
         if (!connect)
-            this.resource = Listener.cleanOptions(this.resource);
+            this.resource = Worker.cleanOptions(this.resource);
 
         if (this.resource.length() <= 0)
             this.resource = this.docroot.concat(this.environment.get("path_base"));
@@ -1571,7 +1568,7 @@ class Listener implements Runnable {
             }
         }
         
-        string = Listener.cleanOptions(this.resource);
+        string = Worker.cleanOptions(this.resource);
 
         this.environment.set("script_filename", string);
         this.environment.set("path_translated", string);
@@ -1601,7 +1598,7 @@ class Listener implements Runnable {
         
         this.resource = this.filter();
 
-        string = Listener.cleanOptions(this.resource);
+        string = Worker.cleanOptions(this.resource);
 
         this.environment.set("script_filename", string);
         this.environment.set("path_translated", string);
@@ -1699,7 +1696,7 @@ class Listener implements Runnable {
         string = ("HTTP/1.0 ").concat(string).concat(" ").concat(this.statuscodes.get(string)).trim();
         if (this.options.get("identity").toLowerCase().equals("on"))
             string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
-        string = string.concat("\r\n").concat(Listener.dateFormat("'Date: 'E, dd MMM yyyy HH:mm:ss z", new Date(), "GMT"));
+        string = string.concat("\r\n").concat(Worker.dateFormat("'Date: 'E, dd MMM yyyy HH:mm:ss z", new Date(), "GMT"));
         string = string.concat("\r\n").concat(String.join("\r\n", header));
 
         return string.trim();
@@ -1764,7 +1761,7 @@ class Listener implements Runnable {
         return (String[])list.toArray(new String[0]);
     }
     
-    private void doGateway() {
+    private void doGateway() throws Exception {
         
         InputStream  input;
         OutputStream output;
@@ -1789,228 +1786,215 @@ class Listener implements Runnable {
             //die Moduldefinition wird als Umgebungsvariablen gesetzt
             this.environment.set("module_opts", this.gateway);
             
-            this.call(Listener.cleanOptions(this.gateway), 7);
+            this.invoke(Worker.cleanOptions(this.gateway), "service");
+        
+            return;
+        } 
             
-        } else {
-            
-            shadow = this.environment.get("script_filename");
-            cursor = shadow.replace('\\', '/').lastIndexOf("/") +1;
-            string = Listener.textReplace(this.gateway, "[P]", shadow.substring(0, cursor));
+        shadow = this.environment.get("script_filename");
+        cursor = shadow.replace('\\', '/').lastIndexOf("/") +1;
+        string = Worker.textReplace(this.gateway, "[P]", shadow.substring(0, cursor));
 
-            shadow = shadow.substring(cursor);
-            cursor = shadow.lastIndexOf(".");
-            string = Listener.textReplace(string, "[N]", shadow.substring(0, cursor < 0 ? shadow.length() : cursor));
-            string = Listener.textReplace(string, "[C]", this.environment.get("script_filename").replace((File.separator.equals("/")) ? '\\' : '/', File.separatorChar));
-            string = Listener.cleanOptions(string);
+        shadow = shadow.substring(cursor);
+        cursor = shadow.lastIndexOf(".");
+        string = Worker.textReplace(string, "[N]", shadow.substring(0, cursor < 0 ? shadow.length() : cursor));
+        string = Worker.textReplace(string, "[C]", this.environment.get("script_filename").replace((File.separator.equals("/")) ? '\\' : '/', File.separatorChar));
+        string = Worker.cleanOptions(string);
+        
+        //die maximale Prozesslaufzeit wird ermittelt
+        try {duration = Long.parseLong(this.options.get("duration"));
+        } catch (Throwable throwable) {
+            duration = 0;
+        }
+
+        //der zeitliche Verfall des Prozess wird ermittelt
+        if (duration > 0)
+            duration += System.currentTimeMillis();
+
+        //initiale Einrichtung der Variablen
+        environment = this.getEnvironment();
+
+        //der Prozess wird gestartet, Daten werden soweit ausgelesen
+        //bis der Prozess beendet wird oder ein Fehler auftritt
+        process = Runtime.getRuntime().exec(string.trim(), environment);
+
+        try {
             
-            //die maximale Prozesslaufzeit wird ermittelt
-            try {duration = Long.parseLong(this.options.get("duration"));
+            input  = process.getInputStream();
+            output = process.getOutputStream();
+
+            //der XCGI-Header wird aus den CGI-Umgebungsvariablen
+            //erstellt und vergleichbar dem Header ins StdIO geschrieben
+            if (this.gateway.toUpperCase().contains("[X]"))
+                output.write(String.join("\r\n", environment).trim().concat("\r\n\r\n").getBytes());
+
+            //die Laenge des Contents wird ermittelt
+            try {length = Integer.parseInt(this.fields.get("http_content_length"));
             } catch (Throwable throwable) {
-                duration = 0;
+                length = 0;
             }
 
-            //der zeitliche Verfall des Prozess wird ermittelt
-            if (duration > 0)
-                duration += System.currentTimeMillis();
-
-            //initiale Einrichtung der Variablen
-            process = null;
+            //das ByteArray wird entsprechen des BLOCKSIZE eingerichtet
+            bytes = new byte[this.blocksize];
             
-            try {
-                
-                environment = this.getEnvironment();
-                
-                //der Prozess wird gestartet, Daten werden soweit ausgelesen
-                //bis der Prozess beendet wird oder ein Fehler auftritt
-                process = Runtime.getRuntime().exec(string.trim(), environment);
-                input   = process.getInputStream();
-                output  = process.getOutputStream();
+            while (length > 0) {
 
-                //der XCGI-Header wird aus den CGI-Umgebungsvariablen
-                //erstellt und vergleichbar dem Header ins StdIO geschrieben
-                if (this.gateway.toUpperCase().contains("[X]"))
-                    output.write(String.join("\r\n", environment).trim().concat("\r\n\r\n").getBytes());
+                //die Daten werden aus dem Datenstrom gelesen
+                size = this.input.read(bytes);
+                if (size < 0)
+                    break;
 
-                //die Laenge des Contents wird ermittelt
-                try {length = Integer.parseInt(this.fields.get("http_content_length"));
+                //die an das CGI zu uebermittelnde Datenmenge wird auf die
+                //Menge von CONTENT-LENGHT begrenzt
+                if (size > length)
+                    size = length;
+                
+                //die Daten werden an das CGI uebergeben
+                output.write(bytes, 0, (int)size);
+
+                //das verbleibende Datenvolumen wird berechnet
+                length -= size;
+                
+                //die maximale Prozesslaufzeit wird geprueft
+                if (duration > 0 && duration < System.currentTimeMillis()) {
+                    this.status = 504;
+                    break;
+                }
+
+                Thread.sleep(this.interrupt);
+            }        
+            
+            //der Datenstrom wird geschlossen
+            if (process.isAlive())
+                output.close();
+            
+            //der Prozess wird zwangsweise beendet um auch die Prozesse
+            //abzubrechen deren Verarbeitung fehlerhaft verlief
+            if (this.status != 200)
+                return;
+            
+            //der Datenpuffer fuer den  wird eingerichtet
+            header = new String();
+            
+            //Responsedaten werden bis zum Ende der Anwendung gelesen
+            //dazu wird initial die Datenflusskontrolle gesetzt
+            while (true) {
+                
+                //das Beenden der Connection wird geprueft
+                try {this.socket.getSoTimeout();
                 } catch (Throwable throwable) {
-                    length = 0;
-                }
-
-                //das ByteArray wird entsprechen des BLOCKSIZE eingerichtet
-                bytes = new byte[this.blocksize];
-                
-                while (length > 0) {
-
-                    //die Daten werden aus dem Datenstrom gelesen
-                    size = this.input.read(bytes);
-                    if (size < 0)
-                        break;
-
-                    //die an das CGI zu uebermittelnde Datenmenge wird auf die
-                    //Menge von CONTENT-LENGHT begrenzt
-                    if (size > length)
-                        size = length;
-                    
-                    //die Daten werden an das CGI uebergeben
-                    output.write(bytes, 0, (int)size);
-
-                    //das verbleibende Datenvolumen wird berechnet
-                    length -= size;
-                    
-                    //die maximale Prozesslaufzeit wird geprueft
-                    if (duration > 0 && duration < System.currentTimeMillis()) {
-                        this.status = 504;
-                        break;
-                    }
-
-                    Thread.sleep(this.interrupt);
-                }        
-                
-                //der Datenstrom wird geschlossen
-                if (process.isAlive())
-                    output.close();
-                
-                if (this.status != 200) {
-                    
-                    //der Prozess wird zwangsweise beendet um auch die Prozesse
-                    //abzubrechen deren Verarbeitung fehlerhaft verlief
-                    try {process.destroy();
-                    } catch (Throwable throwable) {
-
-                        //keine Fehlerbehandlung erforderlich
-                    }
-                    
-                    return;
+                    this.status = 503;
+                    break;
                 }
                 
-                //der Datenpuffer fuer den  wird eingerichtet
-                header = new String();
-                
-                //Responsedaten werden bis zum Ende der Anwendung gelesen
-                //dazu wird initial die Datenflusskontrolle gesetzt
-                while (true) {
+                if (input.available() > 0) {
                     
-                    //das Beenden der Connection wird geprueft
-                    try {this.socket.getSoTimeout();
-                    } catch (Throwable throwable) {
-                        this.status = 503;
-                        break;
-                    }
+                    //die Daten werden aus dem StdIO gelesen
+                    length = input.read(bytes);
+                    offset = 0;
                     
-                    if (input.available() > 0) {
+                    //fuer die Analyse vom Header wird nur die erste Zeile
+                    //vom CGI-Output ausgewertet, der Header selbst wird
+                    //vom Server nicht geprueft oder manipuliert, lediglich
+                    //die erste Zeile wird HTTP-konform aufbereitet                        
+                    if (this.control && header != null) {
                         
-                        //die Daten werden aus dem StdIO gelesen
-                        length = input.read(bytes);
-                        offset = 0;
+                        header = header.concat(new String(bytes, 0, length));
+                        cursor = header.indexOf("\r\n\r\n");
+                        if (cursor >= 0) {
+                            offset = length -(header.length() -cursor -4); 
+                            header = header.substring(0, cursor);
+                        } else offset = header.length();
                         
-                        //fuer die Analyse vom Header wird nur die erste Zeile
-                        //vom CGI-Output ausgewertet, der Header selbst wird
-                        //vom Server nicht geprueft oder manipuliert, lediglich
-                        //die erste Zeile wird HTTP-konform aufbereitet                        
-                        if (this.control && header != null) {
+                        //der Buffer zur Header-Analyse ist auf 65535 Bytes
+                        //begrenzt, Ueberschreiten fuehrt zum STATUS 502                            
+                        if (header.length() > 65535) {
                             
-                            header = header.concat(new String(bytes, 0, length));
-                            cursor = header.indexOf("\r\n\r\n");
-                            if (cursor >= 0) {
-                                offset = length -(header.length() -cursor -4); 
-                                header = header.substring(0, cursor);
-                            } else offset = header.length();
+                            this.status = 502;
+                            break;
                             
-                            //der Buffer zur Header-Analyse ist auf 65535 Bytes
-                            //begrenzt, Ueberschreiten fuehrt zum STATUS 502                            
-                            if (header.length() > 65535) {
-                                
-                                this.status = 502;
-                                break;
-                                
-                            } else if (cursor >= 0) {
-                                
-                                header = header.trim();
-                                cursor = header.indexOf("\r\n");
-                                string = cursor >= 0 ? header.substring(0, cursor).trim() : header;
-                                shadow = string.toUpperCase();
-                                
-                                if (shadow.startsWith("HTTP/")) {
+                        } else if (cursor >= 0) {
+                            
+                            header = header.trim();
+                            cursor = header.indexOf("\r\n");
+                            string = cursor >= 0 ? header.substring(0, cursor).trim() : header;
+                            shadow = string.toUpperCase();
+                            
+                            if (shadow.startsWith("HTTP/")) {
 
-                                    if (shadow.matches("^HTTP/STATUS(\\s.*)*$"))
-                                        header = null;
-                                        
-                                    try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$2")));
-                                    } catch (Throwable throwable) {
+                                if (shadow.matches("^HTTP/STATUS(\\s.*)*$"))
+                                    header = null;
+                                    
+                                try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$2")));
+                                } catch (Throwable throwable) {
 
-                                        //keine Fehlerbehandlung erforderlich
-                                    } 
+                                    //keine Fehlerbehandlung erforderlich
+                                } 
 
-                                    //ggf. werden die Statuscodes mit eigenen
-                                    //bzw. unbekannten Codes und Text temporaer
-                                    //angereichert, mit dem Ende der Connection
-                                    //wird die Liste verworfen
-                                    string = string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$3");
-                                    if (string.length() > 0
-                                            && !this.statuscodes.contains(String.valueOf(this.status)))
-                                        this.statuscodes.set(String.valueOf(this.status), string);
-                                }
-                                
-                                //beginnt der Response mit HTTP/STATUS, wird der
-                                //Datenstrom ausgelesen, nicht aber an den
-                                //Client weitergeleitet, die Beantwortung vom
-                                //Request uebernimmt in diesem Fall der Server
-
-                                if (header != null) {
-
-                                    header = header.replaceAll("(?si)^ *HTTP */ *[^\r\n]*([\r\n]+|$)", "");
-                                    header = this.header(this.status, header.split("[\r\n]+"));
-                                    this.control = false;
-                                }                                
+                                //ggf. werden die Statuscodes mit eigenen
+                                //bzw. unbekannten Codes und Text temporaer
+                                //angereichert, mit dem Ende der Connection
+                                //wird die Liste verworfen
+                                string = string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$3");
+                                if (string.length() > 0
+                                        && !this.statuscodes.contains(String.valueOf(this.status)))
+                                    this.statuscodes.set(String.valueOf(this.status), string);
                             }
-                        }
-
-                        //die Daten werden nur in den Output geschrieben, wenn
-                        //die Ausgabekontrolle geetzt wurde und der Response
-                        //nicht mit HTTP/STATUS beginnt
-                        if (!this.control) {
                             
-                            //der Zeitpunkt wird registriert, um auf blockierte
-                            //Datenstroeme reagieren zu koennen
-                            if (this.isolation != 0)
-                                this.isolation = System.currentTimeMillis();
-                            
-                            if (header != null)
-                                this.output.write(header.concat("\r\n\r\n").getBytes());
-                            header = null;
+                            //beginnt der Response mit HTTP/STATUS, wird der
+                            //Datenstrom ausgelesen, nicht aber an den
+                            //Client weitergeleitet, die Beantwortung vom
+                            //Request uebernimmt in diesem Fall der Server
 
-                            this.output.write(bytes, offset, length -offset);
+                            if (header != null) {
 
-                            if (this.isolation != 0)
-                                this.isolation = -1;
-
-                            this.volume += length -offset;
+                                header = header.replaceAll("(?si)^ *HTTP */ *[^\r\n]*([\r\n]+|$)", "");
+                                header = this.header(this.status, header.split("[\r\n]+"));
+                                this.control = false;
+                            }                                
                         }
                     }
 
-                    Thread.sleep(this.interrupt);
+                    //die Daten werden nur in den Output geschrieben, wenn
+                    //die Ausgabekontrolle geetzt wurde und der Response
+                    //nicht mit HTTP/STATUS beginnt
+                    if (!this.control) {
+                        
+                        //der Zeitpunkt wird registriert, um auf blockierte
+                        //Datenstroeme reagieren zu koennen
+                        if (this.isolation != 0)
+                            this.isolation = System.currentTimeMillis();
+                        
+                        if (header != null)
+                            this.output.write(header.concat("\r\n\r\n").getBytes());
+                        header = null;
 
-                    //die maximale Prozesslaufzeit wird geprueft
-                    if (duration > 0
-                            && duration < System.currentTimeMillis()) {
-                        this.status = 504;
-                        break;
-                     }
-                    
-                    //der Datenstrom wird aud vorliegende Daten und der Prozess
-                    //wird aus sein Ende geprueft
-                    if (input.available() <= 0
-                            && !process.isAlive())
-                        break;
+                        this.output.write(bytes, offset, length -offset);
+
+                        if (this.isolation != 0)
+                            this.isolation = -1;
+                        
+                        this.volume += length -offset;
+                    }
                 }
+
+                Thread.sleep(this.interrupt);
+
+                //die maximale Prozesslaufzeit wird geprueft
+                if (duration > 0
+                        && duration < System.currentTimeMillis()) {
+                    this.status = 504;
+                    break;
+                 }
                 
-            } catch (Throwable throwable) {
-
-                this.status = 502;
-
-                Service.print(throwable);
+                //der Datenstrom wird aud vorliegende Daten und der Prozess
+                //wird aus sein Ende geprueft
+                if (input.available() <= 0
+                        && !process.isAlive())
+                    break;
             }
+            
+        } finally {
             
             //der Prozess wird zwangsweise beendet um auch die Prozesse
             //abzubrechen deren Verarbeitung fehlerhaft verlief
@@ -2107,7 +2091,7 @@ class Listener implements Runnable {
         //das Standard-Template fuer den INDEX wird ermittelt und geladen
         file = new File(this.sysroot.concat("/index.html"));
         
-        generator = Generator.parse(Listener.fileRead(file));
+        generator = Generator.parse(Worker.fileRead(file));
         
         string = this.environment.get("path_base");
         if (!string.endsWith("/"))
@@ -2252,163 +2236,28 @@ class Listener implements Runnable {
         //die Ressource wird eingerichtet
         file = new File(this.resource);
         
-        input = null;
-        
-        if (file.isFile()) {
-
-            //wenn vom Client uebermittelt, wird IF-(UN)MODIFIED-SINCE geprueft
-            //und bei (un)gueltiger Angabe STATUS 304/412 gesetzt
-            if (!Listener.fileIsModified(file, this.fields.get("http_if_modified_since"))) {
-                this.status = 304;
-            } else if (this.fields.contains("http_if_unmodified_since")
-                    && Listener.fileIsModified(file, this.fields.get("http_if_unmodified_since"))) {
-                this.status = 412;
-            } else {
-
-                offset = 0;
-                size   = file.length();
-                limit  = size;
-
-                //ggf. werden der partielle Datenbereich RANGE ermittelt
-                if (this.fields.contains("http_range")
-                        && size > 0) {
-                    
-                    //mogeliche Header fuer den Range:
-                    //  Range: ...; bytes=500-999 ...
-                    //         ...; bytes=-999 ...
-                    //         ...; bytes=500- ...
-
-                    string = this.fields.get("http_range").replace(';', '\n');
-                    string = Section.parse(string).get("bytes");
-                    if (string.matches("^(\\d+)*\\s*-\\s*(\\d+)*$")) {
-                        tokenizer = new StringTokenizer(string, "-");
-                        try {
-                            offset = Long.parseLong(tokenizer.nextToken().trim());
-                            if (tokenizer.hasMoreTokens()) {
-                                limit = Long.parseLong(tokenizer.nextToken().trim());
-                            } else if (string.startsWith("-")) {
-                                if (offset > 0) {
-                                    limit  = size -1;
-                                    offset = Math.max(0, size -offset);
-                                } else limit = -1;
-                            }
-                            limit = Math.min(limit, size -1);
-                            if (offset >= size) {
-                                this.status = 416;
-                                return;
-                            }
-                            if (offset < size
-                                    && offset <= limit) {
-                                this.status = 206;
-                                limit++;
-                            } else {
-                                offset = 0;
-                                limit  = size;
-                            }
-                        } catch (Throwable throwable) {
-                        }
-                    }
-                }
-                
-                //der Header wird zusammengestellt
-                header.add(("Last-Modified: ").concat(Listener.dateFormat("E, dd MMM yyyy HH:mm:ss z", new Date(file.lastModified()), "GMT")));
-                header.add(("Content-Length: ").concat(String.valueOf(limit -offset)));
-                header.add(("Accept-Ranges: bytes"));
-                
-                //wenn verfuegbar wird der Content-Type gesetzt
-                if (this.mediatype.length() > 0)
-                    header.add(("Content-Type: ").concat(this.mediatype));
-
-                //ggf. wird der partielle Datenbereich gesetzt
-                if (this.status == 206)
-                    header.add(("Content-Range: bytes ").concat(String.valueOf(offset)).concat("-").concat(String.valueOf(limit -1)).concat("/").concat(String.valueOf(size)));
-                
-                //der Header wird fuer die Ausgabe zusammengestellt
-                string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
-                
-                //die Connection wird als geschlossen gekennzeichnet
-                this.control = false;
-
-                //der Zeitpunkt wird registriert, um auf blockierte Datenstroeme
-                //reagieren zu koennen
-                if (this.isolation != 0)
-                    this.isolation = System.currentTimeMillis();
-
-                try {
-
-                    this.output.write(string.getBytes());
-
-                    if (this.isolation != 0)
-                        this.isolation = -1;
-
-                    if (method.equals("get")) {
-
-                        //das ByteArray wird mit dem BLOCKSIZE eingerichtet
-                        bytes = new byte[this.blocksize];
-
-                        //der Datenstrom wird eingerichtet
-                        input = new FileInputStream(this.resource);
-
-                        //ggf. wird der partielle Datenbereich beruecksichtigt
-                        input.skip(offset);
-
-                        //der Datenstrom wird ausgelesen
-                        while ((offset +this.volume < limit)
-                                && ((size = input.read(bytes)) >= 0)) {
-
-                            if (this.status == 206 && (offset +this.volume +size > limit))
-                                size = limit -(offset +this.volume);
-
-                            //der Zeitpunkt wird registriert, um auf blockierte
-                            //Datenstroeme reagieren zu koennen
-                            if (this.isolation != 0)
-                                this.isolation = System.currentTimeMillis();
-
-                            this.output.write(bytes, 0, Math.max(0, (int)size));
-
-                            if (this.isolation != 0)
-                                this.isolation = -1;
-
-                            this.volume += size;
-                        }
-                    }
-
-                } catch (Throwable throwable) {
-
-                    //keine Fehlerbehandlung erforderlich
-                }
-
-                //der Datenstrom wird geschlossen
-                try {input.close();
-                } catch (Throwable throwable) {
-
-                    //keine Fehlerbehandlung erforderlich
-                }
-            }
-
-        } else if (file.isDirectory()) {
+        if (file.isDirectory()) {
 
             //die Option INDEX ON wird ueberprueft
             //bei Verzeichnissen und der INDEX OFF wird STATUS 403 gesetzt
-            if (Listener.cleanOptions(this.options.get("index")).toLowerCase().equals("on")) {
-                
+            if (Worker.cleanOptions(this.options.get("index")).toLowerCase().equals("on")) {
+
                 header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
+
+                bytes = new byte[0]; 
 
                 //die Verzeichnisstruktur wird bei METHOD:GET generiert
                 if (method.equals("get")) {
-
+                    
                     bytes = this.createDirectoryIndex(file, this.environment.get("query_string"));
                     
                     header.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
-                    
-                    this.volume += bytes.length;
-                    
-                } else bytes = new byte[0]; 
+                }
 
                 //der Header wird fuer die Ausgabe zusammengestellt
                 string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
 
-                //die Connection wird als geschlossen gekennzeichnet
+                //die Connection wird als verwendet gekennzeichnet
                 this.control = false;
                 
                 //der Zeitpunkt wird registriert, um auf blockierte
@@ -2416,23 +2265,160 @@ class Listener implements Runnable {
                 if (this.isolation != 0)
                     this.isolation = System.currentTimeMillis();
 
+                this.output.write(string.getBytes());
+                this.output.write(bytes);
+
+                if (this.isolation != 0)
+                    this.isolation = -1;
+                
+                this.volume += bytes.length;
+                
+                return;
+            } 
+            
+            this.status = 403;
+            
+            return;
+        }       
+
+        //wenn vom Client uebermittelt, wird IF-(UN)MODIFIED-SINCE geprueft
+        //und bei (un)gueltiger Angabe STATUS 304/412 gesetzt
+        if (!Worker.fileIsModified(file, this.fields.get("http_if_modified_since"))) {
+            this.status = 304;
+            return;
+        }
+        
+        if (this.fields.contains("http_if_unmodified_since")
+                && Worker.fileIsModified(file, this.fields.get("http_if_unmodified_since"))) {
+            this.status = 412;
+            return;
+        }
+
+        offset = 0;
+        size   = file.length();
+        limit  = size;
+
+        //ggf. werden der partielle Datenbereich RANGE ermittelt
+        if (this.fields.contains("http_range")
+                && size > 0) {
+            
+            //mogeliche Header fuer den Range:
+            //  Range: ...; bytes=500-999 ...
+            //         ...; bytes=-999 ...
+            //         ...; bytes=500- ...
+
+            string = this.fields.get("http_range").replace(';', '\n');
+            string = Section.parse(string).get("bytes");
+            if (string.matches("^(\\d+)*\\s*-\\s*(\\d+)*$")) {
+                tokenizer = new StringTokenizer(string, "-");
                 try {
-
-                    this.output.write(string.getBytes());
-                    this.output.write(bytes);
-
-                    if (this.isolation != 0) this.isolation = -1;
-
+                    offset = Long.parseLong(tokenizer.nextToken().trim());
+                    if (tokenizer.hasMoreTokens()) {
+                        limit = Long.parseLong(tokenizer.nextToken().trim());
+                    } else if (string.startsWith("-")) {
+                        if (offset > 0) {
+                            limit  = size -1;
+                            offset = Math.max(0, size -offset);
+                        } else limit = -1;
+                    }
+                    limit = Math.min(limit, size -1);
+                    if (offset >= size) {
+                        this.status = 416;
+                        return;
+                    }
+                    if (offset < size
+                            && offset <= limit) {
+                        this.status = 206;
+                        limit++;
+                    } else {
+                        offset = 0;
+                        limit  = size;
+                    }
                 } catch (Throwable throwable) {
+                    
+                    offset = 0;
+                    size   = file.length();
+                    limit  = size;                            
+                }
+            }
+        }
+        
+        //der Header wird zusammengestellt
+        header.add(("Last-Modified: ").concat(Worker.dateFormat("E, dd MMM yyyy HH:mm:ss z", new Date(file.lastModified()), "GMT")));
+        header.add(("Content-Length: ").concat(String.valueOf(limit -offset)));
+        header.add(("Accept-Ranges: bytes"));
+        
+        //wenn verfuegbar wird der Content-Type gesetzt
+        if (this.mediatype.length() > 0)
+            header.add(("Content-Type: ").concat(this.mediatype));
 
-                    //keine Fehlerbehandlung erforderlich
+        //ggf. wird der partielle Datenbereich gesetzt
+        if (this.status == 206)
+            header.add(("Content-Range: bytes ").concat(String.valueOf(offset)).concat("-").concat(String.valueOf(limit -1)).concat("/").concat(String.valueOf(size)));
+        
+        //der Header wird fuer die Ausgabe zusammengestellt
+        string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
+        
+        //die Connection wird als verwendet gekennzeichnet
+        this.control = false;
+
+        //der Zeitpunkt wird registriert, um auf blockierte Datenstroeme
+        //reagieren zu koennen
+        if (this.isolation != 0)
+            this.isolation = System.currentTimeMillis();
+
+        this.output.write(string.getBytes());
+
+        if (this.isolation != 0)
+            this.isolation = -1;
+        
+        if (method.equals("get")) {
+            
+            input = null;
+
+            try {
+
+                //das ByteArray wird mit dem BLOCKSIZE eingerichtet
+                bytes = new byte[this.blocksize];
+
+                //der Datenstrom wird eingerichtet
+                input = new FileInputStream(this.resource);
+
+                //ggf. wird der partielle Datenbereich beruecksichtigt
+                input.skip(offset);
+
+                //der Datenstrom wird ausgelesen
+                while ((offset +this.volume < limit)
+                        && ((size = input.read(bytes)) >= 0)) {
+
+                    if (this.status == 206 && (offset +this.volume +size > limit))
+                        size = limit -(offset +this.volume);
+
+                    //der Zeitpunkt wird registriert, um auf blockierte
+                    //Datenstroeme reagieren zu koennen
+                    if (this.isolation != 0)
+                        this.isolation = System.currentTimeMillis();
+
+                    this.output.write(bytes, 0, Math.max(0, (int)size));
+
+                    if (this.isolation != 0)
+                        this.isolation = -1;
+
+                    this.volume += size;
                 }
 
-            } else this.status = 403;
+            } finally {
+
+                //der Datenstrom wird geschlossen
+                try {input.close();
+                } catch (Throwable throwable) {
+                    //keine Fehlerbehandlung erforderlich
+                }
+            }
         }
     }
 
-    private void doPut() {
+    private void doPut() throws Exception {
         
         File         file;
         OutputStream output;
@@ -2468,60 +2454,59 @@ class Listener implements Runnable {
         } catch (Throwable throwable) {
             length = -1;
         }
-        
+
         //die Methode setzt eine gueltige Dateilaenge voraus, ohne gueltige
         //Dateilaenge wird STATUS 411 gesetzt            
-        if (length >= 0) {
+        if (length < 0) {
+            this.status = 411;
+            return;
+        }
+        
+        output = null;
+        
+        try {
+
+            //ggf. bestehende Dateien werden entfernt
+            file.delete();
+
+            //das Datenpuffer wird eingerichtet
+            bytes = new byte[this.blocksize];
             
-            output = null;
-            
-            try {
+            //der Datenstrom wird eingerichtet
+            output = new FileOutputStream(this.resource);
 
-                //ggf. bestehende Dateien werden entfernt
-                file.delete();
+            while (length > 0) {
 
-                //das Datenpuffer wird eingerichtet
-                bytes = new byte[this.blocksize];
+                //die Daten werden aus dem Datenstrom gelesen
+                if ((size = this.input.read(bytes)) < 0)
+                    break;
+
+                //die zu schreibende Datenmenge wird ermittelt
+                //CONTENT-LENGHT wird dabei nicht ueberschritten
+                size = Math.min(size, length);
                 
-                //der Datenstrom wird eingerichtet
-                output = new FileOutputStream(this.resource);
+                //die Daten werden geschrieben
+                output.write(bytes, 0, (int)size);
 
-                while (length > 0) {
+                //das verbleibende Datenvolumen wird berechnet
+                length -= size;
 
-                    //die Daten werden aus dem Datenstrom gelesen
-                    if ((size = this.input.read(bytes)) < 0)
-                        break;
-
-                    //die zu schreibende Datenmenge wird ermittelt
-                    //CONTENT-LENGHT wird dabei nicht ueberschritten
-                    size = Math.min(size, length);
-                    
-                    //die Daten werden geschrieben
-                    output.write(bytes, 0, (int)size);
-
-                    //das verbleibende Datenvolumen wird berechnet
-                    length -= size;
-
-                    Thread.sleep(this.interrupt);
-                }
-                
-                //kann die Datei nicht oder durch Timeout nur unvollstaendig
-                //angelegt werden wird STATUS 424 gesetzt
-                if (length > 0)
-                    this.status = 424;
-
-            } catch (Throwable throwable) {
-                this.status = 424;
+                Thread.sleep(this.interrupt);
             }
             
+            //kann die Datei nicht oder durch Timeout nur unvollstaendig
+            //angelegt werden wird STATUS 424 gesetzt
+            if (length > 0)
+                this.status = 424;
+
+        } finally {
+
             //der Datenstrom wird geschlossen
             try {output.close();
             } catch (Throwable throwable) {
-
                 //keine Fehlerbehandlung erforderlich
             }
-            
-        } else this.status = 411;
+        }
         
         //bei erfolgreicher Methode wird STATUS 201 gesetzt
         if (this.status == 200
@@ -2533,33 +2518,12 @@ class Listener implements Runnable {
     
     private void doDelete() {
         
-        String string;
-        
         //die angeforderte Ressource wird komplett geloescht,
         //tritt dabei ein Fehler auf wird STATUS 424 gesetzt
-        if (Listener.fileDelete(new File(this.resource))) {
-
-            //der Header wird zusammengestellt und ausgegeben
-            string = this.header(this.status, new String[0]).concat("\r\n\r\n");
-
-            //die Connection wird als geschlossen gekennzeichnet
-            this.control = false;
-
-            //der Zeitpunkt wird registriert, um auf blockierte
-            //Datenstroeme reagieren zu koennen
-            if (this.isolation != 0)
-                this.isolation = System.currentTimeMillis();
-
-            try {this.output.write(string.getBytes());
-            } catch (Throwable throwable) {
-
-                //keine Fehlerbehandlung erforderlich
-            }
-
-            if (this.isolation != 0)
-                this.isolation = -1;
-
-        } else this.status = 424;
+        if (Worker.fileDelete(new File(this.resource)))
+            return;
+        
+        this.status = 424;
     }
 
     private void doStatus() throws Exception {
@@ -2587,7 +2551,8 @@ class Listener implements Runnable {
 
             //die LOCATION wird fuer die Weiterleitung ermittelt
             string = this.environment.get("query_string");
-            string = string.length() > 0 ? ("?").concat(string) : string;
+            if (string.length() > 0)
+                string = ("?").concat(string);
             string = this.environment.get("script_uri").concat(string);
 
             this.fields.set("req_location", string);
@@ -2617,7 +2582,7 @@ class Listener implements Runnable {
                 string = string.concat(", qop=\"auth\"");
                 shadow = this.environment.get("unique_id");
                 string = string.concat(", nonce=\"").concat(shadow).concat("\"");
-                shadow = Listener.textHash(shadow.concat(String.valueOf(shadow.hashCode())));
+                shadow = Worker.textHash(shadow.concat(String.valueOf(shadow.hashCode())));
                 string = string.concat(", opaque=\"").concat(shadow).concat("\"");
                 string = string.concat(", algorithm=\"MD5\"");
                 
@@ -2634,7 +2599,7 @@ class Listener implements Runnable {
         //METHOD:HEAD/METHOD:OPTIONS keine Templates verwendet
         generator = Generator.parse(this.status == 302 || this.status == 200
                 || this.status /100 == 1 || method.equals("head")
-                || method.equals("options") ? null : this.fileRead(new File(this.resource)));
+                || method.equals("options") ? null : Worker.fileRead(new File(this.resource)));
         
         //der Header wird mit den Umgebungsvariablen zusammengefasst,
         //die serverseitig gesetzten haben dabei die hoehere Prioritaet
@@ -2661,9 +2626,6 @@ class Listener implements Runnable {
 
         bytes = generator.extract();
 
-        //das generierte Response und seine Datenvolumen werden uebernommen
-        this.volume += bytes.length;
-
         //bei Bedarf wird im Header CONTENT-TYPE / CONTENT-LENGTH  gesetzt
         if (bytes.length > 0) {
             header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
@@ -2678,30 +2640,26 @@ class Listener implements Runnable {
         //der Header wird fuer die Ausgabe zusammengestellt
         string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
 
-        //die Connection wird als geschlossen gekennzeichnet
-        this.control = false;
+        //die Connection wird als verwendet gekennzeichnet
+        this.control = false;         
 
         //der Zeitpunkt wird registriert, um auf blockierte Datenstroeme
         //reagieren zu koennen
         if (this.isolation != 0)
             this.isolation = System.currentTimeMillis();
-
-        try {
             
-            //der Response wird ausgegeben
-            this.output.write(string.getBytes());
-            this.output.write(bytes);
+        //der Response wird ausgegeben
+        this.output.write(string.getBytes());
+        this.output.write(bytes);
             
-        } catch (Throwable throwable) {
-            
-            //keine Fehlerbehandlung erforderlich
-        }
-        
         if (this.isolation != 0)
             this.isolation = -1;
+        
+        //das generierte Response und seine Datenvolumen werden uebernommen
+        this.volume += bytes.length;        
     }
 
-    /** 
+    /**
      *  Nimmt den Request an und organisiert die Verarbeitung und Beantwortung.
      *  @throws Exception
      *      Im Fall nicht erwarteter Fehler 
@@ -2710,57 +2668,91 @@ class Listener implements Runnable {
 
         File   file;
         String method;
-
-        //die Connection wird initialisiert, um den Serverprozess nicht zu
-        //behindern wird die eigentliche Initialisierung der Connection erst mit
-        //laufendem Thread als asynchroner Prozess vorgenommen
-        this.initialize();
-
-        //die Ressource wird eingerichtet
-        file = new File(this.resource);
-
-        //die Ressource muss auf Modul, Datei oder Verzeichnis verweisen
-        if (this.status == 0) this.status = file.isDirectory() || file.isFile() || this.resource.toUpperCase().contains("[M]") ? 200 : 404;
-
-        if (this.control) {
-
-            //PROCESS/(X)CGI/MODUL - wird bei gueltiger Angabe ausgefuehrt
-            if (this.status == 200 && this.gateway.length() > 0) {
-
-                this.doGateway();
-                
-            } else {
-
-                //die Methode wird ermittelt
-                method = this.fields.get("req_method").toLowerCase();
-
-                //vom Server werden die Methoden OPTIONS, HEAD, GET, PUT, DELETE
-                //unterstuetzt bei anderen Methoden wird STATUS 501 gesetzt
-                if (this.control && this.status == 200
-                        && !method.equals("options") && !method.equals("head") && !method.equals("get")
-                        && !method.equals("put") && !method.equals("delete"))
-                    this.status = 501;
-                
-                //METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
-                if (this.status == 200 && method.equals("head"))
-                    this.doGet();
-
-                if (this.status == 200 && method.equals("get"))
-                    this.doGet();
-
-                //METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
-                if ((this.status == 200 || this.status == 404) && method.equals("put"))
-                    this.doPut();
-                
-                //METHOD:DELETE - wird bei gueltiger Angabe ausgefuehrt
-                if (this.status == 200 && method.equals("delete"))
-                    this.doDelete();
-            }
-        }
         
-        //STATUS/ERROR/METHOD:OPTIONS - wird bei gueltiger Angabe ausgefuehrt
-        if (this.control)
-            this.doStatus();
+        try {
+            
+            //die Connection wird initialisiert, um den Serverprozess nicht zu
+            //behindern wird die eigentliche Initialisierung der Connection erst mit
+            //laufendem Thread als asynchroner Prozess vorgenommen
+            try {this.initialize();
+            } catch (Exception exception) {
+                this.status = 500;
+                throw exception;
+            }             
+            
+            //die Ressource wird eingerichtet
+            file = new File(this.resource);
+
+            //die Ressource muss auf Modul, Datei oder Verzeichnis verweisen
+            if (this.status == 0) this.status = file.isDirectory() || file.isFile() || this.resource.toUpperCase().contains("[M]") ? 200 : 404;            
+            
+            if (this.control) {
+
+                //PROCESS/(X)CGI/MODUL - wird bei gueltiger Angabe ausgefuehrt
+                if (this.status == 200 && this.gateway.length() > 0) {
+
+                    try {this.doGateway();
+                    } catch (Exception exception) {
+                        this.status = 502;
+                        throw exception;
+                    }
+                    
+                } else {
+
+                    //die Methode wird ermittelt
+                    method = this.fields.get("req_method").toLowerCase();
+
+                    //vom Server werden die Methoden OPTIONS, HEAD, GET, PUT, DELETE
+                    //unterstuetzt bei anderen Methoden wird STATUS 501 gesetzt
+                    if (this.status == 200
+                            && !method.equals("options") && !method.equals("head") && !method.equals("get")
+                            && !method.equals("put") && !method.equals("delete"))
+                        this.status = 501;
+                    
+                    //METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
+                    if (this.status == 200 && method.equals("head"))
+                        try {this.doGet();
+                        } catch (Exception exception) {
+                            this.status = 500;
+                            throw exception;
+                        }                    
+
+                    if (this.status == 200 && method.equals("get"))
+                        try {this.doGet();
+                        } catch (Exception exception) {
+                            this.status = 500;
+                            throw exception;
+                        }                    
+
+                    //METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
+                    if ((this.status == 200 || this.status == 404) && method.equals("put"))
+                        try {this.doPut();
+                        } catch (Exception exception) {
+                            this.status = 424;
+                            throw exception;
+                        }                    
+                    
+                    //METHOD:DELETE - wird bei gueltiger Angabe ausgefuehrt
+                    if (this.status == 200 && method.equals("delete"))
+                        try {this.doDelete();
+                        } catch (Exception exception) {
+                            this.status = 424;
+                            throw exception;
+                        }    
+                }
+            }            
+            
+        } finally {
+
+            //der Zeitpunkt evtl. blockierender Datenstroeme wird
+            //zurueckgesetzt
+            if (this.isolation != 0)
+                this.isolation = -1;               
+            
+            //STATUS/ERROR/METHOD:OPTIONS - wird ggf. ausgefuehrt
+            if (this.control)
+                this.doStatus();            
+        }
     }
    
     /** Protokollierte den Zugriff im Protokollmedium. */
@@ -2786,7 +2778,7 @@ class Listener implements Runnable {
         this.environment.set("response_length", String.valueOf(this.volume));
         this.environment.set("response_status", String.valueOf(this.status == 0 ? 500 : this.status));
 
-        synchronized (Listener.class) {
+        synchronized (Worker.class) {
             
             //das Format vom ACCESSLOG wird ermittelt
             format = this.options.get("accesslog");
@@ -2823,7 +2815,7 @@ class Listener implements Runnable {
             enumeration = this.environment.elements();
             while (enumeration.hasMoreElements()) {
                 string = (String)enumeration.nextElement();
-                elements.put(string, Listener.textEscape(this.environment.get(string)));
+                elements.put(string, Worker.textEscape(this.environment.get(string)));
             }
             
             generator = Generator.parse(format.getBytes());
@@ -2847,12 +2839,12 @@ class Listener implements Runnable {
                 } finally {
                     output.close();
                 }
-            } else Service.print(("ACCESS ").concat(format));
+            } else Service.print(format, false);
         }
     }
     
     /**
-     *  Merkt den Listener zum Schliessen vor, wenn diese in der naechsten Zeit
+     *  Merkt den Worker zum Schliessen vor, wenn diese in der naechsten Zeit
      *  nicht mehr verwendet wird. Der Zeitpunkt zum Bereinigen betr&auml;gt
      *  250ms Leerlaufzeit nach der letzen Nutzung. Die Zeit wird &uuml;ber das
      *  SoTimeout vom ServerSocket definiert.
@@ -2865,9 +2857,9 @@ class Listener implements Runnable {
     }
 
     /**
-     *  R&uuml;ckgabe <code>true</code>, wenn der Listener aktiv zur
+     *  R&uuml;ckgabe <code>true</code>, wenn der Worker aktiv zur
      *  Verf&uuml;gung steht und somit weiterhin Requests entgegen nehmen kann.
-     *  @return <code>true</code>, wenn der Listener aktiv verf&uuml;bar ist
+     *  @return <code>true</code>, wenn der Worker aktiv verf&uuml;bar ist
      */
     boolean available() {
 
@@ -2880,7 +2872,7 @@ class Listener implements Runnable {
         return this.mount != null && this.socket == null;
     }
 
-    /** Beendet den Listener durch das Schliessen der Datenstr&ouml;me. */
+    /** Beendet den Worker durch das Schliessen der Datenstr&ouml;me. */
     void destroy() {
 
         //der ServerSocket wird zurueckgesetzt
@@ -2898,8 +2890,8 @@ class Listener implements Runnable {
 
     /**
      *  Stellt den Einsprung in den Thread zur Verf&uuml;gung und initialisiert
-     *  den Listener. Um den Serverprozess nicht zu behindern wird die
-     *  eigentliche Initialisierung vom Listener erst mit dem laufenden Thread
+     *  den Worker. Um den Serverprozess nicht zu behindern wird die
+     *  eigentliche Initialisierung vom Worker erst mit dem laufenden Thread
      *  als asynchroner Prozess vorgenommen.
      */
     public void run() {
@@ -2951,7 +2943,7 @@ class Listener implements Runnable {
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 
             //das Timeout der Connecton wird ermittelt
-            try {this.timeout = Long.parseLong(Listener.cleanOptions(string));
+            try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
             } catch (Throwable throwable) {
                 this.timeout = 0;
             }
@@ -2976,33 +2968,26 @@ class Listener implements Runnable {
                 break;
             }
 
-            //MODUL:SERVICE - Eintrag wird ermittelt
-            string = this.options.get("service");
+            //der Request wird verarbeitet
+            try {this.service();
+            } catch (Throwable throwable) {
+                Service.print(throwable);
+            }
+            
+            //die Connection wird beendet
+            try {this.destroy();
+            } catch (Throwable throwable) {
+                //keine Fehlerbehandlung erforderlich
+            }
 
-            if (!this.call(string, 0)) {
+            //HINWEIS - Beim Schliessen wird der ServerSocket verworfen, um
+            //die Connection von Aussen beenden zu koennen, intern wird
+            //diese daher nach dem Beenden neu gesetzt
 
-                //der Request wird verarbeitet
-                try {this.service();
-                } catch (Throwable throwable) {
-                    Service.print(throwable);
-                    this.status = 0;
-                }
-
-                //die Connection wird beendet
-                try {this.destroy();
-                } catch (Throwable throwable) {
-                    //keine Fehlerbehandlung erforderlich
-                }
-
-                //HINWEIS - Beim Schliessen wird der ServerSocket verworfen, um
-                //die Connection von Aussen beenden zu koennen, intern wird
-                //diese daher nach dem Beenden neu gesetzt
-
-                //der Zugriff wird registriert
-                try {this.register();
-                } catch (Throwable throwable) {
-                    Service.print(throwable);
-                }
+            //der Zugriff wird registriert
+            try {this.register();
+            } catch (Throwable throwable) {
+                Service.print(throwable);
             }
 
             //der Socket wird alternativ geschlossen

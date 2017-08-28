@@ -34,12 +34,12 @@ import java.net.SocketException;
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 5.0 20170325<br>
+ *  Remote 5.0 20170828<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170325
+ *  @version 5.0 20170828
  */
 public class Remote implements Runnable {
 
@@ -95,7 +95,7 @@ public class Remote implements Runnable {
      *  R&uuml;ckgabe der Serverkennung.
      *  @return die Serverkennung
      */
-    public String getCaption() {
+    public String explain() {
         return this.caption;
     }
 
@@ -256,14 +256,14 @@ public class Remote implements Runnable {
 
                 if (thread == null || !thread.isAlive()) {
 
-                    //der Socket wird fuer den Listener eingerichtet
+                    //der Socket wird fuer den Worker eingerichtet
                     this.accept = this.socket.accept();
 
-                    //der Thread fuer den Listener wird eingerichet, ueber den
+                    //der Thread fuer den Worker wird eingerichet, ueber den
                     //Service wird dieser automatisch als Daemon verwendet
                     thread = new Thread(this);
 
-                    //den Listener wird als Thread gestartet
+                    //der Worker wird als Thread gestartet
                     thread.start();
                 }
 

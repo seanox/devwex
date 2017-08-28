@@ -40,12 +40,12 @@ import javax.net.ssl.TrustManagerFactory;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170701<br>
+ *  Server 5.0 20170828<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170701
+ *  @version 5.0 20170828
  */
 public class Server implements Runnable {
 
@@ -61,8 +61,8 @@ public class Server implements Runnable {
     /** Kennung und Bezeichnung des Servers */
     private volatile String caption;
 
-    /** Listener der eingerichteten Verbindungen */
-    private volatile Vector listener;
+    /** Worker der eingerichteten Verbindungen */
+    private volatile Vector worker;
 
     /**
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
@@ -219,7 +219,7 @@ public class Server implements Runnable {
      *  R&uuml;ckgabe der Serverkennung.
      *  @return die Serverkennung
      */
-    public String getCaption() {
+    public String explain() {
         return this.caption;
     }
 
@@ -237,7 +237,7 @@ public class Server implements Runnable {
     /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
     public void run() {
 
-        Listener    listener;
+        Worker      worker;
         Section     options;
         Thread      thread;
         Enumeration enumeration;
@@ -250,8 +250,8 @@ public class Server implements Runnable {
         int         loop;
         int         volume;
 
-        //die Listener werden eingerichtet
-        this.listener = new Vector(256, 256);
+        //die Worker werden eingerichtet
+        this.worker = new Vector(256, 256);
 
         //Initialisierung wird als Information ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
@@ -265,7 +265,7 @@ public class Server implements Runnable {
             volume = 0;
         }
 
-        //die initiale Anzahl zusaetzlicher Listener wird angelegt
+        //die initiale Anzahl zusaetzlicher Worker wird angelegt
         count = 0;
 
         try {
@@ -274,7 +274,7 @@ public class Server implements Runnable {
 
                 control = false;
                 
-                enumeration = ((Vector)this.listener.clone()).elements();
+                enumeration = ((Vector)this.worker.clone()).elements();
                 while (enumeration.hasMoreElements() && !this.socket.isClosed()) {
 
                     objects = (Object[])enumeration.nextElement();
@@ -282,45 +282,45 @@ public class Server implements Runnable {
                     //der Thread wird ermittelt
                     thread = (Thread)objects[1];
 
-                    //ausgelaufene Listener werden entfernt
+                    //ausgelaufene Worker werden entfernt
                     if (control && !thread.isAlive())
-                        this.listener.remove(objects);
+                        this.worker.remove(objects);
 
-                    //der Listener wird ermittelt
-                    listener = (Listener)objects[0];
+                    //der Worker wird ermittelt
+                    worker = (Worker)objects[0];
 
-                    //ueberzaehlige Listener werden beendet
-                    if (control && listener.available())
-                        listener.isolate();
+                    //ueberzaehlige Worker werden beendet
+                    if (control && worker.available())
+                        worker.isolate();
 
-                    //laeuft der Thread nicht, wird der Listener entfernt
-                    if (listener.available() && thread.isAlive())
+                    //laeuft der Thread nicht, wird der Worker entfernt
+                    if (worker.available() && thread.isAlive())
                         control = true;
                 }
 
-                //die Anzahl der nachtraeglich einzurichtenden Listener wird auf
+                //die Anzahl der nachtraeglich einzurichtenden Worker wird auf
                 //Basis der letzten Anzahl ermittelt
                 count = control ? 0 : volume <= 0 ? 1 : count +count +1;
 
-                //liegt kein freier Listener vor, werden neue eingerichtet, die
+                //liegt kein freier Worker vor, werden neue eingerichtet, die
                 //Anzahl ist durch die Angabe vom MAXACCESS begrenzt, weitere
                 //Anfragen werden sonst im Backlog geparkt
                 for (loop = count; !this.socket.isClosed() && loop > 0; loop--) {
                     
-                    if (this.listener.size() >= volume && volume > 0)
+                    if (this.worker.size() >= volume && volume > 0)
                         break;
 
-                    //der Listener wird eingerichtet
-                    listener = new Listener(this.context, this.socket, (Initialize)this.initialize.clone());
+                    //der Worker wird eingerichtet
+                    worker = new Worker(this.context, this.socket, (Initialize)this.initialize.clone());
 
-                    //der Thread der Listener wird eingerichet, ueber den
+                    //der Thread der Worker wird eingerichet, ueber den
                     //Service wird dieser automatisch als Daemon verwendet
-                    thread = new Thread(listener);
+                    thread = new Thread(worker);
 
-                    //der Listener wird mit Thread registriert
-                    this.listener.add(new Object[] {listener, thread});
+                    //der Worker wird mit Thread registriert
+                    this.worker.add(new Object[] {worker, thread});
                     
-                    //der Listener wird als Thread gestartet
+                    //der Worker wird als Thread gestartet
                     thread.start();
                 }
 
@@ -337,10 +337,10 @@ public class Server implements Runnable {
         //das Beenden vom Server wird eingeleitet
         this.destroy();
         
-        //alle Listener werden zwangsweise beendet
-        enumeration = this.listener.elements();
+        //alle Worker werden zwangsweise beendet
+        enumeration = this.worker.elements();
         while (enumeration.hasMoreElements())
-            ((Listener)((Object[])enumeration.nextElement())[0]).destroy();
+            ((Worker)((Object[])enumeration.nextElement())[0]).destroy();
 
         //die Terminierung wird ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" STOPPED"));

@@ -29,13 +29,17 @@
       - Variable "realm" entfällt, dafür gibt es die CGI-Variablen: auth_user, auth_type, auth_realm
       - Variable "reference" geändert in "location"
       - Variable "process" geändert in "gateway"
+  CR: HTTP Request - berarbeitung/Optimierung
+      - Zusammenfassung von SLICING und TIMEOUT
+        Das initiale Lesen vom Request wird nun durch TIMEOUT begrenzt.
+        SLICING als eigenständiger Parameter entfällt.
   CR: HTTP DCGI - Überarbeitung/Optimierung/Umstellung auf XCGI
       - das CGI-Environment wird dem HTTP-Request vorangestellt
         CGI-Environment[CRLF][CRLF]Request-Header[CRLF][CRLF]Request-Body
       - DCGI/XCGI Option [I] geändert in [X]
       - DCGI/XCGI Option [F] geändert in [N] (Name)
       - DCGI/XCGI Option [E] entfällt
-  CR: HTTP Accesslog - Überarbeitung/Optimierung/Umstellung
+  CR: HTTP AccessLog - Überarbeitung/Optimierung/Umstellung
       - Erweiterung um benutzerdefinierte Ausgaben/Formate
         ASCII Bereich 0x00-0x06 wird als Leerzeichen verwendet
       - Erweiterung um die Verwendung von CGI-Variablen auch im Dateinamen
@@ -66,7 +70,10 @@
         bei der Client-Authentication / Mutual-Authentication
       - CLIENTAUTH: Erweiterung um die Option AUTO für eine tollerantes Verhalten
         bei ungültigen oder fehlenden Zertifikaten (Request wird vom Server beantwortet,
-        ggf. mit einer Fehlerseite)     
+        ggf. mit einer Fehlerseite)   
+  CR: HTTP XAPI - Überarbeitung/Optimierung/Erweiterung     
+      - Vereinfachung der API auf die Mehtoden Module.service() in Module.filter()
+        zur Implementierung von Web-Modulen und Filtern          
   CR: Initialize - Überarbeitung/Optimierung/Erweiterung
       - Erweiterung um multiples EXTENDS
       - Erweiterung um die Verarbeitung von Hex-Daten (Maskierung von Daten/Zeichen)
@@ -84,7 +91,14 @@
   CR: Remote - Überarbeitung/Optimierung/Erweiterung
       - Response: Wegfall vom Präfix "INFO:" beim
       - STATE geändert in STATUS
-
+  CR: XAPI - Überarbeitung/Optimierung/Erweiterung     
+      - Änderung der Methode Module.getCaption() in Module.explain()
+  CR: SAPI - Überarbeitung/Optimierung/Erweiterung
+      - Änderung der Methode Server.getCaption() in Server.explain()
+      - Umstellung auf das Laden von Servern über gleichnamige Klassen
+        optional kann ein Scope/Paket mit der Implementierung angegeben werden
+      - Optimierung bei Initialisieurng und Überprüfung der API beim Laden
+        
 4.3.0 20130707
   BF: HTTP File Index - Korrektur vom CSS der Templates für IE 9/10
   CR: Service - Optimierung/Erweiterung

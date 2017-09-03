@@ -1,13 +1,12 @@
 Description
 ====
-Seanox Devwex is a minimalistic container with a modular architecture for web
-servers and applications. The already contained servers instances support the
-HTTP amongst others virtual hosts, IP/Port sharing, filters, modules, SSL/TLS,
-XCGI/CGI1.1, directory listing and a on telnet based remote access to control
-the container. Further servers and modules/applications can be integrated about
-the available APIs. The container and server is a pure Java implementation for
-the command line and can be used with an appropriate Java runtime environment on
-many operating systems.
+Seanox Devwex is a minimalist runtime container with a modular architecture for
+(web) servers and applications. The included server instances support HTTP with
+virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory index,
+templates and a telnet-based remote access to container control. Additional
+servers and modules/applications can be integrated via the available APIs. The
+runtime container with the servers is a pure Java implementation and can be used
+on many operating systems due to the corresponding runtime environments. 
 
 
 Licence Agreement

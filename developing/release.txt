@@ -12,8 +12,15 @@
       - Umstellung auf Java5/8
       - Umstellung der Testumgebung auf JUnit
       - Umstellung der Historie auf den internen ChangeLog (release.txt)
-  CR: Service CLEANUP - Überarbeitung/Optimierung
-      Unterstützt nur noch on/off, Standardwert: off
+  CR: Service
+      - CLEANUP Überarbeitung/Optimierung
+        Unterstützt nur noch on/off, Standardwert: off
+      - Wegfall der erweiterten Ausgabe (Startoption *)
+      - Remote/Telnet-Client Überarbeitung/Optimierung
+        Umstellung auf eine Standard (127.0.0.1:25000) oder frei wählbare
+        Netzwerkverbindung als Programm-Argument. Die Ermittlung der
+        Remote-Verbindung aus der devwex.ini entfällt. Wird der Client entfernt
+        benutzt, wird nur noch devwex.jar benötigt.
   CR: Generator - Überarbeitung/Optimierung/Erweiterung
       - Umbenennung in Template
       - Vereinfachung/Umstellung der Syntax auf #[...] #[0x...] #[...:[[...]]]
@@ -91,14 +98,32 @@
   CR: Remote - Überarbeitung/Optimierung/Erweiterung
       - Response: Wegfall vom Präfix "INFO:" beim
       - STATE geändert in STATUS
-  CR: XAPI - Überarbeitung/Optimierung/Erweiterung     
+  CR: XAPI - Überarbeitung/Optimierung/Erweiterung
       - Änderung der Methode Module.getCaption() in Module.explain()
+        Die Methode ist optional.
+      - Änderung der Methode Module.destroy() diese muss nun implementiert werden
+      - Änderung der Initialiserung
+        Diese erfolgt nur noch über den Konstruktor Module(String options).
+        Der Aufruf der Methoden Module.initialize(String options) entfällt.
+      - Erweiterung vom Logging beim Laden
   CR: SAPI - Überarbeitung/Optimierung/Erweiterung
       - Änderung der Methode Server.getCaption() in Server.explain()
+        Die Methode ist optional.
+      - Änderung der Methode Server.destroy() diese muss nun implementiert werden 
       - Umstellung auf das Laden von Servern über gleichnamige Klassen
         optional kann ein Scope/Paket mit der Implementierung angegeben werden
-      - Optimierung bei Initialisieurng und Überprüfung der API beim Laden
-        
+      - Optimierung bei Initialisieurng
+      - Optimierung bei Überprüfung der API vor dem Laden
+      - Umstellung auf eine dynamische und objektbasiert Initialisieurng
+        Der Name der möglichen Server-Sektionen beginnen dabei mit Klassennamen
+        der Server-Implementierung, zu der optional mit dem Schlüssel SCOPE ein
+        Paket angegeben werden kann. Dadurch entfallen bisher reservierte Sektionen
+        wie z.B. SERVER:REMOTE:BAS und zusätzliche Namen wie z.B. REMOTE in SERVER:REMOTE:BAS.
+        Namen können auch weiterhin verwendet werden, sind aber nicht mehr Pflicht.
+        Die Initialisierung erfolgt nun primär über Sektionen mit der Endung BAS
+        und wenn eine entsprechende Implementierung im ClassPath gefunden werden
+        kann.
+
 4.3.0 20130707
   BF: HTTP File Index - Korrektur vom CSS der Templates für IE 9/10
   CR: Service - Optimierung/Erweiterung

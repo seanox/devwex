@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.0 20170702<br>
+ *  Worker 5.0 20170902<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170702
+ *  @version 5.0 20170902
  */
 class Worker implements Runnable {
   
@@ -513,19 +513,19 @@ class Worker implements Runnable {
         File[] files;
 
         int    loop;
-
-        //bei Verzeichnissen wird die Dateiliste ermittelt
-        //und die einzelnen Bestandteile rekursive geloescht
+        
+        //bei Verzeichnissen wird die Dateiliste ermittelt rekursive geloescht
         if (resource.isDirectory()) {
             files = resource.listFiles();
-            for (loop = 0; loop < files.length; loop++) {
+            if (files == null)
+                return true;
+            for (loop = 0; loop < files.length; loop++)
                 if (!Worker.fileDelete(files[loop]))
                     return false;
-            }
         }
 
-        //der File oder das leere Verzeichnis wird geloescht
-        //ist dies nicht moeglich wird false zurueckgegeben
+        //der File oder das leere Verzeichnis wird geloescht, ist dies nicht
+        //moeglich wird false zurueckgegeben
         return resource.delete();
     }
 
@@ -2025,6 +2025,7 @@ class Worker implements Runnable {
         String          path;
         String          string;
 
+        File[]          files; 
         String[]        entries;
 
         byte[]          bytes;
@@ -2037,41 +2038,6 @@ class Worker implements Runnable {
         int             cursor;
         int             digit;
         int             loop;
-
-        //die Zuordung der Felder fuer die Sortierung wird definiert
-        query = query.length() <= 0 ? "n" : query.substring(0, 1);
-        digit = query.charAt(0);
-        query = query.toLowerCase();        
-        
-        //die Sortierrichtung wird ermittelt
-        reverse = digit >= 'A' && digit <= 'Z';
-        
-        //die Sortierung wird durch die Query festgelegt und erfolgt nach
-        //Case, Query und Name, die Eintraege sind als Array abgelegt um eine
-        //einfache und flexible Zuordnung der Sortierreihenfolge zu erreichen
-        //0 - case, 1 - name, 3 - date, 4 - size, 5 - type
-        if (query.equals("d")) {
-
-            //case, date, name, size, type
-            assign = new int[] {0, 2, 1, 3, 4};
-
-        } else if (query.equals("s")) {
-
-            //case, size, name, date, type
-            assign = new int[] {0, 3, 1, 2, 4};
-
-        } else if (query.equals("t")) {
-
-            //case, type, name, date, size
-            assign = new int[] {0, 4, 1, 2, 3};
-
-        } else {
-            
-            query = "n";
-
-            //case, name, date, size, type
-            assign = new int[] {0, 1, 2, 3, 4};
-        }
         
         values = new Hashtable();
         
@@ -2085,7 +2051,42 @@ class Worker implements Runnable {
                 continue;
             values.put(entry, this.environment.get(entry));
         }
+
+        //die Zuordung der Felder fuer die Sortierung wird definiert
+        if (query.length() <= 0)
+            query = "n";
+        query = query.substring(0, 1);
+        digit = query.charAt(0);
         
+        reverse = digit >= 'A' && digit <= 'Z';
+        
+        query = query.toLowerCase(); 
+        digit = query.charAt(0);
+         
+        //case, name, date, size, type
+        assign = new int[] {0, 1, 2, 3, 4};
+        
+        //die Sortierung wird durch die Query festgelegt und erfolgt nach
+        //Case, Query und Name, die Eintraege sind als Array abgelegt um eine
+        //einfache und flexible Zuordnung der Sortierreihenfolge zu erreichen
+        //0 - case, 1 - name, 3 - date, 4 - size, 5 - type
+        if (digit == 'd') {
+
+            //case, date, name, size, type
+            assign = new int[] {0, 2, 1, 3, 4};
+
+        } else if (digit == 's') {
+
+            //case, size, name, date, type
+            assign = new int[] {0, 3, 1, 2, 4};
+
+        } else if (digit == 't') {
+
+            //case, type, name, date, size
+            assign = new int[] {0, 4, 1, 2, 3};
+
+        } else query = "n";
+
         values.put("sort", query.concat(reverse ? "d" : "a"));
         
         //das Standard-Template fuer den INDEX wird ermittelt und geladen
@@ -2113,7 +2114,10 @@ class Worker implements Runnable {
         }
 
         //die Dateiliste wird ermittelt
-        storage = new ArrayList(Arrays.asList(directory.listFiles()));
+        files = directory.listFiles();
+        if (files == null)
+            files = new File[0];
+        storage = new ArrayList(Arrays.asList(files));
 
         //mit der Option [S] werden versteckte Dateien nicht angezeigt
         control = this.options.get("index").toUpperCase().contains("[S]");
@@ -2165,7 +2169,8 @@ class Worker implements Runnable {
         //die Dateiliste wird sortiert
         Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
 
-        if (reverse) Collections.reverse(storage);
+        if (reverse)
+            Collections.reverse(storage);
         
         bytes = new byte[0];
         

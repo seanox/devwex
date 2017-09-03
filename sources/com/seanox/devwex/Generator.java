@@ -108,12 +108,12 @@ import java.util.Hashtable;
  *  Kleinschreibung sowie fehlerhafte Platzhalter, Strukturen, Namensr&auml;ume
  *  und Schl&uuml;ssel.<br>
  *  <br>
- *  Generator 5.0 20170326<br>
+ *  Generator 5.0 20170902<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170326
+ *  @version 5.0 20170902
  */
 public class Generator {
 
@@ -176,9 +176,9 @@ public class Generator {
         //    internen Klassifizierung und Begrenzung verwendet wird
         while (++cursor < bytes.length) {
             digit = bytes[cursor];
-            if (digit < 'a' && digit > 'z'
-                    && digit < 'A' && digit > 'Z'
-                    && digit < '0' && digit > '9'
+            if (!(digit >= 'a' && digit <= 'z')
+                    && !(digit >= 'A' && digit <= 'Z')
+                    && !(digit >= '0' && digit <= '9')
                     && digit != '_' && digit != '-'
                     && digit != ':' && digit != '[' && digit != ']')
                 return -1;
@@ -274,7 +274,9 @@ public class Generator {
                 return new byte[0];
         }
         
-        model = (byte[])this.segments.get(scope);
+        model = null;
+        if (scope != null)
+            model = (byte[])this.segments.get(scope);
         if (model == null)
             model = new byte[0];
         return this.prepare(model, null, null, 2);
@@ -298,7 +300,9 @@ public class Generator {
                 return new byte[0];
         }
         
-        model = (byte[])this.segments.get(scope);
+        model = null;
+        if (scope != null)
+            model = (byte[])this.segments.get(scope);        
         if (model == null)
             model = new byte[0];
         model = this.prepare(model, scope, values, 1);

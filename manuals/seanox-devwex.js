@@ -7,7 +7,9 @@ window.addEventListener("load", function() {
         var indent = element.innerHTML.match(/^\s+/gm)[0];
         indent = indent.match(/[^\r\n]+$/)[0];
         var content = element.innerHTML.replace(new RegExp("([\r\n])" + indent, "gm"), '$1').trim();
-        content = ("\r\n" + content).replace(/((?:\r\n)|(?:\n\r)|[\r\n])([^\r\n]*)/gm, "$1<li>$2</li>");
-        element.outerHTML = "<ol class=\"code\" start=\"1\">" + content + "</ol>";
+        content = ("\r\n" + content).replace(/((?:\r\n)|(?:\n\r)|[\r\n])([^\r\n]*)/gm, "$1<li><code>$2</code></li>");
+        content = content.replace(/\s+(<\/code>)/gm, "$1");
+        content = "<ol class=\"code\" start=\"1\">" + content + "</ol>"
+        element.outerHTML = "<article>" + content + "</article>";
     });
 });

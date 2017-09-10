@@ -40,12 +40,12 @@ import java.util.Vector;
  *  <br>
  *  TODO:    
  *  <br>
- *  Service 5.0 20170902<br>
+ *  Service 5.0 20170910<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170902
+ *  @version 5.0 20170910
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -655,12 +655,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             string = new String(Remote.call(address, Integer.parseInt(port), string));
             if (string.length() <= 0)
                 string = "REMOTE ACCESS NOT AVAILABLE";
-            Service.print(string, false);
+            System.out.println(string.trim());
             
         } catch (Throwable throwable) {
             
-            Service.print("REMOTE ACCESS FAILED", false);
-            Service.print(throwable.getMessage(), false);
+            System.out.println("REMOTE ACCESS FAILED");
+            System.out.println(throwable.getMessage());
         }        
     }
     

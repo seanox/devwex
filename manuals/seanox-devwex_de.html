@@ -37,6 +37,9 @@
         </p>
       </article>
       <article>
+        <h1>Inhalt</h1>
+      </article>      
+      <article>
         <h1>Beschreibung</h1>
         <p>
           Seanox Devwex ist ein minimalistische Laufzeit-Container mit einer
@@ -491,15 +494,6 @@
             </td>
           </tr>
           <tr>
-            <td>CONNECTOR</td>
-            <td>...</td>
-            <td>
-              Klasse vom Connector.<br>
-              Standardwert wenn nicht angegeben:
-              <code>com.seanox.devwex.Remote</code>
-            </td>
-          </tr>          
-          <tr>
             <td>PORT</td>
             <td>...</td>
             <td>
@@ -510,14 +504,13 @@
         <h3>Hypertext Transfer Protocol</h3>
         TODO
         <p>
-          Diese Sektion enth&auml;lt die Basis-Konfiguration f&uuml;r Server und
-          virtuelle Hosts sowie f&uuml;r HTTP.<br>
-          Die Konfiguration f&uuml;r Server und virtuelle Hosts gleicht sich,
-          mit Ausnahme der Connector-Konfiguration: <code>ADDRESS</code>,
-          <code>BACKLOG</code>, <code>CONNECTOR</code>, <code>ISOLATION</code>,
-          <code>MAXACCESS</code>, <code>PORT</code> und <code>SERVICE</code>,
-          diese entf&auml;llt f&uuml;r virtuelle Hosts, da diese nur HTTP-spezifisch
-          konfiguriert werden.
+          Diese Sektion enth&auml;lt die Konfiguration f&uuml;r HTTP-Server und
+          den dazugeh&ouml;hrigen virtuellen Hosts.<br>
+          Die Konfiguration f&uuml;r HTTP-Server und virtuelle Hosts gleicht
+          sich. Die f&uuml;r Netzwerkverbindungen spezifischen Schl&uuml;ssel:
+          <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code>,
+          <code>ISOLATION</code> und <code>MAXACCESS</code> entfallen f&uuml;r
+          virtuelle Hosts, da diese nur HTTP-spezifisch konfiguriert werden.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:<br>
@@ -550,15 +543,6 @@
                 Anzahl der gleichzeitigen Verbindungen ausgesch&ouml;pft ist.
               </td>
             </tr>
-            <tr>
-              <td>CONNECTOR</td>
-              <td>...</td>
-              <td>
-                Klasse vom Connector.<br>
-                Standardwert wenn nicht angegeben:
-                <code>com.seanox.devwex.Server</code>
-              </td>
-            </tr>          
             <tr>
               <td>ISOLATION</td>
               <td>250</td>
@@ -1014,11 +998,10 @@
             ...
         </pre>
         <p>
-          Die Konfiguration virtueller Hosts gleicht der von Servern.<br>
-          Die Einstellungen <code>CONNECTOR</code>, <code>ADDRESS</code>,
-          <code>PORT</code>, <code>SERVICE</code>, <code>BACKLOG</code>,
-          <code>MAXACCESS</code> und <code>ISOLATION</code> f&uuml;r den Service
-          und den Connector entfallen hier.        
+          Die Konfiguration virtueller Hosts gleicht der von HTTP-Servern.<br>
+          Die f&uuml;r Netzwerkverbindungen spezifischen Schl&uuml;ssel:
+          <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code>,
+          <code>ISOLATION</code> und <code>MAXACCESS</code> entfallen hier.        
         </p>
         <p>
           Virtuelle Host sind eigenst&auml;ndige Konfigurationen, die
@@ -2499,6 +2482,10 @@
       </article>      
       <article>
         <h1>Entwicklung</h1>
+        <p>
+          Die Erweiterbarkeit von Seanox Devwex ist eines der wichtigsten
+          Merkmale. 
+        </p>
         TODO
         <h2>Allgemeines</h2>
         TODO
@@ -2507,6 +2494,12 @@
         <h2>Architektur</h2>
         TODO
         <h2>Sequenzen</h2>
+        TODO
+        <h3>Start</h3>
+        TODO
+        <h3>Neustart</h3>
+        TODO
+        <h3>Beenden</h3>
         TODO
         <h2>Erweiterung</h2>
         <p>
@@ -2537,6 +2530,10 @@
           lassen sich bestehende Server- und Netzwerk-Funktionalit&auml;ten
           &auml;ndern bzw. neue bereitstellen.
         <h3>API</h3>
+        TODO        
+        <h4>Sequenz</h4>
+        TODO        
+        <h4>Implementierung</h4>
         TODO        
         <pre>
           public class Server implements Runnable {
@@ -2580,6 +2577,11 @@
         <h2>Module</h2>
         TODO
         <h3>API</h3>
+        TODO        
+        <h4>Sequenz</h4>
+        TODO        
+        <h4>Implementierung</h4>
+        TODO        
         <pre>
           public class Module {
           
@@ -2635,11 +2637,21 @@
           die Beantwortung der Anfrage mit einem definierten Server-Status kann
           die Verarbeitung auch an einen Filter &uuml;bergeben werden.<br>
           Filter sind zur Pr&uuml;fung bestimmter Anforderungen und ggf. zur
-          Manipulation von eingehenden Requests gedacht, sollten keine tiefere
-          Logik implementieren und haben daher nur einen eingeschr&auml;nkten
-          Zugriff auf den Request-Header.
+          Manipulation von eingehenden Requests gedacht. Sie sollten nur Zugriff
+          auf den Request-Header habe, wenn der Request nicht vollst&auml;ndig
+          vom Filter verarbeitet wird.
         </p>
         <h4>API</h4>
+        <p>
+          Die API entspricht der Modul-API, die um <code>Module.filter(Worker
+          worker, String options)</code> erweitert wird. Der &uuml;bergeben
+          Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
+          Server, Socket, Request, Response, Konfiguration und Environment. Mit
+          der Konfiguration k&ouml;nnen f&uuml;r einen Filter weitere Parameter
+          und Optionen gesetzt werden, die dann optional als ein String 
+          uuml;bergeben werden.
+        </p>
+        <h4>Implementierung</h4>
         <pre>
           public class Module {
           
@@ -2665,7 +2677,13 @@
               public void filter(Worker worker, String options) {
                   ...
                   
-                  TODO
+                  Diese Methode &uuml;bernimmt die Pr&uuml;fung und ggf.
+                  Manipulation vom Request oder verarbeitet sowie beantwortet
+                  diesen komplett. Soll die Anfrage ausschliesslich mit einem
+                  Server-Status beantwortet werden, kann die Filter-Methode
+                  diesen setzen und muss den Request nicht selbst beantworten.
+                  Die Beantwortung &uuml;bernimmt in diesem Fall die
+                  nachgelagerte Worker-Implementierung.
               }              
 
               public void destroy() {
@@ -2678,7 +2696,6 @@
               }
           }        
         </pre>         
-        TODO
         <h3>Service</h3>
         <p>
           Das Ziel einer HTTP-Anfrage sind Verzeichnisse, Dateien sowie
@@ -2686,9 +2703,19 @@
           &uuml;ber virtuelle Pfade angesprochen werden.<br>
           Services stellen eine weitere Form von dynamische Inhalten zur
           Verf&uuml;gung. Sie &uuml;bernehmen die komplette Verarbeitung
-          eingehender Requests haben einen uneingeschr&auml;nkten Zugriff.
+          eingehender Requests und haben einen uneingeschr&auml;nkten Zugriff.
         </p>
         <h4>API</h4>
+        <p>
+          Die API entspricht der Modul-API, die um <code>Module.service(Worker
+          worker, String options)</code> erweitert wird. Der &uuml;bergeben
+          Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
+          Server, Socket, Request, Response, Konfiguration und Environment. Mit
+          der Konfiguration k&ouml;nnen f&uuml;r ein Modul weitere Parameter und
+          Optionen gesetzt werden, die dann optional als ein String
+          uuml;bergeben werden.        
+        </p>        
+        <h4>Implementierung</h4>
         <pre>
           public class Module {
           
@@ -2714,7 +2741,12 @@
               public void service(Worker worker, String options) {
                   ...
                   
-                  TODO
+                  Diese Methode &uuml;bernimmt die komplette Verarbeitung vom
+                  Request- und beantwortet diesen. Soll die Anfrage
+                  ausschliesslich mit einem Server-Status beantwortet werden,
+                  kann die Service-Methode diesen setzen und muss den Request 
+                  nicht selbst beantworten. Die Beantwortung &uuml;bernimmt in
+                  diesem Fall die nachgelagerte Worker-Implementierung.
               }              
 
               public void destroy() {
@@ -2727,22 +2759,20 @@
               }
           }        
         </pre>            
-        TODO        
         <h2>Entwicklungsumgebung (SDK)</h2>
         <p>
           F&uuml;r die Entwicklung und das Experimentieren mit Seanox Devwex
           steht eine spezielle Entwicklungsumgebung (SDK) bereit (f&uuml;r
-          Seanox Devwex 5.x in Entwicklung). Es ist ein komplett
-          vorkonfiguriertes Projekt f&uuml;r die Eclipse IDE und umfasst u.a.
-          Seanox Devwex, Seanox Devwex Test, Seanox Commons und Seanox Devwex
-          WebSocket.
+          Seanox Devwex 5.x in Entwicklung). Das komplett vorkonfigurierte
+          Projekt f&uuml;r die Eclipse IDE umfasst u.a. Seanox Devwex, Seanox
+          Devwex Test, Seanox Commons und Seanox Devwex WebSocket.
         </p>
         <p>
           Neben einer umfangreichen API u.a. mit erforderlichen Interfaces sowie
           Abstraktionen und zus&auml;tzliche ClassLoader-Ebenen f&uuml;r die
           Entwicklung mit Seanox Devwex, sind auch zahlreiche
-          funktionsf&auml;hige Beispiele enthalten.<br>
-          Eine detaillierte Dokumentation liegt der Entwicklungsumgebung bei. 
+          funktionsf&auml;hige Beispiele enthalten. Eine detaillierte
+          Dokumentation liegt der Entwicklungsumgebung bei. 
         </p>
       </article>
     </section>

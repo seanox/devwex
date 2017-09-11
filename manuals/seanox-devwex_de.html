@@ -576,10 +576,16 @@
               <td>... &gt; ../system/access.log</td>
               <td>
                 Format und Pfad der Logdatei zur Protokollierung der Zugriffe.<br>
-                Ohne Pfad wird der Standard-I/O verwendet.<br>
-                Mit <code>OFF</code> wird die Protokollierung deaktiviert.<br>
-                Im Format und Pfad lassen sich Variablen verwenden, was
-                sp&auml;ter im Detail beschrieben wird.         
+                Ohne Pfad wird der Standard-I/O verwendet, <code>OFF</code>
+                deaktiviert wird die Protokollierung.<br>
+                Im Format und Pfad lassen sich CGI-Umgebungsvariablen sowie
+                Symbole von Datum und Zeit im Format <code>#[...]</code>
+                verwenden.<br>
+                Die Datum-/Zeit-Symbol basieren auf den <a target="_extern"
+                  href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
+                  Date/Time Conversions</a> der Formatter-Class.<br>
+                Die Syntax verwendet einen zus&auml;tzlich der Namensraum:
+                <code>#[T:...]</code>.
               </td>
             </tr>
             <tr>
@@ -665,13 +671,6 @@
               </td>
             </tr>          
             <tr>
-              <td>SERVICE</td>
-              <td>...</td>
-              <td>
-                TODO
-              </td>
-            </tr> 
-            <tr>
               <td>SYSROOT</td>
               <td>../system</td>
               <td>
@@ -690,7 +689,7 @@
               </td>
             </tr>
           </tbody>
-        </table>          
+        </table>
         TODO
         <h3>Secure Socket Layer / Transport Layer Security</h3>
         <p>
@@ -2138,7 +2137,7 @@
             HTTP-Methoden an das CGI weitergegeben. Der Alias umgeht dabei aber
             nicht die Einschr&auml;kung von <code>[SERVER:BAS] METHODS</code>.  
           </p>
-        </section>        
+        </section>
         <h2>Statuscodes</h2>
         <p>
           Der Server quittiert alle HTTP-Anfragen mit einem Statuscode und

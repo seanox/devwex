@@ -44,13 +44,13 @@
         <p>
           Seanox Devwex ist ein minimalistische Laufzeit-Container mit einer
           modularen Architektur f&uuml;r (Web)Server und Anwendungen. Die
-          enthaltenen Server-Instanzen unterst&uuml;tzen das HTTP u.a. mit
-          Virtual Hosting, Filtern, Modulen, SSL/TLS, XCGI/CGI1.1, Directory
-          Index, Templates und einem auf Telnet basierenden Fernzugriff zur
-          Container-Steuerung.<br>
-          Weitere Server und Module/Anwendungen lassen sich &uuml;ber die
-          verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container mit den
-          Servern ist eine reine Java-Implementierung Umsetzungen und durch
+          enthaltenen Server-Implementierungen unterst&uuml;tzen u.a. das HTTP
+          mit Virtual Hosting, Filter, HTTP-Modulen, SSL/TLS, XCGI/CGI1.1,
+          Directory Index, Templates und einem auf Telnet basierenden
+          Fernzugriff zur Container-Steuerung.<br>
+          Weitere Server und Module sowie Anwendungen lassen sich &uuml;ber die
+          verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container und die
+          enthaltenen Servern sind ein reine Java-Implementierung und durch
           entsprechende Laufzeitumgebungen auf vielen Betriebssystem verwendbar.        
         </p>
       </article>
@@ -87,41 +87,89 @@
       </article>
       <article>
         <h1>Merkmale</h1>
-        <p>
-          TODO
-        </p>
         <h2>Architektur</h2>
         <p>
-          TODO
+          Seanox Devwex ist ein multithreading-f&auml;higer Container f&uuml;r
+          (Server-)Module, welche &uuml;ber die bereitgestellte Server- und
+          Modul-API eingebunden werden. Der eigene ClassLoader unterst&uuml;tzt
+          dabei das Laden und Entladen von Servern und Modulen zur Laufzeit.<br>
         </p>
-        <h2>Customizing</h2>
+        <h2>Hypertext Transfer Protocol</h2>
         <p>
-          TODO
+          Die enthaltene HTTP-Server-Implementierung unterst&uuml;tzen u.a.
+          Virtual Hosting, Filter, HTTP-Module, SSL/TLS, XCGI/CGI1.1, Directory
+          Index, Templates.
         </p>
-        <h2>Erweiterbarkeit</h2>
+        <h2>Fern&uuml;berwachung</h2>
         <p>
-          TODO
+          Der enthaltenen Fernzugriff unterst&uuml;tzt eine auf Telnet
+          basierende Steuerung f&uuml;r Statusabfragen, Neustart und Stop.<br>
+          Neben der Server-Implementierung ist auch ein Client-Implementierung
+          enthalten.
         </p>
+>
         <h2>Konfiguration</h2>
         <p>
           TODO
         </p>
-        <h2>Kontrolle</h2>
-        <p>
-          TODO
-        </p>
         <h2>Schnittstellen</h2>
-        <p>
+          <h3>Server-API (SAPI))</h3>
           TODO
-        </p>
+          <h3>Modul-API (XAPI)</h3>
+          TODO
+          <h3>HTTP</h3>
+          TODO          
+          <h3>HTTP-Modul-API (XAPI)</h3>
+          TODO
+          <h3>(Fast)CGI</h3>
+          <p>
+            Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen
+            und Anwendungen werden die Spezifikation 1.1 des Common Gateway
+            Interfaces und somit PHP, Perl, Python und andere unterst&uuml;tz.
+            Optional ist auch FastCGI verf&uuml;gbar.
+          </p>
+          <h3>XCGI</h3>
+          <p>
+            Das XCGI ist eine an das CGI angelehnte Schnittstelle und gleich im
+            Grundprinzip und der Arbeitsweise. Auch das XCGI kommuniziert
+            &uuml;ber den Standard-I/O, &uuml;bermittelt aber auch die
+            serverrelevanten Informationen und Umgebungsvariablen &uuml;ber
+            diesen Weg. Womit auch Applikationen ohne eigenst&auml;ndige
+            Laufzeitumgebung verwendet werden k&ouml;nnen;
+          </p>
+          TODO
+          <h3>Telnet</h3>
+          TODO
         <h2>Sicherheit</h2>
         <p>
-          TODO
+          F&uuml;r eine gesicherte &Uuml;bertragung von Daten werden unter
+          anderem Transport Layer Security (TLS) und Secure Socket Layer (SSL)
+          mit Server- und Client-Zertifikaten unerst&uuml;tzt. Zertifikate
+          k&ouml;nnen dabei f&uuml;r jeden physischen Host einzeln, durch
+          Vererbung in Gruppen oder global zugewisen werden.
+        </p>
+        <p>
+          Der Zugriff auf Verzeichnisse und Dateien kann mit Basic- sowie
+          Digest-Access-Authentication versehen werden, welche Gruppen
+          unterst&uuml;tzen. Zudem kann der Zugriff &uuml;ber Filter gesteuert
+          werden, welche frei definierbare Regeln, individuelle Fehlerseiten,
+          automatische Weiterleitungen und Module unterst&uuml;tzen.
         </p>
         <h2>Virtualisierung</h2>
         <p>
           TODO
         </p>
+        <h2>Individualität</h2>
+        <p>
+          HTTP-Server und virtuelle Hosts verwenden f&uuml;r die Fehlerseiten
+          und die Listenansicht der Verzeichnisse (Directory Index) Templates,
+          die sich individuell anpassen lassen. Mit Unterst&uuml;tzung der
+          CGI-Umgebungsvariablen kann der Inhalt dynamisch gestalltet werden.
+        </p>
+        <h2>Erweiterbarkeit</h2>
+        <p>
+          TODO
+        </p>        
       </article>
       <article>
         <h1>Systemanforderung</h1>
@@ -502,15 +550,15 @@
           </tr>
         </table>
         <h3>Hypertext Transfer Protocol</h3>
-        TODO
         <p>
           Diese Sektion enth&auml;lt die Konfiguration f&uuml;r HTTP-Server und
-          den dazugeh&ouml;hrigen virtuellen Hosts.<br>
+          die zugeh&ouml;hrigen virtuellen Hosts.<br>
           Die Konfiguration f&uuml;r HTTP-Server und virtuelle Hosts gleicht
-          sich. Die f&uuml;r Netzwerkverbindungen spezifischen Schl&uuml;ssel:
+          sich, mit Ausnahme der netzwerkspezifischen Schl&uuml;ssel:
           <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code>,
-          <code>ISOLATION</code> und <code>MAXACCESS</code> entfallen f&uuml;r
-          virtuelle Hosts, da diese nur HTTP-spezifisch konfiguriert werden.
+          <code>ISOLATION</code> und <code>MAXACCESS</code> welche bei den
+          virtuelle Hosts entfallen, da diese nur HTTP-spezifisch konfiguriert
+          werden.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:<br>
@@ -690,7 +738,6 @@
             </tr>
           </tbody>
         </table>
-        TODO
         <h3>Secure Socket Layer / Transport Layer Security</h3>
         <p>
           Zur gesicherten &Uuml;bertragung von Daten werden Transport Layer
@@ -1678,9 +1725,9 @@
         <h3>Common Gateway Interface</h3>
         <p>
           Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen und
-          Anwendungen wird die Spezifikation 1.1 des Common Gateway Interfaces
-          und somit PHP, Perl, Python und andere unterst&uuml;tz. Optional steht
-          auch FastCGI zur Verf&uuml;gung.
+          Anwendungen werden die Spezifikation 1.1 des Common Gateway Interfaces
+          und somit PHP, Perl, Python und andere unterst&uuml;tz. Optional ist
+          auch FastCGI verf&uuml;gbar.
         </p>
         <p>
           Mit dem XCGI ist eine weitere an das CGI angelehnte Schnittstelle
@@ -2580,7 +2627,6 @@
         <h4>Sequenz</h4>
         TODO        
         <h4>Implementierung</h4>
-        TODO        
         <pre>
           public class Module {
           
@@ -2613,7 +2659,6 @@
               }
           }        
         </pre>   
-        TODO
         <h2>HTTP-Module</h2>
         <p>
           Die modularen Architektur unterst&uuml;tzt &Auml;nderungen und

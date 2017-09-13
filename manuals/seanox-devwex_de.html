@@ -107,10 +107,13 @@
           Neben der Server-Implementierung ist auch ein Client-Implementierung
           enthalten.
         </p>
->
         <h2>Konfiguration</h2>
         <p>
-          TODO
+          Die Konfiguration verwendet eine zentrale Datei in einem erweiterten
+          INI-Format, dass in Sektionen mit Schl&uuml;sseln und Werten
+          untergliedert ist. Mehrfachvererbung bei den Sektionen, dynamische
+          Werte sowie der Zugriff auf System- und Umgebungsvariablen werden
+          dabei unterst&uuml;tzt.
         </p>
         <h2>Schnittstellen</h2>
           <h3>Server-API (SAPI))</h3>
@@ -134,10 +137,10 @@
             Grundprinzip und der Arbeitsweise. Auch das XCGI kommuniziert
             &uuml;ber den Standard-I/O, &uuml;bermittelt aber auch die
             serverrelevanten Informationen und Umgebungsvariablen &uuml;ber
-            diesen Weg. Womit auch Applikationen ohne eigenst&auml;ndige
-            Laufzeitumgebung verwendet werden k&ouml;nnen;
+            diesen Weg. Womit auch Anwendungen genutzt werden k&ouml;nnen,
+            welche keine exklusive Umgebung besitzen oder keinen Zugriff auf die
+            Umgebungsvariablen vom Betriebssystem haben.
           </p>
-          TODO
           <h3>Telnet</h3>
           TODO
         <h2>Sicherheit</h2>
@@ -197,9 +200,11 @@
         <p>
           Seanox Devwex verwendet eine zentrale Konfiguration aus dem aktuellen 
           Arbeitsverzeichnis, die mit der Installation vorkonfiguriert im 
-          Programm-Verzeichnis./devwex/program in der Datei devwex.ini abgelegt 
-          wird. Die Konfiguration ist in Sektionen mit Schl&uuml;sseln und 
-          Werten untergliedert.
+          Programm-Verzeichnis <code>./devwex/program</code> in der Datei
+          <code>devwex.ini</code> abgelegt wird. Die Konfiguration ist in
+          Sektionen mit Schl&uuml;sseln und Werten untergliedert, die u.a. auch
+          dynamische Werte und den Zugriff auf System- und Umgebungsvariablen
+          unterst&uuml;tzt. 
         </p>
         <header>         
           Die Basis-Konfiguration besteht aus den folgenden Sektionen:
@@ -1015,7 +1020,7 @@
           eigenst&auml;ndig konfigurierten Server entgegengenommen wird.
         </p>
         <header>
-          Beispiel eines Request f&uuml;r einen virtuellen Host:
+          Beispiel eines Requests f&uuml;r einen virtuellen Host:
         </header>
         <pre>
           GET /directory/file.cgi?value=123 HTTP/1.1
@@ -1745,7 +1750,7 @@
           <code>[CRLFCRLF]</code> und dann der Request-Body.
         </p>
         <header>
-          Beispiel eines XCGI-Request:
+          Beispiel eines XCGI-Requests:
         </header>
         <pre>
           SERVER_PORT=80

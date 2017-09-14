@@ -36,7 +36,7 @@
       - Variable "realm" entfaellt, dafuer gibt es die CGI-Variablen: auth_user, auth_type, auth_realm
       - Variable "reference" geaendert in "location"
       - Variable "process" geaendert in "gateway"
-  CR: HTTP Request - berarbeitung/Optimierung
+  CR: HTTP Request - Ueberarbeitung/Optimierung
       - Zusammenfassung von SLICING und TIMEOUT
         Das initiale Lesen vom Request wird nun durch TIMEOUT begrenzt.
         SLICING als eigenstaendiger Parameter entfaellt.

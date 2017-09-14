@@ -1,5 +1,4 @@
-Description
-====
+# Description
 Seanox Devwex is a minimalist runtime container with a modular architecture for
 (web) servers and applications. The included server instances support HTTP with
 virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory index,
@@ -9,8 +8,7 @@ runtime container with the servers is a pure Java implementation and can be used
 on many operating systems due to the corresponding runtime environments. 
 
 
-Licence Agreement
-====
+# Licence Agreement
 Seanox Software Solutions ist ein Open-Source-Projekt, im Folgenden
 Seanox Software Solutions oder kurz Seanox genannt.
 
@@ -31,6 +29,5 @@ this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
-Changes (Change Log)
-====
+# Changes (Change Log)
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES?1)

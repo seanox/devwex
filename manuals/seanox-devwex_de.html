@@ -116,14 +116,29 @@
           dabei unterst&uuml;tzt.
         </p>
         <h2>Schnittstellen</h2>
-          <h3>Server-API (SAPI))</h3>
-          TODO
+          <h3>Server-API (SAPI)</h3>
+          <p>
+            Mit der Server-API werden die Implementierungen eingebunden, welche
+            den physischen Zugriff im Netzwerk f&uuml;r ein Protokoll an einer
+            Adresse und Port zur Verf&uuml;gung stellen. Bestehende Server- und
+            Netzwerk-Funktionalit&auml;ten lassen sich damit &auml;ndern bzw.
+            neue bereitstellen.
+          </p>
           <h3>Modul-API (XAPI)</h3>
           TODO
           <h3>HTTP</h3>
-          TODO          
-          <h3>HTTP-Modul-API (XAPI)</h3>
-          TODO
+          <p>
+            Entsprechend der Spezifikation 1.0 werden GET, POST und HEAD sowie
+            OPTIONS, PUT und DELETE vom HTTP 1.1 unterst&uuml;tzt. Weitere
+            Methoden lassen sich &uuml;ber HTTP-Module, XCGI bzw. CGI
+            bereitstellen.
+          </p>
+          <h3>HTTP-Modul-API (XAPI+)</h3>
+          <p>
+            Die HTTP-Modul-API ist eine Erweiterung der Module-API f&uuml;r den 
+            HTTP-Server zur Implementierung von Filter- und
+            Service-Funktionalit&auml;ten, die im Context vom Server laufen.
+          </p>          
           <h3>(Fast)CGI</h3>
           <p>
             Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen
@@ -2580,7 +2595,7 @@
           bindet Server-Module &uuml;ber eine Server-API ein. Mit dieser API
           lassen sich bestehende Server- und Netzwerk-Funktionalit&auml;ten
           &auml;ndern bzw. neue bereitstellen.
-        <h3>API</h3>
+        <h3>API (SAPI)</h3>
         TODO        
         <h4>Sequenz</h4>
         TODO        
@@ -2627,7 +2642,7 @@
         TODO
         <h2>Module</h2>
         TODO
-        <h3>API</h3>
+        <h3>API (XAPI)</h3>
         TODO        
         <h4>Sequenz</h4>
         TODO        
@@ -2690,7 +2705,7 @@
           auf den Request-Header habe, wenn der Request nicht vollst&auml;ndig
           vom Filter verarbeitet wird.
         </p>
-        <h4>API</h4>
+        <h4>API (XAPI+)</h4>
         <p>
           Die API entspricht der Modul-API, die um <code>Module.filter(Worker
           worker, String options)</code> erweitert wird. Der &uuml;bergeben
@@ -2754,7 +2769,7 @@
           Verf&uuml;gung. Sie &uuml;bernehmen die komplette Verarbeitung
           eingehender Requests und haben einen uneingeschr&auml;nkten Zugriff.
         </p>
-        <h4>API</h4>
+        <h4>API (XAPI+)</h4>
         <p>
           Die API entspricht der Modul-API, die um <code>Module.service(Worker
           worker, String options)</code> erweitert wird. Der &uuml;bergeben

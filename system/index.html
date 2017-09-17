@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Seanox Devwex</title>
+    <link rel="stylesheet" href="common.css"/>
+    <link rel="stylesheet" href="/system/common.css"/>
+    <link rel="stylesheet" href="index.css"/>
+    <link rel="stylesheet" href="/system/index.css"/>
+  </head>
+  <body>
+    <header>
+      <h1>Index</h1>
+      <nav>
+        <h2>
+          <a href="/">#[HTTP_HOST]</a>#[path:[[<a href="#[base]">#[name]</a>]]]
+        </h2>
+      </nav>  
+      <table class="#[sort]">
+        <thead>
+          <tr>
+            <th>
+              <h3>
+                <a href="?n"></a>
+                <a href="?N"></a>
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?t"></a>
+                <a href="?T"></a>              
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?s"></a>
+                <a href="?S"></a>
+              </h3>
+            </th>
+            <th>
+              <h3>
+                <a href="?d"></a>
+                <a href="?D"></a>
+              </h3>
+            </th>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
+            <th colspan="4">
+              <h3>
+                No entries available
+              </h3>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          #[file:[[
+          <tr class="#[case] #[type]" mime="#[mime]">
+            <td>
+              <div></div>
+              <div>
+                <a href="#[name]">#[name]</a>
+              </div>
+            </td>
+            <td>
+              <div text="#[type]"></div>
+            </td>
+            <td>
+              <div text="#[size] Bytes"></div> 
+            </td>
+            <td>
+              <div text="#[date]"></div> 
+            </td>
+          </tr>
+          ]]]
+        </tbody>
+      </table>  
+    </header>
+    <footer>
+      <section>
+        <p>Seanox Devwex</p>
+        <p>Advanced Server Development</p>
+        <p>Seanox Software Solutions</p>
+       </section>
+    </footer>
+  </body>
+</html>

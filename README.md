@@ -37,7 +37,7 @@ BF: HTTP Range - Korrekturen
 CR: Projekt - Optimierung  
 CR: Service  
 CR: Generator - Überarbeitung/Optimierung/Erweiterung  
-CR: HTTP Session/Listener - Überarbeitung/Optimierung/Erweiterung  
+CR: HTTP Session/Worker - Überarbeitung/Optimierung/Erweiterung  
 CR: HTTP Request - Überarbeitung/Optimierung  
 CR: HTTP DCGI - Überarbeitung/Optimierung/Umstellung auf XCGI  
 CR: HTTP AccessLog - Überarbeitung/Optimierung/Umstellung  

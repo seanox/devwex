@@ -27,8 +27,8 @@
       - Erweiterung um maskierte Text/Daten/Zeichen
       - Generierung vom Segmenten wird jetzt direkt im mit der Set-Methode unterstuetzt
       - Optimierung vom Parser und in der Verarbeitung
-  CR: HTTP Session/Listener - Ueberarbeitung/Optimierung/Erweiterung
-      - Umbenennung in Listener
+  CR: HTTP Session/Worker - Ueberarbeitung/Optimierung/Erweiterung
+      - Umbenennung in Worker
       - Implementierung der der HTTP-Methoden in separaten do-Methoden
       - allgemeine Umstellung auf die einheitliche Verwendung von CGI-Variablen
         betrifft u.a. (X)CGI, Filter, Status, Tempaltes

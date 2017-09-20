@@ -21,14 +21,16 @@
         Netzwerkverbindung als Programm-Argument. Die Ermittlung der
         Remote-Verbindung aus der devwex.ini entfällt. Wird der Client entfernt
         benutzt, wird nur noch devwex.jar benötigt.
+      - Änderung der Methode Service.call(Class, String) in Service.load(Class, String)
+      - Erweiterung um Service.print(String, boolean)        
   CR: Generator - Überarbeitung/Optimierung/Erweiterung
       - Umbenennung in Template
       - Vereinfachung/Umstellung der Syntax auf #[...] #[0x...] #[...:[[...]]]
       - Erweiterung um maskierte Text/Daten/Zeichen
       - Generierung vom Segmenten wird jetzt direkt im mit der Set-Methode unterstützt
       - Optimierung vom Parser und in der Verarbeitung
-  CR: HTTP Session/Listener - Überarbeitung/Optimierung/Erweiterung
-      - Umbenennung in Listener
+  CR: HTTP Session/Worker - Überarbeitung/Optimierung/Erweiterung
+      - Umbenennung in Worker
       - Implementierung der der HTTP-Methoden in separaten do-Methoden
       - allgemeine Umstellung auf die einheitliche Verwendung von CGI-Variablen
         betrifft u.a. (X)CGI, Filter, Status, Tempaltes
@@ -36,7 +38,7 @@
       - Variable "realm" entfällt, dafür gibt es die CGI-Variablen: auth_user, auth_type, auth_realm
       - Variable "reference" geändert in "location"
       - Variable "process" geändert in "gateway"
-  CR: HTTP Request - berarbeitung/Optimierung
+  CR: HTTP Request - Überarbeitung/Optimierung
       - Zusammenfassung von SLICING und TIMEOUT
         Das initiale Lesen vom Request wird nun durch TIMEOUT begrenzt.
         SLICING als eigenständiger Parameter entfällt.

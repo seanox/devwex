@@ -21,6 +21,8 @@
         Netzwerkverbindung als Programm-Argument. Die Ermittlung der
         Remote-Verbindung aus der devwex.ini entfaellt. Wird der Client entfernt
         benutzt, wird nur noch devwex.jar benoetigt.
+      - Aenderung der Methode Service.call(Class, String) in Service.load(Class, String)
+      - Erweiterung um Service.print(String, boolean)        
   CR: Generator - Ueberarbeitung/Optimierung/Erweiterung
       - Umbenennung in Template
       - Vereinfachung/Umstellung der Syntax auf #[...] #[0x...] #[...:[[...]]]

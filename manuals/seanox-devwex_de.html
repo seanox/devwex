@@ -10,15 +10,12 @@
     <header>
       TODO
     </header>
-    <nav>
-      TODO
-    </nav>
     <section>
       <article>
-        TODO
-        Seanox Devwex
-        Version #[ant:release-version] #[ant:release-date]
-        Systemhandbuch
+        TODO:
+        <p>Seanox Devwex</p>
+        <p>Version #[ant:release-version] #[ant:release-date]</p>
+        <p>Systemhandbuch</p>
       </article>
       <article>
         <p>
@@ -116,48 +113,53 @@
           dabei unterst&uuml;tzt.
         </p>
         <h2>Schnittstellen</h2>
-          <h3>Server-API (SAPI)</h3>
-          <p>
-            Mit der Server-API werden die Implementierungen eingebunden, welche
-            den physischen Zugriff im Netzwerk f&uuml;r ein Protokoll an einer
-            Adresse und Port zur Verf&uuml;gung stellen. Bestehende Server- und
-            Netzwerk-Funktionalit&auml;ten lassen sich damit &auml;ndern bzw.
-            neue bereitstellen.
-          </p>
-          <h3>Modul-API (XAPI)</h3>
-          TODO
-          <h3>HTTP</h3>
-          <p>
-            Entsprechend der Spezifikation 1.0 werden GET, POST und HEAD sowie
-            OPTIONS, PUT und DELETE vom HTTP 1.1 unterst&uuml;tzt. Weitere
-            Methoden lassen sich &uuml;ber HTTP-Module, XCGI bzw. CGI
-            bereitstellen.
-          </p>
-          <h3>HTTP-Modul-API (XAPI+)</h3>
-          <p>
-            Die HTTP-Modul-API ist eine Erweiterung der Module-API f&uuml;r den 
-            HTTP-Server zur Implementierung von Filter- und
-            Service-Funktionalit&auml;ten, die im Context vom Server laufen.
-          </p>          
-          <h3>(Fast)CGI</h3>
-          <p>
-            Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen
-            und Anwendungen werden die Spezifikation 1.1 des Common Gateway
-            Interfaces und somit PHP, Perl, Python und andere unterst&uuml;tz.
-            Optional ist auch FastCGI verf&uuml;gbar.
-          </p>
-          <h3>XCGI</h3>
-          <p>
-            Das XCGI ist eine an das CGI angelehnte Schnittstelle und gleich im
-            Grundprinzip und der Arbeitsweise. Auch das XCGI kommuniziert
-            &uuml;ber den Standard-I/O, &uuml;bermittelt aber auch die
-            serverrelevanten Informationen und Umgebungsvariablen &uuml;ber
-            diesen Weg. Womit auch Anwendungen genutzt werden k&ouml;nnen,
-            welche keine exklusive Umgebung besitzen oder keinen Zugriff auf die
-            Umgebungsvariablen vom Betriebssystem haben.
-          </p>
-          <h3>Telnet</h3>
-          TODO
+        <h3>Server-API (SAPI)</h3>
+        <p>
+          Mit dem Server-API werden die Implementierungen eingebunden, welche
+          den physischen Zugriff im Netzwerk f&uuml;r ein Protokoll an einer
+          Adresse und einem Port zur Verf&uuml;gung stellen. Bestehende Server-
+          und Netzwerk-Funktionalit&auml;ten lassen sich damit &auml;ndern bzw.
+          neue bereitstellen.
+        </p>
+        <h3>Modul-API (XAPI)</h3>
+        TODO
+        <h3>HTTP</h3>
+        <p>
+          Entsprechend der Spezifikation 1.0 werden GET, POST und HEAD sowie
+          OPTIONS, PUT und DELETE vom HTTP 1.1 unterst&uuml;tzt. Weitere
+          Methoden lassen sich &uuml;ber HTTP-Module, XCGI bzw. CGI
+          bereitstellen.
+        </p>
+        <h3>HTTP-Modul-API (XAPI+)</h3>
+        <p>
+          Die HTTP-Modul-API ist eine Erweiterung vom Module-API f&uuml;r den 
+          HTTP-Server zur Implementierung von Filter- und
+          Service-Funktionalit&auml;ten, die im Context vom Server laufen.
+        </p>          
+        <h3>(Fast)CGI</h3>
+        <p>
+          Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen und
+          Anwendungen werden die Spezifikation 1.1 des Common Gateway Interfaces
+          und somit PHP, Perl, Python und andere unterst&uuml;tz. Optional ist
+          auch FastCGI verf&uuml;gbar.
+        </p>
+        <h3>XCGI</h3>
+        <p>
+          Das XCGI ist eine an das CGI angelehnte Schnittstelle und gleich im
+          Grundprinzip und der Arbeitsweise. Auch das XCGI kommuniziert
+          &uuml;ber den Standard-I/O, &uuml;bermittelt aber auch die
+          serverrelevanten Informationen und Umgebungsvariablen &uuml;ber diesen
+          Weg. Womit auch Anwendungen genutzt werden k&ouml;nnen, welche keine
+          exklusive Umgebung besitzen oder keinen Zugriff auf die
+          Umgebungsvariablen vom Betriebssystem haben.
+        </p>
+        <h3>Telnet</h3>
+        <p>
+          Der enthaltenen Fernzugriff unterst&uuml;tzt eine auf Telnet
+          basierende Steuerung f&uuml;r Statusabfragen, Neustart und Stop.<br>
+          Neben der Server-Implementierung ist auch ein Client-Implementierung
+          enthalten.
+        </p>
         <h2>Sicherheit</h2>
         <p>
           F&uuml;r eine gesicherte &Uuml;bertragung von Daten werden unter
@@ -175,7 +177,8 @@
         </p>
         <h2>Virtualisierung</h2>
         <p>
-          TODO
+          Der HTTP-Server unterst&uuml;tzt Virtual Hosting und Aliasing f&uuml;r
+          virtueller Pfade. 
         </p>
         <h2>Individualität</h2>
         <p>
@@ -187,7 +190,9 @@
         <h2>Erweiterbarkeit</h2>
         <p>
           TODO
-        </p>        
+          Die modulare Architektur und zahlreichen Schnittstellen erm&ouml;glichen
+          das &Auml;ndern, Erweitern und Hinzuf&uuml;gen von Funktionalit&auml;ten.<br>
+        </p>  
       </article>
       <article>
         <h1>Systemanforderung</h1>
@@ -220,68 +225,6 @@
           Sektionen mit Schl&uuml;sseln und Werten untergliedert, die u.a. auch
           dynamische Werte und den Zugriff auf System- und Umgebungsvariablen
           unterst&uuml;tzt. 
-        </p>
-        <header>         
-          Die Basis-Konfiguration besteht aus den folgenden Sektionen:
-        </header>
-        <table>
-          <tr>
-            <th>Sektion</th>
-            <th>Beschreibung</th>
-          </tr>
-          <tr>
-            <td>[COMMON]</td>
-            <td>
-              Allgemeine Anwendungskonfiguration.<br>
-              TODO       
-            </td>
-          </tr>
-          <tr>
-            <td>[INITIALIZE]</td>
-            <td>
-              Zentrale Modulkonfiguration.<br>
-              Initialisierung mit dem (Re)Start des Service
-              TODO
-            </td>
-          </tr>   
-          <tr>
-            <td>[REMOTE]</td>
-            <td>
-              Konfigurationsbereich der Fern&uuml;berwachung<br>
-              TODO
-            </td>
-          </tr>                 
-          <tr>
-            <td>[SERVER]</td>
-            <td>
-              Konfigurationsbereich der HTTP-Server<br>
-              TODO
-            </td>
-          </tr>
-          <tr>
-            <td>[VIRTUAL]</td>
-            <td>
-              Konfigurationsbereich der virtuellen Hosts f&uuml;r HTTP-Server<br>
-              TODO
-            </td>
-          </tr>
-          <tr>
-            <td>[STATUSCODES]</td>
-            <td>
-              Statuscodes der HTTP-Server<br>
-              TODO
-            </td>
-          </tr>  
-          <tr>
-            <td>[MEDIATYPES]</td>
-            <td>
-              Zuordnung von Medien- und Datentypen<br>
-              TODO
-            </td>
-          </tr>                                          
-        </table>        
-        <p>  
-          Weitere Sektionen k&ouml;nnen beliebig hinzugef&uuml;gt werden.
         </p>
         <h2>Konfigurationsdatei</h2>
         <p>
@@ -429,8 +372,63 @@
             Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.
           </p>
         </section>       
-        TODO
-        <h2>Basisoptionen</h2>
+        <h2>Konfigurationsstruktur</h2>
+        <header>         
+          Die Basis-Konfiguration besteht aus den folgenden Sektionen:
+        </header>
+        <table>
+          <tr>
+            <th>Sektion</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>[COMMON]</td>
+            <td>
+              Allgemeine Anwendungskonfiguration<br>
+            </td>
+          </tr>
+          <tr>
+            <td>[INITIALIZE]</td>
+            <td>
+              Zentrale Modulkonfiguration.<br>
+              Initialisierung mit dem (Re)Start des Service
+            </td>
+          </tr>   
+          <tr>
+            <td>[REMOTE]</td>
+            <td>
+              Konfigurationsbereich der Fern&uuml;berwachung<br>
+            </td>
+          </tr>                 
+          <tr>
+            <td>[SERVER]</td>
+            <td>
+              Konfigurationsbereich der HTTP-Server<br>
+            </td>
+          </tr>
+          <tr>
+            <td>[VIRTUAL]</td>
+            <td>
+              Konfigurationsbereich der virtuellen Hosts f&uuml;r HTTP-Server<br>
+            </td>
+          </tr>
+          <tr>
+            <td>[STATUSCODES]</td>
+            <td>
+              Statuscodes der HTTP-Server<br>
+            </td>
+          </tr>  
+          <tr>
+            <td>[MEDIATYPES]</td>
+            <td>
+              Zuordnung von Medien- und Datentypen<br>
+            </td>
+          </tr>                                          
+        </table>        
+        <p>  
+          Weitere Sektionen k&ouml;nnen beliebig hinzugef&uuml;gt werden.
+        </p>        
+        <h2>Allgemeine Anwendungskonfiguration</h2>
         <p>
           Allgemeine und global verf&uuml;gbare Optionen f&uuml;r Container,
           Server, Hosts und Module werden hier festgelegt.        
@@ -530,7 +528,6 @@
           basierende Fern&uuml;berwachung, deren Konfiguration und Funktion in
           den folgenden Abschnitten beschrieben werden.
         </p>
-        TODO:        
         <h3>Fern&uuml;berwachung</h3>
         <p>
           Funktionen f&uuml;r Restart, Stop und zur Afrage vom Betriebsstatus
@@ -571,6 +568,54 @@
         </table>
         <h3>Hypertext Transfer Protocol</h3>
         <p>
+          Der Server und das Protokoll besitzen eine eine Vielzahl von
+          Konfigurationsm&ouml;gliclkeiten, die in eigene Teilsektionen
+          aufgeteilt sind, deren Position und Reihenfolge beliebig ist. Die
+          Teilsektionen besitzen den gleichen Namen wie die Server-Sektion,
+          unterscheiden sich dann am Ende in der Sektionskennung.
+        </p>
+        <header>
+          &Uuml;bersicht der Sektionen:
+        </header>         
+        <table>
+          <tr>
+            <th>Sektion</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>[SERVER:X:BAS]</td>
+            <td>
+              Server-Konfiguration<br>
+              Netzwerk und Laufzeitverhalten
+            </td>
+          </tr>
+          <tr>
+            <td>[SERVER:X:SSL]</td>
+            <td>TLS/SSL-Konfiguration </td>
+          </tr> 
+          <tr>
+            <td>[SERVER:X:REF]</td>
+            <td>virtuelle Pfade</td>
+          </tr>                    
+          <tr>
+            <td>[SERVER:X:ACC]</td>
+            <td>Zugriffssteuerung (Access Control List)</td>
+          </tr>
+          <tr>
+            <td>[SERVER:X:CGI]</td>
+            <td>XCGI/CGI Zuweisung und Konfiguration</td>
+          </tr>
+          <tr>
+            <td>[SERVER:X:ENV]</td>
+            <td>Umgebungsvariablen</td>
+          </tr>
+          <tr>
+            <td>[SERVER:X:FLT]</td>
+            <td>Filter-Konfiguration</td>
+          </tr>
+        </table>        
+        <h3>Server</h3>
+        <p>
           Diese Sektion enth&auml;lt die Konfiguration f&uuml;r HTTP-Server und
           die zugeh&ouml;hrigen virtuellen Hosts.<br>
           Die Konfiguration f&uuml;r HTTP-Server und virtuelle Hosts gleicht
@@ -599,8 +644,8 @@
               <td>AUTO|IP|NAME</td>
               <td>
                 Lokale Adresse oder Namen des Servers im Netzwerk.<br>
-                <code>AUTO</code> entspricht 0.0.0.0 und verwendet alle im System
-                verf&uuml;gbaren IP-Adressen.            
+                <code>AUTO</code> entspricht 0.0.0.0 und verwendet alle im
+                System verf&uuml;gbaren IP-Adressen.            
               </td>
             </tr>
             <tr>
@@ -618,7 +663,7 @@
                 Maximale Leerlaufzeit der Worker-Instanzen in Millisekunden.<br>
                 Der Server verwendet einen dynamisch Pool mit Workern zur
                 Request-Annahme, der sich automatisch dem Bedarf anpasst.<br>
-                Dieser Schl&uuml;sel legt die maximale Leerlaufzeit eines
+                Dieser Schl&uuml;ssel legt die maximale Leerlaufzeit eines
                 Workers fest, bevor dieser aufgegeben und aus dem Pool entfernt
                 wird.
               </td>
@@ -687,8 +732,8 @@
               <td>500000</td>
               <td>
                 Maximale Laufzeit von XCGI/CGI-Prozessen in Millisekunden.<br>
-                Beim &Uuml;berschreiten wird der Prozess durch den Server beendet,
-                der Wert <code>0</code> ignoriert die Laufzeit.
+                Beim &Uuml;berschreiten wird der Prozess durch den Server
+                beendet, der Wert <code>0</code> ignoriert die Laufzeit.
               </td>
             </tr>
             <tr>
@@ -725,7 +770,7 @@
               <td>MEDIATYPE</td>
               <td>application/octet-stream</td>
               <td>
-                Standard-Mediatype, der verwendet wird, wenn der geforderte
+                Standard-Mediatype der verwendet wird, wenn der geforderte
                 Mediatype nicht in der Liste der Mediatypes (Sektion
                 <code>[MEDIATYPES]</code>) enthalten ist.
               </td>
@@ -752,13 +797,13 @@
                 Maximale Leerlaufzeit des Datenstroms in Millisekunden.<br>
                 Beim &Uuml;berschreiten wird ein Timeout ausgel&ouml;st, mit der
                 Option <code>[S]</code> (strickt) wirkt die Begrenzung der
-                Leerlaufzeit auch auf ausgehende Server-Datenstr&ouml;me, der Wert
-                <code>0</code> ignoriert das Timeout.
+                Leerlaufzeit auch auf ausgehende Server-Datenstr&ouml;me, der
+                Wert <code>0</code> ignoriert das Timeout.
               </td>
             </tr>
           </tbody>
         </table>
-        <h3>Secure Socket Layer / Transport Layer Security</h3>
+        <h3>Transport Layer Security / Secure Socket Layer</h3>
         <p>
           Zur gesicherten &Uuml;bertragung von Daten werden Transport Layer
           Security (TLS) und Secure Socket Layer (SSL) unterst&uuml;tzt.<br>
@@ -1403,7 +1448,6 @@
             und <code>B</code> aufgerufen.
           </p>
         </section>
-        TODO        
         <h3>Virtuelle Pfade (Aliasing and Redirection)</h3>
         <p>
           Virtuelle Pfade sind ein Alias f&uuml;r physische Elemente in einem
@@ -1919,7 +1963,7 @@
           Neben XCGI und CGI k&ouml;nnen auch Module &uuml;ber den Gateway
           eingerichtet werden.<br>
           Anders als beim XCGI und CGI, werden Module nicht als externe
-          Anwendung geladen, sondern &uuml;ber die Modul-API (MAPI) direkt in
+          Anwendung geladen, sondern &uuml;ber das Modul-API (MAPI) direkt in
           der Laufzeitumgebung des Servers ausgef&uuml;hrt. Sehr schnelle
           Zugriffszeiten und ein direkter Zugang und Zugriff auf die Komponenten
           vom Laufzeit-Container sind dabei von Vorteil.
@@ -2304,13 +2348,6 @@
               Beendet Seanox Devwex inkl. aller aktiven Module und Server.
             </td>
           </tr>          
-          <tr>
-            <td>*</td>
-            <td>
-              Aktiviert die erweiterte Ausgabe f&uuml;r einen Befehl.<br>
-              Beispiel: <code>start*</code>
-            </td>
-          </tr>                    
         </table>         
         <header>
           Beispiele f&uuml;r den Programmaufruf:
@@ -2322,9 +2359,9 @@
           </p>
         </section>        
         <section>
-          <pre>devwex.bat start*</pre>
+          <pre>devwex.bat start</pre>
           <p>
-            Programmaufruf mit erweiterter Ausgabe per Batch-Skript in Windows
+            Programmaufruf per Batch-Skript in Windows
           </p>
         </section>        
         <section>
@@ -2358,7 +2395,7 @@
           Programmaufruf:
         </header>                
         <section>
-          <pre>java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start*</pre>
+          <pre>java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start</pre>
           <p>
             Mit dem Programmaufruf zum Start werden die Argumente
             <code>argument1</code> und <code>argument2</code> &uuml;bergeben.
@@ -2383,7 +2420,7 @@
           Programmaufruf:
         </header>                
         <section>
-          <pre>java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start*</pre>
+          <pre>java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start</pre>
           <p>
             TODO
           </p>
@@ -2553,35 +2590,129 @@
           Merkmale. 
         </p>
         TODO
-        <h2>Allgemeines</h2>
-        TODO
-        <h2>Einrichtung</h2>
-        TODO
         <h2>Architektur</h2>
         TODO
         <h2>Sequenzen</h2>
-        TODO
+        <p>
+          Start, Neustart und Beenden der Server sowie das Laden, Anfordern und
+          Entladen von Modulen sind feste Abfolgen vom Laufzeit-Container.
+        </p>
         <h3>Start</h3>
-        TODO
+        <ul>
+          <li>
+            Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert,
+            die mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+          </li>
+          <li>
+            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen,
+            und &uuml;ber den Konstruktor <code>Module(String options)</code>
+            initialisiert und registriert.
+          </li>
+          <li>
+            Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
+            auf <code>BAS</code> enden und zu denen eine Implementierung im
+            Klassenpfad gefunden werden kann. Die gefundenen Server werden
+            werden geladen, registriert und &uuml;ber den Konstruktor
+            <code>Server(String name, Object initialize)</code> initialisiert.
+            Dazu wird jedem Server der Name entsprechend der ermittelten Sektion
+            sowie eine komplette Kopie der zentralen Konfiguration als
+            Initialize-Objekt &uuml;bergeben. Nach erfolgreicher Initialisierung
+            wird der Server als (Daemon)Thread gestartet und kann seine Arbeit
+            in der Methode <code>Server.run()</code> aufnehmen.
+          </li>
+        </ul>
+        <h3>Modulaufruf</h3>
+        <ul>
+          <li>
+            Ist das Modul noch nicht geladen, wird dies aus dem aktuellen
+            Klassenpfad ermittelt, &uuml;ber <code>Module(String options)</code>
+            initialisiert und registriert. Eine Konfiguration wird dabei nicht
+            &uuml;bergeben, da f&uuml;r Module nur eine zentrale Konfiguration
+            in der Sektion <code>INITIALIZE</code> vorgesehen ist.
+          </li>
+          <li>
+            Ist das Modul bereits geladen, wird die aktuelle Instanz verwendet.
+          </li>
+        </ul>        
         <h3>Neustart</h3>
-        TODO
+        <p>
+          Die Sequenz entspricht der Kombination aus
+          #EntwicklungSequenzenBeenden und #EntwicklungSequenzenStart.
+        </p>
+        <ul>
+          <li>
+            Alle registrierten Server-Instanzen werden &uuml;ber die Methode
+            <code>Server.destroy()</code> zum Beenden aufgefordert.
+          </li>
+          <li>
+            Alle registrierten Module werden &uuml;ber die Methode
+            <code>Module.destroy()</code> zum Beenden aufgefordert.
+          </li>
+          <li>
+            Das Einleiten vom Beenden der Server verl&auml;ft asynchron. Der
+            Laufzeit-Container wartet auf das Ende aller registrierten Server.
+          </li>
+          <li>
+            Alle Module und Server werden durch das Verwerfen vom aktuell
+            verwendeten ClassLoader entladen.
+          </li>
+          <li>
+            Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert,
+            die mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+          </li>
+          <li>
+            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen,
+            und &uuml;ber den Konstruktor <code>Module(String options)</code>
+            initialisiert und registriert.
+          </li>
+          <li>
+            Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
+            auf <code>BAS</code> enden und zu denen eine Implementierung im
+            Klassenpfad gefunden werden kann. Die gefundenen Server werden
+            werden geladen, registriert und &uuml;ber den Konstruktor
+            <code>Server(String name, Object initialize)</code> initialisiert.
+            Dazu wird jedem Server der Name entsprechend der ermittelten Sektion
+            sowie eine komplette Kopie der zentralen Konfiguration als
+            Initialize-Objekt &uuml;bergeben. Nach erfolgreicher Initialisierung
+            wird der Server als (Daemon)Thread gestartet und kann seine Arbeit
+            in der Methode <code>Server.run()</code> aufnehmen.
+          </li>
+        </ul>          
         <h3>Beenden</h3>
-        TODO
+        <ul>
+          <li>
+            Alle registrierten Server-Instanzen werden &uuml;ber die Methode
+            <code>Server.destroy()</code> zum Beenden aufgefordert.
+          </li>
+          <li>
+            Alle registrierten Module werden &uuml;ber die Methode
+            <code>Module.destroy()</code> zum Beenden aufgefordert.
+          </li>
+          <li>
+            Das Einleiten vom Beenden der Server verl&auml;ft asynchron. Der
+            Laufzeit-Container wartet auf das Ende aller registrierten Server.
+          </li>
+          <li>
+            Alle Module und Server werden durch das Verwerfen vom aktuell
+            verwendeten ClassLoader entladen.
+          </li>
+        </ul>
         <h2>Erweiterung</h2>
         <p>
           Die Erweiterung von Seanox Devwex ist auf mehre Arten m&ouml;glich.
         </p>
         <p>
-          Der Service stellt dazu eine Server-, Modul- und HTTP-Modul-API
-          bereit. Spezielle Interfaces und Abstraktionen sind im Service selbst
-          nicht enthalten, dieser nutzt die und steuert alle Server und Module
+          Der Service stellt dazu ein Server-, Modul- und HTTP-Modul-API bereit.
+          Spezielle Interfaces und Abstraktionen sind im Service selbst nicht
+          enthalten, dieser nutzt die und steuert alle Server und Module
           &uuml;ber Reflections und stille Standards/Interfaces, was u.U.
           detaillierte Kenntnisse &uuml;ber die Komponenten und Arbeitsweise von
           Seanox Devwex erforder.
         </p>
         <p>
-          Einfacherer und komfortabler gestaltet sich die Implemetierung mit
-          Seanox Commons, welche die erforderlichen Interfaces sowie
+          Einfacher und komfortabler gestaltet sich die Implemetierung mit
+          Seanox Commons als Bestandteil vom Seanox Devwex SDK (f&uuml;r Seanox
+          Devwex 5.x in Entwicklung), welche die erforderlichen Interfaces sowie
           Abstraktionen enthalten und zus&auml;tzliche ClassLoader-Ebenen bereit
           stellen.
         </p>
@@ -2590,17 +2721,29 @@
           Server-, Modul- und HTTP-Modul-API beschrieben.
         </p>          
         <h2>Server</h2>
+        <p>
           Server stellen den physischen Zugriff im Netzwerk f&uuml;r ein
-          Protokoll an einer Adresse und Port zur Verf&uuml;gung. Seanox Devwex
-          bindet Server-Module &uuml;ber eine Server-API ein. Mit dieser API
-          lassen sich bestehende Server- und Netzwerk-Funktionalit&auml;ten
+          Protokoll an einer Adresse und einem Port zur Verf&uuml;gung. Seanox
+          Devwex bindet Server &uuml;ber das Server-API (SAPI) ein. Mit dem API
+          lassen sich auch bestehende Server- und Netzwerk-Funktionalit&auml;ten
           &auml;ndern bzw. neue bereitstellen.
+        </p>
         <h3>API (SAPI)</h3>
-        TODO        
-        <h4>Sequenz</h4>
-        TODO        
-        <h4>Implementierung</h4>
-        TODO        
+        <p>
+          Das Server-API basiert auf der Implementierung vom Runnable-Interface.
+          Die Initialisierung, deren Reihenfolge mit der Reihenfolge der
+          Server-Konfigurationen in Konfigurationsdatei festgelegt wird, und
+          die Konfiguration erfolgt &uuml;ber den Konstruktor. Die erstellten
+          Server-Instanzen werden vom Laufzeit-Container (Service) mit der
+          Methode <code>Server.run()</code> gestartet und per
+          <code>Service.destroy()</code> zum Beenden aufgefordert. Der Aufruf
+          beider Methoden ist asynchron. Verz&ouml;gert sich das Beenden, wartet
+          der Laufzeit-Container auf das Ende aller registrierten
+          Server-Instanzen. Optional ist die Implementierung der Methode
+          <code>Service.explain()</code> zur Abfrage allgemeiner Informationen
+          zum Protokoll und zur Netzwerkverbindung.
+        </p>
+        <h3>Implementierung</h3>
         <pre>
           public class Server implements Runnable {
                
@@ -2625,7 +2768,7 @@
                public void run() {
                    ...
                    
-                   Der Server wird als Thread gestartet.
+                   Der Server wird als (Daemon)Thread gestartet.
                }
 
                public void destroy {
@@ -2639,14 +2782,23 @@
                }
           }        
         </pre>        
-        TODO
         <h2>Module</h2>
-        TODO
+        <p>
+          Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen
+          stellen nach aussen hin keine direkten Funktionen bereit. Sie werden
+          &uuml;ber die Klasse identifiziert und beim Start bzw. Restart vom
+          Service oder zur Laufzeit in Servern und Modulen &uuml;ber den
+          Application-ClassLoader geladen, initialisiert und konfiguriert.
+          Module sind globale Erweiterungen, die einmal instanziert allen
+          Komponenten bereitgestellt werden.<br>
+          Optional ist die Verwendung vom Context-ClassLoader aus dem Seanox
+          Devwex SDK m&ouml;glich, womit Module auch in mehreren
+          unabh&auml;ngigen Instanzen mit eigenem ClassLoader verwendet werden
+          k&ouml;nnen.
+        </p>
         <h3>API (XAPI)</h3>
         TODO        
-        <h4>Sequenz</h4>
-        TODO        
-        <h4>Implementierung</h4>
+        <h3>Implementierung</h3>
         <pre>
           public class Module {
           
@@ -2681,10 +2833,7 @@
         </pre>   
         <h2>HTTP-Module</h2>
         <p>
-          Die modularen Architektur unterst&uuml;tzt &Auml;nderungen und
-          Erweiterung der Funktionalit&auml;ten vom HTTP-Server durch externe
-          Komponenten.<br>
-          HTTP-Module sind eine Erweiterung der Module-API von Seanox Devwex
+          HTTP-Module sind eine Erweiterung vom Module-API von Seanox Devwex
           speziell zur Filterung, Annahme und Verarbeitung von HTTP-Anfragen,
           die im Context vom Server laufen.
         </p>
@@ -2707,7 +2856,7 @@
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Die API entspricht der Modul-API, die um <code>Module.filter(Worker
+          Das API entspricht dem Modul-API, die um <code>Module.filter(Worker
           worker, String options)</code> erweitert wird. Der &uuml;bergeben
           Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
           Server, Socket, Request, Response, Konfiguration und Environment. Mit
@@ -2771,8 +2920,8 @@
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Die API entspricht der Modul-API, die um <code>Module.service(Worker
-          worker, String options)</code> erweitert wird. Der &uuml;bergeben
+          Das API entspricht dem Modul-API, die um <code>Module.service(Worker
+          worker, String options)</code> erweitert ist. Der &uuml;bergeben
           Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
           Server, Socket, Request, Response, Konfiguration und Environment. Mit
           der Konfiguration k&ouml;nnen f&uuml;r ein Modul weitere Parameter und

@@ -61,6 +61,7 @@ window.addEventListener("load", function() {
                 var text = element.textContent.trim();
                 text = text.replace(/"/g, "&quot;");
                 sitemap[numbers.slice(1).join(".")] = text;
+                sitemap[lookup(numbers.slice(1).join("."))] = text;
             }
             var number = numbers.slice(1).join(".");
             var text = lookup(number);
@@ -70,6 +71,15 @@ window.addEventListener("load", function() {
             element.innerHTML = "<a name=\"" + number + "\"></a>"
                               + "<a name=\"" + text + "\"></a>"
                               + element.innerHTML;
+        });
+    });
+    var pattern = new RegExp("\\[#([a-z0-9]+)\\]", "ig");
+    elements = document.querySelectorAll("body > section > article");
+    elements.forEach(function(element, index, array) {
+        if (!pattern.test(element.innerHTML))
+            return;
+        element.innerHTML = element.innerHTML.replace(pattern, function(match, word) {
+            return "<a href=\"#" + word + "\">" + sitemap[word] + "</a>";
         });
     });
 });

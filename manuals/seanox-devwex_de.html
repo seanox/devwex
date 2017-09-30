@@ -2591,7 +2591,127 @@
         </p>
         TODO
         <h2>Architektur</h2>
-        TODO
+        <table class="architecture">
+          <tr>
+            <td>
+              <table class="composite list float">
+                <tr>
+                  <td colspan="2">Resource Management</td>
+                </tr>
+                <tr>
+                  <td>Module Management</td>
+                  <td>Server Management</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Class Loader</td>
+                </tr>
+              </table>
+              <table class="composite section float">
+                <tr>
+                  <td>Remote Client</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="composite interface">Telnet Connector</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="composite float interface">Module-API (XAPI)</div>
+              <div class="composite float interface">Server API (SAPI)</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table class="composite section float">
+                <tr>
+                  <td>HTTP(S) Server</td>
+                </tr>
+                <tr>
+                  <td>
+                    <table class="composite list" style="width:100%;">
+                      <tr>
+                        <td class="interface">HTTP Connector</td>
+                        <td class="interface">HTTPS Connector</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">Connection Pool</td>
+                      </tr>
+                    </table>
+                    <table class="composite section">
+                      <tr>
+                        <td>Worker (Acceptor)</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <table class="composite list float">
+                            <tr>
+                              <td>HTTP-Protocol</td>
+                            </tr>
+                            <tr>
+                              <td>Virtual Hosting</td>
+                            </tr>
+                            <tr>
+                              <td>Filter</td>
+                            </tr>
+                            <tr>
+                              <td>ACL</td>
+                            </tr>
+                            <tr>
+                              <td>Aliasing</td>
+                            </tr>
+                            <tr>
+                              <td>Templating</td>
+                            </tr>
+                          </table>
+                          <table class="composite list float">
+                            <tr>
+                              <td colspan="2" class="interface">HTTP-Module-API (XAPI+)</td>
+                            </tr>
+                            <tr>
+                              <td class="interface">XCGI</td>
+                              <td class="interface">CGI</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>                    
+                  </td>
+                </tr>
+              </table>
+              <table class="composite section float">
+                <tr>
+                  <td>Remote Server</td>
+                </tr>
+                <tr>
+                  <td>
+                    <table class="composite list">
+                      <tr>
+                        <td class="interface">Telnet Connector</td>
+                      </tr>
+                      <tr>
+                        <td>Connection Pool</td>
+                      </tr>
+                    </table>
+                    <table class="composite section">
+                      <tr>
+                        <td>Worker (Acceptor)</td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="composite">Remote-Protocol</div>
+                        </td>
+                      </tr>
+                    </table>                                            
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
         <h2>Sequenzen</h2>
         <p>
           Start, Neustart und Beenden der Server sowie das Laden, Anfordern und
@@ -2637,7 +2757,7 @@
         <h3>Neustart</h3>
         <p>
           Die Sequenz entspricht der Kombination aus
-          #EntwicklungSequenzenBeenden und #EntwicklungSequenzenStart.
+          [#EntwicklungSequenzenBeenden] und [#EntwicklungSequenzenStart].
         </p>
         <ul>
           <li>

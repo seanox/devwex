@@ -4,6 +4,17 @@
     NodeList.prototype.forEach = Array.prototype.forEach;
 })();
 
+(function() {
+    if (typeof Number.prototype.pad === "function")
+        return false;
+    Number.prototype.pad = function(size) {
+        var text = String(this);
+        while (text.length < (size || 2))
+            text = "0" + text;
+        return text;
+   };
+})();
+
 window.addEventListener("load", function() {
     var elements = document.querySelectorAll("pre");
     elements.forEach(function(element, index, array) {
@@ -73,6 +84,7 @@ window.addEventListener("load", function() {
                               + element.innerHTML;
         });
     });
+    
     var pattern = new RegExp("\\[#([a-z0-9]+)\\]", "ig");
     elements = document.querySelectorAll("body > section > article");
     elements.forEach(function(element, index, array) {
@@ -81,5 +93,12 @@ window.addEventListener("load", function() {
         element.innerHTML = element.innerHTML.replace(pattern, function(match, word) {
             return "<a href=\"#" + word + "\">" + sitemap[word] + "</a>";
         });
+    });
+    
+    elements = document.querySelector("table.architecture");
+    elements = elements.getElementsByTagName("*");
+    elements = Array.prototype.slice.call(elements, 0);
+    elements.forEach(function(element, index, array) {
+        element.className = (element.className + " architecture-" + (index).pad(4)).trim();
     });
 });

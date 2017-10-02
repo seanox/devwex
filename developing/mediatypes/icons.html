@@ -3,16 +3,8 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <title>Seanox Devwex</title>
-    <link rel="stylesheet" href="/system/status-xxx.css"/>
-    <style type="text/css">
-
-      header div {
-        display:inline-block; height:35px; width:35px; margin-right:1em; margin-bottom:1em;
-      }
-      header h2 {
-        padding-top:2em;
-      }
-    </style> 
+    <link rel="stylesheet" href="../../system/common.css"/>
+    <link rel="stylesheet" href="/system/common.css"/>
     <script type="text/icons">
 
       Directory
@@ -125,43 +117,83 @@
       data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA1klEQVRYhe2V0Q2DIBCGHaEjdISOQMrfd0foCI7gBo6BnA8dpSM4AiNcX4jaxlQSOGua+5PvgSOELwS4qophul2YwLvjYKrPTDIDOu7RiDOg25ZZmxTI1/1URmVKyrCDyaWcDNkx8z8J5WQe5sTOnHMoJiMRlVEZlfm5DPdo2KNlj3aqxXEq5WQITyYEJjsuaiGdeV22jET+Q2at+x6ha4e5doCuPZ+Mdu14MpG1WgrlZA51ZxwMe1u/vSZv62RKviaJqIzKyMgM6Jiud3F6NNsye7OQeQEV85+/ToaIAgAAAABJRU5ErkJggg==        
       data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA3ElEQVRYhe3WwQ2CQBAFUEqwBEughI187pZgCZRAB5SxMBwsxRIogRLGg4YIcRfj7IAx85N/2kx4IcCQZc8wlTkTePN6uGyZCdOj4RaVens065h3hwqJXs8whkmJYQ8nbToMFYPwezKmw1zdgb07SpoMoxHDGMYwu2O4RcUd6rXOZjxc6EyGIdyYMMZbDLOZDnXoTITRyH9gvtnMj52039aebebph3uvrR2bSYbRiOzOfNDYTDrMTz0zHo674hzt8m2iMg+diTAaMYxhdDA9GqbTRb0tqnXM1n3B3AHYbopdpUXDkQAAAABJRU5ErkJggg==    
       data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAxUlEQVRYhe3X0QnCMBAG4I7gCB3BEYL53cMRHCEbZIQ8xlweOoKjdISO8PtgK4UWNJUWtHfwv+Xg4wIHV1Vab4rR1MzwFNtulgzPxhymmAT3epDgPo7YQAEpNhT1JTgKOooNU0wPKZ6onI8UkBGmuLcHzWMSnGIUoxjFjDEZnnK6lAXNOpjl+fdvUoxiFDPGfLMvVsA0vOFalAy/g29SjGIU89MY285hwgAqyrD0Ft3az0U7xURT90d8t1ky7oymLp3o/uoBza6kGot8+dcAAAAASUVORK5CYII=    
-    </script>
+    </script>  
     <script type="text/javascript">
-    
       window.addEventListener("load", function() {
-          
           var icons;
-          var data;
-          
           icons = document.querySelector("script[type='text/icons']");
           icons = icons.innerHTML;
           icons = icons.replace(/x00/g, ' ');
           icons = icons.replace(/(((\r\n)|(\n\r)|[\r\n])\s*?){2,}/g, '\00');
           icons = icons.split(/\00/);
-          
           icons.forEach(function(element, index, array) {
               element = element.trim()
               if (!element)
                   return;
-              
-              var title = element.match(/^[^\r\n]+/) || "Others";
-              var data  = element.match(/^\s*data:image[^\r\n]+/gm) || [];
-              
-              var root = document.querySelector("header");
-              root.innerHTML += "<h2>" + title + "</h2>";
+              var name = element.match(/^[^\r\n]+/) || "Others";
+              var data = element.match(/^\s*data:image[^\r\n]+/gm) || [];
+              var root = document.querySelector("main section");
+              root.innerHTML += "<h3>" + name + "</h3>";
               data.forEach(function(element, index, array) {
                   root.innerHTML += "<div></div>";
-                  var node = document.querySelector("header div:last-child");
+                  var node = document.querySelector("main div:last-child");
                   node.style.background = "url('" + element + "') no-repeat center center";
               });
           });
       });
-    </script>
+    </script>     
+    <style type="text/css">
+      main section div {
+        display:inline-block; height:35px; width:35px; margin-right:1em;
+      }
+      main section span {
+        color:#999999; text-decoration:none;  
+      }
+      main section a {
+        color:#CCCCCC; text-decoration:none;  
+      }
+     
+      main label {
+        color:#999999;
+      }  
+      main label span {
+        margin-left:0.25em;
+        color:#CCCCCC;
+      }  
+      main label + label {
+        margin-left:1em;
+      }
+      
+      main p:last-child a {
+        text-decoration:none;
+      }
+      main p:last-child a:before {
+        text-decoration:none;    
+        content:attr(text);
+      }
+      main p:last-child a:after {
+        color:#FFFFFF;
+        content:attr(title);
+      }
+    </style>      
   </head>
   <body>
-    <header>
+    <main>
       <h1>Overview of icons</h1>
-    </header>
+      <h2>A selection of standard icons for the user interface.</h2>
+      <h3>Creation guide</h3>
+      <p>
+        <label>Type:<span>iOS</span></label>
+        <label>Format:<span>PNG</span></label>
+        <label>Size:<span>35px x 35px</span></label>
+        <label>Color:<span>#FFAA44</span></label>
+      </p>
+      <section></section>
+      <p>
+        <span>icons powert by</span>
+        <a target="_extern" title="icons8.com" href="https://icons8.com/license"></a>
+      </p>
+    </main>
     <footer>
       <section>
         <p>Seanox Devwex</p>

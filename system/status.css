@@ -1,12 +1,20 @@
-header h1 ~ h2 {
-  margin-top:-0.75em;
-}
-header > p {
+main > p {
   color:#999999;
 }
-header > p + p {
+main > p + p {
   color:#CCCCCC; display:none;
 }
-header > p + p[class~='#[http_status]'] {
+main > p + p[class~='#[http_status]'] {
   display:block;
+}
+
+
+
+@media screen and (min-width:1400px) {
+  main > p {
+    padding-bottom:5em;
+  }
+  main > p + p {
+    margin-top:-5em;
+  }
 }

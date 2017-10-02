@@ -1,6 +1,3 @@
-
-
-
 /** general styles */
 a {
   text-decoration:none;
@@ -15,12 +12,12 @@ a:hover {
 
 
 /** path: breadcrumb navigation */
-header > h1 + h2 a:before {
+main > h1 + h2 a:before {
   display:inline-block; margin:0em 0.5em;
   border:0.4em solid transparent; border-left-color:#FFAA44; border-right:none;
   content:'';
 }
-header > h1 + h2 a:first-child:before {
+main > h1 + h2 a:first-child:before {
   margin-left:0em;
 }
 

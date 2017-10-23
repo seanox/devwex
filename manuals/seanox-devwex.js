@@ -5,6 +5,14 @@
 })();
 
 (function() {
+    if (typeof Array.prototype.contains === "function")
+        return false;
+    Array.prototype.contains = function(value) {
+        return this.indexOf(value) >= 0;
+    }
+})();
+
+(function() {
     if (typeof Number.prototype.pad === "function")
         return false;
     Number.prototype.pad = function(size) {
@@ -12,6 +20,32 @@
         while (text.length < (size || 2))
             text = "0" + text;
         return text;
+    };
+})();
+
+(function() {
+    if (typeof Element.prototype.cssSelector === "function")
+        return false;
+    Element.prototype.cssSelector = function() {
+        var element = this;
+        var names = new Array();
+        while (element.parentNode) {
+            if (element.id) {
+              names.unshift("#" + element.id);
+              break;
+            }
+            if (element != element.ownerDocument.documentElement) {
+                var index = 1;
+                var sibling = element;
+                while (sibling.previousElementSibling) {
+                    sibling = sibling.previousElementSibling;
+                    index++;
+                }
+                names.unshift(element.tagName + ":nth-child(" + index + ")");
+            } else names.unshift(element.tagName);
+            element = element.parentNode;
+        }
+        return names.join(" > ");
     };
 })();
 
@@ -109,6 +143,28 @@
 })();
 
 (function() {
+    if (typeof Element.prototype.containsClassName === "function")
+        return false;
+    Element.prototype.containsClassName = function(className) {
+        className = (className || "").trim();
+        if (!className)
+            return false;
+        var classNameA = className.toLowerCase().split(/\s+/);
+        if (!Array.isArray(classNameA))
+            classNameA = new Array(classNameA);
+        var classNameB = (this.className || "").trim().toLowerCase().split(/\s+/);
+        if (!Array.isArray(classNameB))
+            classNameB = new Array(classNameB);
+        classNameA.forEach(function(className, index, array) {
+            if (className
+                    && classNameB.contains(className))
+                array[index] = "";
+        });
+        return !classNameA.join("").trim();
+    };
+})();
+
+(function() {
     if (typeof window.height === "function")
         return false;
     window.height = function() {
@@ -168,12 +224,14 @@ window.addEventListener("load", function() {
 
 var Sitemap = Sitemap || new Object();
 
-Sitemap.SELECTOR_TOC = "body > main > article nav";
+Sitemap.SELECTOR_ARTICLE = "body > main > article";
+Sitemap.SELECTOR_ARTICLE_SET = Sitemap.SELECTOR_ARTICLE;
+Sitemap.SELECTOR_CHAPTER;
+
+Sitemap.SELECTOR_TOC = Sitemap.SELECTOR_ARTICLE + " nav";
 Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_TOC + " input";
 Sitemap.SELECTOR_TOC_ANCHOR = Sitemap.SELECTOR_TOC + " a";
-
-Sitemap.SELECTOR_ARTICLE = "body > main > article";
-Sitemap.SELECTOR_CHAPTER;
+Sitemap.SELECTOR_TOC_ARTICLE;
 
 Sitemap.ATTRIBUTE_INDEX = "index";
 Sitemap.ATTRIBUTE_LEVEL = "level";
@@ -212,12 +270,12 @@ Sitemap.create = function() {
         if (Sitemap.SELECTOR_CHAPTER
                 || !element.querySelector("nav"))
             return;
-        Sitemap.SELECTOR_ARTICLE += ":not(:nth-child(-n+" + (index +1) + "))";
+        Sitemap.SELECTOR_ARTICLE_SET += ":not(:nth-child(-n+" + (index +1) + "))";
         for (var loop = 1; loop < 6; loop++) {
             if (!Sitemap.SELECTOR_CHAPTER)
                 Sitemap.SELECTOR_CHAPTER = "";
             else Sitemap.SELECTOR_CHAPTER += ", ";
-            Sitemap.SELECTOR_CHAPTER += Sitemap.SELECTOR_ARTICLE + " h" + loop;
+            Sitemap.SELECTOR_CHAPTER += Sitemap.SELECTOR_ARTICLE_SET + " h" + loop;
         }
         var numbers = [0, 0, 0, 0, 0, 0, 0];
         var elements = document.querySelectorAll(Sitemap.SELECTOR_CHAPTER);
@@ -268,6 +326,15 @@ Sitemap.create = function() {
     });
     
     var element = document.querySelector(Sitemap.SELECTOR_TOC);
+    while (element.parentNode
+            && !Sitemap.SELECTOR_TOC_ARTICLE) {
+        if (element.tagName == "ARTICLE") {
+            Sitemap.SELECTOR_TOC_ARTICLE = element.cssSelector();
+            element.addClassName("toc");
+        }
+        element = element.parentNode;
+    }
+    element = document.querySelector(Sitemap.SELECTOR_TOC);
     element.innerHTML += Sitemap.view;
     elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
     elements.forEach(function(element, index, array) {
@@ -282,7 +349,7 @@ Sitemap.create = function() {
     });
     
     var pattern = new RegExp("\\[#([a-z0-9]+)\\]", "ig");
-    elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+    elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE_SET);
     elements.forEach(function(element, index, array) {
         if (!pattern.test(element.innerHTML))
             return;
@@ -292,7 +359,7 @@ Sitemap.create = function() {
     });    
     
     window.setInterval(function() {
-        var element = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden)");
+        var element = document.querySelector(Sitemap.SELECTOR_ARTICLE_SET + ":not(.hidden)");
         //TODO: Navigate setzt das Kapitel.
         //      Neu gelesen und analysiert wird aber erst wenn gescrollt wird.
         //      Ein Problem ist das letzt Kapitel, was nicht oben stehen kann
@@ -320,17 +387,13 @@ Sitemap.create = function() {
     }, Sitemap.FOCUS_INTERVAL);
     
     Sitemap.index = new Object();
-    elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+    elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE_SET);
     elements.forEach(function(element, index, array) {
         var content = element.innerHTML;
-        content = content.replace(/\s+/g, ' ');
-        content = content.replace(new RegExp("<h[1-6][^>]+\\b" + Sitemap.ATTRIBUTE_CHAPTER + "=\"\\s*([\\d\\.]+)\\s*\"[^>]*>", "g"), '\r\n$1 ');
-        content = content.replace(/<\/*[^>]+>/g, ' ').toLowerCase();
+        content = Filter.normalize(content);
+        content = content.replace(new RegExp("<h[1-6][^>]+\\b" + Sitemap.ATTRIBUTE_CHAPTER + "=\"\\s*([\\d\\.]+)\\s*\"[^>]*>", "ig"), '\r\n$1 ');
+        content = content.replace(/<\/*[^>]+>/g, ' ');
         content = content.replace(/ +/g, ' ').trim();
-        content = content.replace(/\u00c4|\u00e4/g, 'ae');
-        content = content.replace(/\u00d6|\u00f6/g, 'oe');
-        content = content.replace(/\u00dc|\u00fc/g, 'ue');
-        content = content.replace(/\u00df/g, 'ss');
         content.split(/[\r\n]+/).forEach(function(line, index, array) {
             var match = line.match(/^([\d\.]+)\s*(.*)$/);
             Sitemap.index[match[1]] = match[2];
@@ -401,6 +464,9 @@ Sitemap.navigate = function(chapter) {
         chapter = Math.min(Sitemap.data["#" + Sitemap.size].article, chapter);
         chapter = Math.max(1, chapter);
         chapter = Sitemap.data[chapter + ".0.0.0.0.0"];
+    } else if (String((chapter || "")).match(/^:toc$/i)) {
+        //TODO: show toc, the other chapters
+        return;
     } else if (String((chapter || "")).match(/^:first$/i)) {        
         chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
     } else if (String((chapter || "")).match(/^:last$/i)) {
@@ -425,13 +491,26 @@ Sitemap.navigate = function(chapter) {
     Sitemap.chapter = chapter;
     if (!Sitemap.chapter)
         return;
-    var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
-    elements.forEach(function(element, index, array) {
-        if (element.querySelector("*[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter.chapter + "']"))
-            element.show();
-        else element.hide();
+    //show the current chapter and hide the other chapters
+    window.setTimeout(function() {
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+        elements.forEach(function(element, index, array) {
+            if (!element.containsClassName("toc")
+                    && element.querySelector("*[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter.chapter + "']"))
+                element.show();
+            else element.hide();
+        });
+        document.location.hash = chapter.alias;
     });
-    document.location.hash = chapter.alias;
+    //mark the curent chapter in the table of content (toc) as active
+    window.setTimeout(function() {
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
+        elements.forEach(function(element, index, array) {
+            if (element.getAttribute(Sitemap.ATTRIBUTE_CHAPTER) == chapter.chapter)
+                element.addClassName("active");
+            else element.removeClassName("active");
+        });        
+    }, 0);
 };
 
 Sitemap.focus = function(enable) {
@@ -451,15 +530,25 @@ Sitemap.filter = function(filter) {
     if (!Sitemap.meta)
         Sitemap.meta = {filter:null, current:null, timing:0};
     Sitemap.meta.timing = new Date().getTime();
-    Sitemap.meta.filter = filter || "";
-    Sitemap.meta.filter = Sitemap.meta.filter.trim().toLowerCase();
+    Sitemap.meta.filter = Filter.normalize(filter);
 };
 
 var Filter = Filter || new Object();
 
-Filter.ESCAPE = String.fromCharCode(27);
 Filter.WILDCARD = String.fromCharCode(1);
 Filter.DELIMITER = String.fromCharCode(7);
+Filter.ESCAPE = String.fromCharCode(27);
+
+Filter.normalize = function(text) {
+    text = (text || "").trim();
+    text = text.replace(/\s+/g, ' ');
+    text = text.replace(/\u00c4|\u00e4/g, 'ae');
+    text = text.replace(/\u00d6|\u00f6/g, 'oe');
+    text = text.replace(/\u00dc|\u00fc/g, 'ue');
+    text = text.replace(/\u00df/g, 'ss');
+    text = text.toLowerCase();
+    return text;
+};
 
 Filter.compile = function(filter) {
     //simplifies all white spaces

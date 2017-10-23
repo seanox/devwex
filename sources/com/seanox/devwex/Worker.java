@@ -1467,30 +1467,25 @@ class Worker implements Runnable {
 
         //die Ressource wird als File eingerichtet
         file = new File(this.resource);
-
-        //die Referenz wird fuer den syntaktischen Vergleich zwischengespeichert
-        string = file.getName();
-
-        //bei Dateien die nicht existieren wird STATUS 404 gesetzt
-        if (!connect) {
-            try {file = file.getCanonicalFile();
-            } catch (Throwable throwable) {
-                if (this.status == 0)
-                    this.status = 404;
-            }
+        
+        //die Ressource wird syntaktisch geprueft, nicht real existierende
+        //Ressourcen sowie Abweichungen im  kanonisch Pfad werden mit Status
+        //404 quitiert (das schliesst die Bugs im Windows-Dateisystem / / und
+        //Punkt vorm Slash ein), die Gross- und Kleinschreibung wird in Windows
+        //ignoriert
+        if (!connect
+                && this.status == 0) {
+            File canonical = Worker.fileCanonical(file);
+            if (!file.equals(canonical))
+                this.status = 404;
+            if (canonical != null)
+                file = canonical;
+            if (file.isDirectory()
+                    && file.list() == null)
+                this.status = 404;
             this.resource = file.getPath();
         }
-
-        //der Dateiname der Ressource wird syntaktisch verglichen, ist dieser
-        //nicht identisch (file.txt != file.txt...) wird STATUS 404 gesetzt,
-        //die Gross- und Kleinschreibung wird beim Vergleich ignoriert
-        //der Dateisystem-Bug von Windows XP "/ /" wird geprueft und behandelt
-        if (this.status == 0 && !connect
-                && (!file.getName().equalsIgnoreCase(string)
-                        || !file.getAbsolutePath().equalsIgnoreCase(this.resource)
-                        || (file.isDirectory() && file.list() == null)))
-            this.status = 404;
-
+        
         if (file.isFile() && shadow.endsWith("/"))
             shadow = shadow.substring(0, shadow.length() -1);
 
@@ -2086,8 +2081,6 @@ class Worker implements Runnable {
             assign = new int[] {0, 4, 1, 2, 3};
 
         } else query = "n";
-
-        values.put("sort", query.concat(reverse ? "d" : "a"));
         
         //das Standard-Template fuer den INDEX wird ermittelt und geladen
         file = new File(this.sysroot.concat("/index.html"));
@@ -2212,6 +2205,11 @@ class Worker implements Runnable {
             System.arraycopy(cache, 0, bytes, bytes.length -cache.length, cache.length);
         }
         
+        query = query.concat(reverse ? "d" : "a");
+        if (bytes.length <= 0)
+            query = query.concat(" x");
+        values.put("sort", query);
+
         values.put("file", bytes);
         generator.set("file", values);
 
@@ -2656,12 +2654,12 @@ class Worker implements Runnable {
         //der Response wird ausgegeben
         this.output.write(string.getBytes());
         this.output.write(bytes);
+        
+        //das Datenvolumen wird uebernommen
+        this.volume += bytes.length;  
             
         if (this.isolation != 0)
             this.isolation = -1;
-        
-        //das generierte Response und seine Datenvolumen werden uebernommen
-        this.volume += bytes.length;        
     }
 
     /**
@@ -2756,7 +2754,9 @@ class Worker implements Runnable {
             
             //STATUS/ERROR/METHOD:OPTIONS - wird ggf. ausgefuehrt
             if (this.control)
-                this.doStatus();            
+                try {this.doStatus();            
+                } catch (IOException exception) {
+                }
         }
     }
    

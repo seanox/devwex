@@ -34,6 +34,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager  
 BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis  
 BF: HTTP Range - Korrekturen  
+BF: HTTP Locate - Korrektur der Pfadverarbeitung  
 CR: Projekt - Optimierung  
 CR: Service  
 CR: Generator - Überarbeitung/Optimierung/Erweiterung  

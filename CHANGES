@@ -8,6 +8,12 @@
       - HTTP Range -x lieferte nicht die letzten Bytes
       - HTTP Range verwendet nun auch Status 416
       - Toleranz wurde verringert, ungueltige Werte werden nicht mehr interpoliert
+  BF: HTTP Locate - Korrektur der Pfadverarbeitung
+      Der Dot-(Back)Slash-Bug in Windows (Punkt vor dem (Back)Slash) wurde korrigiert.
+      Beispiel: https://example.local/forbidden./foo.html konnte den Schutz von
+      /forbidden aushebeln, da /forbidden. offiziell nicht existiert, Windows aber
+      automatisch daraus /forbidden macht und ggf. hinterlegte Regeln und Direktiven
+      nicht greifen, da diese nicht mit /forbidden. rechnen.
   CR: Projekt - Optimierung
       - Umstellung auf Java5/8
       - Umstellung der Testumgebung auf JUnit

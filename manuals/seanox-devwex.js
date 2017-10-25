@@ -60,6 +60,14 @@
 })();
 
 (function() {
+    if (typeof Element.prototype.isShow === "function")
+        return false;
+    Element.prototype.isShow = function() {
+        return !this.isHide();
+    };
+})();
+
+(function() {
     if (typeof Element.prototype.hide === "function")
         return false;
     Element.prototype.hide = function() {
@@ -67,6 +75,14 @@
         if (!this.hasAttribute("x-style-display"))
             this.setAttribute("x-style-display", this.style.display);
         this.style.display = "none";
+    };
+})();
+
+(function() {
+    if (typeof Element.prototype.isHide === "function")
+        return false;
+    Element.prototype.isHide = function() {
+        return this.style.display == "none";
     };
 })();
 
@@ -224,7 +240,8 @@ window.addEventListener("load", function() {
 
 var Sitemap = Sitemap || new Object();
 
-Sitemap.SELECTOR_ARTICLE = "body > main > article";
+Sitemap.SELECTOR_MAIN = "body > main";
+Sitemap.SELECTOR_ARTICLE = Sitemap.SELECTOR_MAIN + " > article";
 Sitemap.SELECTOR_ARTICLE_SET = Sitemap.SELECTOR_ARTICLE;
 Sitemap.SELECTOR_CHAPTER;
 
@@ -259,12 +276,48 @@ Sitemap.index;
 
 Sitemap.meta;
 
+Sitemap.screen;
+
+Sitemap.toc;
+
 Sitemap.create = function() {
     if (Sitemap.data)
         return;
     Sitemap.data = new Object();
     if (!Sitemap.size)
         Sitemap.size = 0;
+    Sitemap.screen = {left:0, top:0};
+    Sitemap.toc = new Object();
+    Sitemap.toc.selector = function() {
+        //TODO;
+    };
+    Sitemap.toc.hide = function() {
+        //TODO;
+    };
+    Sitemap.toc.show = function() {
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+        elements.forEach(function(element, index, array) {
+            if (element.containsClassName("toc"))
+                element.show();
+            else element.hide();
+        });        
+    };
+    Sitemap.toc.focus = function(enable) {
+        if (!Sitemap.chapter)    
+            return;
+        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
+        if (enable)
+            toc.addClassName("focus");
+        else toc.removeClassName("focus");
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
+        elements.forEach(function(element, index, array) {
+            var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
+            if (numbers[0] == Sitemap.chapter.article
+                    || !enable)
+                element.show();
+            else element.hide();
+        });
+    };    
     var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
     elements.forEach(function(element, index, array) {
         if (Sitemap.SELECTOR_CHAPTER
@@ -454,22 +507,52 @@ Sitemap.lookup = function(chapter) {
     return Sitemap.data[chapter];
 };
 
-Sitemap.navigate = function(chapter) {
+Sitemap.synchronize = function() {
+    if (!Sitemap.screen)
+        Sitemap.screen = {left:0, top:0};
+    var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
+    if (article) {
+        var main = document.querySelector(Sitemap.SELECTOR_MAIN);
+        Sitemap.screen.left = main.scrollLeft;
+        Sitemap.screen.top = main.scrollTop;
+    }    
+    return Sitemap.screen;
+};
+
+Sitemap.navigate = function(chapter, synchronize) {
     if (!Sitemap.size)
         return;
-    if (String((chapter || "")).match(/^[\-\+]{2,}\d+$/)) {
+    chapter = String(chapter || "");
+    if (chapter.match(/^[\-\+]{2,}\d+$/)) {
         chapter = parseInt(chapter.substring(1));
         if (Sitemap.chapter)
             chapter += parseInt(Sitemap.chapter.article);
         chapter = Math.min(Sitemap.data["#" + Sitemap.size].article, chapter);
         chapter = Math.max(1, chapter);
         chapter = Sitemap.data[chapter + ".0.0.0.0.0"];
-    } else if (String((chapter || "")).match(/^:toc$/i)) {
-        //TODO: show toc, the other chapters
+    } else if (chapter.match(/^:toc$/i)) {
+        Sitemap.synchronize();
+        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + ":not(.focus)");
+        if (toc && toc.isShow()) {
+            Sitemap.navigate(Sitemap.chapter ? Sitemap.chapter.chapter : null, true);
+            return;
+        }
+        Sitemap.toc.focus(false);
+        Sitemap.toc.show();        
         return;
-    } else if (String((chapter || "")).match(/^:first$/i)) {        
+    } else if (chapter.match(/^:toc-focus/i)) {
+        Sitemap.synchronize();
+        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + ".focus");
+        if (toc && toc.isShow()) {
+            Sitemap.navigate(Sitemap.chapter ? Sitemap.chapter.chapter : null, true);
+            return;
+        }
+        Sitemap.toc.focus(true);
+        Sitemap.toc.show();
+        return;
+    } else if (chapter.match(/^:first$/i)) {        
         chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
-    } else if (String((chapter || "")).match(/^:last$/i)) {
+    } else if (chapter.match(/^:last$/i)) {
         chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
         var loop = parseInt(chapter.index.substring(1));
         while (loop <= Sitemap.size) {
@@ -478,7 +561,7 @@ Sitemap.navigate = function(chapter) {
             else break;
             loop++;
         }
-    } else if (String((chapter || "")).match(/^[\-\+]\d+$/)) {
+    } else if (chapter.match(/^[\-\+]\d+$/)) {
         chapter = parseInt(chapter);
         if (Sitemap.chapter)
             chapter += parseInt(Sitemap.chapter.index.substring(1));
@@ -501,6 +584,14 @@ Sitemap.navigate = function(chapter) {
             else element.hide();
         });
         document.location.hash = chapter.alias;
+        if (synchronize) {
+            var main = document.querySelector(Sitemap.SELECTOR_MAIN);
+            if (Sitemap.screen
+                    && main) {
+                main.scrollLeft = Sitemap.screen.left;
+                main.scrollTop = Sitemap.screen.top;
+            }
+        }
     });
     //mark the curent chapter in the table of content (toc) as active
     window.setTimeout(function() {
@@ -511,19 +602,6 @@ Sitemap.navigate = function(chapter) {
             else element.removeClassName("active");
         });        
     }, 0);
-};
-
-Sitemap.focus = function(enable) {
-    if (!Sitemap.chapter)    
-        return;
-    var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
-    elements.forEach(function(element, index, array) {
-        var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
-        if (numbers[0] == Sitemap.chapter.article
-                || !enable)
-            element.show();
-        else element.hide();
-    });
 };
 
 Sitemap.filter = function(filter) {

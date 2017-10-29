@@ -256,13 +256,14 @@ Sitemap.ATTRIBUTE_NUMBER = "number";
 Sitemap.ATTRIBUTE_CHAPTER = "chapter";
 Sitemap.ATTRIBUTE_ALIAS = "alias";
 Sitemap.ATTRIBUTE_TITLE = "title";
+Sitemap.ATTRIBUTE_SCROLL = "scroll";
 
 Sitemap.STYLE_MINOR = "minor";
 Sitemap.STYLE_ERROR = "error";
 
-Sitemap.FOCUS_INTERVAL = 250;
+Sitemap.FOCUS_INTERRUPT = 250;
 
-Sitemap.TOC_FILTER_INTERVAL = Sitemap.TOC_FOCUS_INTERVAL /2;
+Sitemap.TOC_FILTER_INTERVAL = Sitemap.FOCUS_INTERRUPT /2;
 
 Sitemap.data;
 
@@ -276,8 +277,6 @@ Sitemap.index;
 
 Sitemap.meta;
 
-Sitemap.screen;
-
 Sitemap.toc;
 
 Sitemap.create = function() {
@@ -286,38 +285,53 @@ Sitemap.create = function() {
     Sitemap.data = new Object();
     if (!Sitemap.size)
         Sitemap.size = 0;
-    Sitemap.screen = {left:0, top:0};
-    Sitemap.toc = new Object();
-    Sitemap.toc.selector = function() {
-        //TODO;
+    Sitemap.toc = {
+        article: null,
+        main: document.querySelector(Sitemap.SELECTOR_MAIN),
+        screen: {
+            left: 0, top: 0, article: null
+        },
+        hide: function() {
+            var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+            elements.forEach(function(element, index, array) {
+                element.hide();
+            });
+            if (this.article) {
+                this.article.show();
+                this.main.scrollLeft = this.screen.left;
+                this.main.scrollTop = this.screen.top;
+            }
+        },
+        show: function(focus) {
+            if (Sitemap.chapter) {
+                var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
+                if (focus)
+                    toc.addClassName("focus");
+                else toc.removeClassName("focus");
+                var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
+                elements.forEach(function(element, index, array) {
+                    var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
+                    if (numbers[0] == Sitemap.chapter.article
+                            || !focus)
+                        element.show();
+                    else element.hide();
+                });
+            }
+            
+            var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
+            if (article) {
+                this.article = article;
+                this.screen.left = this.main.scrollLeft;
+                this.screen.top = this.main.scrollTop;
+            }    
+            var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
+            elements.forEach(function(element, index, array) {
+                if (element.containsClassName("toc"))
+                    element.show();
+                else element.hide();
+            });        
+        }
     };
-    Sitemap.toc.hide = function() {
-        //TODO;
-    };
-    Sitemap.toc.show = function() {
-        var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
-        elements.forEach(function(element, index, array) {
-            if (element.containsClassName("toc"))
-                element.show();
-            else element.hide();
-        });        
-    };
-    Sitemap.toc.focus = function(enable) {
-        if (!Sitemap.chapter)    
-            return;
-        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
-        if (enable)
-            toc.addClassName("focus");
-        else toc.removeClassName("focus");
-        var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
-        elements.forEach(function(element, index, array) {
-            var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
-            if (numbers[0] == Sitemap.chapter.article
-                    || !enable)
-                element.show();
-            else element.hide();
-        });
-    };    
     var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
     elements.forEach(function(element, index, array) {
         if (Sitemap.SELECTOR_CHAPTER
@@ -411,33 +425,52 @@ Sitemap.create = function() {
         });
     });    
     
-    window.setInterval(function() {
-        var element = document.querySelector(Sitemap.SELECTOR_ARTICLE_SET + ":not(.hidden)");
-        //TODO: Navigate setzt das Kapitel.
-        //      Neu gelesen und analysiert wird aber erst wenn gescrollt wird.
-        //      Ein Problem ist das letzt Kapitel, was nicht oben stehen kann
-        //      und somit nie als aktuelles Kapitel erkannt wird.
-        //      Wird zum letzten Kapitel navigiert und dieser angesprungen, ist
-        //      es denn noch nicht das aktuelle. Nur wenn das Kapitel bei
-        //      navigate gesetzt wird und die analyse bim scroll beginnt.
-        //TODO: Q: Unterscheiden ob man auf oder ab scrollt?
-        //      Bsp. Ab verwendet das untere drittel, Auf das obere Drittel
-        //      als Fokus?
-        if (element) {
-            var elements = element.querySelectorAll("h1, h2, h3, h4, h5, h6");
-            elements = Array.prototype.slice.call(elements, 0);
-            var chapter = elements.length ? elements[0] : null;
-            while (elements.length) {
-                var item = elements.shift();
-                var look = item.visibility(3);
-                if (look.y <= 0)
-                    chapter = item;
-                if (look.y >= 0)
-                    break;
+    window.addEventListener("wheel", function(event) {
+        var main = document.querySelector(Sitemap.SELECTOR_MAIN);
+        var scroll = new Event("scroll", {bubbles:true, cancelable:false});
+        scroll.deltaX = event.deltaX;
+        scroll.deltaY = event.deltaY;
+        main.dispatchEvent(scroll);
+    });
+    
+    var main = document.querySelector(Sitemap.SELECTOR_MAIN);
+    main.addEventListener("scroll", function(event) {
+        var scroll = this.getAttribute(Sitemap.ATTRIBUTE_SCROLL) || 0;
+        this.setAttribute(Sitemap.ATTRIBUTE_SCROLL, this.scrollTop);
+        if (scroll < this.scrollTop
+                || scroll > this.scrollTop) {
+            (function(main, scroll) {
+                window.setTimeout(function() {
+                    if (scroll != (main.getAttribute(Sitemap.ATTRIBUTE_SCROLL) || 0))
+                        return;
+                    var element = document.querySelector(Sitemap.SELECTOR_ARTICLE_SET + ":not(.hidden)");
+                    if (!element)
+                        return;
+                    var elements = element.querySelectorAll("h1, h2, h3, h4, h5, h6");
+                    elements = Array.prototype.slice.call(elements, 0);
+                    var chapter = elements.length ? elements[0] : null;
+                    while (elements.length) {
+                        var item = elements.shift();
+                        //TODO: does not correct work
+                        var look = item.visibility(3);
+                        if (look.y <= 0)
+                            chapter = item;
+                        if (look.y >= 0)
+                            break;
+                    }
+                    Sitemap.chapter = Sitemap.lookup(chapter.getAttribute("chapter")) || Sitemap.chapter;
+                }, Sitemap.FOCUS_INTERRUPT);
+            })(this, this.scrollTop);
+        } else if (event.deltaY) {
+            if (this.scrollTop <= 0
+                    && event.deltaY < 0) {
+                //TODO: chapter up
+            } else if (this.scrollTop >= this.scrollHeight - this.offsetHeight
+                    && event.deltaY > 0) {
+                //TODO: chapter down
             }
-            //TODO: Sitemap.chapter = Sitemap.lookup(chapter.getAttribute("chapter")) || Sitemap.chapter;
         }
-    }, Sitemap.FOCUS_INTERVAL);
+    });
     
     Sitemap.index = new Object();
     elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE_SET);
@@ -489,6 +522,11 @@ Sitemap.create = function() {
             update(chapter, filter);
         }
     }, Sitemap.TOC_FILTER_INTERVAL /2);
+    
+    //TODO: debug only
+    window.setInterval(function() {
+        console.log(Sitemap.chapter ? Sitemap.chapter.chapter : null);
+    }, 500);
 };
 
 Sitemap.lookup = function(chapter) {
@@ -507,19 +545,7 @@ Sitemap.lookup = function(chapter) {
     return Sitemap.data[chapter];
 };
 
-Sitemap.synchronize = function() {
-    if (!Sitemap.screen)
-        Sitemap.screen = {left:0, top:0};
-    var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
-    if (article) {
-        var main = document.querySelector(Sitemap.SELECTOR_MAIN);
-        Sitemap.screen.left = main.scrollLeft;
-        Sitemap.screen.top = main.scrollTop;
-    }    
-    return Sitemap.screen;
-};
-
-Sitemap.navigate = function(chapter, synchronize) {
+Sitemap.navigate = function(chapter) {
     if (!Sitemap.size)
         return;
     chapter = String(chapter || "");
@@ -530,25 +556,14 @@ Sitemap.navigate = function(chapter, synchronize) {
         chapter = Math.min(Sitemap.data["#" + Sitemap.size].article, chapter);
         chapter = Math.max(1, chapter);
         chapter = Sitemap.data[chapter + ".0.0.0.0.0"];
-    } else if (chapter.match(/^:toc$/i)) {
-        Sitemap.synchronize();
-        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + ":not(.focus)");
+    } else if (chapter.match(/^:toc(-focus)*/i)) {
+        var focus = chapter.match(/^:toc-focus/i);
+        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + (focus ? ".focus" : ":not(.focus)"));
         if (toc && toc.isShow()) {
-            Sitemap.navigate(Sitemap.chapter ? Sitemap.chapter.chapter : null, true);
+            Sitemap.toc.hide();
             return;
         }
-        Sitemap.toc.focus(false);
-        Sitemap.toc.show();        
-        return;
-    } else if (chapter.match(/^:toc-focus/i)) {
-        Sitemap.synchronize();
-        var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + ".focus");
-        if (toc && toc.isShow()) {
-            Sitemap.navigate(Sitemap.chapter ? Sitemap.chapter.chapter : null, true);
-            return;
-        }
-        Sitemap.toc.focus(true);
-        Sitemap.toc.show();
+        Sitemap.toc.show(focus);
         return;
     } else if (chapter.match(/^:first$/i)) {        
         chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
@@ -584,14 +599,6 @@ Sitemap.navigate = function(chapter, synchronize) {
             else element.hide();
         });
         document.location.hash = chapter.alias;
-        if (synchronize) {
-            var main = document.querySelector(Sitemap.SELECTOR_MAIN);
-            if (Sitemap.screen
-                    && main) {
-                main.scrollLeft = Sitemap.screen.left;
-                main.scrollTop = Sitemap.screen.top;
-            }
-        }
     });
     //mark the curent chapter in the table of content (toc) as active
     window.setTimeout(function() {

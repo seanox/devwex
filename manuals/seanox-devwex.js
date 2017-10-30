@@ -89,33 +89,38 @@
 (function() {
     if (typeof Element.prototype.visibility === "function")
         return false;
-    Element.prototype.visibility = function(scale) {
-        var result = {x:0, y:0};
+    Element.prototype.visibility = function(smart) {
         var offset = {x:0, y:0};
-        var spread = {x:0, y:0};
-        for (var element = this; element.parentNode && element != element.parentNode; element = element.parentNode) {
-            if (element.parentNode.scrollLeft > 0)
-                offset.x = element.scrollLeft;
-            if (element.parentNode.scrollTop > 0)
-                offset.y = element.scrollTop;
+        for (var element = this; offset.x === 0 && offset.y === 0
+                && element.parentNode && element != element.parentNode; element = element.parentNode) {
+            if (element.parentNode.scrollLeft
+                    && element.parentNode.scrollLeft > 0)
+                offset.x = element.parentNode.scrollLeft;
+            if (element.parentNode.scrollTop
+                    && element.parentNode.scrollTop > 0)
+                offset.y = element.parentNode.scrollTop;
         }
-        scale = Math.max(0, scale || 0);
-        if (scale < 1)
-            scale = 1;
-        spread.x = (window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth) /scale;
+        //TODO: add 1/3 condition + use the element height
+        var result = {x:0, y:0};
+        var spread = {x:0, y:0};
+        spread.x = window.innerWidth
+                || document.documentElement.clientWidth
+                || document.body.clientWidth;
         if (this.offsetLeft -offset.x < 0)
             result.x = -1;
         if (this.offsetLeft -offset.x >= spread.x)
             result.x = 1;
-        spread.y = (window.innerHeight
-            || document.documentElement.clientHeight
-            || document.body.clientHeight) /scale;
+        
+        
+        spread.y = window.innerHeight
+                || document.documentElement.clientHeight
+                || document.body.clientHeight;
         if (this.offsetTop -offset.y < 0)
             result.y = -1;
         if (this.offsetTop -offset.y >= spread.y)
             result.y = 1;
+        
+        
         return result;
     };
 })();
@@ -244,6 +249,7 @@ Sitemap.SELECTOR_MAIN = "body > main";
 Sitemap.SELECTOR_ARTICLE = Sitemap.SELECTOR_MAIN + " > article";
 Sitemap.SELECTOR_ARTICLE_SET = Sitemap.SELECTOR_ARTICLE;
 Sitemap.SELECTOR_CHAPTER;
+Sitemap.SELECTOR_CHAPTER_FOCUS = Sitemap.SELECTOR_MAIN + " a.focus";
 
 Sitemap.SELECTOR_TOC = Sitemap.SELECTOR_ARTICLE + " nav";
 Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_TOC + " input";
@@ -260,10 +266,11 @@ Sitemap.ATTRIBUTE_SCROLL = "scroll";
 
 Sitemap.STYLE_MINOR = "minor";
 Sitemap.STYLE_ERROR = "error";
+Sitemap.STYLE_FOCUS = "focus";
 
-Sitemap.FOCUS_INTERRUPT = 250;
+Sitemap.FOCUS_INTERRUPT = 125;
 
-Sitemap.TOC_FILTER_INTERVAL = Sitemap.FOCUS_INTERRUPT /2;
+Sitemap.TOC_FILTER_INTERVAL = Sitemap.FOCUS_INTERRUPT;
 
 Sitemap.data;
 
@@ -391,7 +398,7 @@ Sitemap.create = function() {
                 + " " + Sitemap.ATTRIBUTE_ALIAS + "=\"" + chapter.alias + "\">" + chapter.title + "</a>";            
         });
     });
-    
+
     var element = document.querySelector(Sitemap.SELECTOR_TOC);
     while (element.parentNode
             && !Sitemap.SELECTOR_TOC_ARTICLE) {
@@ -451,7 +458,6 @@ Sitemap.create = function() {
                     var chapter = elements.length ? elements[0] : null;
                     while (elements.length) {
                         var item = elements.shift();
-                        //TODO: does not correct work
                         var look = item.visibility(3);
                         if (look.y <= 0)
                             chapter = item;
@@ -486,6 +492,7 @@ Sitemap.create = function() {
         });        
     });   
     
+    //TODO: change to use a logik like 'scroll' (event + )
     window.setInterval(function() {
         if (!Sitemap
                 || !Sitemap.index
@@ -523,20 +530,81 @@ Sitemap.create = function() {
         }
     }, Sitemap.TOC_FILTER_INTERVAL /2);
     
-    //TODO: debug only
     window.setInterval(function() {
-        console.log(Sitemap.chapter ? Sitemap.chapter.chapter : null);
-    }, 500);
+        var focus = document.querySelector(Sitemap.SELECTOR_CHAPTER_FOCUS);
+        if (!focus) {
+            focus = document.createElement("A");
+            focus.addClassName(Sitemap.STYLE_FOCUS);
+            document.querySelector(Sitemap.SELECTOR_MAIN).appendChild(focus);
+            focus = document.querySelector(Sitemap.SELECTOR_CHAPTER_FOCUS);
+        }
+        var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
+        if (Sitemap
+                && Sitemap.chapter
+                && article) {
+            if (focus.getAttribute(Sitemap.ATTRIBUTE_CHAPTER) != Sitemap.chapter.chapter) {
+                focus.setAttribute(Sitemap.ATTRIBUTE_CHAPTER, Sitemap.chapter.chapter)
+                var chapter = Sitemap.chapter;
+                chapter = {chapter: chapter, element: document.querySelector("a[name='" + chapter.chapter + "']")};
+                var sibling = Sitemap.lookup("+1");
+                sibling = {chapter: sibling, element: document.querySelector("a[name='" + sibling.chapter + "']")};
+                focus.style.top = chapter.element.parentNode.offsetTop + "px";
+                var height = sibling.element.parentNode.offsetTop -chapter.element.parentNode.offsetTop;
+                var style = window.getComputedStyle(sibling.element.parentNode);
+                height -= parseInt(style.marginTop) +parseInt(style.paddingTop);
+                if (chapter.chapter == sibling.chapter
+                        || chapter.chapter.article != sibling.chapter.article) {
+                    height = (article.offsetTop +article.scrollHeight) -chapter.element.parentNode.offsetTop;
+                    var style = window.getComputedStyle(article);
+                    height -= parseInt(style.marginBottom) +parseInt(style.paddingBottom);
+                }
+                focus.style.height = height + "px";
+            }
+            focus.show();
+        } else focus.hide();
+    }, Sitemap.FOCUS_INTERRUPT);
 };
 
 Sitemap.lookup = function(chapter) {
+    if (!Sitemap.size)
+        return null;
+    chapter = String(chapter || "").trim();
+    if (chapter.match(/^[\-\+]{2,}\d+$/)) {
+        chapter = parseInt(chapter.substring(1));
+        if (Sitemap.chapter)
+            chapter += parseInt(Sitemap.chapter.article);
+        chapter = Math.min(Sitemap.data["#" + Sitemap.size].article, chapter);
+        chapter = Math.max(1, chapter);
+        chapter = Sitemap.data[chapter + ".0.0.0.0.0"];
+        return chapter;
+    } else if (chapter.match(/^[\-\+]\d+$/)) {
+        chapter = parseInt(chapter);
+        if (Sitemap.chapter)
+            chapter += parseInt(Sitemap.chapter.index.substring(1));
+        chapter = Math.min(Sitemap.size, chapter);
+        chapter = Math.max(1, chapter);
+        chapter = Sitemap.data["#" + chapter];
+        return chapter;
+    } else if (chapter.match(/^:first$/i)) {        
+        return Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
+    } else if (chapter.match(/^:last$/i)) {
+        chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
+        var loop = parseInt(chapter.index.substring(1));
+        while (loop <= Sitemap.size) {
+            if (Sitemap.data["#" + loop].article != chapter.article)
+                break;
+            chapter = Sitemap.data["#" + loop];
+            loop++;
+        }
+        return chapter;
+    }
     if (chapter)
         chapter = chapter.replace(/^#/, '') .trim();
     if (!chapter)
         return null;
     if (!chapter.match(/^\d+(\.\d+)*$/)) {
         return Sitemap.data[chapter]
-    }
+    }    
     if (!chapter.match(/^\d+(\.\d+){5,}$/)) {
         chapter = chapter.replace(/(\.0)+$/, '');
         while (!chapter.match(/^\d+(\.\d+){5,}$/))
@@ -549,14 +617,7 @@ Sitemap.navigate = function(chapter) {
     if (!Sitemap.size)
         return;
     chapter = String(chapter || "");
-    if (chapter.match(/^[\-\+]{2,}\d+$/)) {
-        chapter = parseInt(chapter.substring(1));
-        if (Sitemap.chapter)
-            chapter += parseInt(Sitemap.chapter.article);
-        chapter = Math.min(Sitemap.data["#" + Sitemap.size].article, chapter);
-        chapter = Math.max(1, chapter);
-        chapter = Sitemap.data[chapter + ".0.0.0.0.0"];
-    } else if (chapter.match(/^:toc(-focus)*/i)) {
+    if (chapter.match(/^:toc(-focus)*/i)) {
         var focus = chapter.match(/^:toc-focus/i);
         var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + (focus ? ".focus" : ":not(.focus)"));
         if (toc && toc.isShow()) {
@@ -565,28 +626,10 @@ Sitemap.navigate = function(chapter) {
         }
         Sitemap.toc.show(focus);
         return;
-    } else if (chapter.match(/^:first$/i)) {        
-        chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
-    } else if (chapter.match(/^:last$/i)) {
-        chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
-        var loop = parseInt(chapter.index.substring(1));
-        while (loop <= Sitemap.size) {
-            if (Sitemap.data["#" + loop].article == chapter.article)
-                chapter = Sitemap.data["#" + loop];
-            else break;
-            loop++;
-        }
-    } else if (chapter.match(/^[\-\+]\d+$/)) {
-        chapter = parseInt(chapter);
-        if (Sitemap.chapter)
-            chapter += parseInt(Sitemap.chapter.index.substring(1));
-        chapter = Math.min(Sitemap.size, chapter);
-        chapter = Math.max(1, chapter);
-        chapter = Sitemap.data["#" + chapter];
-    } else chapter = Sitemap.lookup(chapter);
+    }
     //TODO: wenn chapter null, dann standard kapitel anzeigen
     //      Q: was ist das standard kapitel?
-    Sitemap.chapter = chapter;
+    Sitemap.chapter = Sitemap.lookup(chapter);
     if (!Sitemap.chapter)
         return;
     //show the current chapter and hide the other chapters
@@ -594,11 +637,11 @@ Sitemap.navigate = function(chapter) {
         var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
         elements.forEach(function(element, index, array) {
             if (!element.containsClassName("toc")
-                    && element.querySelector("*[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter.chapter + "']"))
+                    && element.querySelector("*[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + Sitemap.chapter.chapter + "']"))
                 element.show();
             else element.hide();
         });
-        document.location.hash = chapter.alias;
+        document.location.hash = Sitemap.chapter.alias;
     });
     //mark the curent chapter in the table of content (toc) as active
     window.setTimeout(function() {
@@ -608,7 +651,7 @@ Sitemap.navigate = function(chapter) {
                 element.addClassName("active");
             else element.removeClassName("active");
         });        
-    }, 0);
+    });
 };
 
 Sitemap.filter = function(filter) {

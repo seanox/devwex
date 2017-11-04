@@ -38,14 +38,195 @@ import java.util.Vector;
  *  Service ist ein Container mit den ben&ouml;tigten Mechanismen, APIs und
  *  Sequenzen zur Verwaltung und Ausf&uuml;hrung von Servern und Modulen.<br>
  *  <br>
- *  TODO:    
+ *  <dir>
+ *    <b>Begriffe</b>
+ *  </dir>
+ *  <dir>
+ *    <dir>
+ *      Server
+ *    </dir>
+ *  </dir>
+ *  Server stellen den physischen Zugriff im Netzwerk f&uuml;r ein Protokoll an
+ *  einer Adresse und einem Port zur Verf&uuml;gung. Seanox Devwex bindet
+ *  Server &uuml;ber das Server-API (SAPI) ein. Mit dem API lassen sich auch
+ *  bestehende Server- und Netzwerk-Funktionalit&auml;ten &auml;ndern bzw. neue
+ *  bereitstellen.<br>
+ *  Das Server-API basiert auf der Implementierung vom Runnable-Interface. Die
+ *  Initialisierung, deren Reihenfolge mit der Reihenfolge der
+ *  Server-Konfigurationen in Konfigurationsdatei festgelegt wird, und die
+ *  Konfiguration erfolgt &uuml;ber den Konstruktor. Die erstellten
+ *  Server-Instanzen werden vom Laufzeit-Container (Service) mit der Methode
+ *  <code>Server.run()</code> gestartet und per <code>Service.destroy()</code>
+ *  zum Beenden aufgefordert. Der Aufruf beider Methoden ist asynchron.
+ *  Verz&ouml;gert sich das Beenden, wartet der Laufzeit-Container auf das Ende
+ *  aller registrierten Server-Instanzen. Optional wird die Implementierung der
+ *  Methode <code>Server.explain()</code> zur Abfrage allgemeiner
+ *  Informationen, wie Protokoll und Netzwerkverbindung, unterst&uuml;tzt.<br>
  *  <br>
- *  Service 5.0 20170910<br>
+ *  <dir>
+ *    <dir>
+ *      Module
+ *    </dir>
+ *  </dir>
+ *  Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen stellen
+ *  nach aussen hin keine direkten Funktionen bereit. Sie werden &uuml;ber die
+ *  Ausf&uuml;hrungsklasse identifiziert und beim Start bzw. Restart vom
+ *  Service oder nachtr&auml;glich in Servern und Modulen &uuml;ber den
+ *  Application-ClassLoader geladen, initialisiert und konfiguriert. Module
+ *  sind globale Erweiterungen, die einmal instanziert und dann allen
+ *  Komponenten bereitgestellt werden.<br>
+ *  Optional ist die Verwendung vom Context-ClassLoader aus dem Seanox Devwex
+ *  SDK m&ouml;glich, womit Module auch in mehreren unabh&auml;ngigen Instanzen
+ *  mit eigenem ClassLoader verwendet werden k&ouml;nnen.<br>
+ *  Das Modul-API umfasst lediglich die Initialisierung und das Beenden von
+ *  Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor initial mit
+ *  dem Start vom Laufzeit-Container (Service), dabei wird die Abfolge in der
+ *  Konfigurationsdatei mit der Reihenfolge der Module innerhalb der Sektion
+ *  <code>INITIALIZE</code> festgelegt, oder die Initialisierung erfolgt mit
+ *  der ersten Anforderung eines Moduls zur Laufzeit. Die Konfiguration wird
+ *  einem Module nur dann &uuml;bergeben, wenn es initial &uuml;ber die Sektion
+ *  <code>INITIALIZE</code> geladen wird. Die Aufforderung zum Beenden erfolgt
+ *  &uuml;ber die Methode <code>Module.destroy()</code>. Der Laufzeit-Container
+ *  &uuml;berwacht das Beenden nicht aktiv und verwirft die Module durch das
+ *  Entladen vom ClassLoader.Optional wird die Implementierung der Methode
+ *  <code>Module.explain()</code> zur Abfrage allgemeiner Informationen, wie
+ *  Hersteller und Version, unterst&uuml;tzt.<br>          
+ *  <br>
+ *  <dir>
+ *    <b>Arbeitsweise</b>
+ *  </dir>
+ *  Alle f&uuml;r die Initialisierung und den Betrieb erforderlichen Daten
+ *  werden aus der Konfigurationsdatei <code>devwex.ini</code> gelesen, die aus
+ *  dem aktuellen Arbeitsverzeichnis geladen wird. Beim Start, Neustart und Stop
+ *  werden feste Sequenzen zum Laden und Entladen von Servern und Modulen
+ *  durchlaufen<br>
+ *  Im Betrieb &uuml;berwacht der Service Konfiguration, Server sowie Module und
+ *  steuert den Garbage Collector f&uuml;r eine schnellere Freigabe von
+ *  Ressourcen.<br>
+ *  <br>
+ *  <dir>
+ *    <b>Sequenzen</b>
+ *  </dir>
+ *  Start, Neustart und Beenden der Server sowie das Laden, Anfordern und
+ *  Entladen von Modulen sind feste Abfolgen vom Laufzeit-Container.<br>
+ *  <dir>
+ *    <dir>
+ *      Start
+ *    </dir>
+ *  </dir>
+ *  <ul>
+ *    <li>
+ *      Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert, die
+ *      mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+ *    </li>
+ *    <li>
+ *      Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen und
+ *      &uuml;ber den Konstruktor <code>Module(String options)</code>
+ *      initialisiert und registriert.
+ *    </li>
+ *    <li>
+ *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
+ *      auf <code>BAS</code> enden und zu denen eine Implementierung im
+ *      Klassenpfad gefunden werden kann. Die gefundenen Server werden geladen,
+ *      registriert und &uuml;ber den Konstruktor <code>Server(String name,
+ *      Object initialize)</code> initialisiert. Dazu werden jedem Server der
+ *      Name entsprechend der ermittelten Sektion sowie eine komplette Kopie
+ *      der zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
+ *      erfolgreicher Initialisierung wird der Server als (Daemon)Thread
+ *      gestartet und kann seine Arbeit in der Methode
+ *      <code>Server.run()</code> aufnehmen.
+ *    </li>
+ *  </ul>
+ *  <dir>
+ *    <dir>
+ *      Modulaufruf
+ *    </dir>
+ *  </dir>
+ *  <ul>
+ *    <li>
+ *      Ist das Modul noch nicht geladen, wird dies aus dem aktuellen
+ *      Klassenpfad ermittelt, &uuml;ber <code>Module(String options)</code>
+ *      initialisiert und registriert. Eine Konfiguration wird dabei nicht
+ *      &uuml;bergeben, da f&uuml;r Module nur eine zentrale Konfiguration in
+ *      der Sektion <code>INITIALIZE</code> vorgesehen ist.
+ *    </li>
+ *    <li>
+ *      Ist das Modul bereits geladen, wird die aktuelle Instanz verwendet.
+ *    </li>
+ *  </ul> 
+ *  <dir>
+ *    <dir>
+ *      Neustart
+ *    </dir>
+ *  </dir>
+ *  Die Sequenz entspricht der Kombination aus <i>Beenden</i> und <i>Start</i>.
+ *  <ul>
+ *    <li>
+ *      Alle registrierten Server-Instanzen werden &uuml;ber die Methode
+ *      <code>Server.destroy()</code> zum Beenden aufgefordert.
+ *    </li>
+ *    <li>
+ *      Alle registrierten Module werden &uuml;ber die Methode
+ *      <code>Module.destroy()</code> zum Beenden aufgefordert.
+ *    </li>
+ *    <li>
+ *      Das Einleiten vom Beenden der Server verl&auml;uft asynchron. Der
+ *      Laufzeit-Container wartet auf das Ende aller registrierten Server.
+ *    </li>
+ *    <li>
+ *      Alle Module und Server werden durch das Verwerfen vom aktuell
+ *      verwendeten ClassLoader entladen.
+ *    </li>
+ *    <li>
+ *      Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert, die
+ *      mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+ *    </li>
+ *    <li>
+ *      Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen, und
+ *      &uuml;ber den Konstruktor <code>Module(String options)</code>
+ *      initialisiert und registriert.
+ *    </li>
+ *    <li>
+ *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
+ *      auf <code>BAS</code> enden und zu denen eine Implementierung im
+ *      Klassenpfad gefunden werden kann. Die gefundenen Server werden geladen,
+ *      registriert und &uuml;ber den Konstruktor <code>Server(String name,
+ *      Object initialize)</code> initialisiert. Dazu werden jedem Server der
+ *      Name entsprechend der ermittelten Sektion sowie eine komplette Kopie
+ *      der zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
+ *      erfolgreicher Initialisierung wird der Server als Thread gestartet und
+ *      kann seine Arbeit in der Methode <code>Server.run()</code> aufnehmen.
+ *    </li>
+ *  </ul>
+ *  <dir>
+ *    <dir>
+ *      Beenden
+ *    </dir>
+ *  </dir>
+ *  <ul>
+ *    <li>
+ *      Alle registrierten Server-Instanzen werden &uuml;ber die Methode
+ *      <code>Server.destroy()</code> zum Beenden aufgefordert.
+ *    </li>
+ *    <li>
+ *      Alle registrierten Module werden &uuml;ber die Methode
+ *      <code>Module.destroy()</code> zum Beenden aufgefordert.
+ *    </li>
+ *    <li>
+ *      Das Einleiten vom Beenden der Server verl&auml;uft asynchron. Der
+ *      Laufzeit-Container wartet auf das Ende aller registrierten Server.
+ *    </li>
+ *    <li>
+ *      Alle Module und Server werden durch das Verwerfen vom aktuell
+ *      verwendeten ClassLoader entladen.
+ *    </li>
+ *  </ul>
+ *  Service 5.0 20171104<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170910
+ *  @version 5.0 20171104
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -207,7 +388,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         double          timing;
         int             loop;
         int             size;
-        long            timeout;
         
         synchronized (Service.class) {
             
@@ -262,18 +442,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
                 }
                 
-                //das Timeout wird ermittelt
-                timeout = System.currentTimeMillis() +65535;
-
-                //die Anzahl aktiver Server wird ermittelt
-                size = service.servers.size();
-
-                while (service.servers.size() > 0
-                        && timeout > System.currentTimeMillis()) {
+                while (service.servers.size() > 0) {
                     
-                    //alle aktiven Server werden ermittelt und durchsucht, bei
-                    //noch laufenden Servern wird gewartet bis diese enden oder
-                    //das Timeout erreicht wird
+                    //Alle aktiven Server werden ermittelt und durchsucht.
+                    //Bei noch laufenden Servern wird gewartet bis diese enden.
                     enumeration = ((Vector)service.servers.clone()).elements();
                     while (enumeration.hasMoreElements()) {
 
@@ -284,19 +456,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                             service.servers.remove(object);
                     }
 
-                    //das Timeout wird bei Erfolgen verlaengert
-                    if (service.servers.size() != size)
-                        timeout = System.currentTimeMillis() +65535;
-                    
                     try {Thread.sleep(25);
                     } catch (Throwable throwable) {
                         break;
                     }
-                }
-
-                if (service.servers.size() > 0) {
-                    Service.print("SERVICE STOP FAILED");
-                    return false;
                 }
                 
                 service.status = mode;

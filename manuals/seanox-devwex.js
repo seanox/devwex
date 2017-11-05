@@ -1,31 +1,20 @@
-(function() {
-    if (typeof NodeList.prototype.forEach === "function")
-        return false;
+if (typeof NodeList.prototype.forEach !== "function")
     NodeList.prototype.forEach = Array.prototype.forEach;
-})();
 
-(function() {
-    if (typeof Array.prototype.contains === "function")
-        return false;
+if (typeof Array.prototype.contains !== "function")
     Array.prototype.contains = function(value) {
         return this.indexOf(value) >= 0;
     }
-})();
 
-(function() {
-    if (typeof Number.prototype.pad === "function")
-        return false;
+if (typeof Number.prototype.pad !== "function")
     Number.prototype.pad = function(size) {
         var text = String(this);
         while (text.length < (size || 2))
             text = "0" + text;
         return text;
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.cssSelector === "function")
-        return false;
+if (typeof Element.prototype.cssSelector !== "function")
     Element.prototype.cssSelector = function() {
         var element = this;
         var names = new Array();
@@ -47,87 +36,28 @@
         }
         return names.join(" > ");
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.show === "function")
-        return false;
+if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
         this.removeClassName("hidden");
         this.style.display = this.getAttribute("x-style-display");
         this.removeAttribute("x-style-display");
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.isShow === "function")
-        return false;
-    Element.prototype.isShow = function() {
-        return !this.isHide();
-    };
-})();
-
-(function() {
-    if (typeof Element.prototype.hide === "function")
-        return false;
+if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
         this.addClassName("hidden");
         if (!this.hasAttribute("x-style-display"))
             this.setAttribute("x-style-display", this.style.display);
         this.style.display = "none";
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.isHide === "function")
-        return false;
-    Element.prototype.isHide = function() {
-        return this.style.display == "none";
+if (typeof Element.prototype.visible !== "function")
+    Element.prototype.visible = function() {
+        return this.style.display != "none";
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.visibility === "function")
-        return false;
-    Element.prototype.visibility = function(smart) {
-        var offset = {x:0, y:0};
-        for (var element = this; offset.x === 0 && offset.y === 0
-                && element.parentNode && element != element.parentNode; element = element.parentNode) {
-            if (element.parentNode.scrollLeft
-                    && element.parentNode.scrollLeft > 0)
-                offset.x = element.parentNode.scrollLeft;
-            if (element.parentNode.scrollTop
-                    && element.parentNode.scrollTop > 0)
-                offset.y = element.parentNode.scrollTop;
-        }
-        //TODO: add 1/3 condition + use the element height
-        var result = {x:0, y:0};
-        var spread = {x:0, y:0};
-        spread.x = window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-        if (this.offsetLeft -offset.x < 0)
-            result.x = -1;
-        if (this.offsetLeft -offset.x >= spread.x)
-            result.x = 1;
-        
-        
-        spread.y = window.innerHeight
-                || document.documentElement.clientHeight
-                || document.body.clientHeight;
-        if (this.offsetTop -offset.y < 0)
-            result.y = -1;
-        if (this.offsetTop -offset.y >= spread.y)
-            result.y = 1;
-        
-        
-        return result;
-    };
-})();
-
-(function() {
-    if (typeof Element.prototype.addClassName === "function")
-        return false;
+if (typeof Element.prototype.addClassName !== "function")
     Element.prototype.addClassName = function(className) {
         className = (className || "").trim();
         if (!className)
@@ -141,11 +71,8 @@
             element.className = (element.className + " " + className).trim(); 
         });
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.removeClassName === "function")
-        return false;
+if (typeof Element.prototype.removeClassName !== "function")
     Element.prototype.removeClassName = function(className) {
         className = (className || "").trim();
         if (!className)
@@ -161,11 +88,8 @@
                 element.removeAttribute("class");
         });
     };
-})();
 
-(function() {
-    if (typeof Element.prototype.containsClassName === "function")
-        return false;
+if (typeof Element.prototype.containsClassName !== "function")
     Element.prototype.containsClassName = function(className) {
         className = (className || "").trim();
         if (!className)
@@ -183,25 +107,18 @@
         });
         return !classNameA.join("").trim();
     };
-})();
 
-(function() {
-    if (typeof window.height === "function")
-        return false;
+if (typeof window.height !== "function")
     window.height = function() {
         return window.innerHeight
             || document.documentElement.clientHeight
             || document.body.clientHeight;
     };
-})();
 
-(function() {
-    if (typeof RegExp.quote === "function")
-        return false;
+if (typeof RegExp.quote !== "function")
     RegExp.quote = function(text) {
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
-})();
 
 window.addEventListener("load", function() {
     var elements = document.querySelectorAll("pre");
@@ -227,6 +144,7 @@ window.addEventListener("load", function() {
     });
 });
 
+//TODO: change: all chapters are hidden, default view = toc or first chapter
 window.addEventListener("load", function() {
     var elements = document.querySelectorAll("body > main > article:nth-child(n+2):not(:nth-child(3))");
     elements.forEach(function(element, index, array) {
@@ -236,11 +154,6 @@ window.addEventListener("load", function() {
 
 window.addEventListener("load", function() {
     Sitemap.create();
-    Sitemap.navigate(document.location.hash);
-});
-
-window.addEventListener("load", function() {
-    //TODO: add event listener for navigation/toc buttons
 });
 
 var Sitemap = Sitemap || new Object();
@@ -249,12 +162,13 @@ Sitemap.SELECTOR_MAIN = "body > main";
 Sitemap.SELECTOR_ARTICLE = Sitemap.SELECTOR_MAIN + " > article";
 Sitemap.SELECTOR_ARTICLE_SET = Sitemap.SELECTOR_ARTICLE;
 Sitemap.SELECTOR_CHAPTER;
-Sitemap.SELECTOR_CHAPTER_FOCUS = Sitemap.SELECTOR_MAIN + " a.focus";
 
 Sitemap.SELECTOR_TOC = Sitemap.SELECTOR_ARTICLE + " nav";
-Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_TOC + " input";
+Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_ARTICLE + ".toc > input";
 Sitemap.SELECTOR_TOC_ANCHOR = Sitemap.SELECTOR_TOC + " a";
 Sitemap.SELECTOR_TOC_ARTICLE;
+
+Sitemap.SELECTOR_CONTROL = Sitemap.SELECTOR_MAIN + " ~ button";
 
 Sitemap.ATTRIBUTE_INDEX = "index";
 Sitemap.ATTRIBUTE_LEVEL = "level";
@@ -262,15 +176,13 @@ Sitemap.ATTRIBUTE_NUMBER = "number";
 Sitemap.ATTRIBUTE_CHAPTER = "chapter";
 Sitemap.ATTRIBUTE_ALIAS = "alias";
 Sitemap.ATTRIBUTE_TITLE = "title";
-Sitemap.ATTRIBUTE_SCROLL = "scroll";
+Sitemap.ATTRIBUTE_TIMING = "timing";
 
 Sitemap.STYLE_MINOR = "minor";
 Sitemap.STYLE_ERROR = "error";
 Sitemap.STYLE_FOCUS = "focus";
 
-Sitemap.FOCUS_INTERRUPT = 125;
-
-Sitemap.TOC_FILTER_INTERVAL = Sitemap.FOCUS_INTERRUPT;
+Sitemap.INTERRUPT = 125;
 
 Sitemap.data;
 
@@ -287,11 +199,14 @@ Sitemap.meta;
 Sitemap.toc;
 
 Sitemap.create = function() {
+    
     if (Sitemap.data)
         return;
     Sitemap.data = new Object();
+    
     if (!Sitemap.size)
         Sitemap.size = 0;
+    
     Sitemap.toc = {
         article: null,
         main: document.querySelector(Sitemap.SELECTOR_MAIN),
@@ -313,8 +228,8 @@ Sitemap.create = function() {
             if (Sitemap.chapter) {
                 var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
                 if (focus)
-                    toc.addClassName("focus");
-                else toc.removeClassName("focus");
+                    toc.addClassName(Sitemap.STYLE_FOCUS);
+                else toc.removeClassName(Sitemap.STYLE_FOCUS);
                 var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
                 elements.forEach(function(element, index, array) {
                     var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
@@ -324,21 +239,23 @@ Sitemap.create = function() {
                     else element.hide();
                 });
             }
-            
             var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
             if (article) {
                 this.article = article;
                 this.screen.left = this.main.scrollLeft;
                 this.screen.top = this.main.scrollTop;
-            }    
+            }
             var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
             elements.forEach(function(element, index, array) {
                 if (element.containsClassName("toc"))
                     element.show();
                 else element.hide();
-            });        
+            });
+            this.main.scrollLeft = 0;
+            this.main.scrollTop = 0;            
         }
     };
+    
     var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
     elements.forEach(function(element, index, array) {
         if (Sitemap.SELECTOR_CHAPTER
@@ -432,52 +349,6 @@ Sitemap.create = function() {
         });
     });    
     
-    window.addEventListener("wheel", function(event) {
-        var main = document.querySelector(Sitemap.SELECTOR_MAIN);
-        var scroll = new Event("scroll", {bubbles:true, cancelable:false});
-        scroll.deltaX = event.deltaX;
-        scroll.deltaY = event.deltaY;
-        main.dispatchEvent(scroll);
-    });
-    
-    var main = document.querySelector(Sitemap.SELECTOR_MAIN);
-    main.addEventListener("scroll", function(event) {
-        var scroll = this.getAttribute(Sitemap.ATTRIBUTE_SCROLL) || 0;
-        this.setAttribute(Sitemap.ATTRIBUTE_SCROLL, this.scrollTop);
-        if (scroll < this.scrollTop
-                || scroll > this.scrollTop) {
-            (function(main, scroll) {
-                window.setTimeout(function() {
-                    if (scroll != (main.getAttribute(Sitemap.ATTRIBUTE_SCROLL) || 0))
-                        return;
-                    var element = document.querySelector(Sitemap.SELECTOR_ARTICLE_SET + ":not(.hidden)");
-                    if (!element)
-                        return;
-                    var elements = element.querySelectorAll("h1, h2, h3, h4, h5, h6");
-                    elements = Array.prototype.slice.call(elements, 0);
-                    var chapter = elements.length ? elements[0] : null;
-                    while (elements.length) {
-                        var item = elements.shift();
-                        var look = item.visibility(3);
-                        if (look.y <= 0)
-                            chapter = item;
-                        if (look.y >= 0)
-                            break;
-                    }
-                    Sitemap.chapter = Sitemap.lookup(chapter.getAttribute("chapter")) || Sitemap.chapter;
-                }, Sitemap.FOCUS_INTERRUPT);
-            })(this, this.scrollTop);
-        } else if (event.deltaY) {
-            if (this.scrollTop <= 0
-                    && event.deltaY < 0) {
-                //TODO: chapter up
-            } else if (this.scrollTop >= this.scrollHeight - this.offsetHeight
-                    && event.deltaY > 0) {
-                //TODO: chapter down
-            }
-        }
-    });
-    
     Sitemap.index = new Object();
     elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE_SET);
     elements.forEach(function(element, index, array) {
@@ -492,24 +363,22 @@ Sitemap.create = function() {
         });        
     });   
     
-    //TODO: change to use a logik like 'scroll' (event + )
-    window.setInterval(function() {
+    var search = function() {
         if (!Sitemap
-                || !Sitemap.index
-                || !Sitemap.meta
-                || !Sitemap.meta.timing
-                || Sitemap.meta.timing >= new Date().getTime() -Sitemap.TOC_FILTER_INTERVAL
-                || Sitemap.meta.filter == Sitemap.meta.current)
+                || !Sitemap.index)
             return;
-        Sitemap.meta.current = Sitemap.meta.filter;
-        Sitemap.meta.timing = new Date().getTime();
-        var search = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
-        if (search)
+        var filter = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
+        Sitemap.filter(filter.value);
+        window.setTimeout(function() {
+            var timing = new Date().getTime();
+            if (timing -Sitemap.meta.timing < 250
+                    || Sitemap.meta.search == Sitemap.meta.filter)
+                return;
+            Sitemap.meta.search = Sitemap.meta.filter;
+            var search = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
             search.removeClassName(Sitemap.STYLE_ERROR);
-        var filter = Filter.compile(Sitemap.meta.filter);
-        for (var chapter in Sitemap.index) {
+            var filter = Filter.compile(Sitemap.meta.search);
             var update = function(chapter, filter, wait) {
-                Sitemap.meta.timing = new Date().getTime();
                 if (!wait) {
                     window.setTimeout(function() {
                         update(chapter, filter, true);  
@@ -526,43 +395,37 @@ Sitemap.create = function() {
                         search.addClassName(Sitemap.STYLE_ERROR);
                 }
             };
-            update(chapter, filter);
-        }
-    }, Sitemap.TOC_FILTER_INTERVAL /2);
+            for (var chapter in Sitemap.index)
+                update(chapter, filter);
+        }, 250);
+    }; 
+    var filter = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
+    filter.addEventListener("keyup", function() {
+        search();
+    });
+    filter.addEventListener("mouseup", function() {
+        search();
+    });
     
-    window.setInterval(function() {
-        var focus = document.querySelector(Sitemap.SELECTOR_CHAPTER_FOCUS);
-        if (!focus) {
-            focus = document.createElement("A");
-            focus.addClassName(Sitemap.STYLE_FOCUS);
-            document.querySelector(Sitemap.SELECTOR_MAIN).appendChild(focus);
-            focus = document.querySelector(Sitemap.SELECTOR_CHAPTER_FOCUS);
-        }
-        var article = document.querySelector(Sitemap.SELECTOR_ARTICLE + ":not(.hidden):not(.toc)");
-        if (Sitemap
-                && Sitemap.chapter
-                && article) {
-            if (focus.getAttribute(Sitemap.ATTRIBUTE_CHAPTER) != Sitemap.chapter.chapter) {
-                focus.setAttribute(Sitemap.ATTRIBUTE_CHAPTER, Sitemap.chapter.chapter)
-                var chapter = Sitemap.chapter;
-                chapter = {chapter: chapter, element: document.querySelector("a[name='" + chapter.chapter + "']")};
-                var sibling = Sitemap.lookup("+1");
-                sibling = {chapter: sibling, element: document.querySelector("a[name='" + sibling.chapter + "']")};
-                focus.style.top = chapter.element.parentNode.offsetTop + "px";
-                var height = sibling.element.parentNode.offsetTop -chapter.element.parentNode.offsetTop;
-                var style = window.getComputedStyle(sibling.element.parentNode);
-                height -= parseInt(style.marginTop) +parseInt(style.paddingTop);
-                if (chapter.chapter == sibling.chapter
-                        || chapter.chapter.article != sibling.chapter.article) {
-                    height = (article.offsetTop +article.scrollHeight) -chapter.element.parentNode.offsetTop;
-                    var style = window.getComputedStyle(article);
-                    height -= parseInt(style.marginBottom) +parseInt(style.paddingBottom);
-                }
-                focus.style.height = height + "px";
-            }
-            focus.show();
-        } else focus.hide();
-    }, Sitemap.FOCUS_INTERRUPT);
+    var control = document.querySelector(Sitemap.SELECTOR_CONTROL);
+    control.addEventListener("click", function() {
+        var time = new Date().getTime();
+        this.setAttribute(Sitemap.ATTRIBUTE_TIMING + "-A", this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B") || time -1000);
+        this.setAttribute(Sitemap.ATTRIBUTE_TIMING + "-B", time);
+        var time = parseInt(this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B"))
+            - parseInt(this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-A"));
+        if (time < 250)
+            return;
+        window.setTimeout(function() {
+            var control = document.querySelector(Sitemap.SELECTOR_CONTROL);
+            var content = ":toc";
+            if ((parseInt(control.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B"))
+                    - parseInt(control.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-A"))) < 250)
+                content += "-focus";
+            Sitemap.navigate(content);
+        }, 250);
+    });
+    Sitemap.navigate(document.location.hash);    
 };
 
 Sitemap.lookup = function(chapter) {
@@ -614,24 +477,26 @@ Sitemap.lookup = function(chapter) {
 };
 
 Sitemap.navigate = function(chapter) {
+    
     if (!Sitemap.size)
         return;
+    
     chapter = String(chapter || "");
     if (chapter.match(/^:toc(-focus)*/i)) {
         var focus = chapter.match(/^:toc-focus/i);
         var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + (focus ? ".focus" : ":not(.focus)"));
-        if (toc && toc.isShow()) {
+        if (toc && toc.visible())
             Sitemap.toc.hide();
-            return;
-        }
-        Sitemap.toc.show(focus);
+        else Sitemap.toc.show(focus);
         return;
     }
+    
     //TODO: wenn chapter null, dann standard kapitel anzeigen
     //      Q: was ist das standard kapitel?
     Sitemap.chapter = Sitemap.lookup(chapter);
     if (!Sitemap.chapter)
         return;
+    
     //show the current chapter and hide the other chapters
     window.setTimeout(function() {
         var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
@@ -643,7 +508,8 @@ Sitemap.navigate = function(chapter) {
         });
         document.location.hash = Sitemap.chapter.alias;
     });
-    //mark the curent chapter in the table of content (toc) as active
+    
+    //mark the current chapter in the table of content (toc) as active
     window.setTimeout(function() {
         var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
         elements.forEach(function(element, index, array) {

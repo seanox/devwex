@@ -1,10 +1,22 @@
+/**
+ *  Enhancement of the JavaScript API
+ *  Executes a provided a function once for each array element.
+ *  @param callback function to execute for each element
+ */
 if (typeof NodeList.prototype.forEach !== "function")
     NodeList.prototype.forEach = Array.prototype.forEach;
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Determines whether an array includes a certain element.
+ *  @param element element to search for
+ *  @param true or false as appropriate
+ */
 if (typeof Array.prototype.contains !== "function")
-    Array.prototype.contains = function(value) {
-        return this.indexOf(value) >= 0;
+    Array.prototype.contains = function(element) {
+        return this.indexOf(element) >= 0;
     }
+
 
 if (typeof Number.prototype.pad !== "function")
     Number.prototype.pad = function(size) {
@@ -14,6 +26,11 @@ if (typeof Number.prototype.pad !== "function")
         return text;
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Determines the CSS selector for the element.
+ *  @param the determined CSS selector
+ */
 if (typeof Element.prototype.cssSelector !== "function")
     Element.prototype.cssSelector = function() {
         var element = this;
@@ -144,16 +161,15 @@ window.addEventListener("load", function() {
     });
 });
 
-//TODO: change: all chapters are hidden, default view = toc or first chapter
-window.addEventListener("load", function() {
-    var elements = document.querySelectorAll("body > main > article:nth-child(n+2):not(:nth-child(3))");
-    elements.forEach(function(element, index, array) {
-        element.hide();
-    });
-});
-
 window.addEventListener("load", function() {
     Sitemap.create();
+    var elements = document.querySelectorAll("body > main > article");
+    elements.forEach(function(element, index, array) {
+        if (index == 0)
+            element.show();
+        else element.hide();
+    });
+    document.querySelector("body > main").addClassName("active");
 });
 
 var Sitemap = Sitemap || new Object();
@@ -168,7 +184,7 @@ Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_ARTICLE + ".toc > input";
 Sitemap.SELECTOR_TOC_ANCHOR = Sitemap.SELECTOR_TOC + " a";
 Sitemap.SELECTOR_TOC_ARTICLE;
 
-Sitemap.SELECTOR_CONTROL = Sitemap.SELECTOR_MAIN + " ~ button";
+Sitemap.SELECTOR_CONTROL = Sitemap.SELECTOR_MAIN + " ~ nav";
 
 Sitemap.ATTRIBUTE_INDEX = "index";
 Sitemap.ATTRIBUTE_LEVEL = "level";
@@ -176,7 +192,6 @@ Sitemap.ATTRIBUTE_NUMBER = "number";
 Sitemap.ATTRIBUTE_CHAPTER = "chapter";
 Sitemap.ATTRIBUTE_ALIAS = "alias";
 Sitemap.ATTRIBUTE_TITLE = "title";
-Sitemap.ATTRIBUTE_TIMING = "timing";
 
 Sitemap.STYLE_MINOR = "minor";
 Sitemap.STYLE_ERROR = "error";
@@ -214,6 +229,9 @@ Sitemap.create = function() {
             left: 0, top: 0, article: null
         },
         hide: function() {
+            var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
+            if (!toc || !toc.visible())
+                return;
             var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
             elements.forEach(function(element, index, array) {
                 element.hide();
@@ -255,6 +273,93 @@ Sitemap.create = function() {
             this.main.scrollTop = 0;            
         }
     };
+    
+    Sitemap.Filter = {
+        WILDCARD: String.fromCharCode(1),
+        DELIMITER: String.fromCharCode(7),
+        ESCAPE: String.fromCharCode(27),
+        normalize: function(text) {
+            text = (text || "").trim();
+            text = text.replace(/\s+/g, ' ');
+            text = text.replace(/\u00c4|\u00e4/g, 'ae');
+            text = text.replace(/\u00d6|\u00f6/g, 'oe');
+            text = text.replace(/\u00dc|\u00fc/g, 'ue');
+            text = text.replace(/\u00df/g, 'ss');
+            text = text.toLowerCase();
+            return text;
+        },
+        compile: function(filter) {
+            //simplifies all white spaces
+            filter = filter.replace(/[\x00-\x20]+/g, ' ');
+            //escapes all \\
+            filter = filter.replace(/\\\\/g, Sitemap.Filter.ESCAPE + '5C');
+            //escapes all \"
+            filter = filter.replace(/\\"/g, Sitemap.Filter.ESCAPE + '22');
+            //escapes all the escaped symbols
+            filter = filter.replace(/\\(.)/g, function(match, symbol) {
+                symbol = String(symbol).charCodeAt(0).toString(16);
+                while (symbol.length < 2)
+                    symbol = "0" + symbol;
+                return Sitemap.Filter.ESCAPE + symbol;
+            });
+            //escapes all special symbols in a phrase
+            filter = filter.replace(/"([^\"]*)"/g, function(match, phrase) {
+                phrase = phrase.replace(/\\(.)/g, function(match, symbol) {
+                    symbol = String(symbol).charCodeAt(0).toString(16);
+                    while (symbol.length < 2)
+                        symbol = "0" + symbol;
+                    return Sitemap.Filter.ESCAPE + symbol;
+                });
+                phrase = phrase.replace(/([\(\)\-\!\+\&\|\s|\*])/g, function(match, symbol) {
+                    symbol = String(symbol).charCodeAt(0).toString(16);
+                    while (symbol.length < 2)
+                        symbol = "0" + symbol;
+                    return Sitemap.Filter.ESCAPE + symbol;
+                });
+                return phrase; 
+            });
+            //escapes all *
+            filter = filter.replace(/\*/g, '\u0001');
+            //normalizes all special symbols
+            filter = filter.replace(/[\+\&]/g, '+');
+            filter = filter.replace(/[\-\!]/g, '-');
+            //removes all invalid auto AND combinations
+            filter = filter.replace(/([\(\+\-\|]) /g, '$1');
+            filter = filter.replace(/ ([\+\|\)])/g, '$1');
+            //set auto AND for all white spaces
+            filter = filter.replace(/\s/g, '+');
+            return filter;
+        },
+        validate: function(text, filter) {
+            if (!filter
+                    || !filter.trim())
+                return true;
+            //mark all special symbols
+            filter = filter.replace(/([\(\+\-\|\)])/g, Sitemap.Filter.DELIMITER + "$1" + Sitemap.Filter.DELIMITER);
+            filter = filter.split(Sitemap.Filter.DELIMITER);
+            filter.forEach(function(element, index, array) {
+                if (!element)
+                    return;
+                if (element.match(/\+/))
+                    array[index] = "&&";
+                if (element.match(/\-/))
+                    array[index] = "!";
+                if (element.match(/\|/))
+                    array[index] = "||";
+                if (element.match(/[\(\+\-\|\)]/))
+                    return;
+                element = element.replace(new RegExp(Sitemap.Filter.ESCAPE + "(\\d{2})", "g"), function(match, symbol) {
+                    return String.fromCharCode(parseInt(symbol, 16));
+                });
+                var regexp = RegExp.quote(element);
+                //unescape wildcard
+                regexp = regexp.replace(new RegExp(Sitemap.Filter.WILDCARD, "g"), '.*');
+                regexp = new RegExp("\\b" + regexp + "\\b", "i");
+                array[index] = regexp.test(text); 
+            });  
+            return eval(filter.join(" ").trim());
+        }       
+    }
     
     var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
     elements.forEach(function(element, index, array) {
@@ -353,7 +458,7 @@ Sitemap.create = function() {
     elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE_SET);
     elements.forEach(function(element, index, array) {
         var content = element.innerHTML;
-        content = Filter.normalize(content);
+        content = Sitemap.Filter.normalize(content);
         content = content.replace(new RegExp("<h[1-6][^>]+\\b" + Sitemap.ATTRIBUTE_CHAPTER + "=\"\\s*([\\d\\.]+)\\s*\"[^>]*>", "ig"), '\r\n$1 ');
         content = content.replace(/<\/*[^>]+>/g, ' ');
         content = content.replace(/ +/g, ' ').trim();
@@ -377,7 +482,7 @@ Sitemap.create = function() {
             Sitemap.meta.search = Sitemap.meta.filter;
             var search = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
             search.removeClassName(Sitemap.STYLE_ERROR);
-            var filter = Filter.compile(Sitemap.meta.search);
+            var filter = Sitemap.Filter.compile(Sitemap.meta.search);
             var update = function(chapter, filter, wait) {
                 if (!wait) {
                     window.setTimeout(function() {
@@ -388,7 +493,7 @@ Sitemap.create = function() {
                 var element = document.querySelector(Sitemap.SELECTOR_TOC_ANCHOR + "[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter + "']");
                 element.removeClassName(Sitemap.STYLE_MINOR);
                 try {
-                    if (!Filter.validate(Sitemap.index[chapter], filter))
+                    if (!Sitemap.Filter.validate(Sitemap.index[chapter], filter))
                         element.addClassName(Sitemap.STYLE_MINOR);
                 } catch (exception) {
                     if (search)
@@ -407,23 +512,18 @@ Sitemap.create = function() {
         search();
     });
     
-    var control = document.querySelector(Sitemap.SELECTOR_CONTROL);
+    var control;
+    control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(1)");
     control.addEventListener("click", function() {
-        var time = new Date().getTime();
-        this.setAttribute(Sitemap.ATTRIBUTE_TIMING + "-A", this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B") || time -1000);
-        this.setAttribute(Sitemap.ATTRIBUTE_TIMING + "-B", time);
-        var time = parseInt(this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B"))
-            - parseInt(this.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-A"));
-        if (time < 250)
-            return;
-        window.setTimeout(function() {
-            var control = document.querySelector(Sitemap.SELECTOR_CONTROL);
-            var content = ":toc";
-            if ((parseInt(control.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-B"))
-                    - parseInt(control.getAttribute(Sitemap.ATTRIBUTE_TIMING + "-A"))) < 250)
-                content += "-focus";
-            Sitemap.navigate(content);
-        }, 250);
+        Sitemap.toc.hide();
+    });
+    control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(2)");
+    control.addEventListener("click", function() {
+        Sitemap.navigate(":toc");
+    });
+    control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(3)");
+    control.addEventListener("click", function() {
+        Sitemap.navigate(":toc-focus");
     });
     Sitemap.navigate(document.location.hash);    
 };
@@ -483,7 +583,7 @@ Sitemap.navigate = function(chapter) {
     
     chapter = String(chapter || "");
     if (chapter.match(/^:toc(-focus)*/i)) {
-        var focus = chapter.match(/^:toc-focus/i);
+        var focus = chapter.match(/^:toc-focus/i) && Sitemap.chapter;
         var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE + (focus ? ".focus" : ":not(.focus)"));
         if (toc && toc.visible())
             Sitemap.toc.hide();
@@ -491,8 +591,6 @@ Sitemap.navigate = function(chapter) {
         return;
     }
     
-    //TODO: wenn chapter null, dann standard kapitel anzeigen
-    //      Q: was ist das standard kapitel?
     Sitemap.chapter = Sitemap.lookup(chapter);
     if (!Sitemap.chapter)
         return;
@@ -524,95 +622,5 @@ Sitemap.filter = function(filter) {
     if (!Sitemap.meta)
         Sitemap.meta = {filter:null, current:null, timing:0};
     Sitemap.meta.timing = new Date().getTime();
-    Sitemap.meta.filter = Filter.normalize(filter);
-};
-
-var Filter = Filter || new Object();
-
-Filter.WILDCARD = String.fromCharCode(1);
-Filter.DELIMITER = String.fromCharCode(7);
-Filter.ESCAPE = String.fromCharCode(27);
-
-Filter.normalize = function(text) {
-    text = (text || "").trim();
-    text = text.replace(/\s+/g, ' ');
-    text = text.replace(/\u00c4|\u00e4/g, 'ae');
-    text = text.replace(/\u00d6|\u00f6/g, 'oe');
-    text = text.replace(/\u00dc|\u00fc/g, 'ue');
-    text = text.replace(/\u00df/g, 'ss');
-    text = text.toLowerCase();
-    return text;
-};
-
-Filter.compile = function(filter) {
-    //simplifies all white spaces
-    filter = filter.replace(/[\x00-\x20]+/g, ' ');
-    //escapes all \\
-    filter = filter.replace(/\\\\/g, Filter.ESCAPE + '5C');
-    //escapes all \"
-    filter = filter.replace(/\\"/g, Filter.ESCAPE + '22');
-    //escapes all the escaped symbols
-    filter = filter.replace(/\\(.)/g, function(match, symbol) {
-        symbol = String(symbol).charCodeAt(0).toString(16);
-        while (symbol.length < 2)
-            symbol = "0" + symbol;
-        return Filter.ESCAPE + symbol;
-    });
-    //escapes all special symbols in a phrase
-    filter = filter.replace(/"([^\"]*)"/g, function(match, phrase) {
-        phrase = phrase.replace(/\\(.)/g, function(match, symbol) {
-            symbol = String(symbol).charCodeAt(0).toString(16);
-            while (symbol.length < 2)
-                symbol = "0" + symbol;
-            return Filter.ESCAPE + symbol;
-        });
-        phrase = phrase.replace(/([\(\)\-\!\+\&\|\s|\*])/g, function(match, symbol) {
-            symbol = String(symbol).charCodeAt(0).toString(16);
-            while (symbol.length < 2)
-                symbol = "0" + symbol;
-            return Filter.ESCAPE + symbol;
-        });
-        return phrase; 
-    });
-    //escapes all *
-    filter = filter.replace(/\*/g, '\u0001');
-    //normalizes all special symbols
-    filter = filter.replace(/[\+\&]/g, '+');
-    filter = filter.replace(/[\-\!]/g, '-');
-    //removes all invalid auto AND combinations
-    filter = filter.replace(/([\(\+\-\|]) /g, '$1');
-    filter = filter.replace(/ ([\+\|\)])/g, '$1');
-    //set auto AND for all white spaces
-    filter = filter.replace(/\s/g, '+');
-    return filter;
-};
-
-Filter.validate = function(text, filter) {
-    if (!filter
-            || !filter.trim())
-        return true;
-    //mark all special symbols
-    filter = filter.replace(/([\(\+\-\|\)])/g, Filter.DELIMITER + "$1" + Filter.DELIMITER);
-    filter = filter.split(Filter.DELIMITER);
-    filter.forEach(function(element, index, array) {
-        if (!element)
-            return;
-        if (element.match(/\+/))
-            array[index] = "&&";
-        if (element.match(/\-/))
-            array[index] = "!";
-        if (element.match(/\|/))
-            array[index] = "||";
-        if (element.match(/[\(\+\-\|\)]/))
-            return;
-        element = element.replace(new RegExp(Filter.ESCAPE + "(\\d{2})", "g"), function(match, symbol) {
-            return String.fromCharCode(parseInt(symbol, 16));
-        });
-        var regexp = RegExp.quote(element);
-        //unescape wildcard
-        regexp = regexp.replace(new RegExp(Filter.WILDCARD, "g"), '.*');
-        regexp = new RegExp("\\b" + regexp + "\\b", "i");
-        array[index] = regexp.test(text); 
-    });  
-    return eval(filter.join(" ").trim());
+    Sitemap.meta.filter = Sitemap.Filter.normalize(filter);
 };

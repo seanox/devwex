@@ -34,6 +34,15 @@
       </article>
       <article>
         <h1>Inhalt</h1>
+        <input type="text">
+        <button></button>
+        <p>
+          Der Filter unterstützt: UND (+ oder |), NICHT (- oder !), ODER (|),
+          runde Klammern, Jokerzeichen (*), Phrasen ("..."), Escape-Sequenzen /
+          Fluchtsymbole (\). In Phrasen werden alle Steuerzeichen automatisch
+          als Escape-Sequenz verwendet.         
+        </p>
+        <nav></nav>
       </article>      
       <article>
         <h1>Beschreibung</h1>
@@ -88,7 +97,7 @@
           Seanox Devwex ist ein multithreading-f&auml;higer Container f&uuml;r
           (Server-)Module, welche &uuml;ber die bereitgestellte Server- und
           Modul-API eingebunden werden. Der eigene ClassLoader unterst&uuml;tzt
-          dabei das Laden und Entladen von Servern und Modulen zur Laufzeit.<br>
+          dabei das Laden und Entladen von Servern und Modulen zur Laufzeit.
         </p>
         <h2>Hypertext Transfer Protocol</h2>
         <p>
@@ -2732,7 +2741,7 @@
             die mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
           </li>
           <li>
-            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen,
+            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen
             und &uuml;ber den Konstruktor <code>Module(String options)</code>
             initialisiert und registriert.
           </li>
@@ -2789,7 +2798,7 @@
             die mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
           </li>
           <li>
-            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen,
+            Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen
             und &uuml;ber den Konstruktor <code>Module(String options)</code>
             initialisiert und registriert.
           </li>
@@ -2867,9 +2876,9 @@
           <code>Service.destroy()</code> zum Beenden aufgefordert. Der Aufruf
           beider Methoden ist asynchron. Verz&ouml;gert sich das Beenden, wartet
           der Laufzeit-Container auf das Ende aller registrierten
-          Server-Instanzen. Optional ist die Implementierung der Methode
-          <code>Service.explain()</code> zur Abfrage allgemeiner Informationen
-          zum Protokoll und zur Netzwerkverbindung.
+          Server-Instanzen. Optional wird die Implementierung der Methode
+          <code>Server.explain()</code> zur Abfrage allgemeiner Informationen,
+          wie Protokoll und Netzwerkverbindung, unterst&uuml;tzt.
         </p>
         <h3>Implementierung</h3>
         <pre>
@@ -2929,17 +2938,17 @@
           Das Modul-API umfasst lediglich die Initialisierung und das Beenden
           von Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor
           initial mit dem Start vom Laufzeit-Container (Service), dabei wird die
-          Reihenfolge mit der Reihenfolge der Module innerhalb der Sektion
-          <code>INITIALIZE</code> in Konfigurationsdatei festgelegt, oder die
+          Abfolge in der Konfigurationsdatei mit der Reihenfolge der Module
+          innerhalb der Sektion <code>INITIALIZE</code>  festgelegt, oder die
           Initialisierung erfolgt mit der ersten Anforderung eines Moduls zur
           Laufzeit. Die Konfiguration wird einem Module nur dann &uuml;bergeben,
           wenn es initial &uuml;ber die Sektion <code>INITIALIZE</code> geladen
           wird. Die Aufforderung zum Beenden erfolgt &uuml;ber die Methode
           <code>Module.destroy()</code>. Der Laufzeit-Container &uuml;berwacht
           das Beenden nicht aktiv und verwirft die Module durch das Entladen vom
-          ClassLoader. Optional ist die Implementierung der Methode
-          <code>Module.explain()</code> zur Abfrage allgemeiner Informationen
-          zum Hersteller und zur Version.        
+          ClassLoader. Optional wird die Implementierung der Methode
+          <code>Module.explain()</code> zur Abfrage allgemeiner Informationen,
+          wie Hersteller und Version, unterst&uuml;tzt.        
         </p>
         <h3>Implementierung</h3>
         <pre>
@@ -3132,6 +3141,11 @@
         </p>
       </article>
     </main>
+    <nav>
+      <button></button>
+      <button></button>
+      <button></button>
+    </nav>
     <footer>
       <section>
         <p>Seanox Devwex</p>

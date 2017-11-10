@@ -17,7 +17,10 @@ if (typeof Array.prototype.contains !== "function")
         return this.indexOf(element) >= 0;
     }
 
-
+/**
+ *  Left padding a string of a number with zeros.
+ *  @param size length of the result string
+ */
 if (typeof Number.prototype.pad !== "function")
     Number.prototype.pad = function(size) {
         var text = String(this);
@@ -54,6 +57,10 @@ if (typeof Element.prototype.cssSelector !== "function")
         return names.join(" > ");
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Showns an element.
+ */     
 if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
         this.removeClassName("hidden");
@@ -61,6 +68,10 @@ if (typeof Element.prototype.show !== "function")
         this.removeAttribute("x-style-display");
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Hiddes an element.
+ */      
 if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
         this.addClassName("hidden");
@@ -69,11 +80,21 @@ if (typeof Element.prototype.hide !== "function")
         this.style.display = "none";
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Checks whether if an element hidden or shown.
+ *  @return true, if an element shown
+ */  
 if (typeof Element.prototype.visible !== "function")
     Element.prototype.visible = function() {
         return this.style.display != "none";
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Adds one or more specified CSS classes for the element.
+ *  @param  className class names to be added (space separeted)
+ */      
 if (typeof Element.prototype.addClassName !== "function")
     Element.prototype.addClassName = function(className) {
         className = (className || "").trim();
@@ -89,6 +110,11 @@ if (typeof Element.prototype.addClassName !== "function")
         });
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Removes one or more specified CSS classes for the element.
+ *  @param  className class names to be removed (space separeted)
+ */  
 if (typeof Element.prototype.removeClassName !== "function")
     Element.prototype.removeClassName = function(className) {
         className = (className || "").trim();
@@ -106,6 +132,12 @@ if (typeof Element.prototype.removeClassName !== "function")
         });
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Checks whether one or more specified CSS classes are set for the element.
+ *  @param  className class names to be tested (space separeted)
+ *  @return true, if all specified CSS classes are set for the element
+ */    
 if (typeof Element.prototype.containsClassName !== "function")
     Element.prototype.containsClassName = function(className) {
         className = (className || "").trim();
@@ -125,6 +157,11 @@ if (typeof Element.prototype.containsClassName !== "function")
         return !classNameA.join("").trim();
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Returns the real height of an element.
+ *  @return the real height of an element
+ */
 if (typeof window.height !== "function")
     window.height = function() {
         return window.innerHeight
@@ -132,11 +169,24 @@ if (typeof window.height !== "function")
             || document.body.clientHeight;
     };
 
+/**
+ *  Enhancement of the JavaScript API
+ *  Returns a literal pattern String for the specified text.
+ *  This method produces a String that can be used to create a Pattern that
+ *  would match the text as if it were a literal pattern. Metacharacters or
+ *  escape sequences in the input sequence will be given no special meaning.
+ *  @param  text to be literalized
+ *  @return a literal string replacement
+ */
 if (typeof RegExp.quote !== "function")
     RegExp.quote = function(text) {
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
 
+/**
+ *  Event when loading the page
+ *  Transforms PRE tags into output with row numbers.
+ */    
 window.addEventListener("load", function() {
     var elements = document.querySelectorAll("pre");
     elements.forEach(function(element, index, array) {
@@ -152,6 +202,10 @@ window.addEventListener("load", function() {
     });
 });
 
+/**
+ *  Event when loading the page
+ *  Transforms the table of architecure.
+ */    
 window.addEventListener("load", function() {
     var elements = document.querySelector("table.architecture");
     elements = elements.getElementsByTagName("*");
@@ -161,6 +215,10 @@ window.addEventListener("load", function() {
     });
 });
 
+/**
+ *  Event when loading the page
+ *  Activates the articles for the initial display.
+ */    
 window.addEventListener("load", function() {
     Sitemap.create();
     var elements = document.querySelectorAll("body > main > article");
@@ -172,20 +230,25 @@ window.addEventListener("load", function() {
     document.querySelector("body > main").addClassName("active");
 });
 
+/** Sitemap to manage and navigate the chapters. */
 var Sitemap = Sitemap || new Object();
 
+/** CSS selectors for all chapter/article relevants elements */
 Sitemap.SELECTOR_MAIN = "body > main";
 Sitemap.SELECTOR_ARTICLE = Sitemap.SELECTOR_MAIN + " > article";
 Sitemap.SELECTOR_ARTICLE_SET = Sitemap.SELECTOR_ARTICLE;
 Sitemap.SELECTOR_CHAPTER;
 
+/** CSS selectors for all toc relevants elements */
 Sitemap.SELECTOR_TOC = Sitemap.SELECTOR_ARTICLE + " nav";
 Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_ARTICLE + ".toc > input";
 Sitemap.SELECTOR_TOC_ANCHOR = Sitemap.SELECTOR_TOC + " a";
 Sitemap.SELECTOR_TOC_ARTICLE;
 
+/** CSS selectors for all navigation relevants elements */
 Sitemap.SELECTOR_CONTROL = Sitemap.SELECTOR_MAIN + " ~ nav";
 
+/** Attributes */
 Sitemap.ATTRIBUTE_INDEX = "index";
 Sitemap.ATTRIBUTE_LEVEL = "level";
 Sitemap.ATTRIBUTE_NUMBER = "number";
@@ -193,26 +256,36 @@ Sitemap.ATTRIBUTE_CHAPTER = "chapter";
 Sitemap.ATTRIBUTE_ALIAS = "alias";
 Sitemap.ATTRIBUTE_TITLE = "title";
 
+/** CSS styles classes */
 Sitemap.STYLE_MINOR = "minor";
 Sitemap.STYLE_ERROR = "error";
 Sitemap.STYLE_FOCUS = "focus";
 
+/** interrupt for concurrent and time-controlled logic */
 Sitemap.INTERRUPT = 125;
 
+/** chapter as meta objects */
 Sitemap.data;
 
+/** toc as HTML */
 Sitemap.view;
 
+/** current chapter */
 Sitemap.chapter;
 
+/** number of available chapters */
 Sitemap.size;
 
+/** index of chapters */
 Sitemap.index;
 
+/** meta search */
 Sitemap.meta;
 
+/** toc as meta object */
 Sitemap.toc;
 
+/** Creates the Sitemap, indexes all chapters and builds the tabel of content. */
 Sitemap.create = function() {
     
     if (Sitemap.data)
@@ -528,6 +601,13 @@ Sitemap.create = function() {
     Sitemap.navigate(document.location.hash);    
 };
 
+/**
+ *  Determines the metadata for a chapter.
+ *  As chapters are supported: chapter numbers, aliases and the directives
+ *  :first and :last
+ *  @param  chapter
+ *  @return determined metadata for a chapter, otherwise null
+ */
 Sitemap.lookup = function(chapter) {
     if (!Sitemap.size)
         return null;
@@ -576,6 +656,12 @@ Sitemap.lookup = function(chapter) {
     return Sitemap.data[chapter];
 };
 
+/**
+ *  Navigates to a chapter.
+ *  As chapters are supported: chapter numbers, aliases and the directives :toc,
+ *  :toc-focus, :first and :last
+ *  @param chapter
+ */
 Sitemap.navigate = function(chapter) {
     
     if (!Sitemap.size)
@@ -618,6 +704,14 @@ Sitemap.navigate = function(chapter) {
     });
 };
 
+/** 
+ *  Filters the table of contents with a search expression.
+ *  The expression supports: AND (+ or |), NOT (- or !), OR (|), round brackets,
+ *  wildcard characters (*), phrases ("..."), escape sequences / escape symbols
+ *  (\). In phrases, all special characters are automatically used as escape
+ *  sequences. 
+ *  @param filter search expression
+ */
 Sitemap.filter = function(filter) {
     if (!Sitemap.meta)
         Sitemap.meta = {filter:null, current:null, timing:0};

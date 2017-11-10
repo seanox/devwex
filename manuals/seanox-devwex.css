@@ -1,72 +1,238 @@
-body {
-  padding:0em; margin:0em; 
-  color:#CCCCCC; background:#494744; font:1em sans-serif; cursor:default;
+pre, code, samp, kbr {
+  font-size:1rem; color:#FFFFFF;
+  font:1rem monospace;
 }
 
-pre, code, samp, ol {
-  font-size:1.25em; color:#FFFFFF;
+strong {
+  color:#FFFFFF; font-weight:normal;
 }
 
-body > section {
-  padding:5% 10%;
+h1:before,
+h2:before,
+h3:before,
+h4:before,
+h5:before,
+h6:before {
+  position:relative; min-width:1em; margin-right:1em; display:block; float:left;
+  color:#999999;
+  content:attr(chapter);
 }
-body section section {
-  display:block; margin:1em 0em 1em 0em; padding:0em 1em 0em 1em; 
-  border:1px solid #999999;
+h1 {
+  font-size:24px;
 }
-body section section > *:first-child {
-  display:block; margin:1em 0em 1em 0em;
-  font-weight:bold;
+h2 {
+  font-size:20px; margin-top:4em;
 }
-
-body section article table {
-  border-spacing:0px; border-collapse:collapse;
-  border-bottom:2px solid #FFAA44;
+h3 {
+  font-size:18px; margin-top:4em;
 }
-body section article table tr th + th,
-body section article table tr td + td {
-  padding-left:2em;
+h4 {
+  font-size:16px; margin-top:4em;
 }
-
-body section article table tr th {
-  position:relative; text-align:right; 
-  border-bottom:2px solid #FFAA44;
+h5 {
+  font-size:14px; margin-top:4em;
 }
-
-body section article table tr th,
-body section article table tr td {
-  text-align:left; vertical-align:top; padding:0.5em;
-}
-body section article table tr td {
-  font:1.25em monospace; color:#FFFFFF;
-}
-body section article table tr td + td {
-  font:1.25em monospace; color:#CCCCCC;
-}
-body section article table tr td:last-of-type {
-  font:1em sans-serif; color:#CCCCCC;
+h1 > a,
+h2 > a,
+h3 > a,
+h4 > a,
+h5 > a,
+h6 > a {
+  position:relative; top:-3em;
 }
 
-body section article table tr:nth-child(even) {
+
+
+body main article.toc a {
+  display:block; 
+}
+body main article.toc a:before {
+  min-width:1em; margin-right:1em;
+  position:relative; display:block; float:left;
+  color:#999999;
+  content:attr(chapter);
+}
+body main article.toc a.active {
   background:#595755;
 }
 
-body section article table tbody tr + tr td {
+
+
+body main section {
+  display:block; margin:1em 0em 1em 0em; padding:0em 1em 0em 1em; 
+  border:1px solid #999999;
+}
+body main section > *:first-child {
+  display:block; margin:1em 0em 1em 0em;
+}
+
+
+
+body main article table.architecture,
+body main article table.architecture table {
+  border-spacing:0px; border-collapse:collapse; 
+}
+body main article table.architecture td {
+  vertical-align:top; white-space:nowrap; 
+}
+body main article table.architecture > tbody > tr + tr > td {
+  padding-top:1em;
+}
+body main article table.architecture *.composite {
+}
+body main article table.architecture *.composite.float {
+  float:left;
+}
+body main article table.architecture *.composite.float + *.composite.float {
+  margin-left:1em;    
+}
+body main article table.architecture *.composite.container {
+  border:none;  
+}
+body main article table.architecture *.composite.container.float td {
+  padding:0em;
+}
+body main article table.architecture *.composite.container.float td + td {
+  padding-left:1em;
+}
+body main article table.architecture *.composite td,
+body main article table.architecture *.composite div {
+  padding:0.5em; vertical-align:middle; text-align:center;
+  color:#CCCCCC;
+}
+body main article table.architecture *.composite,
+body main article table.architecture *.composite.list > tbody > tr > td,
+body main article table.architecture *.composite.section,
+body main article table.architecture *.composite.section > tbody > tr:first-child > td {
+  border:1px solid #999999; 
+}
+body main article table.architecture *.composite.section > tbody > tr:first-child > td {
+  color:#FFFFFF; border-color:#FFFFFF;
+}
+body main article table.architecture *.composite.section > tbody > tr + tr > td {
+  padding:1em;
+}
+body main article table.architecture *.composite:not(.float) + *.composite:not(.float) {
+  margin-top:1em;
+}
+body main article table.architecture *.interface {
+  color:#FFAA44!important; border:1px solid #FFAA44!important;
+}
+body main article table.architecture *.architecture-0017 {
+  padding-bottom:calc(1em + 3px)!important;
+}
+body main article table.architecture *.architecture-0024 {
+  width:25%;
+}
+body main article table.architecture *.architecture-0039,
+body main article table.architecture *.architecture-0040,
+body main article table.architecture *.architecture-0068,
+body main article table.architecture *.architecture-0069 {
+  width:50%;
+}
+body main article table.architecture *.architecture-0021,
+body main article table.architecture *.architecture-0076 {
+  width:100%;
+}
+
+
+
+body main article ol.code {
+  display:block; margin:1em 0em 1em 0em; padding:1em; 
+  background:#595755; list-style:inside none; border:1px solid #999999;
+  counter-reset:line;
+}
+body main article ol.code li {
+  display:block; 
+}
+body main article ol.code li:before { 
+  margin-right:1em;
+  color:#999999; font:1rem monospace;
+  counter-increment:line;
+  content:counters(line, '.', decimal-leading-zero);
+}
+body main article ol.code li code {
+  white-space:pre;
+}
+
+
+
+body main article table:not([class]) {
+  width:100%;
+  border-spacing:0px; border-collapse:collapse; border-bottom:2px solid #FFAA44;
+}
+body main article table:not([class]) tr th + th,
+body main article table:not([class]) tr td + td {
+  padding-left:2em;
+}
+body main article table:not([class]) tr th {
+  position:relative; text-align:right; 
+  border-bottom:2px solid #FFAA44;
+}
+body main article table:not([class]) tbody tr:first-child td {
+  border-top:2px solid #FFAA44;
+}
+body main article table:not([class]) tr th,
+body main article table:not([class]) tr td {
+  text-align:left; vertical-align:top; padding:0.5em;
+}
+body main article table:not([class]) tr td {
+  font:1rem monospace; color:#FFFFFF;
+}
+body main article table:not([class]) tr td + td {
+  font:1rem monospace; color:#CCCCCC;
+}
+body main article table:not([class]) tr td:last-of-type {
+  font:1em sans-serif; color:#CCCCCC;
+}
+body main article table:not([class]) tr:nth-child(even) {
+  background:#595755;
+}
+body main article table:not([class]) tbody tr + tr td {
   border-top:1px solid #777777;
 }
 
-body section article ol.code {
-  display:block; margin:1em 0em 1em 0em; padding:1em; 
-  background:#595755; list-style:inside none; border:1px solid #999999;
-  counter-reset:item;
+
+
+body main article > header {
+  display:block; margin:2em 0em 1em 0em;
 }
-body section article ol.code li {
-  display:block; white-space:pre;
-  font:1em monospace;
+
+
+
+@media screen {
+
+  body > main:not(.active) article {
+    display:none;
+  }
+  
+  body > nav {
+    position:fixed; height:3em; bottom:3em; right:3em; 
+  }
+  body > nav button {
+    height:35px; width:35px; 
+  }  
+  body > nav button + button {
+    margin-left:0.5em;
+  }
+  body > nav button:nth-child(1) {
+    TODO:
+  }
+  body > nav button:nth-child(2) {
+    TODO:
+  }    
+  body > nav button:nth-child(3) {
+    TODO:
+  }  
 }
-body section article ol.code li:before { 
-  margin-right:1em;
-  color:#999999;
-  counter-increment:item;
-  content:counters(item, '.', decimal-leading-zero);
-}
+
+
+
+@media print {
+
+  body > nav {
+    display:none;
+  }
+  
+  TODO:
+}  

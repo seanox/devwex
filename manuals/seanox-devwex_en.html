@@ -125,99 +125,93 @@
           to the network for a protocol at an address and port. Existing server
           and network functionalities can be changed or new ones made available. 
         </p>
-        TODO:
         <h3>Modul-API (XAPI)</h3>
-          Mit dem Modul-API werden die Implementierungen eingebunden, welche
-          im Hintergrund agieren und nach Aussen keine direkten Funktionen
-          bereitstellen.
+          The module API integrates implementations that work in the background
+          and do not provide direct external functions. 
         <h3>HTTP</h3>
         <p>
-          Entsprechend der Spezifikation 1.0 werden GET, POST und HEAD sowie
-          OPTIONS, PUT und DELETE vom HTTP 1.1 unterst&uuml;tzt. Weitere
-          Methoden lassen sich &uuml;ber HTTP-Module, XCGI bzw. CGI
-          bereitstellen.
+          In accordance with the HTTP in specification 1.0 and partly 1.1 GET,
+          POST, HEAD as well as OPTIONS, PUT and DELETE are supported.
+          Additional methods can be provided via HTTP modules, XCGI or CGI. 
         </p>
         <h3>HTTP-Modul-API (XAPI+)</h3>
         <p>
-          Die HTTP-Modul-API ist eine Erweiterung vom Module-API f&uuml;r den 
-          HTTP-Server zur Implementierung von Filter- und
-          Service-Funktionalit&auml;ten, die im Kontext vom Server laufen.
+          The HTTP Module API is an extension of the Module API for the HTTP
+          server to implement filter and service functions that run in the
+          context of the server. 
         </p>          
         <h3>(Fast)CGI</h3>
         <p>
-          Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen und
-          Anwendungen werden die Spezifikation 1.1 des Common Gateway Interfaces
-          und somit PHP, Perl, Python und andere unterst&uuml;tz. Optional ist
-          auch FastCGI verf&uuml;gbar.
+          For data exchange as well as for connecting external runtime
+          environments and applications, the specification 1.1 of the Common
+          Gateway Interface and thus PHP, Perl, Python and others are supported.
+          FastCGI is also available as an option. 
         </p>
         <h3>XCGI</h3>
         <p>
-          Das XCGI ist eine an das CGI angelehnte Schnittstelle und gleich im
-          Grundprinzip und der Arbeitsweise. Auch das XCGI kommuniziert
-          &uuml;ber den Standard-I/O, &uuml;bermittelt aber auch die
-          serverrelevanten Informationen und Umgebungsvariablen &uuml;ber diesen
-          Weg. Womit auch Anwendungen genutzt werden k&ouml;nnen, welche keine
-          exklusive Umgebung besitzen oder keinen Zugriff auf die
-          Umgebungsvariablen vom Betriebssystem haben.
+          The XCGI is an interface based on the CGI and is based on the same
+          basic principle and method of operation. The XCGI also communicates
+          via the standard I/O, but also transmits server-relevant information
+          and environment variables via this channel. This can also be used to
+          use applications that do not have an exclusive environment or do not
+          have access to the environment variables of the operating system. 
         </p>
         <h3>Telnet</h3>
         <p>
-          Der enthaltene Fernzugriff unterst&uuml;tzt eine auf Telnet basierende
-          Steuerung f&uuml;r Statusabfragen, Neustart und Stopp.<br>
-          Neben der Server-Implementierung ist auch eine Client-Implementierung
-          enthalten.
+          The included remote access supports a Telnet-based control for status
+          queries, restart and stop.<br>
+          In addition to the server implementation, a client implementation is
+          also included. 
         </p>
-        <h2>Sicherheit</h2>
+        <h2>Security</h2>
         <p>
-          F&uuml;r eine gesicherte &Uuml;bertragung von Daten werden unter
-          anderem Transport Layer Security (TLS) und Secure Socket Layer (SSL)
-          mit Server- und Client-Zertifikaten unterst&uuml;tzt. Zertifikate
-          k&ouml;nnen dabei f&uuml;r jeden physischen Host einzeln, durch
-          Vererbung in Gruppen oder global zugewiesen werden.
+          For a secure transfer of data, Transport Layer Security (TLS) and
+          Secure Socket Layer (SSL) with server and client certificates are
+          supported. Certificates can be assigned individually for each physical
+          host, by inheritance in groups or globally. 
         </p>
         <p>
-          Der Zugriff auf Verzeichnisse und Dateien kann mit Basic- sowie
-          Digest-Access-Authentication versehen werden, welche Gruppen
-          unterst&uuml;tzen. Zudem kann der Zugriff &uuml;ber Filter gesteuert
-          werden, welche frei definierbare Regeln, individuelle Fehlerseiten,
-          automatische Weiterleitungen und Module unterst&uuml;tzen.
+          Access to directories and files can be provided with basic and digest
+          access authentication that supports groups. In addition, access can be
+          controlled via filters that support freely definable rules, individual
+          error pages, automatic redirections and modules. 
         </p>
-        <h2>Virtualisierung</h2>
+        <h2>Virtualization</h2>
         <p>
-          Der HTTP-Server unterst&uuml;tzt Virtual Hosting und Aliasing f&uuml;r
-          virtuelle Pfade. 
+          The HTTP server supports virtual hosting and aliasing for virtual
+          paths. 
         </p>
-        <h2>Individualität</h2>
+        <h2>Individuality</h2>
         <p>
-          HTTP-Server und virtuelle Hosts verwenden f&uuml;r die Fehlerseiten
-          und die Listenansicht der Verzeichnisse (Directory Index) Templates,
-          die sich individuell anpassen lassen. Mit Unterst&uuml;tzung der
-          CGI-Umgebungsvariablen kann der Inhalt dynamisch gestaltet werden.
+          HTTP servers and virtual hosts use customizable templates for the
+          error pages and list view of the directories (directory index). With
+          support for CGI environment variables, the content can be designed
+          dynamically. 
         </p>
-        <h2>Erweiterbarkeit</h2>
+        <h2>Expandability</h2>
         <p>
-          Die modulare Architektur und zahlreichen Schnittstellen
-          erm&ouml;glichen das &Auml;ndern, Erweitern und Hinzuf&uuml;gen von
-          Funktionalit&auml;ten.
+          The modular architecture and many interfaces allow the modification,
+          extension and addition of functionalities. 
         </p>  
       </article>
       <article>
-        <h1>Systemanforderung</h1>
+        <h1>System requirement</h1>
         <h2>Software</h2>
         <ul>
-          <li>Java Runtime 8.x oder h&ouml;her</li>
+          <li>Java Runtime 8.x or higher</li>
         </ul>
         <h2>Hardware (Minimum)</h2>
         <ul>
-          <li>Prozessor 200 MHz</li>
-          <li>Speicher 64 MB</li>
-          <li>Netzwerk 10 MB/s</li>                    
+          <li>Processor 200 MHz</li>
+          <li>Memory 64 MB</li>
+          <li>Network 10 MB/s</li>                    
         </ul>       
       </article>
       <article>
         <h1>Installation</h1>
         <p>
-          Seanox Devwex wird als ZIP-Archive bereitgestellt und entpackt.<br>
+          TODO:
+          Seanox Devwex is provided as a ZIP archive and unpacked.<br>
           Die enthaltene Verzeichnisstruktur wird an einer beliebigen Stelle im
           Dateisystem abgelegt.
         </p>

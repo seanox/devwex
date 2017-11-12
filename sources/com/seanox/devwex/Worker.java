@@ -2691,7 +2691,7 @@ class Worker implements Runnable {
             
             if (this.control) {
 
-                //PROCESS/(X)CGI/MODUL - wird bei gueltiger Angabe ausgefuehrt
+                //PROCESS/(X)CGI/MODULE - wird bei gueltiger Angabe ausgefuehrt
                 if (this.status == 200 && this.gateway.length() > 0) {
 
                     try {this.doGateway();

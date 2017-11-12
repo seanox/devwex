@@ -125,7 +125,7 @@
           to the network for a protocol at an address and port. Existing server
           and network functionalities can be changed or new ones made available. 
         </p>
-        <h3>Modul-API (XAPI)</h3>
+        <h3>Module-API (XAPI)</h3>
           The module API integrates implementations that work in the background
           and do not provide direct external functions. 
         <h3>HTTP</h3>
@@ -134,7 +134,7 @@
           POST, HEAD as well as OPTIONS, PUT and DELETE are supported.
           Additional methods can be provided via HTTP modules, XCGI or CGI. 
         </p>
-        <h3>HTTP-Modul-API (XAPI+)</h3>
+        <h3>HTTP-Module-API (XAPI+)</h3>
         <p>
           The HTTP Module API is an extension of the Module API for the HTTP
           server to implement filter and service functions that run in the
@@ -1964,7 +1964,7 @@
           Neben XCGI und CGI k&ouml;nnen auch Module &uuml;ber den Gateway
           eingerichtet werden.<br>
           Anders als beim XCGI und CGI, werden Module nicht als externe
-          Anwendung geladen, sondern &uuml;ber das Modul-API (MAPI) direkt in
+          Anwendung geladen, sondern &uuml;ber das Module-API (XAPI) direkt in
           der Laufzeitumgebung des Servers ausgef&uuml;hrt. Sehr schnelle
           Zugriffszeiten und ein direkter Zugang und Zugriff auf die Komponenten
           vom Laufzeit-Container sind dabei von Vorteil.
@@ -2831,9 +2831,9 @@
           Die Erweiterung von Seanox Devwex ist auf mehre Arten m&ouml;glich.
         </p>
         <p>
-          Der Service stellt dazu ein Server-, Modul- und HTTP-Modul-API bereit.
-          Spezielle Interfaces und Abstraktionen sind im Service selbst nicht
-          enthalten, dieser nutzt die und steuert alle Server und Module
+          Der Service stellt dazu ein Server-, Module- und HTTP-Module-API
+          bereit. Spezielle Interfaces und Abstraktionen sind im Service selbst
+          nicht enthalten, dieser nutzt die und steuert alle Server und Module
           &uuml;ber Reflections und stille Standards/Interfaces, was u.U.
           detaillierte Kenntnisse &uuml;ber die Komponenten und Arbeitsweise von
           Seanox Devwex erforder.
@@ -2847,7 +2847,7 @@
         </p>
         <p>
           Im Nachfolgenden werden ausschliesslich die im Service enthaltene
-          Server-, Modul- und HTTP-Modul-API beschrieben.
+          Server-, Module- und HTTP-Module-API beschrieben.
         </p>          
         <h2>Server</h2>
         <p>
@@ -2927,7 +2927,7 @@
         </p>
         <h3>API (XAPI)</h3>
         <p>
-          Das Modul-API umfasst lediglich die Initialisierung und das Beenden
+          Das Module-API umfasst lediglich die Initialisierung und das Beenden
           von Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor
           initial mit dem Start vom Laufzeit-Container (Service), dabei wird die
           Abfolge in der Konfigurationsdatei mit der Reihenfolge der Module
@@ -3000,7 +3000,7 @@
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Das API entspricht dem Modul-API, die um <code>Module.filter(Worker
+          Das API entspricht dem Module-API, die um <code>Module.filter(Worker
           worker, String options)</code> erweitert wird. Der &uuml;bergeben
           Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
           Server, Socket, Request, Response, Konfiguration und Environment. Mit
@@ -3064,7 +3064,7 @@
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Das API entspricht dem Modul-API, die um <code>Module.service(Worker
+          Das API entspricht dem Module-API, die um <code>Module.service(Worker
           worker, String options)</code> erweitert ist. Der &uuml;bergeben
           Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
           Server, Socket, Request, Response, Konfiguration und Environment. Mit

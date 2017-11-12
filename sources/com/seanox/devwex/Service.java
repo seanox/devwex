@@ -78,7 +78,7 @@ import java.util.Vector;
  *  Optional ist die Verwendung vom Context-ClassLoader aus dem Seanox Devwex
  *  SDK m&ouml;glich, womit Module auch in mehreren unabh&auml;ngigen Instanzen
  *  mit eigenem ClassLoader verwendet werden k&ouml;nnen.<br>
- *  Das Modul-API umfasst lediglich die Initialisierung und das Beenden von
+ *  Das Module-API umfasst lediglich die Initialisierung und das Beenden von
  *  Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor initial mit
  *  dem Start vom Laufzeit-Container (Service), dabei wird die Abfolge in der
  *  Konfigurationsdatei mit der Reihenfolge der Module innerhalb der Sektion

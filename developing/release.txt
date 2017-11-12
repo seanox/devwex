@@ -156,9 +156,9 @@
       - COMMONS RELOADING geändert in RELOAD
       - COMMONS CLEARING geändert in CLEANUP
   CR: HTTP File Index - allgemeine Umgestaltung von Sortierung und Navigation
-  CR: HTTP Module - Erweiterung der MAPI um die optionale Übergabe der Modul-Parameter
+  CR: HTTP Module - Erweiterung der XAPI um die optionale Übergabe der Modul-Parameter
   CR: SERVERSTATUS - Erweiterung um Status 101
-  CR: Test - Erweiterung der Prüfung der MAPI
+  CR: Test - Erweiterung der Prüfung der XAPI
       Übergabe der Konfiguration bei der Initialisierung
 
 4.1.0 20120815
@@ -173,7 +173,7 @@
   CR: Projekt - Umstellung der Ant-Tags auf das Format @@@ant-[property]
   CR: Service - Erweiterung von -Dlibraries zum das Laden von Verzeichnisse
   CR: Module - Optimierung/Bereinigung
-      MAPI: Wegfall der optionalen Methoden mount/unmount
+      XAPI: Wegfall der optionalen Methoden mount/unmount
   CR: Server - Erweiterung
       - Option [S] für SERVER:BAS TIMEOUT / VIRTUAL:BAS TIMEOUT zur strikten Trennung
         ausgehender Datenströme bei Leerlauf oder minderer Transferraten (z.B. < 4096 b/s)
@@ -220,7 +220,7 @@
       - SERVER:BAS/VIRTUAL:BAS DEFAULT Trennung der Werte durch Leerzeichen
       - SERVER:BAS/VIRTUAL:BAS METHODS Trennung der Werte durch Leerzeichen
   CR: HTTP Filter - Optimierung/Erweiterung
-      - direkt Verwendung von Modulen über MAPI
+      - direkt Verwendung von Modulen über XAPI
       - neue Bedingungen: CONTAINS, ALWAYS, EMPTY
         Die Konstante EMPTY entfällt und wird ersetzt durch die Bedingung EMPTY.
         Die Bedingung INDEX wurde in CONTAINS geändert.
@@ -292,7 +292,7 @@
 3.4.2 20091003
   BF: HTTP DCGI/CGI - Korrektur der max. Ausführungszeit
       Diese schliesst nun die Übertragung der Request-Daten an das DCGI/CGI ein.
-  CR: Module - Erweiterung der MAPI/Sequenz und den Aufruf der Methoden mount/unmount
+  CR: Module - Erweiterung der XAPI/Sequenz und den Aufruf der Methoden mount/unmount
   CR: Konfiguration - Umstellung auf FastCGI
       - Umstellung der PHP-Distribution auf FastCGI
 
@@ -374,7 +374,7 @@
 3.1.0 20071017
   CR: Projekt - Anpassung zur Kompatibilität Java 1.2.x bis 1.6.x
   CR: Devwex - allgemeine Optimierung bei Performanz, Fehlerausgabe und Grösse
-  CR: Devwex - neuer finaler Stand der SAPI (Server-API) und MAPI (Modul-API)
+  CR: Devwex - neuer finaler Stand der SAPI (Server-API) und XAPI (Module-API)
   CR: Service - Umstellung der Server-API
       - Server müssen Runnable sowie die Methode Server::GetCaption und Server::Destroy
         implementieren. Die Signatur vom Konstruktor wurde in Server::Server(String, Object)
@@ -394,7 +394,7 @@
       - Erweiterung um die Option [*] bei der Initialisierung von Modulen
         So gekennzeichnete Module sind optional und führen zu keiner Fehlerausgabe,
         wenn diese nicht verfügbar sind.
-        Bsp. MODUL EXAMPLE = com.seanox.module.Example [*]
+        Bsp. MODULE EXAMPLE = com.seanox.module.Example [*]
       - allgemeine Verbesserung bei Erkennung und Verarbeitung der Modul-Optionen
   CR: Server - Überarbeitung/Optimierung
       - Umstellung auf die neue SAPI
@@ -433,7 +433,7 @@
   CR: Server - der Schlüssel SERVER:MOD SERVER:CONNECTOR wurde verworfen
       Die Deklaration von Servern wird nur noch über SERVER:BAS CONNECTOR unterstützt
   CR: HTTP Server - Konfiguration: Sektion VIRTUALHOST geändert in VIRTUAL
-  CR: HTTP Module - Update der MAPI auf Seanox Module-API 1.2006.12xx oder höher
+  CR: HTTP Module - Update der XAPI auf Seanox Module-API 1.2006.12xx oder höher
   CR: HTTP Module - Vereinfachung der Sektion SERVER:MOD
       - Wegfall vom Präfix SESSION:
         SESSION:FILTER ist FILTER, SESSION:LOGGING ist LOGGING, ...

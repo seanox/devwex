@@ -64,8 +64,6 @@ if (typeof Element.prototype.cssSelector !== "function")
 if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
         this.removeClassName("hidden");
-        this.style.display = this.getAttribute("x-style-display");
-        this.removeAttribute("x-style-display");
     };
 
 /**
@@ -75,9 +73,6 @@ if (typeof Element.prototype.show !== "function")
 if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
         this.addClassName("hidden");
-        if (!this.hasAttribute("x-style-display"))
-            this.setAttribute("x-style-display", this.style.display);
-        this.style.display = "none";
     };
 
 /**
@@ -87,7 +82,7 @@ if (typeof Element.prototype.hide !== "function")
  */  
 if (typeof Element.prototype.visible !== "function")
     Element.prototype.visible = function() {
-        return this.style.display != "none";
+        return !this.containsClassName("hidden");
     };
 
 /**
@@ -523,7 +518,7 @@ Sitemap.create = function() {
         if (!pattern.test(element.innerHTML))
             return;
         element.innerHTML = element.innerHTML.replace(pattern, function(match, word) {
-            return "<a href=\"#" + word + "\">" + Sitemap.data[word] + "</a>";
+            return "<a href=\"#" + word + "\">" + Sitemap.data[word].title + "</a>";
         });
     });    
     

@@ -11,7 +11,6 @@
   <body>
     <main>
       <article>
-        TODO:
         <p>Seanox Devwex</p>
         <p>Version #[ant:release-version] #[ant:release-date]</p>
         <p>System Manual (machine translation)</p>
@@ -210,40 +209,36 @@
       <article>
         <h1>Installation</h1>
         <p>
-          TODO:
           Seanox Devwex is provided as a ZIP archive and unpacked.<br>
-          Die enthaltene Verzeichnisstruktur wird an einer beliebigen Stelle im
-          Dateisystem abgelegt.
+          The unpacked directory structure is stored anywhere in the file
+          system. 
         </p>
       </article>
       <article>
-        <h1>Konfiguration</h1>
+        <h1>Configuration</h1>
         <p>
-          Seanox Devwex verwendet eine zentrale Konfiguration aus dem aktuellen 
-          Arbeitsverzeichnis, die mit der Installation vorkonfiguriert im 
-          Programm-Verzeichnis <code>./devwex/program</code> in der Datei
-          <code>devwex.ini</code> abgelegt wird. Die Konfiguration ist in
-          Sektionen mit Schl&uuml;sseln und Werten untergliedert, die u.a. auch
-          dynamische Werte und den Zugriff auf System- und Umgebungsvariablen
-          unterst&uuml;tzt. 
+          Seanox Devwex uses a central configuration from the current working
+          directory, which is pre-configured in the program directory
+          <code>./devwex/program</code> and stored there in the file
+          <code>devwex.ini</code>. The configuration is divided into sections
+          with keys and values that support dynamic values and access to system
+          and environment variables. 
         </p>
-        <h2>Konfigurationsdatei</h2>
+        <h2>Configuration File</h2>
         <p>
-          Das verwendete INI-Format ist eine kompatible Erweiterung zum
-          klassischen Format. Es ist ebenfalls zeilenbasiert und verwendet
-          Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim Namen
-          von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung 
-          ignoriert. Gleichnamige Deklarationen f&uuml;hren zum
-          &Uuml;berschreiben von Sektionen und Schl&uuml;sseln.
+          The INI format used is a compatible extension to the classic format.
+          It is also row-based and uses sections with keys and values. The name
+          of the section and key is not case-sensitive. Declarations with the
+          same name cause sections and keys to be overwritten. 
         </p>
         <p>
-          In der Erweiterung lassen sich u.a. Sektionen vererben. Dazu folgt
-          einer Sektion das Sch&uuml;sselwort <code>EXTENDS</code> und gefolgt
-          von den Namen referenzierter Sektionen. Damit &uuml;bernimmt die
-          Sektion alle Schl&uuml;ssel und Werte der referenzierten Sektionen und
-          kann diese erweitern oder &uuml;berschreiben.
+          With the extension, sections can be inherited. The section is followed
+          by the keyword <code>EXTENDS</code>, followed by the names of the
+          referenced sections. The section takes over all keys and values of the
+          referenced sections and can expand or overwrite them. 
         </p>
         <p>
+          TODO:
           Das Zuweisen von Werten zu Schl&uuml;sseln in einer Sektion erfolgt
           mit dem Gleichheitszeichen. Abweichend vom Originalformat, kann die
           Zuweisung in der Folgezeile ohne erneute Angabe des Schl&uuml;ssels
@@ -626,10 +621,12 @@
           virtuelle Hosts entfallen, da diese nur HTTP-spezifisch konfiguriert
           werden.
         </p>
+        <p>
+          Die Server-Konfiguration besteht aus zwei Teilen.<br>
+          Neben der Netzwerkverbindung wird hier auch das HTTP konfiguriert.
+        </p>
         <header>
-          &Uuml;bersicht der verf&uuml;gbaren Konfiguration:<br>
-          Im ersten Teil wird die Konfiguration vom Server und im zweiten Teil
-          die vom HTTP beschrieben. 
+          &Uuml;bersicht der verf&uuml;gbaren Server-Konfiguration:<br>
         </header>         
         <table>
           <thead>
@@ -684,6 +681,18 @@
               </td>
             </tr>
           </tbody>
+        </table>
+        <header>
+          &Uuml;bersicht der verf&uuml;gbaren HTTP-Konfiguration:<br>
+        </header>            
+        <table>
+          <thead>
+            <tr>
+              <th>Schl&uuml;ssel</th>
+              <th>Wert</th>
+              <th>Beschreibung</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>ACCESSLOG</td>
@@ -2942,194 +2951,190 @@
           <code>Module.explain()</code> zur Abfrage allgemeiner Informationen,
           wie Hersteller und Version, unterst&uuml;tzt.        
         </p>
-        <h3>Implementierung</h3>
+        TODO:
+        <h3>Implementation</h3>
         <pre>
           public class Module {
           
               public Module(String options) {
                   ...
                   
-                  Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
-                  dieser nicht vor, wird das Modul als inkompatible zur API
-                  betrachtet und nicht geladen. Die Konfiguration ist optional
-                  und wird nur bei zentraler Initiierung aus der Sektion
-                  [INITIALIZE] &uuml;bergeben.
+                  The module is initiated via this constructor. If this is not
+                  available, the module is considered incompatible with the API
+                  and is not loaded. The configuration is optional and will only
+                  be transferred from the[INITIALIZE] section if initiated
+                  centrally.
               }
 
               public String explain() {
                   ...
                   
-                  Die Methode ist optional und gibt allgemeine Informationen zum
-                  Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
-                  die statisch oder mit der Initialisierung gesetzt werden
-                  sollten.
+                  This method is optional and returns general information about
+                  the module in the following format:
+                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
+                  statically or with initialization.
               }
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  The module is requested to close before being unloaded by the
+                  service and ClassLoader. The resources, data streams and
+                  processes initiated or used by the module should be closed or
+                  terminated with this call.
               }
           }        
         </pre>   
-        <h2>HTTP-Module</h2>
+        <h2>HTTP-Modules</h2>
         <p>
-          HTTP-Module sind eine Erweiterung vom Module-API von Seanox Devwex
-          speziell zur Filterung, Annahme und Verarbeitung von HTTP-Anfragen,
-          die im Kontext vom Server laufen.
+          HTTP modules are an extension of Seanox Devwex Module API, which run
+          in the server context and are used specifically for filtering,
+          accepting, and processing HTTP requests.
         </p>
         <p>
-          Mit HTTP-Modulen lassen sich Filter- und Service-Funktionalit&auml;ten 
-          implementieren, was im Folgenden detailliert beschrieben wird. Die
-          Beschreibung basiert auf einzelner Implementierungen die aber auch in
-          einem HTTP-Modul zusammengefasst werden k&ouml;nnen.
+          HTTP modules enable the implementation of filter and service
+          functions, which is described in detail below. The description is
+          based on separate implementations which can also be combined in one
+          HTTP module. 
         </p>
         <h3>Filter</h3>
         <p>
-          Zugriffe auf die physischen und virtuellen Hosts k&ouml;nnen &uuml;ber
-          speziell definierte Regeln gesteuert werden. Neben Weiterleitung und
-          die Beantwortung der Anfrage mit einem definierten Server-Status kann
-          die Verarbeitung auch an einen Filter &uuml;bergeben werden.<br>
-          Filter sind zur Pr&uuml;fung bestimmter Anforderungen und ggf. zur
-          Manipulation von eingehenden Requests gedacht. Sie sollten nur Zugriff
-          auf den Request-Header habe, wenn der Request nicht vollst&auml;ndig
-          vom Filter verarbeitet wird.
+          Access to physical and virtual hosts can be controlled by specially
+          defined rules. In addition to forwarding and responding to requests
+          with a defined server status, processing can also be passed to a
+          filter.<br>
+          Filters are used to check certain requirements and, if necessary, to
+          manipulate incoming requests. They should only have access to the
+          request header if the request is not completely processed by the
+          filter. 
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Das API entspricht dem Module-API, die um <code>Module.filter(Worker
-          worker, String options)</code> erweitert wird. Der &uuml;bergeben
-          Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
-          Server, Socket, Request, Response, Konfiguration und Environment. Mit
-          der Konfiguration k&ouml;nnen f&uuml;r einen Filter weitere Parameter
-          und Optionen gesetzt werden, die dann optional als ein String 
-          &uuml;bergeben werden.
+          The API corresponds to the Module API, which is extended by
+          <code>Module.filter(Worker worker, String options)</code>. The passed
+          worker is the request processing instance and has access to the
+          server, socket, request, response, configuration and environment. With
+          the configuration you can set further parameters and options for a
+          filter, which are then optionally passed as a string. 
         </p>
-        <h4>Implementierung</h4>
+        <h4>Implementation</h4>
         <pre>
           public class Module {
           
               public Module(String options) {
                   ...
                   
-                  Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
-                  dieser nicht vor, wird das Modul als inkompatible zur API
-                  betrachtet und nicht geladen. Die Konfiguration ist optional
-                  und wird nur bei zentraler Initiierung aus der Sektion
-                  [INITIALIZE] &uuml;bergeben.
+                  The module is initiated via this constructor. If this is not
+                  available, the module is considered incompatible with the API
+                  and is not loaded. The configuration is optional and will only
+                  be transferred from the[INITIALIZE] section if initiated
+                  centrally.
               }
 
               public String explain() {
                   ...
                   
-                  Die Methode ist optional und gibt allgemeine Informationen zum
-                  Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
-                  die statisch oder mit der Initialisierung gesetzt werden
-                  sollten.
+                  This method is optional and returns general information about
+                  the module in the following format:
+                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
+                  statically or with initialization.
               }
               
               public void filter(Worker worker, String options) {
                   ...
                   
-                  Diese Methode &uuml;bernimmt die Pr&uuml;fung und ggf.
-                  Manipulation vom Request oder verarbeitet sowie beantwortet
-                  diesen komplett. Soll die Anfrage ausschliesslich mit einem
-                  Server-Status beantwortet werden, kann die Filter-Methode
-                  diesen setzen und muss den Request nicht selbst beantworten.
-                  Die Beantwortung &uuml;bernimmt in diesem Fall die
-                  nachgelagerte Worker-Implementierung.
+                  This method takes over the check and, if necessary, the
+                  manipulation of the request or processes and completely
+                  answers it. If the request is to be answered with a server
+                  status only, the filter method can set it and does not have to
+                  answer the request itself. In this case, the answer is
+                  provided by the downstream worker implementation.
               }              
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  The module is requested to close before being unloaded by the
+                  service and ClassLoader. The resources, data streams and
+                  processes initiated or used by the module should be closed or
+                  terminated with this call.
               }
           }        
         </pre>         
         <h3>Service</h3>
         <p>
-          Das Ziel einer HTTP-Anfrage sind Verzeichnisse, Dateien sowie
-          dynamische Inhalte externe von CGI- und XCGI-Anwendungen, welche 
-          &uuml;ber virtuelle Pfade angesprochen werden.<br>
-          Services stellen eine weitere Form von dynamischen Inhalten zur
-          Verf&uuml;gung. Sie &uuml;bernehmen die komplette Verarbeitung
-          eingehender Requests und haben einen uneingeschr&auml;nkten Zugriff.
+          The target of an HTTP request these are directories, files and dynamic
+          content from external CGI and XCGI applications that are requested via
+          virtual paths.<br>
+          Services provide another form of dynamic content. These take over the
+          complete processing of incoming requests and have unrestricted access. 
         </p>
         <h4>API (XAPI+)</h4>
         <p>
-          Das API entspricht dem Module-API, die um <code>Module.service(Worker
-          worker, String options)</code> erweitert ist. Der &uuml;bergeben
-          Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
-          Server, Socket, Request, Response, Konfiguration und Environment. Mit
-          der Konfiguration k&ouml;nnen f&uuml;r ein Modul weitere Parameter und
-          Optionen gesetzt werden, die dann optional als ein String
-          &uuml;bergeben werden.        
+          The API corresponds to the Module API, which is extended by
+          <code>Module.service(Worker worker, String options)</code>. The passed
+          worker is the request processing instance and has access to the
+          server, socket, request, response, configuration and environment. With
+          the configuration, further parameters and options can be set for a
+          module, which are then optionally passed as a string. 
         </p>        
-        <h4>Implementierung</h4>
+        <h4>Implementation</h4>
         <pre>
           public class Module {
           
               public Module(String options) {
                   ...
                   
-                  Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
-                  dieser nicht vor, wird das Modul als inkompatible zur API
-                  betrachtet und nicht geladen. Die Konfiguration ist optional
-                  und wird nur bei zentraler Initiierung aus der Sektion
-                  [INITIALIZE] &uuml;bergeben.
+                  The module is initiated via this constructor. If this is not
+                  available, the module is considered incompatible with the API
+                  and is not loaded. The configuration is optional and will only
+                  be transferred from the[INITIALIZE] section if initiated
+                  centrally.
               }
 
               public String explain() {
                   ...
                   
-                  Die Methode ist optional und gibt allgemeine Informationen zum
-                  Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
-                  die statisch oder mit der Initialisierung gesetzt werden
-                  sollten.
+                  This method is optional and returns general information about
+                  the module in the following format:
+                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
+                  statically or with initialization.
               }
               
               public void service(Worker worker, String options) {
                   ...
                   
-                  Diese Methode &uuml;bernimmt die komplette Verarbeitung vom
-                  Request- und beantwortet diesen. Soll die Anfrage
-                  ausschliesslich mit einem Server-Status beantwortet werden,
-                  kann die Service-Methode diesen setzen und muss den Request 
-                  nicht selbst beantworten. Die Beantwortung &uuml;bernimmt in
-                  diesem Fall die nachgelagerte Worker-Implementierung.
+                  This method takes over the complete processing of the request
+                  and answers it. If the request is to be answered with a server
+                  status only, the service method can set this status and does
+                  not have to answer the request itself. In this case, the
+                  answer is provided by the downstream worker implementation.
               }              
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  The module is requested to close before being unloaded by the
+                  service and ClassLoader. The resources, data streams and
+                  processes initiated or used by the module should be closed or
+                  terminated with this call.
               }
           }        
         </pre>            
-        <h2>Entwicklungsumgebung (SDK)</h2>
+        <h2>Development Environment (SDK)</h2>
         <p>
-          F&uuml;r die Entwicklung und das Experimentieren mit Seanox Devwex
-          steht eine spezielle Entwicklungsumgebung (SDK) bereit (f&uuml;r
-          Seanox Devwex 5.x in Entwicklung). Das komplett vorkonfigurierte
-          Projekt f&uuml;r die Eclipse IDE umfasst u.a. Seanox Devwex, Seanox
-          Devwex Test, Seanox Commons und Seanox Devwex WebSocket.
+          For development and experimenting with Seanox Devwex, a special
+          development environment (SDK) is available (for Seanox Devwex 5. x in
+          development). The completely pre-configured project for the Eclipse
+          IDE includes Seanox Devwex, Seanox Devwex Test, Seanox Commons and
+          Seanox Devwex WebSocket. 
         </p>
         <p>
-          Neben einer umfangreichen API u.a. mit erforderlichen Interfaces sowie
-          Abstraktionen und zus&auml;tzliche ClassLoader-Ebenen f&uuml;r die
-          Entwicklung mit Seanox Devwex, sind auch zahlreiche
-          funktionsf&auml;hige Beispiele enthalten. Eine detaillierte
-          Dokumentation liegt der Entwicklungsumgebung bei. 
+          In addition to a comprehensive API, including the necessary interfaces
+          as well as abstractions and additional ClassLoader layers for the
+          development with Seanox Devwex, many functional examples are also
+          included. Detailed documentation is included with the development
+          environment. 
         </p>
       </article>
     </main>

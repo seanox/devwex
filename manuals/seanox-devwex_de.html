@@ -634,10 +634,12 @@
           virtuelle Hosts entfallen, da diese nur HTTP-spezifisch konfiguriert
           werden.
         </p>
+        <p>
+          Die Server-Konfiguration besteht aus zwei Teilen.<br>
+          Neben der Netzwerkverbindung wird hier auch das HTTP konfiguriert.
+        </p>
         <header>
-          &Uuml;bersicht der verf&uuml;gbaren Konfiguration:<br>
-          Im ersten Teil wird die Konfiguration vom Server und im zweiten Teil
-          die vom HTTP beschrieben. 
+          &Uuml;bersicht der verf&uuml;gbaren Server-Konfiguration:<br>
         </header>         
         <table>
           <thead>
@@ -692,6 +694,18 @@
               </td>
             </tr>
           </tbody>
+        </table>
+        <header>
+          &Uuml;bersicht der verf&uuml;gbaren HTTP-Konfiguration:<br>
+        </header>            
+        <table>
+          <thead>
+            <tr>
+              <th>Schl&uuml;ssel</th>
+              <th>Wert</th>
+              <th>Beschreibung</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>ACCESSLOG</td>
@@ -2974,12 +2988,12 @@
               }
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  Das Modul wird zum Beenden aufgefordert, bevor es vom Service
+                  samt ClassLoader entladen wird. Vom Modul initiierte bzw.
+                  verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
+                  mit diesem Aufruf geschlossen bzw. beendet werden.
               }
           }        
         </pre>   
@@ -3052,12 +3066,12 @@
               }              
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  Das Modul wird zum Beenden aufgefordert, bevor es vom Service
+                  samt ClassLoader entladen wird. Vom Modul initiierte bzw.
+                  verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
+                  mit diesem Aufruf geschlossen bzw. beendet werden.
               }
           }        
         </pre>         
@@ -3079,7 +3093,7 @@
           der Konfiguration k&ouml;nnen f&uuml;r ein Modul weitere Parameter und
           Optionen gesetzt werden, die dann optional als ein String
           &uuml;bergeben werden.        
-        </p>        
+        </p>  
         <h4>Implementierung</h4>
         <pre>
           public class Module {
@@ -3107,7 +3121,7 @@
                   ...
                   
                   Diese Methode &uuml;bernimmt die komplette Verarbeitung vom
-                  Request- und beantwortet diesen. Soll die Anfrage
+                  Request und beantwortet diesen. Soll die Anfrage
                   ausschliesslich mit einem Server-Status beantwortet werden,
                   kann die Service-Methode diesen setzen und muss den Request 
                   nicht selbst beantworten. Die Beantwortung &uuml;bernimmt in
@@ -3115,12 +3129,12 @@
               }              
 
               public void destroy() {
-                 ...
+                  ...
                 
-                 Das Modul wird zum Beenden aufgefordert, bevor es vom Service
-                 samt ClassLoader entladen wird. Vom Modul initiierte bzw.
-                 verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten mit
-                 diesem Aufruf geschlossen bzw. beendet werden.
+                  Das Modul wird zum Beenden aufgefordert, bevor es vom Service
+                  samt ClassLoader entladen wird. Vom Modul initiierte bzw.
+                  verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
+                  mit diesem Aufruf geschlossen bzw. beendet werden.
               }
           }        
         </pre>            
@@ -3133,9 +3147,9 @@
           Devwex Test, Seanox Commons und Seanox Devwex WebSocket.
         </p>
         <p>
-          Neben einer umfangreichen API u.a. mit erforderlichen Interfaces sowie
-          Abstraktionen und zus&auml;tzliche ClassLoader-Ebenen f&uuml;r die
-          Entwicklung mit Seanox Devwex, sind auch zahlreiche
+          Neben einem umfangreichen API, u.a. mit erforderlichen Interfaces
+          sowie Abstraktionen und zus&auml;tzliche ClassLoader-Ebenen f&uuml;r
+          die Entwicklung mit Seanox Devwex, sind auch zahlreiche
           funktionsf&auml;hige Beispiele enthalten. Eine detaillierte
           Dokumentation liegt der Entwicklungsumgebung bei. 
         </p>

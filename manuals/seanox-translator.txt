@@ -1,0 +1,10 @@
+- kopiere den Inhalt der deutschen Vorlage in die engliche Vorlage
+- setze in der englichen Vorlage translate="yes"
+- rufe die Vorlage im Browser auf
+- kontrolliere die Konsole, ob die Requests verabreitet werden
+- kopiere das HTML-Tag (äussere HTML) aus der Entwicklungeransicht und füge es
+  in der Vorlage ein  
+- kontrolliere den Inhalt der Übersetzung
+- kontrolliere die BR-Tags und formatiere den Inhalt ggf. nach
+- kontrolliere die PRE-Tags und formatiere den Inhalt ggf. nach
+- ist die englichen Vorlage fertig, dann setze translate="no" und

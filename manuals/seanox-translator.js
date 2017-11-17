@@ -10,8 +10,6 @@ if (typeof String.prototype.capitalize !== "function")
     };
 
 window.addEventListener("load", function() {
-    if (!(document.querySelector("body").toObject().meta.translate || "").match(/yes/i))
-        return;    
     var translate = function(element, filter) {
         var text = element.innerHTML;
         var indent = 0;

@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
     <title>Seanox Devwex</title>
-    <link rel="stylesheet" href="/system/common.css"/>    
+    <link rel="stylesheet" href="/system/common.css"/>
     <link rel="stylesheet" href="../system/common.css"/>
     <link rel="stylesheet" href="seanox-devwex.css"/>
     <script src="seanox-devwex.js"></script>
@@ -40,10 +40,10 @@
           Der Filter unterstützt: UND (+ oder |), NICHT (- oder !), ODER (|),
           runde Klammern, Jokerzeichen (*), Phrasen ("..."), Escape-Sequenzen /
           Fluchtsymbole (\). In Phrasen werden alle Steuerzeichen automatisch
-          als Escape-Sequenz verwendet.         
+          als Escape-Sequenz verwendet.
         </p>
         <nav></nav>
-      </article>      
+      </article>
       <article>
         <h1>Beschreibung</h1>
         <p>
@@ -56,7 +56,7 @@
           Weitere Server und Module sowie Anwendungen lassen sich &uuml;ber die
           verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container und die
           enthaltenen Servern sind ein reine Java-Implementierung und durch
-          entsprechende Laufzeitumgebungen auf vielen Betriebssystem verwendbar.        
+          entsprechende Laufzeitumgebungen auf vielen Betriebssystem verwendbar.
         </p>
       </article>
       <article>
@@ -87,8 +87,8 @@
           You should have received a copy of the GNU General Public License
           along with this program; if not, write to the Free Software
           Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-          02110-1301, USA.        
-        </p>     
+          02110-1301, USA.
+        </p>
       </article>
       <article>
         <h1>Merkmale</h1>
@@ -129,9 +129,11 @@
           neue bereitstellen.
         </p>
         <h3>Module-API (XAPI)</h3>
+        <p>
           Mit dem Module-API werden die Implementierungen eingebunden, welche
           im Hintergrund agieren und nach Aussen keine direkten Funktionen
           bereitstellen.
+        </p>
         <h3>HTTP</h3>
         <p>
           Entsprechend der Spezifikation 1.0 werden GET, POST und HEAD sowie
@@ -141,10 +143,10 @@
         </p>
         <h3>HTTP-Module-API (XAPI+)</h3>
         <p>
-          Die HTTP-Module-API ist eine Erweiterung vom Module-API f&uuml;r den 
+          Die HTTP-Module-API ist eine Erweiterung vom Module-API f&uuml;r den
           HTTP-Server zur Implementierung von Filter- und
           Service-Funktionalit&auml;ten, die im Kontext vom Server laufen.
-        </p>          
+        </p>
         <h3>(Fast)CGI</h3>
         <p>
           Zum Datenaustausch sowie zur Anbindung externer Laufzeitumgebungen und
@@ -187,7 +189,7 @@
         <h2>Virtualisierung</h2>
         <p>
           Der HTTP-Server unterst&uuml;tzt Virtual Hosting und Aliasing f&uuml;r
-          virtuelle Pfade. 
+          virtuelle Pfade.
         </p>
         <h2>Individualität</h2>
         <p>
@@ -201,7 +203,7 @@
           Die modulare Architektur und zahlreichen Schnittstellen
           erm&ouml;glichen das &Auml;ndern, Erweitern und Hinzuf&uuml;gen von
           Funktionalit&auml;ten.
-        </p>  
+        </p>
       </article>
       <article>
         <h1>Systemanforderung</h1>
@@ -213,8 +215,8 @@
         <ul>
           <li>Prozessor 200 MHz</li>
           <li>Speicher 64 MB</li>
-          <li>Netzwerk 10 MB/s</li>                    
-        </ul>       
+          <li>Netzwerk 10 MB/s</li>
+        </ul>
       </article>
       <article>
         <h1>Installation</h1>
@@ -227,20 +229,20 @@
       <article>
         <h1>Konfiguration</h1>
         <p>
-          Seanox Devwex verwendet eine zentrale Konfiguration aus dem aktuellen 
-          Arbeitsverzeichnis, die mit der Installation vorkonfiguriert im 
+          Seanox Devwex verwendet eine zentrale Konfiguration aus dem aktuellen
+          Arbeitsverzeichnis, die mit der Installation vorkonfiguriert im
           Programm-Verzeichnis <code>./devwex/program</code> in der Datei
           <code>devwex.ini</code> abgelegt wird. Die Konfiguration ist in
           Sektionen mit Schl&uuml;sseln und Werten untergliedert, die u.a. auch
           dynamische Werte und den Zugriff auf System- und Umgebungsvariablen
-          unterst&uuml;tzt. 
+          unterst&uuml;tzt.
         </p>
         <h2>Konfigurationsdatei</h2>
         <p>
           Das verwendete INI-Format ist eine kompatible Erweiterung zum
           klassischen Format. Es ist ebenfalls zeilenbasiert und verwendet
           Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim Namen
-          von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung 
+          von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung
           ignoriert. Gleichnamige Deklarationen f&uuml;hren zum
           &Uuml;berschreiben von Sektionen und Schl&uuml;sseln.
         </p>
@@ -274,7 +276,7 @@
         </p>
         <p>
           Sektionen, Schl&uuml;ssel und Werte unterst&uuml;tzen auch eine
-          hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>, 
+          hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>,
           gefolgt von der hexadezimalen Zeichenfolge. Diese Schreibweise kann
           immer nur auf das komplette Element angewandt werden. Die Kombination
           oder Unterbrechung ist nicht m&ouml;glich.
@@ -286,10 +288,10 @@
                                     + WERT-4; WERT-5
             PARAM-C          [?][+] = WERT-6; WERT-7
             PARAM-E          [?]                     ;Kommentar
-          
+
           [0x53454354494F4E2D41]
             PARAM-A                 = 0x574552542D31 ;Kommentar
-            0x504152414D2D42        = WERT-2         ;Kommentar 
+            0x504152414D2D42        = WERT-2         ;Kommentar
             0x504152414D2D43    [+] = 0x574552542D33
             PARAM-D                 = 0x574552542D34
                                     + 0x574552542D35
@@ -306,16 +308,16 @@
             Werten der Sektionen <code>SECTION-A</code> und
             <code>SECTION-B</code>. Ab dem Semikolon werden die nachfolgenden
             Zeichen als Kommentar interpretiert.
-          </p>       
-        </section> 
+          </p>
+        </section>
         <section>
           <b>Zeile 2</b>
           <p>
             Dem Schl&uuml;ssel <code>PARAM-A</code> wird der Wert
             <code>WERT-1</code> zugewiesen. Die nachfolgenden Zeichen werden ab
-            dem Semikolon als Kommentar interpretiert.        
-          </p>       
-        </section>       
+            dem Semikolon als Kommentar interpretiert.
+          </p>
+        </section>
         <section>
           <b>Zeile 3</b>
           <p>
@@ -324,8 +326,8 @@
             <code>[+]</code> am Ende vom Schl&uuml;ssel wird der Zeilenkommentar
             abgeschaltet und alle Zeichen f&uuml;r die Wertzuweisung verwendet.
             Die Angabe eines Kommentars ist in dieser Zeile nicht m&ouml;glich.
-          </p>       
-        </section>       
+          </p>
+        </section>
         <section>
           <b>Zeile 4</b>
           <p>
@@ -337,8 +339,8 @@
             Wertzuweisung verwendet werden. Die Eingabe eines Kommentars ist in
             dieser Zeile nicht m&ouml;glich. Weitere vorangestellte Optionen
             sind nicht m&ouml;glich.
-          </p>       
-        </section>       
+          </p>
+        </section>
         <section>
           <b>Zeile 5</b>
           <p>
@@ -356,8 +358,8 @@
             Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle
             Zeichen f&uuml;r die Wertzuweisung verwendet. Die Angabe eines
             Kommentars ist in dieser Zeile nicht m&ouml;glich.
-          </p>       
-        </section>       
+          </p>
+        </section>
         <section>
           <b>Zeile 6</b>
           <p>
@@ -365,24 +367,24 @@
             ist dynamisch. In den System-Properties der Java-Laufzeitumgebung
             wird dazu nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die
             Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss
-            dazu Bestandteil der Laufzeitumgebung sein oder kann beim           
+            dazu Bestandteil der Laufzeitumgebung sein oder kann beim
             Programmstart in der Form <code>-Dschluessel=wert</code> gesetzt
             werden.<br>
             Enthalten die System-Properties der Java-Laufzeitumgebung keinen
             entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert,
             da auch kein alternativer Wert angegeben wurde.<br>
             Kommentare werden in dieser Zeile unterst&uuml;tzt.
-          </p>       
-        </section>       
+          </p>
+        </section>
         <section>
           <b>Zeile 8 - 15</b>
           <p>
             Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
             Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.
           </p>
-        </section>       
+        </section>
         <h2>Konfigurationsstruktur</h2>
-        <header>         
+        <header>
           Die Basis-Konfiguration besteht aus den folgenden Sektionen:
         </header>
         <table>
@@ -393,7 +395,7 @@
           <tr>
             <td>[COMMON]</td>
             <td>
-              Allgemeine Anwendungskonfiguration<br>
+              Allgemeine Anwendungskonfiguration
             </td>
           </tr>
           <tr>
@@ -402,49 +404,49 @@
               Zentrale Modulkonfiguration.<br>
               Initialisierung mit dem (Re)Start des Service
             </td>
-          </tr>   
+          </tr>
           <tr>
             <td>[REMOTE]</td>
             <td>
-              Konfigurationsbereich der Fern&uuml;berwachung<br>
+              Konfigurationsbereich der Fern&uuml;berwachung
             </td>
-          </tr>                 
+          </tr>
           <tr>
             <td>[SERVER]</td>
             <td>
-              Konfigurationsbereich der HTTP-Server<br>
+              Konfigurationsbereich der HTTP-Server
             </td>
           </tr>
           <tr>
             <td>[VIRTUAL]</td>
             <td>
-              Konfigurationsbereich der virtuellen Hosts f&uuml;r HTTP-Server<br>
+              Konfigurationsbereich der virtuellen Hosts f&uuml;r HTTP-Server
             </td>
           </tr>
           <tr>
             <td>[STATUSCODES]</td>
             <td>
-              Statuscodes der HTTP-Server<br>
+              Statuscodes der HTTP-Server
             </td>
-          </tr>  
+          </tr>
           <tr>
             <td>[MEDIATYPES]</td>
             <td>
-              Zuordnung von Medien- und Datentypen<br>
+              Zuordnung von Medien- und Datentypen
             </td>
-          </tr>                                          
-        </table>        
-        <p>  
+          </tr>
+        </table>
+        <p>
           Weitere Sektionen k&ouml;nnen beliebig hinzugef&uuml;gt werden.
-        </p>        
+        </p>
         <h2>Allgemeine Anwendungskonfiguration</h2>
         <p>
           Allgemeine und global verf&uuml;gbare Optionen f&uuml;r Container,
-          Server, Hosts und Module werden hier festgelegt.        
+          Server, Hosts und Module werden hier festgelegt.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
-        </header>         
+        </header>
         <table>
           <tr>
             <th>Schl&uuml;ssel</th>
@@ -457,7 +459,7 @@
             <td>
               Option f&uuml;r die intelligente Bereinigung der Ressourcen.<br>
               Dazu wird der Garbage Collector von Java angestossen, wenn
-              freizugebene Ressourcen zu erwarten sind.            
+              freizugebene Ressourcen zu erwarten sind.
             </td>
           </tr>
           <tr>
@@ -468,7 +470,7 @@
               das automatische Neuladen und Durchstarten bei &Auml;nderungen.
             </td>
           </tr>
-        </table>        
+        </table>
         <h2>Initialisierung</h2>
         <p>
           Mit dem Start und Neustart von Seanox Devwex ist mit der Sektion
@@ -481,16 +483,16 @@
         <header>
           Schema zur Formulierung der Initialisierung:
         </header>
-        <code>NAME = EXTENSION [OPTION] [OPTION] ...</code>        
+        <code>NAME = EXTENSION [OPTION] [OPTION] ...</code>
         <header>
           Beispiel f&uuml;r die Initialisierung:
         </header>
         <pre>
           [INITIALIZE]
             CONTROL = com.seanox.devwex.control.Connector
-            PHP     = com.seanox.fastcgi.Connector                                        
-                    + [connection:127.0.0.1:8129] 
-            CGI     = com.seanox.fastcgi.Connector                                        
+            PHP     = com.seanox.fastcgi.Connector
+                    + [connection:127.0.0.1:8129]
+            CGI     = com.seanox.fastcgi.Connector
                     + [connection:127.0.0.1:8139] [*]
         </pre>
         <p>
@@ -501,8 +503,8 @@
         </p>
         <h2>Server</h2>
         <p>
-          Server sind ein essentieller Bestandteil von Seanox Devwex und setzt 
-          f&uuml;r den Betrieb mindestens eine erfolgreich etabliere 
+          Server sind ein essentieller Bestandteil von Seanox Devwex und setzt
+          f&uuml;r den Betrieb mindestens eine erfolgreich etabliere
           Server-Instant vorrausetzt.<br>
           Bei der Initialisierung werden alle Sektionen die auf <code>BAS</code>
           enden betrachtet und nach einer passenden Implementierung im ClassPath
@@ -512,13 +514,13 @@
         <pre>
           [CLASS:BAS]
             ...
-            
+
           [CLASS:IDENTIFIER:BAS]
             ...
         </pre>
         <p>
           Optional kann &uuml;ber den Schl&uuml;ssel SCOPE das Paket in der sich
-          die Klasse befindet, festgelegt werden. Ohne die diese Angabe wird das 
+          die Klasse befindet, festgelegt werden. Ohne die diese Angabe wird das
           Standard-Paket com.seanox.devewx verwendet.<br>
           Wird zu einer Sektion die auf BAS endet keine Implementierung
           gefunden, wird diese ohne Fehlermeldung ignoriert.
@@ -527,13 +529,13 @@
           [CLASS:BAS]
             SCOPE = package.of.class
             ...
-            
+
           [CLASS:IDENTIFIER:BAS]
             SCOPE = package.of.class
             ...
         </pre>
         <p>
-          Seanox Devwex enth&auml;lt einen HTTP-Server und eine auf Telnet 
+          Seanox Devwex enth&auml;lt einen HTTP-Server und eine auf Telnet
           basierende Fern&uuml;berwachung, deren Konfiguration und Funktion in
           den folgenden Abschnitten beschrieben werden.
         </p>
@@ -548,10 +550,10 @@
           eine alternative Client-Komponente.<br>
           Die Konfiguration beider Komponenten erfolgt in der Sektion
           <code>[REMOTE:BAS]</code>.
-        </p>  
+        </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
-        </header>         
+        </header>
         <table>
           <tr>
             <th>Schl&uuml;ssel</th>
@@ -564,7 +566,7 @@
             <td>
               Lokale Adresse oder Namen des Servers im Netzwerk.<br>
               <code>AUTO</code> entspricht 0.0.0.0 und verwendet alle im System
-              verf&uuml;gbaren IP-Adressen.            
+              verf&uuml;gbaren IP-Adressen.
             </td>
           </tr>
           <tr>
@@ -585,7 +587,7 @@
         </p>
         <header>
           &Uuml;bersicht der Sektionen:
-        </header>         
+        </header>
         <table>
           <tr>
             <th>Sektion</th>
@@ -601,11 +603,11 @@
           <tr>
             <td>[SERVER:X:SSL]</td>
             <td>TLS/SSL-Konfiguration </td>
-          </tr> 
+          </tr>
           <tr>
             <td>[SERVER:X:REF]</td>
             <td>virtuelle Pfade</td>
-          </tr>                    
+          </tr>
           <tr>
             <td>[SERVER:X:ACC]</td>
             <td>Zugriffssteuerung (Access Control List)</td>
@@ -622,7 +624,7 @@
             <td>[SERVER:X:FLT]</td>
             <td>Filter-Konfiguration</td>
           </tr>
-        </table>        
+        </table>
         <h3>Server</h3>
         <p>
           Diese Sektion enth&auml;lt die Konfiguration f&uuml;r HTTP-Server und
@@ -639,8 +641,8 @@
           Neben der Netzwerkverbindung wird hier auch das HTTP konfiguriert.
         </p>
         <header>
-          &Uuml;bersicht der verf&uuml;gbaren Server-Konfiguration:<br>
-        </header>         
+          &Uuml;bersicht der verf&uuml;gbaren Server-Konfiguration:
+        </header>
         <table>
           <thead>
             <tr>
@@ -656,7 +658,7 @@
               <td>
                 Lokale Adresse oder Namen des Servers im Netzwerk.<br>
                 <code>AUTO</code> entspricht 0.0.0.0 und verwendet alle im
-                System verf&uuml;gbaren IP-Adressen.            
+                System verf&uuml;gbaren IP-Adressen.
               </td>
             </tr>
             <tr>
@@ -678,7 +680,7 @@
                 Workers fest, bevor dieser aufgegeben und aus dem Pool entfernt
                 wird.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>MAXACCESS</td>
               <td>100</td>
@@ -696,8 +698,8 @@
           </tbody>
         </table>
         <header>
-          &Uuml;bersicht der verf&uuml;gbaren HTTP-Konfiguration:<br>
-        </header>            
+          &Uuml;bersicht der verf&uuml;gbaren HTTP-Konfiguration:
+        </header>
         <table>
           <thead>
             <tr>
@@ -742,14 +744,14 @@
                 der aufgef&uuml;hrten Dokumente, wird der Inhalt vom Verzeichnis
                 angezeigt, sofern diese zul&auml;ssig ist.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>DOCROOT</td>
               <td>../documents</td>
               <td>
                 Pfad vom Verzeichnis der Dokumente.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>DURATION</td>
               <td>500000</td>
@@ -775,9 +777,9 @@
                 Listenansicht (Directory Index).<br>
                 Mit dem Zusatz <code>[S]</code> k&ouml;nnen versteckte
                 Eintr&auml;ge des Dateisystems f&uuml;r die Anzeige
-                unterdr&uuml;ckt werden.            
+                unterdr&uuml;ckt werden.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>INTERRUPT</td>
               <td>10</td>
@@ -785,7 +787,7 @@
                 Unterbrechung f&uuml;r Systemprozesse in Millisekunden.<br>
                 Diese Einstellung minimiert die CPU-Auslastung bei
                 arbeitsintensiven Prozessen, in dem diese auf einen Teil ihrer
-                Ausf&uuml;hrungszeit verzichten und damit Zeitschlitze/Time Slices
+                Ausf&uuml;hrungszeit verzichten und damit Zeitschlitze/Time-Slices
                 anderen Prozessen &uuml;berl&auml;sst.
               </td>
             </tr>
@@ -797,7 +799,7 @@
                 Mediatype nicht in der Liste der Mediatypes (Sektion
                 <code>[MEDIATYPES]</code>) enthalten ist.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>METHODS</td>
               <td>GET POST HEAD OPTIONS PUT DELETE ...</td>
@@ -805,14 +807,14 @@
                 Durch Leerzeichen getrennte Liste mit Methoden die der Server
                 verarbeiten darf.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>SYSROOT</td>
               <td>../system</td>
               <td>
                 Pfad vom Verzeichnis der Systemdateien.
               </td>
-            </tr>          
+            </tr>
             <tr>
               <td>TIMEOUT</td>
               <td>30000 [S]</td>
@@ -847,14 +849,14 @@
             CA-Zertifikate vertrauensw&uuml;rdiger Zertifizierungsstellen.<br>
             Bei Seanox Devwex entf&auml;llt diese Unterscheidung und so wird nur
             ein Keystore f&uuml;r beides verwendet.
-          </strong>             
+          </strong>
         </p>
         <p>
           <strong>
             Die Verwendung von Aliasen im Keystore ist m&ouml;glich, wird von
             Seanox Devwex aber nicht unterst&uuml;tzt. Daher wird die
             Konfiguration von dedizierten Keystores empfohlen.
-          </strong>             
+          </strong>
         </p>
         <p>
           <strong>
@@ -864,11 +866,11 @@
             f&uuml;r Sub-Domains. F&uuml;r die Bereitstellung unterschiedlichen
             Domains ist die Verwendung von physischen Hosts mit virtuellen
             IP-Adressen empfehlenswert.
-          </strong>             
+          </strong>
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
-        </header>          
+        </header>
         <table>
           <tr>
             <th>Schl&uuml;ssel</th>
@@ -884,7 +886,7 @@
             <td>
               Protokoll: <code>TLS</code> (Transport Layer Security),
               <code>SSL</code> (Secure Socket Layer).<br>
-              Standardwert wenn nicht angegeben: <code>TLS</code>
+              Standardwert: <code>TLS</code> (wenn nicht angegeben)
             </td>
           </tr>
           <tr>
@@ -898,9 +900,9 @@
               &uuml;berl&auml;sst die Entscheidung zur Autorisierung dem Client
               und der Server etabliert die Verbindung auch dann, wenn der Client
               keine Autorisierung &uuml;bermittelt.<br>
-              Standardwert wenn nicht angegeben: <code>OFF</code><br>
+              Standardwert: <code>OFF</code> (wenn nicht angegeben)
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>KEYSTORE</td>
             <td>...</td>
@@ -915,7 +917,7 @@
               Type vom verwendeten Keystore.<br>
               Standardwert: <code>JKS</code> (wenn nicht angegeben)
             </td>
-          </tr> 
+          </tr>
           <tr>
             <td>ALGORITHM</td>
             <td>SunX509|PKIX|...</td>
@@ -923,14 +925,14 @@
               Algorithmus der Verschl&uuml;sselung vom Keystore.<br>
               Standardwert: <code>SunX509</code> (wenn nicht angegeben)
             </td>
-          </tr>                           
+          </tr>
           <tr>
             <td>PASSWORD</td>
             <td>...</td>
             <td>
               Passwort f&uuml;r den Keystore.
             </td>
-          </tr>        
+          </tr>
         </table>
         <p>
           Die Konfiguration und Verwendung der Zertifikate, ausgehend davon,
@@ -957,7 +959,7 @@
         <p>
           Durch die automatisch vergebenen Standardwerte gen&uuml;gt meist die
           folgende Konfiguration:
-        </p>              
+        </p>
         <pre>
           [SERVER:X:BAS]
             PORT       = 443
@@ -1026,10 +1028,10 @@
           [SERVER:X:SSL]
             ...
             CLIENTAUTH  = AUTO
-            ...        
+            ...
           [SERVER:X:FLT]
             CLIENT-AUTH = ALL IS EMPTY AUTH_CERT
-        </pre>                
+        </pre>
         <header>
           Server- und Client-Zertifikate lassen sich wie folgt selbst erstellen:
         </header>
@@ -1037,7 +1039,7 @@
           ./java/bin/keytool -genkeypair -alias Server -keyalg RSA -keysize 2048 -validity 365
                              -dname 'CN=Server'
                              -keystore server.jks -keypass changeIt -storepass changeIt
-        </pre>        
+        </pre>
         <pre>
           ./java/bin/keytool -exportcert -alias Server -file server.cer
                              -keystore server.jks -storepass changeIt
@@ -1048,7 +1050,7 @@
           Beides ist in diesem Beispiel nur tempor&auml;r und wird im weiteren
           Verlauf f&uuml;r die die Erstellung vom Server-Keysore und zum Export
           vom Client-Zertifikat ben&ouml;tigt.
-        </p>        
+        </p>
         <pre>
           ./java/bin/keytool -genkeypair -alias Client -keyalg RSA -keysize 2048 -validity 365
                              -dname 'CN=Client'
@@ -1060,10 +1062,10 @@
         </pre>
         <p>
           Die Keystores vom Server und Client werden gegenseitig migriert.<br>
-          Somit wird nur der Server-Keystore ben&ouml;tigt.         
+          Somit wird nur der Server-Keystore ben&ouml;tigt.
         </p>
         <pre>
-          ./java/bin/keytool -importcert -alias Client -file client.cer 
+          ./java/bin/keytool -importcert -alias Client -file client.cer
                              -keystore server.jks -storepass changeIt
                              -noprompt
         </pre>
@@ -1083,7 +1085,7 @@
           ./java/bin/keytool -importkeystore
                              -srckeystore server.jks -srcstorepass changeIt
                              -destkeystore server.p12 -deststoretype PKCS12
-                             -keypass changeIt -storepass changeIt 
+                             -keypass changeIt -storepass changeIt
                              -noprompt
         </pre>
         <pre>
@@ -1109,13 +1111,13 @@
           GET /directory/file.cgi?value=123 HTTP/1.1
           Accept-Encoding: gzip, deflate
           Accept-Language: de
-          Accept: */*  
-          User-Agent: Browser  
-          Host: example.local  
+          Accept: */*
+          User-Agent: Browser
+          Host: example.local
         </pre>
         <p>
           Zu diesem Beispiel m&uuml;ssen die Sektionen f&uuml;r den virtuellen
-          Host wie folgt in der Konfigurationsdatei angelegt werden.        
+          Host wie folgt in der Konfigurationsdatei angelegt werden.
         </p>
         <pre>
           [VIRTUAL:EXAMPLE.LOCAL:BAS]
@@ -1135,7 +1137,7 @@
           Die Konfiguration virtueller Hosts gleicht der von HTTP-Servern.<br>
           Die f&uuml;r Netzwerkverbindungen spezifischen Schl&uuml;ssel:
           <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code>,
-          <code>ISOLATION</code> und <code>MAXACCESS</code> entfallen hier.        
+          <code>ISOLATION</code> und <code>MAXACCESS</code> entfallen hier.
         </p>
         <p>
           Virtuelle Host sind eigenst&auml;ndige Konfigurationen, die
@@ -1145,19 +1147,19 @@
         </p>
         <header>
           Beispiel f&uuml;r die Beschr&auml;nkung auf einzelne Server:
-        </header>        
+        </header>
         <pre>
           [VIRTUAL:X:BAS]
             SERVER = SERVER:A SERVER:B SERVER:C
             ...
-        </pre>                
+        </pre>
         <h3>Filter</h3>
         <p>
           Die Zugriffe auf Server und virtuelle Hosts k&ouml;nnen &uuml;ber
           individuelle Regeln gesteuert werden, wozu die eingehenden Anfragen
           (Requests) vor der Verarbeitung gegen diese Regeln gepr&uuml;ft
           werden. Individuelle Fehlerseiten, automatische Weiterleitungen und
-          Module werden dabei unterst&uuml;tzt.<br>
+          Module werden dabei unterst&uuml;tzt.
         </p>
         <header>
           Schema zur Formulierung der Filter:
@@ -1167,11 +1169,11 @@
           Den Filtern stehen alle CGI-Umgebungsvariablen mit deren Werte in ggf.
           kodierter und dekodierter Form zur Verf&uuml;gung. Die Gross- und
           Kleinschreibung wird bei den Variablen wie auch den Werten ignoriert.
-          Die Angabe von einem Verweise ist dabei optional.        
+          Die Angabe von einem Verweise ist dabei optional.
         </p>
         <header>
           &Uuml;bersicht der Elemente vom Filter-Ausdruck:
-        </header>        
+        </header>
         <table>
           <tr>
             <th>Name</th>
@@ -1187,24 +1189,24 @@
             <td>METHODE</td>
             <td>GET|POST|PUT|ALL|...</td>
             <td>auf die zu reagierende HTTP-Methode</td>
-          </tr>        
+          </tr>
           <tr>
             <td>BEDINGUNG</td>
             <td>IS|NOT|ALWAYS</td>
             <td>Bedingung</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>IS</td>
             <td>Der Filter spricht an, wenn die Bedingung erf&uuml;llt ist.</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>NOT</td>
             <td>
               Der Filter spricht an, wenn die Bedingung nicht erf&uuml;llt ist.
             </td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>ALWAYS</td>
@@ -1218,27 +1220,27 @@
             <td>FUNKTION</td>
             <td>STARTS|EQUALS|CONTAINS|ENDS|EMPTY</td>
             <td>Art des Vergleichs</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>STARTS</td>
             <td>Der Wert der Variablen beginnt mit dem Vergleichswert.</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>EQUALS</td>
             <td>Der Wert der Variablen entspricht dem Vergleichswert.</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>CONTAINS</td>
             <td>Der Wert der Variablen enth&auml;lt den Vergleichswert.</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>ENDS</td>
             <td>Der Wert der Variablen endet mit dem Vergleichswert.</td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>EMPTY</td>
@@ -1247,7 +1249,7 @@
               Die Angabe von Funktion und Wert ist bei dieser Bedingung nicht
               erforderlich.
             </td>
-          </tr>        
+          </tr>
           <tr>
             <td></td>
             <td>MATCHES</td>
@@ -1255,7 +1257,7 @@
               Der Wert der Variablen entspricht dem Vergleichswert als
               regul&auml;ren Ausdruck.
             </td>
-          </tr>           
+          </tr>
           <tr>
             <td>VARIABLE</td>
             <td>...</td>
@@ -1263,7 +1265,7 @@
               Zu pr&uuml;fende Variable.<br>
               Dem Filter stehen alle CGI-Variablen zur Verf&uuml;gung.
             </td>
-          </tr>           
+          </tr>
           <tr>
             <td>WERT</td>
             <td>...</td>
@@ -1273,17 +1275,17 @@
             <td>OPTION</td>
             <td>[+] [R] [M]</td>
             <td>zus&auml;tzliche Optionen zur Steuerung des Filters</td>
-          </tr>                      
+          </tr>
           <tr>
             <td></td>
             <td>[+]</td>
             <td>Logische Und-Verkn&uuml;pfung mehrerer Bedingungen.</td>
-          </tr>                      
+          </tr>
           <tr>
             <td></td>
             <td>[R]</td>
             <td>Verweis f&uuml;r eine Weiterleitung.</td>
-          </tr> 
+          </tr>
           <tr>
             <td></td>
             <td>[M]</td>
@@ -1293,8 +1295,8 @@
               Beenden der Filtersequenz erfolgt hier nur, wenn ein Modul den
               Response-Status &auml;ndert und/oder Daten an den Client sendet.
             </td>
-          </tr>           
-        </table>    
+          </tr>
+        </table>
         <header>
           Beispiel f&uuml;r einen Request:
         </header>
@@ -1305,12 +1307,12 @@
           Accept-Language: de
           Accept: */*
           User-Agent: Browser
-        </pre>                
+        </pre>
         <p>
           Die CGI-Variablen und Werte sind abh&auml;ngig vom Request-Header. Der
           Request-Body wird f&uuml;r Filtern nicht ausgelesen, womit Daten und
           Parameter wie z.B. bei der HTTP-Methode <code>POST</code>
-          im Body &uuml;bergeben werden, nicht zur Verf&uuml;gung stehen.   
+          im Body &uuml;bergeben werden, nicht zur Verf&uuml;gung stehen.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Variablen (Auswahl):
@@ -1327,19 +1329,19 @@
             <td>REQUEST_METHOD</td>
             <td>GET</td>
             <td>HTTP-Methoden der Anfrage</td>
-          </tr>           
+          </tr>
           <tr>
             <td>Request</td>
             <td>REQUEST_URI</td>
             <td>/directory/file.cgi?value=123</td>
             <td>Pfad der HTTP-Anfrage inklusive &uuml;bergebener Parameter</td>
-          </tr>           
+          </tr>
           <tr>
             <td>Request</td>
             <td>QUERY_STRING</td>
             <td>value=123</td>
             <td>Liste der mit dem Request-URI &uuml;bergebenen Parameter</td>
-          </tr> 
+          </tr>
           <tr>
             <td>Host</td>
             <td>HTTP_HOST</td>
@@ -1348,19 +1350,19 @@
               Domain-Namen oder IP-Adresse der vom Client angeforderten
               Zieladresse
             </td>
-          </tr>             
+          </tr>
           <tr>
             <td>Accept-Encoding</td>
             <td>HTTP_ACCEPT_ENCODING</td>
             <td>gzip, deflate</td>
             <td>Liste der vom Client unterst&uuml;tzten Kodierungsmethoden</td>
-          </tr>    
+          </tr>
           <tr>
             <td>Accept-Language</td>
             <td>HTTP_ACCEPT_LANGUAGE</td>
             <td>de</td>
             <td>Liste der vom Client unterst&uuml;tzten Landessprachen</td>
-          </tr>          
+          </tr>
           <tr>
             <td>Accept</td>
             <td>HTTP_ACCEPT</td>
@@ -1373,7 +1375,7 @@
             <td>Browser</td>
             <td>Produkt- und Versionsinformationen des Clients</td>
           </tr>
-        </table>           
+        </table>
         <header>
           Beispiele f&uuml;r Filter:
         </header>
@@ -1384,23 +1386,23 @@
             der Parameter <code>Accept-Language</code> nicht <code>EN</code>
             entspricht.
           </p>
-        </section>        
+        </section>
         <section>
           <pre>FILTER-B = GET IS EQUALS HTTP_ACCEPT_LANGUAGE EN</pre>
           <p>
             Die Methode <code>GET</code> wird verweigert, wenn im Request-Header
             der Parameter <code>Accept-Language</code> dem Wert <code>EN</code>
-            entspricht.          
+            entspricht.
           </p>
-        </section>                
+        </section>
         <section>
           <pre>FILTER-C = GET IS CONTAINS HTTP_ACCEPT_LANGUAGE EN</pre>
           <p>
             Die Methode <code>GET</code> wird verweigert, wenn im Request-Header
-            der Parameter <code>Accept-Language</code> den Wert <code>E</code>
-            enth&auml;lt.          
+            der Parameter <code>Accept-Language</code> den Wert <code>EN</code>
+            enth&auml;lt.
           </p>
-        </section>                
+        </section>
         <section>
           <pre>FILTER-D = GET IS STARTS REMOTE_ADDR 192.168.</pre>
           <p>
@@ -1421,9 +1423,9 @@
             Die Methode <code>GET</code> wird verweigert, wenn die CGI-Variable
             <code>SCRIPT_URL</code> dem regul&auml;ren Ausdruck
             <code>(?i).do$</code> entspricht und somit auf <code>.do</code>
-            endet. 
+            endet.
           </p>
-        </section>        
+        </section>
         <section>
           <pre>FILTER-G = GET IS CONTAINS REQUEST_URI /documents [+] GET IS EMPTY HTTP_REFERER</pre>
           <p>
@@ -1485,7 +1487,7 @@
             Ist das Ziel ein relativer Pfad im lokalen Dateisystem, bezieht sich
             dieser der Pfad immer auf Ausf&uuml;hrungsverzeichnis vom Server.
           </p>
-        </section>           
+        </section>
         <header>
           Schema zur Formulierung virtueller Pfade:
         </header>
@@ -1505,7 +1507,7 @@
         </pre>
         <header>
           &Uuml;bersicht der Optionen:
-        </header>        
+        </header>
         <table>
           <tr>
             <th>Option</th>
@@ -1519,7 +1521,7 @@
               Definiert einen virtuellen Teilpfad der auf physische
               Verzeichnisse oder Dateien verweist. Beginnt der Pfad einer
               Anfrage mit diesem virtuellen Teilpfad, wird die so definierte
-              Ressource verwendet. Bei Verweisen auf Skripte oder Modul, 
+              Ressource verwendet. Bei Verweisen auf Skripte oder Modul,
               k&ouml;nnen dieses die zus&auml;tzlichen Pfadinformationen
               auswerten und anwenden.
             </td>
@@ -1532,7 +1534,7 @@
               Die Sperre wirkt bei Verzeichnissen prim&auml;r auf das
               Verzeichnis selbst und alle Unterverzeichnis.
             </td>
-          </tr> 
+          </tr>
           <tr>
             <td>[R]</td>
             <td>Redirect</td>
@@ -1541,7 +1543,7 @@
               sowie Dateien eine automatische Weiterleitung zu einer angegebenen
               Adresse ein.
             </td>
-          </tr>    
+          </tr>
           <tr>
             <td>[M]</td>
             <td>Module</td>
@@ -1552,7 +1554,7 @@
               eingebunden werden. Module k&ouml;nnen die zus&auml;tzlichen
               Pfadinformationen auswerten und anwenden.
             </td>
-          </tr> 
+          </tr>
           <tr>
             <td>[X]</td>
             <td>Method Extension</td>
@@ -1561,7 +1563,7 @@
               Zusatzoption <code>[X]</code> die Beschr&auml;nkung durch
               <code>[SERVER:BAS] METHODS</code>. So werden &uuml;ber den
               virtuellen Path alle angefragten HTTP-Methoden an ein Modul
-              weitergereicht. 
+              weitergereicht.
             </td>
           </tr>
           <tr>
@@ -1585,7 +1587,7 @@
               Access-Conntrol-List in der Sektionen <code>[SERVER:ACC]</code>
               / <code>[VIRTUAL:ACC]</code>.
             </td>
-          </tr>          
+          </tr>
         </table>
         <header>
           Beispiele f&uuml;r den Einsatz virtueller Pfade:
@@ -1596,14 +1598,14 @@
             F&uuml;r Anfragen mit dem Pfad <code>/system</code> wird das
             physische Verzeichnis <code>../system</code> verwendet.
           </p>
-        </section>          
+        </section>
         <section>
           <pre>DIRECTION-A = /system/test.xml &gt; ../system/test.php</pre>
           <p>
             F&uuml;r Anfragen mit dem Pfad <code>/system/test.xml</code> wird
             physisch <code>../system/test.php</code> verwendet.
           </p>
-        </section>          
+        </section>
         <section>
           <pre>DIRECTION-B = /doc &gt; ../documents [A]</pre>
           <p>
@@ -1613,14 +1615,14 @@
             <code>/doc/test.cgi?cmd=123</code>, das physische Verzeichnis
             <code>../documents</code> verwendet.
           </p>
-        </section> 
+        </section>
         <section>
           <pre>DIRECTION-C = /test &gt; http://www.xxx.zzz [R]</pre>
           <p>
             Anfragen vom Pfad <code>/test</code> werden mit einer Weiterleitung
             zu <code>http://www.xxx.zzz</code> beantwortet.
           </p>
-        </section>            
+        </section>
         <section>
           <pre>DIRECTION-D = /control &gt; example.Connector [M]</pre>
           <p>
@@ -1628,7 +1630,7 @@
             <code>Connector</code> aus dem Paket <code>example</code>, welches
             sich im Klassenpfad vom Server befinden muss.
           </p>
-        </section>             
+        </section>
         <section>
           <pre>DIRECTION-E = /program [C]</pre>
           <p>
@@ -1669,74 +1671,74 @@
           Beispiele f&uuml;r Basic-Access-Authentication:
         </header>
         <pre>
-          [SERVER:X:REF]                                                          
+          [SERVER:X:REF]
             ACCESS-A = /access                     [acc:group-a] [realm:Section-A]
             ACCESS-B = /access/section             [acc:group-b] [realm:Section-B]
             ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C]
-            ACCESS-N = /access/public              [acc:none]                     
+            ACCESS-N = /access/public              [acc:none]
 
             ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [...
         </pre>
         <header>
           Beispiele f&uuml;r Digest-Access-Authentication:<br>
-          Die Option <code>[D]</code> macht den Unterschied.        
+          Die Option <code>[D]</code> macht den Unterschied.
         </header>
         <pre>
-          [SERVER:X:REF]  
+          [SERVER:X:REF]
             ACCESS-A = /access                     [acc:group-a] [realm:Section-A] [D]
             ACCESS-B = /access/section             [acc:group-b] [realm:Section-B] [D]
             ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C] [D]
-            ACCESS-N = /access/public              [acc:none]     
-            
-            ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [D] [...      
+            ACCESS-N = /access/public              [acc:none]
+
+            ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [D] [...
         </pre>
         <header>
           Beispiele f&uuml;r die Definition der Zugangsdaten:
         </header>
         <pre>
           [SERVER:X:ACC]
-            GROUP-A = ua:pa ub:pb uc:pc 
-            GROUP-B = ua:pa ub:pbb 
-            GROUP-C = uc:pcc 
-            
-            GROUP-X = user:password user:password ...      
+            GROUP-A = ua:pa ub:pb uc:pc
+            GROUP-B = ua:pa ub:pbb
+            GROUP-C = uc:pcc
+
+            GROUP-X = user:password user:password ...
         </pre>
         <p>
           Das Verzeichnis <code>/access</code> mit alle Unterverzeichnissen ist
           nur f&uuml;r autorisierte Benutzer und mit Passwort zug&auml;nglich.
           Ausgenommen davon ist das Verzeichnis <code>/access/public</code> und
-          dessen Unterverzeichnisse.        
+          dessen Unterverzeichnisse.
         </p>
         <section>
           <b>ACCESS-A</b>
           <p>
             Auf das Verzeichnis <code>/access</code> k&ouml;nnen nur die
-            Benutzer <code>"ua"</code> und dem Passwort <code>"pa"</code>,
-            <code>"ub"</code> und dem Passwort <code>"pb"</code> sowie
-            <code>"uc"</code> mit dem Passwort <code>"pc"</code> zugreifen. Auch
-            der Zugriff auf alle Unterverzeichnisse, ist mit Ausnahme von
-            <code>/access/section</code> und 
+            Benutzer <code>ua</code> und dem Passwort <code>pa</code>,
+            <code>ub</code> und dem Passwort <code>pb</code> sowie
+            <code>uc</code> mit dem Passwort <code>pc</code> zugreifen. Auch der
+            Zugriff auf alle Unterverzeichnisse, ist mit Ausnahme von
+            <code>/access/section</code> und
             <code>/access/section/protected</code>, nur f&uuml;r diese Benutzer
             m&ouml;glich.
-          </p>       
-        </section> 
+          </p>
+        </section>
         <section>
           <b>ACCESS-B</b>
           <p>
             Das Verzeichnis <code>/access/section</code> mit allen
-            Unterverzeichnissen kann von den Benutzern <code>"ua"</code> mit dem
-            Passwort <code>"pa"</code> und <code>"ub"</code> mit dem Passwort
-            <code>"pbb"</code> verwendet werden.
-          </p>       
+            Unterverzeichnissen kann von den Benutzern <code>ua</code> mit dem
+            Passwort <code>pa</code> und <code>ub</code> mit dem Passwort
+            <code>pbb</code> verwendet werden.
+          </p>
         </section>
         <section>
           <b>ACCESS-C</b>
           <p>
             Der Zugriff auf das Verzeichnis
             <code>/access/section/protected</code> ist ausschliesslich f&uuml;r
-            den Benutzer <code>"uc"</code> mit dem Passwort <code>"pcc"</code>
+            den Benutzer <code>uc</code> mit dem Passwort <code>pcc</code>
             m&ouml;glich.
-          </p>       
+          </p>
         </section>
         <section>
           <b>ACCESS-N</b>
@@ -1745,7 +1747,7 @@
             / Digest-Access-Authentication aufgehoben und kann ohne Login und
             Passwort genutzt und Unterverzeichnisse wieder mit Basic Access
             Authentication versehen werden.
-          </p>       
+          </p>
         </section>
         <section>
           <b>Hinweis</b>
@@ -1753,7 +1755,7 @@
             Bei Benutzern und Passw&ouml;rtern wird Gross- und Kleinschreibung
             ber&uuml;cksichtigt. Die Verwendung von Doppelpunkt und Leerzeichen
             ist nicht m&ouml;glich.
-          </p>       
+          </p>
         </section>
         <section>
           <b>Hinweis</b>
@@ -1761,7 +1763,7 @@
             Die Basic- / Digest-Access-Authentication l&auml;sst sich bis auf
             Dateien anwenden. Bei einigen Browsern f&uuml;hrt dies jedoch zur
             erneuten Nachfrage auf Verzeichnisebene.
-          </p>       
+          </p>
         </section>
         <h3>Umgebungsvariablen</h3>
         <p>
@@ -1806,7 +1808,7 @@
             <code>PATH</code> und f&uuml;r Windows <code>SYSTEMDRIVE</code>
             sowie <code>SYSTEMROOT</code> lassen sich &uuml;ber diesen Weg
             &uuml;bergeben. Weitere Informationen dazu sind im Abschnitt
-            <a href="#Konfiguration:Konfigurationsdatei"></a> enthalten.            
+            [#KonfigurationKonfigurationsdatei] enthalten.
           </p>
         </section>
         <h3>Common Gateway Interface</h3>
@@ -1822,7 +1824,7 @@
           Auch beim XCGI erfolgt die Kommunikation &uuml;ber den Standard-I/O
           und die serverrelevanten Informationen werden als Umgebungsvariablen
           &uuml;bermittelt. Hier unterscheidet sich jedoch die Form der
-          &Uuml;bermittlung. So werden die Umgebungsvariablen beim CGI &uuml;ber 
+          &Uuml;bermittlung. So werden die Umgebungsvariablen beim CGI &uuml;ber
           die Laufzeitumgebung und beim XCGI &uuml;ber den Datenstrom
           bereitgestellt. Vergleichbar mit dem CGI wird auch beim XCGI der
           Request-Body per Standard-I/O &uuml;bertragen. Die Umgebungsvariablen
@@ -1855,14 +1857,14 @@
           PATH_TRANSLATED=c:/xcgi/example.xcgi
           REQUEST_URI=/example.xcgi
           GATEWAY_INTERFACE=CGI/1.1
-          
+
           Content of Request(-Body)
         </pre>
         <p>
           Der Vorteil vom XCGI liegt in der einfachen &Uuml;bermittelung der
           Umgebungsvariablen. Somit k&ouml;nnen auch Anwendungen genutzt werden,
           welche keine exklusive Umgebung besitzen oder keinen Zugriff auf die
-          Umgebungsvariablen vom Betriebssystem haben.<br>
+          Umgebungsvariablen vom Betriebssystem haben.
         </p>
         <header>
           Schema zur Formulierung vom Common Gateway Interface:
@@ -1901,7 +1903,7 @@
             <td>[M]</td>
             <td></td>
             <td>Verwendung als Modul</td>
-          </tr>           
+          </tr>
         </table>
         <header>
           Beispiele f&uuml;r die Einrichtung von Common Gateway Interface:
@@ -1967,14 +1969,14 @@
             Mit der Dateierweiterung <code>exe</code> wird jede
             Windows-Anwendung als CGI-Anwendung ausgef&uuml;hrt.
           </p>
-        </section>         
+        </section>
         <section>
           <pre>EXE = POST GET &gt; [C] [X]</pre>
           <p>
             Mit der Dateierweiterung <code>exe</code> wird jede
             Windows-Anwendung als XCGI-Anwendung ausgef&uuml;hrt.
           </p>
-        </section>        
+        </section>
         <section>
           <pre>CMD = POST GET &gt; [C]</pre>
           <p>
@@ -2049,7 +2051,7 @@
             <td>HTTP_CONNECTION</td>
             <td>Keep-Alive</td>
             <td>Status der HTTP-Verbindung zwischen Server und Client</td>
-          </tr>          
+          </tr>
           <tr>
             <td>HTTP_HOST</td>
             <td>experimental.seanox.com</td>
@@ -2198,7 +2200,7 @@
             Beispiel:
           </header>
           <pre>PATH [+] = ./documents;./libraries;./system</pre>
-        </section>        
+        </section>
         <section>
           <b>Tipp</b>
           <p>
@@ -2208,7 +2210,7 @@
             ber&uuml;cksichtigt werden, sollten diese im Arbeitsverzeichnis von
             Seanox Devwex abgelegt werden.
           </p>
-        </section>        
+        </section>
         <section>
           <b>Tipp</b>
           <p>
@@ -2237,7 +2239,7 @@
             der Konfigurationsdatei <code>devwex.ini</code> durch
             <code>REDIRECT_STATUS = 302</code> gesetzt werden.
           </p>
-        </section>        
+        </section>
         <section>
           <b>Hinweis</b>
           <p>
@@ -2245,7 +2247,7 @@
             vom <code>DOCROOT</code> genutzt werden. Ein spezielles
             <code>CGI-BIN</code> ist nicht vorgesehen.
           </p>
-        </section>        
+        </section>
         <section>
           <b>Tipp</b>
           <p>
@@ -2261,15 +2263,15 @@
           <pre>CGI = POST GET &gt; [C]</pre>
           <p>
             Auf diese Art werden nicht pauschal alle Windows-Anwendungen beim
-            HTTP-Zugriff ausgef&uuml;hrt. 
+            HTTP-Zugriff ausgef&uuml;hrt.
           </p>
-        </section>        
+        </section>
         <section>
           <b>Tipp</b>
           <p>
             Mit dem Methoden-Alias <code>ALL</code> werden alle eingehenden
             HTTP-Methoden an das CGI weitergegeben. Der Alias umgeht dabei aber
-            nicht die Einschr&auml;nkung von <code>[SERVER:BAS] METHODS</code>.  
+            nicht die Einschr&auml;nkung von <code>[SERVER:BAS] METHODS</code>.
           </p>
         </section>
         <h2>Statuscodes</h2>
@@ -2286,18 +2288,18 @@
         </header>
         <code>
           CODE = TEXT
-        </code>        
+        </code>
         <header>
           Beispiele f&uuml;r Statuscodes:
         </header>
         <code>
           404 = Document Not Found
-        </code>    
-        <p>Header vom Response:</p>                  
+        </code>
+        <p>Header vom Response:</p>
         <code>
           HTTP/1.0 404 Document Not Found
-        </code> 
-        <h2>Mediatypes</h2> 
+        </code>
+        <h2>Mediatypes</h2>
         <p>
           Der Mediatype, auch Internet-Media-Type, Content-Type und MIME-Type
           (Multipurpose Internet Mail Extensions) genannt, klassifiziert die mit
@@ -2305,7 +2307,7 @@
           von Medientypen und Subtypen.<br>
           In der Konfiguration wird den Mediatypen eine durch Leerzeichen
           getrennte Liste von Dateierweiterungen zugewiesen. Die Zuweisung ist
-          global und wird von allen Servern und virtuellen Hosts verwendet.          
+          global und wird von allen Servern und virtuellen Hosts verwendet.
         </p>
         <header>
           Schema zur Formulierung eines Mediatypes:
@@ -2322,12 +2324,12 @@
         <p>
           Der Mediatype <code>text/html</code> wird den Dateierweiterung
           <code>*.html</code>, <code>*.htm</code> zugewiesen.
-        </p>    
+        </p>
       </article>
       <article>
         <h1>Start</h1>
         <p>
-          Seanox Devwex ist eine Java-Konsolen-Anwendung.<br> 
+          Seanox Devwex ist eine Java-Konsolen-Anwendung.<br>
           Nach dem &Ouml;ffnen der Konsole (Shell/Eingabeaufforderung) wird in
           das Arbeitsverzeichnis <code>./devwex/program</code> gewechselt und
           Seanox Devwex mit dem auszuf&uuml;hrenden Befehl als Java-Binary oder
@@ -2336,7 +2338,7 @@
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Befehle:<br>
           Die Gross- und Kleinschreibung wird bei den Befehlen ignoriert.
-        </header>        
+        </header>
         <table>
           <tr>
             <th>Befehl</th>
@@ -2347,7 +2349,7 @@
             <td>
               Startet Seanox Devwex entsprechend der aktuellen Konfiguration.
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>status</td>
             <td>
@@ -2364,14 +2366,14 @@
               enthalten, wird die zuletzt verwendete Konfiguration
               wiederverwendet.
             </td>
-          </tr> 
+          </tr>
           <tr>
             <td>stop</td>
             <td>
               Beendet Seanox Devwex inkl. aller aktiven Module und Server.
             </td>
-          </tr>          
-        </table>         
+          </tr>
+        </table>
         <header>
           Beispiele f&uuml;r den Programmaufruf:
         </header>
@@ -2380,19 +2382,19 @@
           <p>
             Programmaufruf als Java-Binary
           </p>
-        </section>        
+        </section>
         <section>
           <pre>devwex.bat start</pre>
           <p>
             Programmaufruf per Batch-Skript in Windows
           </p>
-        </section>        
+        </section>
         <section>
           <pre>devwex.sh status</pre>
           <p>
             Programmaufruf zur Ausgabe vom Betriebsstatus per Shell-Skript in Unix/Linux
           </p>
-        </section> 
+        </section>
         <p>
           Neben dem auszuf&uuml;hrenden Befehl k&ouml;nnen mit dem Aufruf
           weitere Argumente als Eigenschaften oder Umgebungsvariablen an das
@@ -2412,11 +2414,11 @@
           verwenden.<br>
           Dabei haben Eigenschaften eine h&ouml;here Priorit&auml;t als
           Umgebungsvariablen.
-        </p> 
+        </p>
         <header>
           Beispiel f&uuml;r die &Uuml;bergabe von Argumenten mit dem
           Programmaufruf:
-        </header>                
+        </header>
         <section>
           <pre>java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start</pre>
           <p>
@@ -2425,8 +2427,8 @@
             Diese lassen sich dann in der Java-Implementierung und in der
             Konfiguration verwenden.<br>
             In der Konfiguration sind die Argumente als dynamische
-            Schl&uuml;ssel verf&uuml;gbar (siehe
-            <a href="#Konfiguration#Konfigurationsdatei"></a>).
+            Schl&uuml;ssel verf&uuml;gbar (siehe Abschnitt
+            [#KonfigurationKonfigurationsdatei]).
           </p>
         </section>
         <p>
@@ -2441,7 +2443,7 @@
         <header>
           Beispiel f&uuml;r die &Uuml;bergabe von Argumenten mit dem
           Programmaufruf:
-        </header>                
+        </header>
         <section>
           <pre>java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start</pre>
           <p>
@@ -2454,10 +2456,10 @@
             Mit Seanox Control steht ein desktopbasierte Administration f&uuml;r
             Seanox Devwex zur Verf&uuml;gung. Die Erweiterung integriert sich
             als Tray-Icon und bietet neben der Statusanzeige lokalen und
-            entfernten Zugriff auf die Server-Steuerung und die Konfiguration. 
+            entfernten Zugriff auf die Server-Steuerung und die Konfiguration.
           </p>
         </section>
-      </article>  
+      </article>
       <article>
         <h1>Steuerung und &Uuml;berwachung</h1>
         <p>
@@ -2468,11 +2470,11 @@
           l&auml;sst.<br>
           Seanox Devwex enth&auml;lt die dazu ben&ouml;tigte Server- wie auch
           eine alternative Client-Komponente.
-        </p>          
+        </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Telnet-Befehle:<br>
           Die Gross- und Kleinschreibung wird bei den Befehlen ignoriert.
-        </header>        
+        </header>
         <table>
           <tr>
             <th>Befehl</th>
@@ -2494,7 +2496,7 @@
               enthalten, wird die zuletzt verwendete Konfiguration
               wiederverwendet.
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>stop</td>
             <td>
@@ -2515,7 +2517,7 @@
           SAPI: TCP 127.0.0.1:25000
           SAPI: TCP 127.0.0.1:443
           SAPI: TCP 127.0.0.1:80
-        </pre>           
+        </pre>
         <p>
           Die Ausgabe vom Betriebsstatus ist mehrzeilig.<br>
           Jede Zeile beginnt mit einem Pr&auml;fix gefolgt vom Wert.
@@ -2536,13 +2538,13 @@
             <td>
               Aktuelle Systemzeit
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td>TIUP</td>
             <td>
               Initiale Startzeit
             </td>
-          </tr>        
+          </tr>
           <tr>
             <td>XAPI</td>
             <td>
@@ -2558,7 +2560,7 @@
               Server identifizieren sich mit Protokoll, Adresse und Port.
             </td>
           </tr>
-        </table> 
+        </table>
         <header>
           Beispiele f&uuml;r den Telnet-Aufruf:
         </header>
@@ -2575,42 +2577,42 @@
           Bei der Verwendung von Seanox Devwex als Telnet-Client, werden die
           Verbindungsdaten aus der Server-Konfiguration <code>devwex.ini</code>,
           welche sich im Arbeitsverzeichnis befinden muss, ermittelt.
-        </p>        
+        </p>
         <section>
           <pre>devwex.bat status</pre>
           <p>
             Verwendung vom Seanox Devwex-Client &uuml;ber das Startskript unter
             Windows
           </p>
-        </section>           
+        </section>
         <section>
           <pre>devwex.sh status</pre>
           <p>
             Verwendung vom Seanox Devwex-Client &uuml;ber das Startskript unter
             Unix/Linux
           </p>
-        </section>         
+        </section>
         <section>
           <pre>java -cp devwex.jar com.seanox.devwex.Service status</pre>
           <p>
             direkter Java-Aufruf vom Seanox Devwex-Client
           </p>
-        </section> 
+        </section>
         <section>
           <b>Tipp</b>
           <p>
             Mit Seanox Control ist eine desktopbasierte Administration f&uuml;r
             Seanox Devwex verf&uuml;gbar. Die Erweiterung integriert sich als
             Tray-Icon und bietet neben der Statusanzeige lokalen und entfernten
-            Zugriff auf die Server-Steuerung und die Konfiguration. 
+            Zugriff auf die Server-Steuerung und die Konfiguration.
           </p>
         </section>
-      </article>      
+      </article>
       <article>
         <h1>Entwicklung</h1>
         <p>
           Die Erweiterbarkeit von Seanox Devwex ist eines der wichtigsten
-          Merkmale. 
+          Merkmale.
         </p>
         TODO
         <h2>Architektur</h2>
@@ -2709,7 +2711,7 @@
                           </table>
                         </td>
                       </tr>
-                    </table>                    
+                    </table>
                   </td>
                 </tr>
               </table>
@@ -2736,7 +2738,7 @@
                           <div class="composite">Remote-Protocol</div>
                         </td>
                       </tr>
-                    </table>                                            
+                    </table>
                   </td>
                 </tr>
               </table>
@@ -2784,7 +2786,7 @@
           <li>
             Ist das Modul bereits geladen, wird die aktuelle Instanz verwendet.
           </li>
-        </ul>        
+        </ul>
         <h3>Neustart</h3>
         <p>
           Die Sequenz entspricht der Kombination aus
@@ -2828,7 +2830,7 @@
             wird der Server als (Daemon)Thread gestartet und kann seine Arbeit
             in der Methode <code>Server.run()</code> aufnehmen.
           </li>
-        </ul>          
+        </ul>
         <h3>Beenden</h3>
         <ul>
           <li>
@@ -2870,7 +2872,7 @@
         <p>
           Im Nachfolgenden werden ausschliesslich die im Service enthaltene
           Server-, Module- und HTTP-Module-API beschrieben.
-        </p>          
+        </p>
         <h2>Server</h2>
         <p>
           Server stellen den physischen Zugriff im Netzwerk f&uuml;r ein
@@ -2897,42 +2899,42 @@
         <h3>Implementierung</h3>
         <pre>
           public class Server implements Runnable {
-               
-               public Server(String name, Object initialize) {
-                   ...
-                   
-                   Der Server wird durch Seanox Devwex &uuml;ber den Konstruktor
-                   initiiert. Liegt dieser nicht vor, wird der Server als
-                   inkompatible betrachtet und nicht geladen. Die Konfiguration
-                   wird neben dem Namen als Initialize-Objekt &uuml;bergeben.
-               }
- 
-               public String explain() {
-                   ...
-                  
-                   Die Methode ist optional und gibt allgemeine Informationen
-                   zum Server im Format &lt;PROTOCOL HOST-NAME:PORT&gt; oder 
-                   &lt;PROTOCOL HOST-ADRESSE:PORT&gt; zur&uuml;ck, die statisch
-                   oder mit der Initialisierung gesetzt werden sollten.
-               }
- 
-               public void run() {
-                   ...
-                   
-                   Der Server wird als (Daemon)Thread gestartet.
-               }
 
-               public void destroy {
-                   ...
-                   
-                   Der Server wird zum Beenden aufgefordert, bevor er vom
-                   Service samt ClassLoader entladen wird. Vom Server initiierte
-                   bzw. verwendet Sockets, Ressourcen, Datenstr&ouml;me und
-                   Prozesse sollten mit diesem Aufruf geschlossen bzw. beendet
-                   werden.
-               }
-          }        
-        </pre>        
+              public Server(String name, Object initialize) {
+                  ...
+
+                  Der Server wird durch Seanox Devwex &uuml;ber den Konstruktor
+                  initiiert. Liegt dieser nicht vor, wird der Server als
+                  inkompatible betrachtet und nicht geladen. Die Konfiguration
+                  wird neben dem Namen als Initialize-Objekt &uuml;bergeben.
+              }
+
+              public String explain() {
+                  ...
+
+                  Die Methode ist optional und gibt allgemeine Informationen zum
+                  Server im Format &lt;PROTOCOL HOST-NAME:PORT&gt; oder
+                  &lt;PROTOCOL HOST-ADRESSE:PORT&gt; zur&uuml;ck, die statisch
+                  oder mit der Initialisierung gesetzt werden sollten.
+              }
+
+              public void run() {
+                  ...
+
+                  Der Server wird als (Daemon)Thread gestartet.
+              }
+
+              public void destroy {
+                  ...
+
+                  Der Server wird zum Beenden aufgefordert, bevor er vom Service
+                  samt ClassLoader entladen wird. Vom Server initiierte bzw.
+                  verwendet Sockets, Ressourcen, Datenstr&ouml;me und Prozesse
+                  sollten mit diesem Aufruf geschlossen bzw. beendet
+                  werden.
+              }
+          }
+        </pre>
         <h2>Module</h2>
         <p>
           Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen
@@ -2953,7 +2955,7 @@
           von Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor
           initial mit dem Start vom Laufzeit-Container (Service), dabei wird die
           Abfolge in der Konfigurationsdatei mit der Reihenfolge der Module
-          innerhalb der Sektion <code>INITIALIZE</code>  festgelegt, oder die
+          innerhalb der Sektion <code>INITIALIZE</code> festgelegt, oder die
           Initialisierung erfolgt mit der ersten Anforderung eines Moduls zur
           Laufzeit. Die Konfiguration wird einem Module nur dann &uuml;bergeben,
           wenn es initial &uuml;ber die Sektion <code>INITIALIZE</code> geladen
@@ -2962,15 +2964,15 @@
           das Beenden nicht aktiv und verwirft die Module durch das Entladen vom
           ClassLoader. Optional wird die Implementierung der Methode
           <code>Module.explain()</code> zur Abfrage allgemeiner Informationen,
-          wie Hersteller und Version, unterst&uuml;tzt.        
+          wie Hersteller und Version, unterst&uuml;tzt.
         </p>
         <h3>Implementierung</h3>
         <pre>
           public class Module {
-          
+
               public Module(String options) {
                   ...
-                  
+
                   Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
                   dieser nicht vor, wird das Modul als inkompatible zur API
                   betrachtet und nicht geladen. Die Konfiguration ist optional
@@ -2980,7 +2982,7 @@
 
               public String explain() {
                   ...
-                  
+
                   Die Methode ist optional und gibt allgemeine Informationen zum
                   Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
                   die statisch oder mit der Initialisierung gesetzt werden
@@ -2989,14 +2991,14 @@
 
               public void destroy() {
                   ...
-                
+
                   Das Modul wird zum Beenden aufgefordert, bevor es vom Service
                   samt ClassLoader entladen wird. Vom Modul initiierte bzw.
                   verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
                   mit diesem Aufruf geschlossen bzw. beendet werden.
               }
-          }        
-        </pre>   
+          }
+        </pre>
         <h2>HTTP-Module</h2>
         <p>
           HTTP-Module sind eine Erweiterung vom Module-API von Seanox Devwex
@@ -3004,7 +3006,7 @@
           die im Kontext vom Server laufen.
         </p>
         <p>
-          Mit HTTP-Modulen lassen sich Filter- und Service-Funktionalit&auml;ten 
+          Mit HTTP-Modulen lassen sich Filter- und Service-Funktionalit&auml;ten
           implementieren, was im Folgenden detailliert beschrieben wird. Die
           Beschreibung basiert auf einzelner Implementierungen die aber auch in
           einem HTTP-Modul zusammengefasst werden k&ouml;nnen.
@@ -3027,16 +3029,16 @@
           Worker ist die Request-verarbeitende Instanz und hat u.a. Zugriff auf
           Server, Socket, Request, Response, Konfiguration und Environment. Mit
           der Konfiguration k&ouml;nnen f&uuml;r einen Filter weitere Parameter
-          und Optionen gesetzt werden, die dann optional als ein String 
+          und Optionen gesetzt werden, die dann optional als ein String
           &uuml;bergeben werden.
         </p>
         <h4>Implementierung</h4>
         <pre>
           public class Module {
-          
+
               public Module(String options) {
                   ...
-                  
+
                   Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
                   dieser nicht vor, wird das Modul als inkompatible zur API
                   betrachtet und nicht geladen. Die Konfiguration ist optional
@@ -3046,16 +3048,16 @@
 
               public String explain() {
                   ...
-                  
+
                   Die Methode ist optional und gibt allgemeine Informationen zum
                   Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
                   die statisch oder mit der Initialisierung gesetzt werden
                   sollten.
               }
-              
+
               public void filter(Worker worker, String options) {
                   ...
-                  
+
                   Diese Methode &uuml;bernimmt die Pr&uuml;fung und ggf.
                   Manipulation vom Request oder verarbeitet sowie beantwortet
                   diesen komplett. Soll die Anfrage ausschliesslich mit einem
@@ -3063,22 +3065,22 @@
                   diesen setzen und muss den Request nicht selbst beantworten.
                   Die Beantwortung &uuml;bernimmt in diesem Fall die
                   nachgelagerte Worker-Implementierung.
-              }              
+              }
 
               public void destroy() {
                   ...
-                
+
                   Das Modul wird zum Beenden aufgefordert, bevor es vom Service
                   samt ClassLoader entladen wird. Vom Modul initiierte bzw.
                   verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
                   mit diesem Aufruf geschlossen bzw. beendet werden.
               }
-          }        
-        </pre>         
+          }
+        </pre>
         <h3>Service</h3>
         <p>
           Das Ziel einer HTTP-Anfrage sind Verzeichnisse, Dateien sowie
-          dynamische Inhalte externe von CGI- und XCGI-Anwendungen, welche 
+          dynamische Inhalte externe von CGI- und XCGI-Anwendungen, welche
           &uuml;ber virtuelle Pfade angesprochen werden.<br>
           Services stellen eine weitere Form von dynamischen Inhalten zur
           Verf&uuml;gung. Sie &uuml;bernehmen die komplette Verarbeitung
@@ -3092,15 +3094,15 @@
           Server, Socket, Request, Response, Konfiguration und Environment. Mit
           der Konfiguration k&ouml;nnen f&uuml;r ein Modul weitere Parameter und
           Optionen gesetzt werden, die dann optional als ein String
-          &uuml;bergeben werden.        
-        </p>  
+          &uuml;bergeben werden.
+        </p>
         <h4>Implementierung</h4>
         <pre>
           public class Module {
-          
+
               public Module(String options) {
                   ...
-                  
+
                   Das Modul wird &uuml;ber diesen Konstruktor initiiert. Liegt
                   dieser nicht vor, wird das Modul als inkompatible zur API
                   betrachtet und nicht geladen. Die Konfiguration ist optional
@@ -3110,34 +3112,34 @@
 
               public String explain() {
                   ...
-                  
+
                   Die Methode ist optional und gibt allgemeine Informationen zum
                   Modul im Format &lt;PRODUCER-MODULE/VERSION&gt; zur&uuml;ck,
                   die statisch oder mit der Initialisierung gesetzt werden
                   sollten.
               }
-              
+
               public void service(Worker worker, String options) {
                   ...
-                  
+
                   Diese Methode &uuml;bernimmt die komplette Verarbeitung vom
                   Request und beantwortet diesen. Soll die Anfrage
                   ausschliesslich mit einem Server-Status beantwortet werden,
-                  kann die Service-Methode diesen setzen und muss den Request 
+                  kann die Service-Methode diesen setzen und muss den Request
                   nicht selbst beantworten. Die Beantwortung &uuml;bernimmt in
                   diesem Fall die nachgelagerte Worker-Implementierung.
-              }              
+              }
 
               public void destroy() {
                   ...
-                
+
                   Das Modul wird zum Beenden aufgefordert, bevor es vom Service
                   samt ClassLoader entladen wird. Vom Modul initiierte bzw.
                   verwendet Ressourcen, Datenstr&ouml;me und Prozesse sollten
                   mit diesem Aufruf geschlossen bzw. beendet werden.
               }
-          }        
-        </pre>            
+          }
+        </pre>
         <h2>Entwicklungsumgebung (SDK)</h2>
         <p>
           F&uuml;r die Entwicklung und das Experimentieren mit Seanox Devwex
@@ -3151,7 +3153,7 @@
           sowie Abstraktionen und zus&auml;tzliche ClassLoader-Ebenen f&uuml;r
           die Entwicklung mit Seanox Devwex, sind auch zahlreiche
           funktionsf&auml;hige Beispiele enthalten. Eine detaillierte
-          Dokumentation liegt der Entwicklungsumgebung bei. 
+          Dokumentation liegt der Entwicklungsumgebung bei.
         </p>
       </article>
     </main>

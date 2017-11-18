@@ -8,6 +8,36 @@ if (typeof String.prototype.capitalize !== "function")
             return match.toUpperCase();
         });
     };
+    
+if (typeof String.prototype.indent !== "function")
+    String.prototype.indent = function(offset) {
+        if (!offset
+                || offset <= 0)
+            return String(this);
+        var text = this.split(/\s*[\r\n]+\s*/);
+        if (!Array.isArray(text))
+            text = new Array(text);
+        text.forEach(function(text, index, array) {
+            var space = "";
+            while (space.length < offset)
+                space += " ";
+            var result = "";
+            while (text.length +offset > 80) {
+                var match = text.substring(0, 80).match(/^.*(?=\s)/);
+                if (!match)
+                    match = text.match(/^.*?(?=\s)/);
+                if (!match)
+                    match = text;
+                match = String(match);
+                result += space + match + "\r\n";
+                text = text.substring(match.length).trim(); 
+            }
+            if (text)
+                result += space + text + "\r\n";
+            array[index]= result;
+        });
+        return text.join("\r\n");    
+    };    
 
 window.addEventListener("load", function() {
     var translate = function(element, filter) {
@@ -27,18 +57,20 @@ window.addEventListener("load", function() {
                 }
             }        
         };
+        text = text.replace(/\s+/ig, ' ').trim();
+        text = text.replace(/\s*<br>\s*/ig, '\r\n').trim();
         var placeholder = new Array();
-        text = text.replace(/#{[\d+RN]}/g, function(match) {
+        text = text.replace(/#\d+[?= ]/g, function(match) {
             placeholder[placeholder.length] = match;
             return "#{" + (placeholder.length -1) + "}";
         });
         text = text.replace(/<([a-z0-9\-]+)(.|\r|\n)*?<\/\1\b[^>]*>/ig, function(match) {
             placeholder[placeholder.length] = match;
-            return "#{" + (placeholder.length -1) + "}";
+            return "#" + (placeholder.length -1) + " ";
         });
         text = text.replace(/<[^>]+?>/ig, function(match) {
             placeholder[placeholder.length] = match;
-            return "#{" + (placeholder.length -1) + "}";
+            return "#" + (placeholder.length -1) + " ";
         });
         var mapping = function(mapping, text) {
             if (!mapping)
@@ -78,26 +110,12 @@ window.addEventListener("load", function() {
                 if (filter
                         && filter.mapping)
                     response = mapping(filter.mapping, response);
-                response = response.replace(/#\{(\d+)\}/ig, function(match, index) {
+                response = response.replace(/#(\d+)[?= ]/ig, function(match, index) {
                     return placeholder[index];
-                });
+                });  
                 response = response.replace(/\s+/g, ' ');
                 response = response.trim();
-                if (indent) {
-                    var patch = ""
-                    while (patch.length < indent)
-                        patch += " ";
-                    var size = 80 -indent;
-                    var pattern = new RegExp("^.{" + (size -1) + "}[^ ]*");
-                    var result = "";
-                    while (response.length > 0) {
-                        var match = response.match(pattern);
-                        match = !!match ? String(match) : response;
-                        result += "\r\n" + patch + match;
-                        response = response.substring(match.length).trim();
-                    }
-                    response = result + "\r\n" + patch.substring(2);
-                }  
+                response = response.indent(indent);
                 element.innerHTML = response;
             }
         } 

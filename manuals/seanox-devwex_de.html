@@ -11,7 +11,6 @@
   <body>
     <main>
       <article>
-        TODO:
         <p>Seanox Devwex</p>
         <p>Version #[ant:release-version] #[ant:release-date]</p>
         <p>Systemhandbuch</p>
@@ -49,10 +48,10 @@
         <p>
           Seanox Devwex ist ein minimalistische Laufzeit-Container mit einer
           modularen Architektur f&uuml;r (Web)Server und Anwendungen. Die
-          enthaltenen Server-Implementierungen unterst&uuml;tzen u.a. das HTTP
-          mit Virtual Hosting, Filter, HTTP-Modulen, SSL/TLS, XCGI/CGI1.1,
-          Directory Index, Templates und einem auf Telnet basierenden
-          Fernzugriff zur Container-Steuerung.<br>
+          enthaltene Server-Implementierung unterst&uuml;tzen u.a. das HTTP mit
+          Virtual Hosting, Filter, HTTP-Modulen, SSL/TLS, XCGI/CGI1.1, Directory
+          Index, Templates und einem auf Telnet basierenden Fernzugriff zur
+          Steuerung des Laufzeit-Containers.<br>
           Weitere Server und Module sowie Anwendungen lassen sich &uuml;ber die
           verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container und die
           enthaltenen Servern sind ein reine Java-Implementierung und durch
@@ -94,10 +93,11 @@
         <h1>Merkmale</h1>
         <h2>Architektur</h2>
         <p>
-          Seanox Devwex ist ein multithreading-f&auml;higer Container f&uuml;r
-          (Server-)Module, welche &uuml;ber die bereitgestellte Server- und
-          Module-API eingebunden werden. Der eigene ClassLoader unterst&uuml;tzt
-          dabei das Laden und Entladen von Servern und Modulen zur Laufzeit.
+          Seanox Devwex ist ein multithreading-f&auml;higer Laufzeit-Container
+          f&uuml;r (Server-)Module, welche &uuml;ber die bereitgestellte Server-
+          und Module-API eingebunden werden. Der eigene ClassLoader
+          unterst&uuml;tzt dabei das Laden und Entladen von Servern und Modulen
+          zur Laufzeit.
         </p>
         <h2>Hypertext Transfer Protocol</h2>
         <p>
@@ -108,7 +108,8 @@
         <h2>Fern&uuml;berwachung</h2>
         <p>
           Der enthaltene Fernzugriff unterst&uuml;tzt eine auf Telnet basierende
-          Steuerung f&uuml;r Statusabfragen, Neustart und Stopp.<br>
+          Steuerung des Laufzeit-Containers (Neustart und Stopp) und Abfragen
+          zum Betribesstatus der laufenden Server und Module.<br>
           Neben der Server-Implementierung ist auch eine Client-Implementierung
           enthalten.
         </p>
@@ -542,14 +543,15 @@
         <h3>Fern&uuml;berwachung</h3>
         <p>
           Funktionen f&uuml;r Neustart, Stopp und zur Abfrage vom Betriebsstatus
-          sind &uuml;ber einen Telnet-basierten Fernzugriff zug&auml;nglich.<br>
-          Die meisten Betriebssysteme enthalten einen entsprechenden Client der
+          des Laufzeit-Containers und der laufenden Server und Module sind
+          &uuml;ber einen Telnet-basierten Fernzugriff zug&auml;nglich.<br>
+          Die meisten Betriebssysteme enthalten einen entsprechenden Client, der
           sich &uuml;ber die Konsole (Shell/Eingabeaufforderung) verwenden
-          l&auml;sst.<br>
-          Seanox Devwex enth&auml;lt die dazu ben&ouml;tigte Server- wie auch
-          eine alternative Client-Komponente.<br>
-          Die Konfiguration beider Komponenten erfolgt in der Sektion
-          <code>[REMOTE:BAS]</code>.
+          l&auml;sst. Alternativ ist in Seanox Devwex neben der Server- eine
+          passende Client-Implementierung enthalten. Die Client-Implementierung
+          wird beim Aufruf in der Kommandozeile per Programm-Argumenten
+          konfiguriert. F&uuml;r den Server erfolgt die Konfiguration in der
+          Sektion <code>[REMOTE:BAS]</code> der Konfigurationsdatei.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
@@ -1803,8 +1805,8 @@
           <p>
             Die Option <code>[?]</code> am Ende eines Schl&uuml;ssels
             kennzeichnet diesen als dynamisch. Dazu wird der Schl&uuml;ssel mit
-            seinem Wert beim Programmstart &uuml;ber als Startargument oder
-            in den System-Properties festgelegt. Systemrelevante Variablen, wie
+            seinem Wert beim Programmstart als VM-Agrument oder in den
+            System-Properties festgelegt. Systemrelevante Variablen, wie
             <code>PATH</code> und f&uuml;r Windows <code>SYSTEMDRIVE</code>
             sowie <code>SYSTEMROOT</code> lassen sich &uuml;ber diesen Weg
             &uuml;bergeben. Weitere Informationen dazu sind im Abschnitt
@@ -1924,7 +1926,7 @@
             Die Dateiendung <code>cgi</code> wird der Anwendung Example
             zugewiesen, die bei Anfragen mit der Dateiendung <code>cgi</code> im
             Pfad gestartet wird. Der Pfad zur Skript-Datei wird hier der
-            Anwendung als Startargument &uuml;bergeben.
+            Anwendung als Programm-Argument &uuml;bergeben.
           </p>
         </section>
         <section>
@@ -2397,7 +2399,7 @@
         </section>
         <p>
           Neben dem auszuf&uuml;hrenden Befehl k&ouml;nnen mit dem Aufruf
-          weitere Argumente als Eigenschaften oder Umgebungsvariablen an das
+          weitere VM-Argumente als Eigenschaften oder Umgebungsvariablen an das
           Programm &uuml;bergeben werden.
         </p>
         <p>
@@ -2409,30 +2411,30 @@
           gesetzt.
         </p>
         <p>
-          In beiden F&auml;llen lassen sich die Argumente dann als dynamische
-          Schl&uuml;ssel in der Konfigurationsdatei <code>devwex.ini</code>
-          verwenden.<br>
-          Dabei haben Eigenschaften eine h&ouml;here Priorit&auml;t als
-          Umgebungsvariablen.
+          In beiden F&auml;llen lassen sich VM-Argumente und Umgebungsvariablen
+          dann als dynamische Schl&uuml;ssel in der Konfigurationsdatei
+          <code>devwex.ini</code> verwenden.<br>
+          Dabei haben Eigenschaften (VM-Argumente) eine h&ouml;here
+          Priorit&auml;t als Umgebungsvariablen.
         </p>
         <header>
-          Beispiel f&uuml;r die &Uuml;bergabe von Argumenten mit dem
+          Beispiel f&uuml;r die &Uuml;bergabe von VM-Argumenten mit dem
           Programmaufruf:
         </header>
         <section>
           <pre>java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start</pre>
           <p>
-            Mit dem Programmaufruf zum Start werden die Argumente
+            Mit dem Programmaufruf zum Start werden die VM-Argumente
             <code>argument1</code> und <code>argument2</code> &uuml;bergeben.
             Diese lassen sich dann in der Java-Implementierung und in der
             Konfiguration verwenden.<br>
-            In der Konfiguration sind die Argumente als dynamische
+            In der Konfiguration sind die VM-Argumente als dynamische
             Schl&uuml;ssel verf&uuml;gbar (siehe Abschnitt
             [#KonfigurationKonfigurationsdatei]).
           </p>
         </section>
         <p>
-          Einen festen Bestandteil bildet das Argument <code>libraies</code>.
+          Einen festen Bestandteil bildet das VM-Argument <code>libraies</code>.
           Mit diesem k&ouml;nnen weitere Ressourcen, Bibliotheken und Klassen
           &uuml;bergeben werden, deren Pfade durch den f&uuml;r das
           Betriebssystem festgelegten Path-Separator getrennt werden.<br>
@@ -2441,13 +2443,15 @@
           so angegebenen Verzeichnisse.
         </p>
         <header>
-          Beispiel f&uuml;r die &Uuml;bergabe von Argumenten mit dem
+          Beispiel f&uuml;r die &Uuml;bergabe von VM-Argumenten mit dem
           Programmaufruf:
         </header>
         <section>
           <pre>java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start</pre>
           <p>
-            TODO
+            Mit dem Programmaufruf zum Start wird das VM-Argument
+            <code>libraries</code> &uuml;bergeben. Dieses l&auml;sset sich dann
+            in der Java-Implementierung und in der Konfiguration verwenden.
           </p>
         </section>
         <section>

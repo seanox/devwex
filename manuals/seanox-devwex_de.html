@@ -33,8 +33,10 @@
       </article>
       <article>
         <h1>Inhalt</h1>
-        <input type="text">
-        <button></button>
+        <p>
+          <input type="text">
+          <input type="button">
+        </p>
         <p>
           Der Filter unterstützt: UND (+ oder |), NICHT (- oder !), ODER (|),
           runde Klammern, Jokerzeichen (*), Phrasen ("..."), Escape-Sequenzen /
@@ -261,10 +263,11 @@
           durch die Verwendung vom Pluszeichen fortgesetzt werden. Werte lassen
           sich zudem fest, variabel und optional zuweisen.<br>
           Durch die Option <code>[?]</code> am Ende eines Schl&uuml;ssels, wird
-          nach einem gleichnamigen Schl&uuml;ssel in den System-Properties der
-          Java-Laufzeitumgebung gesucht. Kann keiner ermittelt werden, wird der
-          optional angegebene Wert verwendet. Ohne Wert gilt ein solcher
-          Schl&uuml;ssel als nicht angegeben und wird ignoriert.
+          nach einem gleichnamigen Schl&uuml;ssel in den System-Properties
+          (VM-Argumente) der Java-Laufzeitumgebung gesucht. Kann keiner
+          ermittelt werden, wird der optional angegebene Wert verwendet. Ohne
+          Wert gilt ein solcher Schl&uuml;ssel als nicht angegeben und wird
+          ignoriert.
         </p>
         <p>
           Kommentare beginnen mit einem Semikolon, sind optional und lassen sich
@@ -346,12 +349,13 @@
           <b>Zeile 5</b>
           <p>
             Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code>
-            ist dynamisch. In den System-Properties der Java-Laufzeitumgebung
-            wird dazu nach dem gleichnamigen Schl&uuml;ssel <code>PARAM-C</code>
-            gesucht, wobei die Gross- und Kleinschreibung ignoriert wird. Der
-            Schl&uuml;ssel muss dazu Bestandteil der Laufzeitumgebung sein oder
-            kann beim Programmstart in der Form <code>-Dschluessel=wert</code>
-            gesetzt werden.<br>
+            ist dynamisch. In den System-Properties (VM-Argumente) der
+            Java-Laufzeitumgebung wird dazu nach dem gleichnamigen
+            Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei die Gross- und
+            Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu
+            Bestandteil der Laufzeitumgebung sein oder kann beim Programmstart
+            als VM-Argument in der Form <code>-Dschluessel=wert</code> gesetzt
+            werden.<br>
             Enthalten die System-Properties der Java-Laufzeitumgebung keinen
             entsprechenden Schl&uuml;ssel, wird alternativ
             <code>WERT-6; WERT-7</code> als Wert verwendet.<br>
@@ -365,12 +369,12 @@
           <b>Zeile 6</b>
           <p>
             Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code>
-            ist dynamisch. In den System-Properties der Java-Laufzeitumgebung
-            wird dazu nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die
-            Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss
-            dazu Bestandteil der Laufzeitumgebung sein oder kann beim
-            Programmstart in der Form <code>-Dschluessel=wert</code> gesetzt
-            werden.<br>
+            ist dynamisch. In den System-Properties (VM-Argumente) der
+            Java-Laufzeitumgebung wird dazu nach dem gleichnamigen
+            Schl&uuml;ssel gesucht, wobei die Gross- und Kleinschreibung
+            ignoriert wird. Der Schl&uuml;ssel muss dazu Bestandteil der
+            Laufzeitumgebung sein oder kann beim Programmstart als VM-Argument
+            in der Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
             Enthalten die System-Properties der Java-Laufzeitumgebung keinen
             entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert,
             da auch kein alternativer Wert angegeben wurde.<br>
@@ -1806,7 +1810,7 @@
             Die Option <code>[?]</code> am Ende eines Schl&uuml;ssels
             kennzeichnet diesen als dynamisch. Dazu wird der Schl&uuml;ssel mit
             seinem Wert beim Programmstart als VM-Agrument oder in den
-            System-Properties festgelegt. Systemrelevante Variablen, wie
+            Umgebungsvariablen festgelegt. Systemrelevante Variablen, wie
             <code>PATH</code> und f&uuml;r Windows <code>SYSTEMDRIVE</code>
             sowie <code>SYSTEMROOT</code> lassen sich &uuml;ber diesen Weg
             &uuml;bergeben. Weitere Informationen dazu sind im Abschnitt
@@ -2615,10 +2619,12 @@
       <article>
         <h1>Entwicklung</h1>
         <p>
-          Die Erweiterbarkeit von Seanox Devwex ist eines der wichtigsten
-          Merkmale.
+          Die Erweiterbarkeit von Seanox Devwex ist ein wichtigstes Merkmale. So
+          ist die Implementierung vom Laufzeit-Container und der Server eine
+          Herausforderung um mit minimalsten Mitteln ein Maximum an
+          Funktionalit&auml;t zu erreichen und dabei eine saubere Architektur zu
+          bewahren.
         </p>
-        TODO
         <h2>Architektur</h2>
         <table class="architecture">
           <tr>

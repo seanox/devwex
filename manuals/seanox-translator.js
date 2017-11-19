@@ -23,7 +23,7 @@ if (typeof String.prototype.indent !== "function")
                 space += " ";
             var result = "";
             while (text.length +offset > 80) {
-                var match = text.substring(0, 80).match(/^.*(?=\s)/);
+                var match = text.substring(0, 80 -offset).match(/^.*(?=\s)/);
                 if (!match)
                     match = text.match(/^.*?(?=\s)/);
                 if (!match)
@@ -49,7 +49,7 @@ window.addEventListener("load", function() {
             "jsonrpc": "2.0",
             "method": "LMT_handle_jobs",
             "params": {
-                "jobs": [{"raw_en_sentence":""}],
+                "jobs": [{"kind":"default", "raw_en_sentence":""}],
                 "lang": {
                     "user_preferred_langs": ["EN","DE"],
                     "source_lang_user_selected": "DE",
@@ -91,6 +91,7 @@ window.addEventListener("load", function() {
         data = JSON.stringify(data);
         var http = new XMLHttpRequest();
         http.open("POST", "https://www.deepl.com/jsonrpc", true);
+        http.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         http.setRequestHeader("Content-Type", "text/plain");
         http.onreadystatechange = function() {
             if (http.readyState == 4
@@ -116,16 +117,47 @@ window.addEventListener("load", function() {
                 response = response.replace(/\s+/g, ' ');
                 response = response.trim();
                 response = response.indent(indent);
+                if (indent) {
+                    response = "\r\n" + response;
+                    while (--indent > 1)
+                        response += " ";
+                }
                 element.innerHTML = response;
             }
         } 
         http.send(data);   
     };
+   
+    var queue = new Array();
     
     var elements;
+    elements = document.querySelectorAll("pre, code");
+    elements.forEach(function(element, index, array) {
+        var text = element.innerHTML;
+        text = text.replace(/Dateierweiterung/g, 'file extension');
+        text = text.replace(/DATEIERWEITERUNG/g, 'FILE EXTENSION');
+        text = text.replace(/METHODEN/g, 'METHODS');
+        text = text.replace(/ANWENDUNG/g, 'APPLICATION');
+        text = text.replace(/VARIABLE/g, 'VARIABLE');
+        text = text.replace(/WERT/g, 'VALUE');
+        text = text.replace(/wert/g, 'value');
+        text = text.replace(/schluessel/g, 'key');
+        text = text.replace(/VIRTUELLER PFAD/g, 'VIRTUAL PATH');
+        text = text.replace(/ZIEL/g, 'TARGET');
+        text = text.replace(/METHODE/g, 'METHOD');
+        text = text.replace(/BEDINGUNG/g, 'CONDITION');
+        text = text.replace(/FUNKTION/g, 'FUNCTION');
+        text = text.replace(/VERWEIS/g, 'REFERENCE');
+        text = text.replace(/Kommentar/g, 'comment');
+        text = text.replace(/(VALUE[^\r\n]+)\s(;comment)/g, '$1$2');
+        if (text.match(/[\r\n]+/))
+            text = "\r\n" + text;
+        element.innerHTML = text;
+    });    
+    
     elements = document.querySelectorAll("h1, h2, h3, h4, h5, h6, th");
     elements.forEach(function(element, index, array) {
-        translate(element, {
+        queue.push([element, {
             mapping: [
                 [/Inhalt/g, 'Inhaltsverzeichnis'],
                 [/Merkmale/g, 'Funktionen'],
@@ -148,48 +180,48 @@ window.addEventListener("load", function() {
             ],
             convert: function(text) {
                 return text.capitalize(true);
-            }});
+            }}]);
     });
 
     elements = document.querySelectorAll("p, header, li, td:last-of-type");
     elements.forEach(function(element, index, array) {
-        translate(element, {
+        queue.push([element, {
             mapping: [
                 [/line(\s+\d+)/ig, 'Line$1'],
                 [/tip/ig, 'Tip'],
                 [/knits/g, 'strict']
-            ]});
+            ]}]);    
     });
 
     elements = document.querySelectorAll("span, a, b, strong");
     elements.forEach(function(element, index, array) {
-        translate(element, {
+        queue.push([element, {
             mapping: [
                 [/line(\s+\d+)/ig, 'Line$1'],
                 [/tip/ig, 'Tip'],
                 [/knits/g, 'strict']
-            ]});
+            ]}]);    
     });
     
-    elements = document.querySelectorAll("pre, code");
-    elements.forEach(function(element, index, array) {
-        var text = element.innerHTML;
-        text = text.replace(/Dateierweiterung/g, 'file extension');
-        text = text.replace(/DATEIERWEITERUNG/g, 'FILE EXTENSION');
-        text = text.replace(/METHODEN/g, 'METHODS');
-        text = text.replace(/ANWENDUNG/g, 'APPLICATION');
-        text = text.replace(/VARIABLE/g, 'VARIABLE');
-        text = text.replace(/WERT/g, 'VALUE');
-        text = text.replace(/wert/g, 'value');
-        text = text.replace(/schluessel/g, 'key');
-        text = text.replace(/VIRTUELLER PFAD/g, 'VIRTUAL PATH');
-        text = text.replace(/ZIEL/g, 'TARGET');
-        text = text.replace(/METHODE/g, 'METHOD');
-        text = text.replace(/BEDINGUNG/g, 'CONDITION');
-        text = text.replace(/FUNKTION/g, 'FUNCTION');
-        text = text.replace(/VERWEIS/g, 'REFERENCE');
-        text = text.replace(/Kommentar/g, 'comment');
-        text = text.replace(/(VALUE[^\r\n]+)\s(;comment)/g, '$1$2');
-        element.innerHTML = text;
-    });
+    var worker = window.setInterval(function() {
+        if (queue.length) {
+            console.log("Translate #" + queue.length);
+            var job = queue.shift();
+            translate(job[0], job[1]);
+            return;
+        }
+        window.clearInterval(status);
+        var html = document.querySelector("body");
+        html = html.innerHTML;
+        html = html.replace(/</g, '&lt;');
+        html = html.replace(/>/g, '&gt;');
+        document.open();
+        document.writeln("<!DOCTYPE HTML>");
+        document.writeln("<html>");
+        document.writeln("<body>");
+        document.writeln("<pre>" + html  + "</pre>");
+        document.writeln("</body>");
+        document.writeln("</html>");        
+        document.close(); 
+    }, 100);
 });

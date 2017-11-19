@@ -236,7 +236,8 @@ Sitemap.SELECTOR_CHAPTER;
 
 /** CSS selectors for all toc relevants elements */
 Sitemap.SELECTOR_TOC = Sitemap.SELECTOR_ARTICLE + " nav";
-Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_ARTICLE + ".toc > input";
+Sitemap.SELECTOR_TOC_FILTER = Sitemap.SELECTOR_ARTICLE + ".toc input";
+Sitemap.SELECTOR_TOC_RESET = Sitemap.SELECTOR_ARTICLE + ".toc input + input";
 Sitemap.SELECTOR_TOC_ANCHOR = Sitemap.SELECTOR_TOC + " a";
 Sitemap.SELECTOR_TOC_ARTICLE;
 
@@ -577,6 +578,12 @@ Sitemap.create = function() {
         search();
     });
     filter.addEventListener("mouseup", function() {
+        search();
+    });
+
+    var reset = document.querySelector(Sitemap.SELECTOR_TOC_RESET);
+    reset.addEventListener("click", function() {
+        document.querySelector(Sitemap.SELECTOR_TOC_FILTER).value = "";
         search();
     });
     

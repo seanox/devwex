@@ -584,23 +584,39 @@ Sitemap.create = function() {
     var reset = document.querySelector(Sitemap.SELECTOR_TOC_RESET);
     reset.addEventListener("click", function() {
         document.querySelector(Sitemap.SELECTOR_TOC_FILTER).value = "";
+        document.querySelector(Sitemap.SELECTOR_TOC_FILTER).focus();
         search();
     });
-    
+
     var control;
     control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(1)");
     control.addEventListener("click", function() {
-        Sitemap.toc.hide();
+        Sitemap.navigate(":toc");
     });
     control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(2)");
     control.addEventListener("click", function() {
-        Sitemap.navigate(":toc");
+        Sitemap.navigate(":toc-focus");
     });
     control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(3)");
     control.addEventListener("click", function() {
-        Sitemap.navigate(":toc-focus");
+        Sitemap.toc.hide();
     });
-    Sitemap.navigate(document.location.hash);    
+    
+    Sitemap.navigate(document.location.hash); 
+    
+    window.setInterval(function() {
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_CONTROL + " button");
+        elements.forEach(function(element, index, array) {
+            element.removeClassName("active");
+        });
+        var element = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
+        if (!element.containsClassName("hidden"))
+            if (element.containsClassName("focus"))
+                element = 2;
+            else element = 1;
+        else element = 3;
+        document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(" + element + ")").addClassName("active");        
+    }, 100);
 };
 
 /**

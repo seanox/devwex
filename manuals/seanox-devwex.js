@@ -604,17 +604,21 @@ Sitemap.create = function() {
     
     Sitemap.navigate(document.location.hash); 
     
+    var control = 0;
     window.setInterval(function() {
-        var elements = document.querySelectorAll(Sitemap.SELECTOR_CONTROL + " button");
-        elements.forEach(function(element, index, array) {
-            element.removeClassName("active");
-        });
         var element = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
         if (!element.containsClassName("hidden"))
             if (element.containsClassName("focus"))
                 element = 2;
             else element = 1;
         else element = 3;
+        if (control == element)
+            return;
+        control = element;
+        var elements = document.querySelectorAll(Sitemap.SELECTOR_CONTROL + " button");
+        elements.forEach(function(element, index, array) {
+            element.removeClassName("active");
+        });
         document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(" + element + ")").addClassName("active");        
     }, 100);
 };

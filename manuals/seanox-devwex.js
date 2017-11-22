@@ -178,53 +178,6 @@ if (typeof RegExp.quote !== "function")
         return String(text).replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
     };
 
-/**
- *  Event when loading the page
- *  Transforms PRE tags into output with row numbers.
- */    
-window.addEventListener("load", function() {
-    var elements = document.querySelectorAll("pre");
-    elements.forEach(function(element, index, array) {
-        if (!element.innerHTML.match(/([\r\n]\s*[^\r\n]+){2,}/m))
-            return;
-        var indent = element.innerHTML.match(/^\s+/gm)[0];
-        indent = indent.match(/[^\r\n]+$/)[0];
-        var content = element.innerHTML.replace(new RegExp("([\r\n])" + indent, "gm"), '$1').trim();
-        content = ("\r\n" + content).replace(/((?:\r\n)|(?:\n\r)|[\r\n])([^\r\n]*)/gm, "$1<li><code>$2</code></li>");
-        content = content.replace(/\s+(<\/code>)/gm, "$1");
-        content = "<ol class=\"code\" start=\"1\">" + content + "</ol>"
-        element.outerHTML = "<article>" + content + "</article>";
-    });
-});
-
-/**
- *  Event when loading the page
- *  Transforms the table of architecure.
- */    
-window.addEventListener("load", function() {
-    var elements = document.querySelector("table.architecture");
-    elements = elements.getElementsByTagName("*");
-    elements = Array.prototype.slice.call(elements, 0);
-    elements.forEach(function(element, index, array) {
-        element.addClassName("architecture-" + (index).pad(4));
-    });
-});
-
-/**
- *  Event when loading the page
- *  Activates the articles for the initial display.
- */    
-window.addEventListener("load", function() {
-    Sitemap.create();
-    var elements = document.querySelectorAll("body > main > article");
-    elements.forEach(function(element, index, array) {
-        if (index == 0)
-            element.show();
-        else element.hide();
-    });
-    document.querySelector("body > main").addClassName("active");
-});
-
 /** Sitemap to manage and navigate the chapters. */
 var Sitemap = Sitemap || new Object();
 
@@ -740,3 +693,50 @@ Sitemap.filter = function(filter) {
     Sitemap.meta.timing = new Date().getTime();
     Sitemap.meta.filter = Sitemap.Filter.normalize(filter);
 };
+
+/**
+ *  Event when loading the page
+ *  Transforms PRE tags into output with row numbers.
+ */    
+window.addEventListener("load", function() {
+    var elements = document.querySelectorAll("pre");
+    elements.forEach(function(element, index, array) {
+        if (!element.innerHTML.match(/([\r\n]\s*[^\r\n]+){2,}/m))
+            return;
+        var indent = element.innerHTML.match(/^\s+/gm)[0];
+        indent = indent.match(/[^\r\n]+$/)[0];
+        var content = element.innerHTML.replace(new RegExp("([\r\n])" + indent, "gm"), '$1').trim();
+        content = ("\r\n" + content).replace(/((?:\r\n)|(?:\n\r)|[\r\n])([^\r\n]*)/gm, "$1<li><code>$2</code></li>");
+        content = content.replace(/\s+(<\/code>)/gm, "$1");
+        content = "<ol class=\"code\" start=\"1\">" + content + "</ol>"
+        element.outerHTML = "<article>" + content + "</article>";
+    });
+});
+
+/**
+ *  Event when loading the page
+ *  Transforms the table of architecure.
+ */    
+window.addEventListener("load", function() {
+    var elements = document.querySelector("table.architecture");
+    elements = elements.getElementsByTagName("*");
+    elements = Array.prototype.slice.call(elements, 0);
+    elements.forEach(function(element, index, array) {
+        element.addClassName("architecture-" + (index).pad(4));
+    });
+});
+
+/**
+ *  Event when loading the page
+ *  Activates the articles for the initial display.
+ */    
+window.addEventListener("load", function() {
+    Sitemap.create();
+    var elements = document.querySelectorAll("body > main > article");
+    elements.forEach(function(element, index, array) {
+        if (index == 0)
+            element.show();
+        else element.hide();
+    });
+    document.querySelector("body > main").addClassName("active");
+});

@@ -1,3 +1,4 @@
+/** General Styles */
 pre, code, samp, kbr {
   font:1rem courier,monospace!important; color:#FFFFFF;
 }
@@ -15,7 +16,7 @@ h6:before {
   content:attr(chapter);
 }
 h1 {
-  font-size:1.5rem
+  font-size:1.5rem;
 }
 h2 {
   font-size:1.25rem; margin-top:4rem;

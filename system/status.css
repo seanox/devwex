@@ -10,7 +10,7 @@ main > p + p[class~='#[http_status]'] {
 
 
 
-@media screen and (min-width:1400px) {
+@media screen and(min-width:1400px) {
   main > p {
     padding-bottom:5em;
   }

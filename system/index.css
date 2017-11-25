@@ -47,19 +47,19 @@ table thead h3 {
 }
 table thead a[href='?n']:before,
 table thead a[href='?N']:before {
-  content:'Name'
+  content:'Name';
 }
 table thead a[href='?t']:after,
 table thead a[href='?T']:after {
-  content:'Type'
+  content:'Type';
 }
 table thead a[href='?s']:after,
 table thead a[href='?S']:after {
-  content:'Size'
+  content:'Size';
 }
 table thead a[href='?d']:after,
 table thead a[href='?D']:after {
-  content:'Modified'
+  content:'Modified';
 }
 table thead a[href='?N'],
 table thead a[href='?T'],

@@ -29,6 +29,10 @@ this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
+# Downloads
+...
+
+
 # Changes (Change Log)
 ## 5.0.0 2017xxxx (summary of the next version)  
 BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager  
@@ -58,3 +62,10 @@ CR: XAPI - Überarbeitung/Optimierung/Erweiterung
 CR: SAPI - Überarbeitung/Optimierung/Erweiterung  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
+
+
+# Contact
+[Support](http://seanox.de/contact?support)  
+[Development](http://seanox.de/contact?development)  
+[Project](http://seanox.de/contact?service)  
+[Page](http://seanox.de/contact)  

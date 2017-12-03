@@ -29,9 +29,19 @@ this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
+# System Requirement
+- Java Runtime 8.x or higher
+
+
+# Installation
+Unpack the zip file to any location in the file system.  
+Go to the program directory and start the program directly or by script.
+
+
 # Downloads
 [Seanox Devwex 5.0.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.0.0.zip)  
-[Seanox Devwex Sources 5.0.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.0.0-src.zip)
+[Seanox Devwex Sources 5.0.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.0.0-src.zip)  
+[Seanox Devwex Test 5.0.0](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.0.0.zip) 
 
 
 # Changes (Change Log)

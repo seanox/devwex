@@ -34,12 +34,13 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Changes (Change Log)
-## 5.0.0 2017xxxx (summary of the next version)  
+## 5.0.0 20171206 (summary of the current version)  
 BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager  
 BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis  
 BF: HTTP Range - Korrekturen  
 BF: HTTP Locate - Korrektur der Pfadverarbeitung (Windows)  
 CR: Projekt - Optimierung  
+CR: Dokumentation / Layout - Überarbeitung/Optimierung/Erweiterung  
 CR: Service  
 CR: Generator - Überarbeitung/Optimierung/Erweiterung  
 CR: HTTP Session/Worker - Überarbeitung/Optimierung/Erweiterung  

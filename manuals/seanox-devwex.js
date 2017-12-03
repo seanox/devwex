@@ -381,7 +381,7 @@ Sitemap.create = function() {
             });  
             return eval(filter.join(" ").trim());
         }       
-    }
+    };
     
     var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
     elements.forEach(function(element, index, array) {
@@ -708,7 +708,7 @@ window.addEventListener("load", function() {
         var content = element.innerHTML.replace(new RegExp("([\r\n])" + indent, "gm"), '$1').trim();
         content = ("\r\n" + content).replace(/((?:\r\n)|(?:\n\r)|[\r\n])([^\r\n]*)/gm, "$1<li><code>$2</code></li>");
         content = content.replace(/\s+(<\/code>)/gm, "$1");
-        content = "<ol class=\"code\" start=\"1\">" + content + "</ol>"
+        content = "<ol class=\"code\" start=\"1\">" + content + "</ol>";
         element.outerHTML = "<article>" + content + "</article>";
     });
 });

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="devwex" default="usage" basedir=".">
+<project name="devwex" default="usage" basedir="..">
   <target name="usage">
     <echo>                                                    </echo>
     <echo> the following targets are available ...            </echo>
@@ -10,24 +10,31 @@
     <echo>   clean    removed all workfiles                   </echo>
   </target>
     
-  <property name="workspace" value=".."/>
+  <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.classes" value="${workspace}/program/classes"/>
   <property name="workspace.program" value="${workspace}/program"/>
   <property name="workspace.developing" value="${workspace}/developing"/>
+  <property name="workspace.extras" value="${workspace.developing}/extras"/>
   <property name="workspace.manuals" value="${workspace}/manuals"/>
   <property name="workspace.system" value="${workspace}/system"/>
   <property name="workspace.documents" value="${workspace}/documents"/>
+  <property name="workspace.storage" value="${workspace}/storage"/>
+  <property name="workspace.settings" value="${workspace}/.settings"/>
   
   <property name="build" value="${workspace}/build"/>
   <property name="build.sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
-  <property name="build.extras" value="${workspace}/developing/extras"/>
-  <property name="build.sources" value="${build}/sources"/>
-  <property name="build.classes" value="${build}/classes"/>
   <property name="build.project" value="${build}/${ant.project.name}"/>
+  <property name="build.sources" value="${build.project}/sources"/>
+  <property name="build.classes" value="${build.project}/classes"/>
   <property name="build.manuals" value="${build.project}/manuals"/>
   <property name="build.system" value="${build.project}/system"/>
   <property name="build.documents" value="${build.project}/documents"/>
+  <property name="build.storage" value="${build.project}/storage"/>
+  <property name="build.program" value="${build.project}/program"/>
+  <property name="build.developing" value="${build.project}/developing"/>
+  <property name="build.extras" value="${build.developing}/extras"/>
+  <property name="build.settings" value="${build.project}/.settings"/>
   
   <property name="release" value="${workspace}/release"/>
   
@@ -38,6 +45,131 @@
   <property name="compile.debug" value="off"/>
   <property name="compile.optimize" value="on"/>
   <property name="compile.deprecation" value="on"/>
+  
+  <macrodef name="release-locate">
+    <sequential>
+      <copy file="${workspace.developing}/release.txt" tofile="${workspace.developing}/release.tmp" overwrite="true"/>
+      <replaceregexp file="${workspace.developing}/release.tmp"
+        match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
+        replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
+      <replaceregexp file="${workspace.developing}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <loadproperties>
+        <file file="${workspace.developing}/release.tmp"/>
+      </loadproperties>
+      <delete file="${workspace.developing}/release.tmp"/>
+    </sequential>
+  </macrodef>  
+  
+  <macrodef name="release-insert">
+    <sequential>
+      <replace dir="${build}" includes="${build.sources.filter}"
+        token="#[ant:release-year]" value="${release.year}"/>
+      <replace dir="${build}" includes="${build.sources.filter}"
+        token="#[ant:release-month]" value="${release.month}"/>
+      <replace dir="${build}" includes="${build.sources.filter}"
+        token="#[ant:release-day]" value="${release.day}"/>
+      <replace dir="${build}" includes="${build.sources.filter}"
+        token="#[ant:release-date]" value="${release.date}"/>
+      <replace dir="${build}" includes="${build.sources.filter}"
+        token="#[ant:release-version]" value="${release.version}"/>        
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="compress-markup-insert">
+    <attribute name="file"/>
+    <attribute name="context"/>
+    <attribute name="content"/>
+    <sequential>
+      <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.css)&quot;/&gt;" flags="g" byline="true"
+        replace="\1&lt;style type=&quot;text/css&quot;&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/style&gt;"/>
+      <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.js)&quot;/&gt;" flags="g" byline="true"
+        replace="\1&lt;script type=&quot;text/javascript&quot;&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/script&gt;"/>
+      <replace file="@{file}" token=":::@{context}.@{content}" value="${file.@{context}.@{content}}"/>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="compress-markup-clean">
+    <attribute name="file"/>
+    <sequential>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;script[^&gt;]*?\ssrc=.*?&lt;/script&gt;" flags="g" byline="false" replace=""/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace="" />
+      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/style&gt;\s*&lt;style[^&lt;]*?&gt;\s*" flags="g" byline="false"
+        replace="\1  "/>
+      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/script&gt;\s*&lt;script[^&lt;]*?&gt;\s*" flags="g" byline="false"
+        replace="\1  "/>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="compress-markup">
+    <attribute name="file"/>
+    <sequential>
+      <echo>Compressing: @{file}</echo> 
+      <compress-markup-insert file="@{file}" context="manuals" content="seanox-devwex.js"/>     
+      <compress-markup-insert file="@{file}" context="manuals" content="seanox-devwex.css"/>
+      <compress-markup-insert file="@{file}" context="system" content="common.css"/>     
+      <compress-markup-insert file="@{file}" context="system" content="media.css"/>     
+      <compress-markup-insert file="@{file}" context="system" content="index.css"/>          
+      <compress-markup-insert file="@{file}" context="system" content="status.css"/>  
+      <compress-markup-insert file="@{file}" context="documents" content="index.css"/>
+      <compress-markup-clean file="@{file}"/>
+      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>      
+    </sequential>
+  </macrodef>
+
+  <macrodef name="compress-javascript">
+    <attribute name="file"/>
+    <attribute name="context"/>
+    <sequential>
+      <echo>Compressing: @{file}</echo> 
+      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)\/\*.*?\*/" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
+      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
+      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(\{)[\r\n]+\s*" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?=\})" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?!\})" flags="g" replace=" " byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+ *(\})" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
+      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
+      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
+      <basename property="@{context}.@{file}" file="@{file}"/>
+      <loadfile property="file.@{context}.${@{context}.@{file}}" srcFile="@{file}"/>
+      <delete file="@{file}"/>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="compress-stylesheet">
+    <attribute name="file"/>
+    <attribute name="context"/>
+    <sequential>
+      <echo>Compressing: @{file}</echo> 
+      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)/\*.*?\*/" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
+      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)\s*(:)\s*" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)\s*(\()\s*" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(?i)(\s[a-z]+)(\()" flags="g" replace="\1 \2" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)\s*(\))\s*" flags="g" replace="\1 " byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)\s*(;) +" flags="g" replace="\1 " byline="false"/>
+      <replaceregexp file="@{file}" match="(?&lt;=[^;\s\{\}])\s*(?=[\r\n]+\s*\})" flags="g" replace=";" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(,)\s*[\r\n]+\s*" flags="g" replace="\1 " byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(;)\s*[\r\n]+\s*(?=[a-zA-Z])" flags="g" replace="\1 " byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(;)\s*(\})" flags="g" replace="\1\2" byline="false"/>
+      <replaceregexp file="@{file}" match="(?s)(\{ *)[\r\n]+" flags="g" replace="\1" byline="false"/>
+      <replaceregexp file="@{file}" match="(\{)(\s*.*?\{)" flags="g" replace="\1${line.separator}\2" byline="true"/>      
+      <replaceregexp file="@{file}" match="(\{) +" flags="g" replace="\1" byline="true"/>      
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+[^\r\n]+\{\s*\}" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
+      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
+      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
+      <basename property="@{context}.@{file}" file="@{file}"/>
+      <loadfile property="file.@{context}.${@{context}.@{file}}" srcFile="@{file}"/>
+      <delete file="@{file}"/>
+    </sequential>
+  </macrodef>  
   
   <target name="changes">
     <copy file="${workspace.developing}/release.txt" tofile="${workspace}/CHANGES" overwrite="true"/>
@@ -68,44 +200,15 @@
   
   <target name="compress" if="windows">
     <delete file="${workspace.program}/${ant.project.name}.jar"/>
-    <unzip src="${build.extras}/compress.zip" dest="${build}"/>
+    <unzip src="${workspace.extras}/compress.zip" dest="${build}"/>
     <property name="compress1" value="a ${workspace.program}/${ant.project.name}.jar"/>
     <property name="compress2" value="-tzip -mm=Deflate -mx9 -md=64k -mfb=128 -mpass=10"/>
     <property name="compress3" value="${build.classes}/com"/>
     <exec executable="${build}/7z/7za.exe">
       <arg line="${compress1} ${compress2} ${compress3}"/>
     </exec>
-  </target> 
+  </target>
   
-  <macrodef name="release-locate">
-    <sequential>
-      <copy file="${workspace.developing}/release.txt" tofile="${workspace.developing}/release.tmp" overwrite="true"/>
-      <replaceregexp file="${workspace.developing}/release.tmp"
-        match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
-        replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
-      <replaceregexp file="${workspace.developing}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
-      <loadproperties>
-        <file file="${workspace.developing}/release.tmp"/>
-      </loadproperties>
-      <delete file="${workspace.developing}/release.tmp"/>
-    </sequential>
-  </macrodef>
-  
-  <macrodef name="release-insert">
-    <sequential>
-      <replace dir="${build}" includes="${build.sources.filter}"
-        token="#[ant:release-year]" value="${release.year}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
-        token="#[ant:release-month]" value="${release.month}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
-        token="#[ant:release-day]" value="${release.day}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
-        token="#[ant:release-date]" value="${release.date}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
-        token="#[ant:release-version]" value="${release.version}"/>        
-    </sequential>
-  </macrodef>  
-
   <target name="compile">
     <release-locate/>
     <delete dir="${build}"/> 
@@ -142,116 +245,140 @@
         -keystore '${workspace.program}/keystore' -keypass changeIt -storepass changeIt
         -keyalg RSA -keysize 2048 -validity 365"/>
     </exec>
-  </target>  
-
-  <macrodef name="compress-markup-insert">
-    <attribute name="file"/>
-    <attribute name="content"/>
-    <sequential>
-      <replaceregexp file="@{file}" match="^(\s*)&lt;link rel=&quot;stylesheet&quot; href=&quot;@{content}&quot;/&gt;" flags="g" byline="true"
-        replace="\1&lt;style type=&quot;text/css&quot;&gt;${line.separator}:::@{content}${line.separator}\1&lt;/style&gt;"/>
-      <replaceregexp file="@{file}" match="^(\s*)&lt;script src=&quot;@{content}&quot;&gt;&lt;/script&gt;" flags="g" byline="true"
-        replace="\1&lt;script type=&quot;text/javascript&quot;&gt;${line.separator}:::@{content}${line.separator}\1&lt;/script&gt;"/>
-      <replace file="@{file}" token=":::@{content}" value="${file.@{content}}"/>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-markup-clean">
-    <attribute name="file"/>
-    <sequential>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;script[^&gt;]*?\ssrc=.*?&lt;/script&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace="" />
-      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/style&gt;\s*&lt;style[^&lt;]*?&gt;\s*" flags="g" byline="false"
-        replace="\1  "/>
-      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/script&gt;\s*&lt;script[^&lt;]*?&gt;\s*" flags="g" byline="false"
-        replace="\1  "/>
-    </sequential>
-  </macrodef>
+  </target> 
   
-  <macrodef name="compress-markup">
-    <attribute name="file"/>
-    <sequential>
-      <echo>compress: @{file}</echo> 
-      <compress-markup-insert file="@{file}" content="seanox-devwex.js"/>     
-      <compress-markup-insert file="@{file}" content="seanox-devwex.css"/>
-      <compress-markup-insert file="@{file}" content="common.css"/>     
-      <compress-markup-insert file="@{file}" content="index.css"/>          
-      <compress-markup-insert file="@{file}" content="status.css"/>
-      <compress-markup-clean file="@{file}"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>      
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-javascript">
-    <attribute name="file"/>
-    <sequential>
-      <echo>compress: @{file}</echo> 
-      <replaceregexp file="@{file}" match="(?s)/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(\{)[\r\n]+\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?=\})" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?!\})" flags="g" replace=" " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ *(\})" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
-      <basename property="name-@{file}" file="@{file}"/>
-      <loadfile property="file.${name-@{file}}" srcFile="@{file}"/>
-      <delete file="@{file}"/>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-stylesheet">
-    <attribute name="file"/>
-    <sequential>
-      <echo>compress: @{file}</echo> 
-      <replaceregexp file="@{file}" match="(?s)/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(:)\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(\()\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(\))\s*" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(;) +" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?&lt;=[^;\s\{\}])\s*(?=[\r\n]+\s*\})" flags="g" replace=";" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(,)\s*[\r\n]+\s*" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(;)\s*[\r\n]+\s*(?=[a-zA-Z])" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(;)\s*(\})" flags="g" replace="\1\2" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(\{ *)[\r\n]+" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(\{)(\s*.*?\{)" flags="g" replace="\1${line.separator}\2" byline="true"/>      
-      <replaceregexp file="@{file}" match="(\{) +" flags="g" replace="\1" byline="true"/>      
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+[^\r\n]+\{\s*\}" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
-      <basename property="name-@{file}" file="@{file}"/>
-      <loadfile property="file.${name-@{file}}" srcFile="@{file}"/>
-      <delete file="@{file}"/>
-    </sequential>
-  </macrodef>
-
+  <scriptdef name="clean" language="javascript">
+    <attribute name="dir"/>
+    <element name="fileset" classname="org.apache.tools.ant.types.FileSet"/>
+    <![CDATA[
+    var echo = function(text) {
+      var echo = project.createTask("echo");
+      echo.setMessage(text);
+      echo.perform();
+    };
+    var basedir = new java.io.File(attributes.get("dir"));
+    var excludes = new Array(String(basedir));
+    var fileset = elements.get("fileset");
+    fileset.forEach(function(fileset, index, array) {
+      var iterator = fileset.iterator();
+      while (iterator.hasNext()) {
+        var file = iterator.next().getFile();
+        excludes.push(String(file));
+        while (file != null
+            && String(file) != String(basedir)) {
+          if (excludes.indexOf(String(file)) < 0)
+            excludes.push(String(file));
+          file = new java.io.File(file.getParent());
+        }
+      }
+    });
+    var clear = function(file, excludes) {
+      if (file.isFile()) {
+        if (excludes.indexOf(String(file)) < 0) {
+          echo("Deleting: " + file);
+          file.delete();
+        }
+      } else if (file.isDirectory()) {
+        var files = Array.prototype.slice.call(file.listFiles(), 0);
+        files.forEach(function(file, index, array) {
+          clear(file, excludes);
+        });
+        if (excludes.indexOf(String(file)) < 0) {
+          echo("Deleting: " + file);
+          file.delete();
+        }
+      }
+    };
+    clear(basedir, excludes);
+    ]]>
+  </scriptdef>  
+  
+  <fileset id="fileset.archive.build" dir="${build.project}">
+    <include name="documents/index.html"/>
+    <include name="manuals/seanox-devwex_de.html"/>
+    <include name="manuals/seanox-devwex_en.html"/> 
+    <include name="program/devwex.bat"/>
+    <include name="program/devwex.ini"/>
+    <include name="program/devwex.jar"/>
+    <include name="program/devwex.sh"/>
+    <include name="program/keystore"/> 
+    <include name="storage"/>
+    <include name="system/index.html"/>
+    <include name="system/status-2xx.html"/>
+    <include name="system/status-3xx.html"/>
+    <include name="system/status-4xx.html"/>
+    <include name="system/status-5xx.html"/>
+    <include name="license.txt"/>
+    <include name="release.txt"/>
+  </fileset> 
+  
+  <fileset id="fileset.archive.source" dir="${build.project}">
+    <include name=".settings/org.eclipse.jdt.core.prefs"/> 
+    <include name="developing/extras/compress.zip"/> 
+    <include name="developing/mediatypes/* File/* File.*"/>
+    <include name="developing/mediatypes/icons.html"/>
+    <include name="developing/build.xml"/>
+    <include name="developing/devwex.ini"/>
+    <include name="developing/release.txt"/>
+    <include name="documents/index.css"/>
+    <include name="documents/index.html"/>
+    <include name="manuals/seanox-devwex_de.html"/>
+    <include name="manuals/seanox-devwex_en.html"/>
+    <include name="manuals/seanox-devwex.css"/>  
+    <include name="manuals/seanox-devwex.js"/>
+    <include name="manuals/seanox-translator.js"/> 
+    <include name="program/devwex.bat"/>
+    <include name="program/devwex.ini"/>
+    <include name="program/devwex.sh"/>
+    <include name="sources/com/seanox/devwex/Generator.java"/>
+    <include name="sources/com/seanox/devwex/Initialize.java"/>
+    <include name="sources/com/seanox/devwex/Loader.java"/>
+    <include name="sources/com/seanox/devwex/Remote.java"/>
+    <include name="sources/com/seanox/devwex/Section.java"/>
+    <include name="sources/com/seanox/devwex/Server.java"/>
+    <include name="sources/com/seanox/devwex/Service.java"/>
+    <include name="sources/com/seanox/devwex/Worker.java"/>
+    <include name="storage"/>
+    <include name="system/common.css"/>
+    <include name="system/index.css"/>
+    <include name="system/index.html"/>
+    <include name="system/media.css"/>
+    <include name="system/status-2xx.html"/>
+    <include name="system/status-3xx.html"/>
+    <include name="system/status-4xx.html"/>
+    <include name="system/status-5xx.html"/>
+    <include name="system/status.css"/>
+    <include name=".classpath"/>
+    <include name=".license"/>
+    <include name=".project"/>
+  </fileset>   
+  
   <target name="archive" depends="compile,keystore">
     <delete dir="${build}"/>
     <mkdir dir="${build}"/>
     <mkdir dir="${build.project}"/>
     <copy todir="${build.manuals}">
-      <fileset dir="${workspace.manuals}" excludes="seanox-translator.js"/>
+      <fileset dir="${workspace.manuals}"/>
     </copy>
-    <compress-javascript file="${build.manuals}/seanox-devwex.js"/>
-    <compress-stylesheet file="${build.manuals}/seanox-devwex.css"/>  
     <copy todir="${build.system}">
       <fileset dir="${workspace.system}"/>
     </copy>
-    <compress-stylesheet file="${build.system}/common.css"/>
-    <compress-stylesheet file="${build.system}/index.css"/>
-    <compress-stylesheet file="${build.system}/status.css"/>
     <copy todir="${build.documents}">
       <fileset dir="${workspace.documents}"/>
     </copy>
+    <copy todir="${build.program}">
+      <fileset dir="${workspace.program}"/>
+    </copy>    
+    <copy file="${workspace}/.license" tofile="${build.project}/license.txt"/>
+    <copy file="${workspace}/developing/release.txt" todir="${build.project}"/>
+    <compress-stylesheet context="documents" file="${build.documents}/index.css"/>
+    <compress-javascript context="manuals" file="${build.manuals}/seanox-devwex.js"/>
+    <compress-stylesheet context="manuals" file="${build.manuals}/seanox-devwex.css"/>  
+    <compress-stylesheet context="system" file="${build.system}/common.css"/>
+    <compress-stylesheet context="system" file="${build.system}/media.css"/>
+    <compress-stylesheet context="system" file="${build.system}/index.css"/>
+    <compress-stylesheet context="system" file="${build.system}/status.css"/>
+    <compress-markup file="${build.documents}/index.html"/>
     <compress-markup file="${build.manuals}/seanox-devwex_de.html"/>
     <compress-markup file="${build.manuals}/seanox-devwex_en.html"/>    
     <compress-markup file="${build.system}/index.html"/>
@@ -259,32 +386,69 @@
     <compress-markup file="${build.system}/status-3xx.html"/>
     <compress-markup file="${build.system}/status-4xx.html"/>
     <compress-markup file="${build.system}/status-5xx.html"/>   
-    <compress-markup file="${build.documents}/index.html"/>
     <release-insert/>
-    <mkdir dir="${build.project}/storage"/>
-    <copy file="${workspace}/LICENSE" tofile="${build.project}/license.txt"/>
-    <copy file="${workspace}/developing/release.txt" todir="${build.project}"/>
-    <copy todir="${build.project}/program">
-      <fileset dir="${workspace}/program">
-        <include name="${ant.project.name}.bat"/>
-        <include name="${ant.project.name}.ini"/>
-        <include name="${ant.project.name}.jar"/>
-        <include name="${ant.project.name}.sh"/>
-        <include name="keystore"/>
-      </fileset>
-    </copy>  
+    <clean dir="${build.project}">
+      <fileset refid="fileset.archive.build"/>
+    </clean>
+    <mkdir dir="${build.storage}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
-    </touch>
+    </touch>  
     <delete file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
     <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}.zip"
-      basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/>
+      basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
       file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
-    <delete dir="${build}"/>
     
-    <!-- TODO: create source archive -->
-  </target>
-  
-  <!-- TODO target:clean -->
+    <delete dir="${build}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${build.project}"/>
+    <copy todir="${build.settings}">
+      <fileset dir="${workspace.settings}"
+        defaultexcludes="false"/>
+    </copy>     
+    <copy todir="${build.developing}">
+      <fileset dir="${workspace.developing}"
+        defaultexcludes="false"/>
+    </copy>    
+    <copy todir="${build.manuals}">
+      <fileset dir="${workspace.manuals}"
+        defaultexcludes="false"/>
+    </copy>
+      <copy todir="${build.sources}">
+        <fileset dir="${workspace.sources}"
+          defaultexcludes="false"/>
+      </copy>    
+    <copy todir="${build.system}">
+      <fileset dir="${workspace.system}"
+        defaultexcludes="false"/>
+    </copy>
+    <copy todir="${build.documents}">
+      <fileset dir="${workspace.documents}"
+        defaultexcludes="false"/>
+    </copy>
+    <copy todir="${build.program}">
+      <fileset dir="${workspace.program}"
+        defaultexcludes="false"/>
+    </copy>
+    <copy todir="${build.project}">
+      <fileset dir="${workspace}"
+        defaultexcludes="false">
+        <include name=".*"/>   
+      </fileset>
+    </copy>      
+    <clean dir="${build.project}">
+      <fileset refid="fileset.archive.source"/>
+    </clean>    
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build}"/>
+    </touch>  
+    <delete file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+    <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"
+      basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
+    <touch datetime="${release.date}" pattern="yyyyMMdd"
+      file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+
+    <delete dir="${build}"/>
+  </target>  
 </project>

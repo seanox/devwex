@@ -1,4 +1,4 @@
-5.0.0 2017xxxx
+5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager
   BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis
       Die Ressource ist ein Directory, wenn keine Content-Length gesendet wird.
@@ -18,6 +18,8 @@
       - Umstellung auf Java5/8
       - Umstellung der Testumgebung auf JUnit
       - Umstellung der Historie auf den internen ChangeLog (release.txt)
+      - Optimierung vom Build-Prozess/Skript
+  CR: Dokumentation / Layout - Überarbeitung/Optimierung/Erweiterung
   CR: Service
       - CLEANUP Überarbeitung/Optimierung
         Unterstützt nur noch on/off, Standardwert: off

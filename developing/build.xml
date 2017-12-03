@@ -4,10 +4,13 @@
     <echo>                                                    </echo>
     <echo> the following targets are available ...            </echo>
     <echo>                                                    </echo>
-    <echo>   compile  compile and build classes               </echo>
-    <echo>   archive  compile, build classes and make archives</echo>
-    <echo>            for distribution and developing         </echo>
-    <echo>   clean    removed all workfiles                   </echo>
+    <echo>   compile   compile and build classes              </echo>
+    <echo>                                                    </echo>
+    <echo>   archive   compile, build classes and make        </echo>
+    <echo>             archives for distribution and          </echo> 
+    <echo>             developing                             </echo>
+    <echo>                                                    </echo>
+    <echo>   keystore  creates a new keystore                 </echo>
   </target>
     
   <property name="workspace" value="${basedir}"/>

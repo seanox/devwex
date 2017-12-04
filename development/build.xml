@@ -8,7 +8,7 @@
     <echo>                                                    </echo>
     <echo>   archive   compile, build classes and make        </echo>
     <echo>             archives for distribution and          </echo> 
-    <echo>             developing                             </echo>
+    <echo>             development                            </echo>
     <echo>                                                    </echo>
     <echo>   keystore  creates a new keystore                 </echo>
   </target>
@@ -17,8 +17,8 @@
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.classes" value="${workspace}/program/classes"/>
   <property name="workspace.program" value="${workspace}/program"/>
-  <property name="workspace.developing" value="${workspace}/developing"/>
-  <property name="workspace.extras" value="${workspace.developing}/extras"/>
+  <property name="workspace.development" value="${workspace}/development"/>
+  <property name="workspace.extras" value="${workspace.development}/extras"/>
   <property name="workspace.manuals" value="${workspace}/manuals"/>
   <property name="workspace.system" value="${workspace}/system"/>
   <property name="workspace.documents" value="${workspace}/documents"/>
@@ -35,8 +35,8 @@
   <property name="build.documents" value="${build.project}/documents"/>
   <property name="build.storage" value="${build.project}/storage"/>
   <property name="build.program" value="${build.project}/program"/>
-  <property name="build.developing" value="${build.project}/developing"/>
-  <property name="build.extras" value="${build.developing}/extras"/>
+  <property name="build.development" value="${build.project}/development"/>
+  <property name="build.extras" value="${build.development}/extras"/>
   <property name="build.settings" value="${build.project}/.settings"/>
   
   <property name="release" value="${workspace}/release"/>
@@ -51,15 +51,15 @@
   
   <macrodef name="release-locate">
     <sequential>
-      <copy file="${workspace.developing}/release.txt" tofile="${workspace.developing}/release.tmp" overwrite="true"/>
-      <replaceregexp file="${workspace.developing}/release.tmp"
+      <copy file="${workspace.development}/release.txt" tofile="${workspace.development}/release.tmp" overwrite="true"/>
+      <replaceregexp file="${workspace.development}/release.tmp"
         match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
         replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
-      <replaceregexp file="${workspace.developing}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <replaceregexp file="${workspace.development}/release.tmp" match="x+" replace="0000" flags="g" byline="false"/>
       <loadproperties>
-        <file file="${workspace.developing}/release.tmp"/>
+        <file file="${workspace.development}/release.tmp"/>
       </loadproperties>
-      <delete file="${workspace.developing}/release.tmp"/>
+      <delete file="${workspace.development}/release.tmp"/>
     </sequential>
   </macrodef>  
   
@@ -175,7 +175,7 @@
   </macrodef>  
   
   <target name="changes">
-    <copy file="${workspace.developing}/release.txt" tofile="${workspace}/CHANGES" overwrite="true"/>
+    <copy file="${workspace.development}/release.txt" tofile="${workspace}/CHANGES" overwrite="true"/>
     <replaceregexp file="${workspace}/CHANGES" match="&#x00E4;" replace="ae" flags="g"/>
     <replaceregexp file="${workspace}/CHANGES" match="&#x00C4;" replace="Ae" flags="g"/>
     <replaceregexp file="${workspace}/CHANGES" match="&#x00F6;" replace="oe" flags="g"/>
@@ -183,19 +183,19 @@
     <replaceregexp file="${workspace}/CHANGES" match="&#x00FC;" replace="ue" flags="g"/>
     <replaceregexp file="${workspace}/CHANGES" match="&#x00DC;" replace="Ue" flags="g"/>
       
-    <copy file="${workspace.developing}/release.txt" tofile="${workspace.developing}/release.tmp" overwrite="true"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^\s+" replace="" byline="false"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="(?s)^(.*?)[\r\n]+\d[\d\. x]+.*$" replace="\1" byline="false"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^(.*?)\s*$" replace="\1  " flags="g" byline="true"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^(\d[\.\d x]+)[^\r\n]*" replace="## \1" byline="false"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^ +([A-Z]+:.*)\s*$" replace="\1" byline="true"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="(?s)[\r\n]+ [^\r\n]+" replace="" flags="g" byline="false"/>  
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^(## \d[\.\d]+ \d+)(  )" replace="\1 (summary of the current version)\2" flags="g" byline="true"/>
-    <replaceregexp file="${workspace.developing}/release.tmp" match="^(## \d[\.\d]+ [\dx]+)(  )" replace="\1 (summary of the next version)\2" flags="g" byline="true"/>
+    <copy file="${workspace.development}/release.txt" tofile="${workspace.development}/release.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="^\s+" replace="" byline="false"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="(?s)^(.*?)[\r\n]+\d[\d\. x]+.*$" replace="\1" byline="false"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="^(.*?)\s*$" replace="\1  " flags="g" byline="true"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="^(\d[\.\d x]+)[^\r\n]*" replace="## \1" byline="false"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="^ +([A-Z]+:.*)\s*$" replace="\1" byline="true"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="(?s)[\r\n]+ [^\r\n]+" replace="" flags="g" byline="false"/>  
+    <replaceregexp file="${workspace.development}/release.tmp" match="^(## \d[\.\d]+ \d+)(  )" replace="\1 (summary of the current version)\2" flags="g" byline="true"/>
+    <replaceregexp file="${workspace.development}/release.tmp" match="^(## \d[\.\d]+ [\dx]+)(  )" replace="\1 (summary of the next version)\2" flags="g" byline="true"/>
     <loadresource property="changes">
-      <file file="${workspace.developing}/release.tmp"/>
+      <file file="${workspace.development}/release.tmp"/>
     </loadresource>
-    <delete file="${workspace.developing}/release.tmp"/>
+    <delete file="${workspace.development}/release.tmp"/>
     <replaceregexp file="${workspace}/README.md"
       match="(?si)(# Changes \(Change Log\)\s+).*?(\[Read more\])" flags="g" byline="false"
       replace="\1${changes}${line.separator}${line.separator}\2"/>
@@ -317,12 +317,12 @@
   
   <fileset id="fileset.archive.source" dir="${build.project}">
     <include name=".settings/org.eclipse.jdt.core.prefs"/> 
-    <include name="developing/extras/compress.zip"/> 
-    <include name="developing/mediatypes/* File/* File.*"/>
-    <include name="developing/mediatypes/icons.html"/>
-    <include name="developing/build.xml"/>
-    <include name="developing/devwex.ini"/>
-    <include name="developing/release.txt"/>
+    <include name="development/extras/compress.zip"/> 
+    <include name="development/mediatypes/* File/* File.*"/>
+    <include name="development/mediatypes/icons.html"/>
+    <include name="development/build.xml"/>
+    <include name="development/devwex.ini"/>
+    <include name="development/release.txt"/>
     <include name="documents/index.css"/>
     <include name="documents/index.html"/>
     <include name="manuals/seanox-devwex_de.html"/>
@@ -373,7 +373,7 @@
       <fileset dir="${workspace.program}"/>
     </copy>    
     <copy file="${workspace}/.license" tofile="${build.project}/license.txt"/>
-    <copy file="${workspace}/developing/release.txt" todir="${build.project}"/>
+    <copy file="${workspace}/development/release.txt" todir="${build.project}"/>
     <compress-stylesheet context="documents" file="${build.documents}/index.css"/>
     <compress-javascript context="manuals" file="${build.manuals}/seanox-devwex.js"/>
     <compress-stylesheet context="manuals" file="${build.manuals}/seanox-devwex.css"/>  
@@ -410,8 +410,8 @@
       <fileset dir="${workspace.settings}"
         defaultexcludes="false"/>
     </copy>     
-    <copy todir="${build.developing}">
-      <fileset dir="${workspace.developing}"
+    <copy todir="${build.development}">
+      <fileset dir="${workspace.development}"
         defaultexcludes="false"/>
     </copy>    
     <copy todir="${build.manuals}">

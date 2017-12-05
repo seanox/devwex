@@ -39,7 +39,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 [Seanox Devwex Test 5.0.0](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.0.0.zip) 
 
 
-# Extenstions
+# Extensions
 [Seanox Devwex Service 1.1.0.0](https://github.com/seanox/devwex-service/raw/master/releases/seanox-devwex-service-1.1.0.0.zip)
 Runs Seanox Devwex as a service in Windows.
 

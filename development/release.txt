@@ -1,3 +1,10 @@
+5.0.1 2018xxxx
+  BF: Initialize - Korrektur
+      - im Smart-Modul mit der Get-Methode erstellte Sections werden wieder gehalten
+  BF: Section - Korrektur
+      - im Smart-Modul mit der Get-Methode verwendete ungültige Schluessel oder
+        alternativen Wert liefern wieder null
+      
 5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager
   BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis

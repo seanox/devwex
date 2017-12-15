@@ -151,12 +151,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
  *  Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.<br>
  *  <br>
- *  Initialize 5.0 20170325<br>
+ *  Initialize 5.0.1 20171215<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170325
+ *  @version 5.0.1 20171215
  */
 public class Initialize implements Cloneable {
 
@@ -319,12 +319,13 @@ public class Initialize implements Cloneable {
 
     /**
      *  R&uuml;ckgabe der angegebenen Section.
-     *  Ist dieser der Schl&ouml;ssel nicht enthalten bzw. kann nicht ermittelt
+     *  Ist dieser der Schl&uuml;ssel nicht enthalten bzw. kann nicht ermittelt
      *  werden, liefert die Methode <code>null</code> und im Smart-Modus eine
-     *  leere Sektion.
+     *  leere Sektion, wenn ein g&uml;ltiger Schl&uuml;ssel angegeben wird.
      *  @param  key Name der Section
-     *  @return die ermittelte Section, sonst <code>null</code>  bzw. im
-     *          Smart-Modus eine leere Sektion
+     *  @return die ermittelte Section, sonst <code>null</code> bzw. im
+     *          Smart-Modus eine leere Sektion, wenn ein g&uml;ltige
+     *          Schl&uuml;ssel angegeben wird
      */
     public synchronized Section get(String key) {
         
@@ -336,8 +337,10 @@ public class Initialize implements Cloneable {
             return null;
         
         section = (Section)this.entries.get(key);
-        if (section == null && this.smart)
-            return new Section(true);
+        if (section == null && this.smart) {
+            section = new Section(true);
+            this.set(key, section);
+        }
         return section;
     }
 

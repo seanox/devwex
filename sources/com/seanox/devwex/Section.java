@@ -151,12 +151,12 @@ import java.util.StringTokenizer;
  *  Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
  *  Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.<br>
  *  <br>
- *  Section 5.0 20170120<br>
+ *  Section 5.0.1 20171215<br>
  *  Copyright (C) 2017 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170120
+ *  @version 5.0.1 20171215
  */
 public class Section implements Cloneable {
 
@@ -373,26 +373,35 @@ public class Section implements Cloneable {
     }
 
     /**
-     *  R&uuml;ckgabe des Wert zum Sch&uuml;ssel. Ist dieser nicht enthalten
+     *  R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
      *  bzw. kann nicht ermittelt werden, liefert die Methode <code>null</code>
-     *  und im Smart-Modus einen leeren Wert.
+     *  und im Smart-Modus einen leeren Wert, wenn ein g&uml;ltiger
+     *  Schl&uuml;ssel angegeben wird. Da im Smart-Modus leere Schl&uuml;ssel
+     *  automatisch bereinigt werden, wird der erstellte Schl&uuml;ssel mit
+     *  seinem leeren Standardwert nicht in der Section eingetragen.
      *  mit einem leerer Wert erstellt. 
      *  @param  key Name des Sch&uuml;ssels
      *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> und im
-     *          Smart-Modus einen leeren Wert
+     *          Smart-Modus einen leeren Wert, wenn ein g&uml;ltiger
+     *          Schl&uuml;ssel angegeben wird
      */
     public synchronized String get(String key) {
         return this.get(key, null);
     }
 
     /**
-     *  R&uuml;ckgabe des Wert zum Schl&uuml;ssel. Ist dieser nicht enthalten
+     *  R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
      *  bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
-     *  Wert, sonst <code>null</code>, bzw. im Smart-Modus einen leeren Wert.
+     *  Wert, sonst <code>null</code>, bzw. im Smart-Modus einen leeren Wert,
+     *  wenn ein g&uml;ltiger Schl&uuml;ssel angegeben wird. Da im Smart-Modus
+     *  leere Schl&uuml;ssel automatisch bereinigt werden, wird der erstellte
+     *  Schl&uuml;ssel mit seinem leeren Standardwert nicht in der Section
+     *  eingetragen.
      *  @param  key       Name des Sch&uuml;ssels
      *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
-     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> und im
-     *          Smart-Modus einen leeren bzw. den alternativen Wert
+     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> bzw. den
+     *          alternativen Wert oder im Smart-Modus einen leeren, wenn ein
+     *          g&uml;ltiger Schl&uuml;ssel angegeben wird
      */
     public synchronized String get(String key, String alternate) {
 
@@ -406,8 +415,10 @@ public class Section implements Cloneable {
         if (value == null) {
             if (alternate != null)
                 return alternate.trim();
-            if (this.smart)
-                return "";
+            if (this.smart
+                    && key != null
+                    && !key.isEmpty())
+                value = "";
         }
         
         return value;

@@ -56,7 +56,8 @@ public class Remote implements Runnable {
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
      *  @param  server Name des Servers
      *  @param  data   Konfigurationsdaten des Servers
-     *  @throws Throwable bei fehlerhafter Einrichtung des Servers
+     *  @throws Throwable
+     *      Bei fehlerhafter Einrichtung des Servers.
      */
     public Remote(String server, Object data) throws Throwable {
 
@@ -106,7 +107,8 @@ public class Remote implements Runnable {
      *  @param  port    Serverport
      *  @param  request Remoterequest
      *  @return der Response als ByteArray
-     *  @throws Exception bei fehlerhaftem Datenzugriff
+     *  @throws Exception
+     *      Bei fehlerhaftem Datenzugriff.
      */
     public static byte[] call(String address, int port, String request) throws Exception {
 

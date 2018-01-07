@@ -36,16 +36,11 @@ import java.util.Vector;
 
 /**
  *  Service ist ein Container mit den ben&ouml;tigten Mechanismen, APIs und
- *  Sequenzen zur Verwaltung und Ausf&uuml;hrung von Servern und Modulen.<br>
- *  <br>
- *  <dir>
- *    <b>Begriffe</b>
- *  </dir>
- *  <dir>
- *    <dir>
- *      Server
- *    </dir>
- *  </dir>
+ *  Sequenzen zur Verwaltung und Ausf&uuml;hrung von Servern und Modulen.
+ *  
+ *  <h2>Begriffe</h2>
+ *  
+ *  <h3>Server</h3>
  *  Server stellen den physischen Zugriff im Netzwerk f&uuml;r ein Protokoll an
  *  einer Adresse und einem Port zur Verf&uuml;gung. Seanox Devwex bindet
  *  Server &uuml;ber das Server-API (SAPI) ein. Mit dem API lassen sich auch
@@ -61,13 +56,9 @@ import java.util.Vector;
  *  Verz&ouml;gert sich das Beenden, wartet der Laufzeit-Container auf das Ende
  *  aller registrierten Server-Instanzen. Optional wird die Implementierung der
  *  Methode <code>Server.explain()</code> zur Abfrage allgemeiner
- *  Informationen, wie Protokoll und Netzwerkverbindung, unterst&uuml;tzt.<br>
- *  <br>
- *  <dir>
- *    <dir>
- *      Module
- *    </dir>
- *  </dir>
+ *  Informationen, wie Protokoll und Netzwerkverbindung, unterst&uuml;tzt.
+ *  
+ *  <h3>Module</h3>
  *  Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen stellen
  *  nach aussen hin keine direkten Funktionen bereit. Sie werden &uuml;ber die
  *  Ausf&uuml;hrungsklasse identifiziert und beim Start bzw. Restart vom
@@ -90,11 +81,9 @@ import java.util.Vector;
  *  &uuml;berwacht das Beenden nicht aktiv und verwirft die Module durch das
  *  Entladen vom ClassLoader.Optional wird die Implementierung der Methode
  *  <code>Module.explain()</code> zur Abfrage allgemeiner Informationen, wie
- *  Hersteller und Version, unterst&uuml;tzt.<br>          
- *  <br>
- *  <dir>
- *    <b>Arbeitsweise</b>
- *  </dir>
+ *  Hersteller und Version, unterst&uuml;tzt.
+ *  
+ *  <h3>Arbeitsweise</h3>
  *  Alle f&uuml;r die Initialisierung und den Betrieb erforderlichen Daten
  *  werden aus der Konfigurationsdatei <code>devwex.ini</code> gelesen, die aus
  *  dem aktuellen Arbeitsverzeichnis geladen wird. Beim Start, Neustart und Stop
@@ -102,18 +91,13 @@ import java.util.Vector;
  *  durchlaufen<br>
  *  Im Betrieb &uuml;berwacht der Service Konfiguration, Server sowie Module und
  *  steuert den Garbage Collector f&uuml;r eine schnellere Freigabe von
- *  Ressourcen.<br>
- *  <br>
- *  <dir>
- *    <b>Sequenzen</b>
- *  </dir>
+ *  Ressourcen.
+ *  
+ *  <h2>Sequenzen</h2>
  *  Start, Neustart und Beenden der Server sowie das Laden, Anfordern und
- *  Entladen von Modulen sind feste Abfolgen vom Laufzeit-Container.<br>
- *  <dir>
- *    <dir>
- *      Start
- *    </dir>
- *  </dir>
+ *  Entladen von Modulen sind feste Abfolgen vom Laufzeit-Container.
+ *  
+ *  <h3>Start</h3>
  *  <ul>
  *    <li>
  *      Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert, die
@@ -137,11 +121,8 @@ import java.util.Vector;
  *      <code>Server.run()</code> aufnehmen.
  *    </li>
  *  </ul>
- *  <dir>
- *    <dir>
- *      Modulaufruf
- *    </dir>
- *  </dir>
+ *  
+ *  <h3>Modulaufruf</h3>
  *  <ul>
  *    <li>
  *      Ist das Modul noch nicht geladen, wird dies aus dem aktuellen
@@ -154,11 +135,8 @@ import java.util.Vector;
  *      Ist das Modul bereits geladen, wird die aktuelle Instanz verwendet.
  *    </li>
  *  </ul> 
- *  <dir>
- *    <dir>
- *      Neustart
- *    </dir>
- *  </dir>
+ *  
+ *  <h3>Neustart</h3>
  *  Die Sequenz entspricht der Kombination aus <i>Beenden</i> und <i>Start</i>.
  *  <ul>
  *    <li>
@@ -198,11 +176,8 @@ import java.util.Vector;
  *      kann seine Arbeit in der Methode <code>Server.run()</code> aufnehmen.
  *    </li>
  *  </ul>
- *  <dir>
- *    <dir>
- *      Beenden
- *    </dir>
- *  </dir>
+ *  
+ *  <h3>Beenden</h3>
  *  <ul>
  *    <li>
  *      Alle registrierten Server-Instanzen werden &uuml;ber die Methode

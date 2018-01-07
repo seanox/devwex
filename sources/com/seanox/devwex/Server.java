@@ -68,7 +68,8 @@ public class Server implements Runnable {
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
      *  @param  server Name des Servers
      *  @param  data   Konfigurationsdaten des Servers
-     *  @throws Throwable bei fehlerhafter Einrichtung des Servers
+     *  @throws Throwable
+     *      Bei fehlerhafter Einrichtung des Servers.
      */
     public Server(String server, Object data) throws Throwable {
 

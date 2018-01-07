@@ -39,16 +39,14 @@ import java.util.Hashtable;
  *  nachfolgende Generierung erhalten.<br>
  *  Segmente sind Strukturen innerhalb einer Vorlage und k&ouml;nnen
  *  verschiedene Platzhalter und Namensr&auml;ume sowie weitere Segmente
- *  enthalten. Sie lassen sich als Teilvorlage beschreiben und verwenden.<br>
- *  <dir>
- *    <b>Beschreibung der Syntax</b>
- *  </dir>
+ *  enthalten. Sie lassen sich als Teilvorlage beschreiben und verwenden.
+ *  
+ *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
  *  auf folgende Zeichen begrenzt:
  *      <dir><code>a-z A-Z 0-9 _-</code></dir>
- *  <dir>
- *    <b>Struktur und Beschreibung der Platzhalter</b>
- *  </dir>
+ *      
+ *  <h3>Struktur und Beschreibung der Platzhalter</h3>
  *  <table>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
@@ -92,9 +90,8 @@ import java.util.Hashtable;
  *      </td>
  *    </tr>
  *  </table>
- *  <dir>
- *    <b>Arbeitsweise</b>
- *  </dir>
+ *  
+ *  <h3>Arbeitsweise</h3>
  *  Die Generierung erfolgt dreistufig (Level 0 - 2) auf Byte-Ebene.
  *  Es gibt einen Parser (Level 0) und einen Prozessor (Level 1) sowie eine
  *  Finalisierung des Prozessors (Level 2).<br>

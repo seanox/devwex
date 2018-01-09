@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.0 20170902<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Worker 5.1 20180109<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170902
+ *  @version 5.1 20180109
  */
 class Worker implements Runnable {
   
@@ -259,17 +259,20 @@ class Worker implements Runnable {
     
     /**
      *  Maskiert im String die Steuerzeichen: BS, HT, LF, FF, CR, ', ",  \ und
-     *  alle Zeichen ausserhalb vom ASCII-Bereich 0x20-0x7F. Die Maskierung
-     *  erfolgt per Slash + ISO oder dem Hexadezimal-Wert.
+     *  alle Zeichen ausserhalb vom ASCII-Bereich 0x20-0x7F.
+     *  Die Maskierung erfolgt per Slash:
+     *  <ul>
+     *    <li>Slash + ISO</li>
+     *    <li>Slash + drei Bytes oktal (0x80-0xFF)</li>
+     *    <li>Slash + vier Bytes hexadezimal (0x100-0xFFFF)</li>
+     *  </ul>
      *  @param  string zu maskierender String
      *  @return der String mit den ggf. maskierten Zeichen.
-     *  @throws Exception
-     *      Im Fall nicht erwarteter Fehler
      */
-    private static String textEscape(String string) {
+    public static String textEscape(String string) {
         
-        byte[] codec;
         byte[] codex;
+        byte[] codec;
         byte[] cache;
 
         int    code;
@@ -278,33 +281,41 @@ class Worker implements Runnable {
         int    length;
         int    loop;
         
-        //Datengroesse wird ermittelt
+        if (string == null)
+            return null;   
+        
         length = string.length();
         
-        //Datenpuffer wird eingerichtet
-        cache = new byte[length *3];
+        cache = new byte[length *6];
         
         codex = ("\b\t\n\f\r\"'\\btnfr\"'\\").getBytes();
-        codec = ("0123456789abcdef").getBytes();
+        codec = ("0123456789ABCDEF").getBytes();
         
         for (loop = count = 0; loop < length; loop++) {
             
-            //der ASCII Code wird ermittelt
             code = string.charAt(loop);
             
             cursor = Arrays.binarySearch(codex, (byte)code);
             if (cursor >= 0 && cursor < 8) {
                 cache[count++] = '\\';
                 cache[count++] = codex[cursor +8];
+            } else if (code > 0xFF) {
+                cache[count++] = '\\';
+                cache[count++] = 'u';
+                cache[count++] = codec[(code >> 12) & 0xF];
+                cache[count++] = codec[(code >>  8) & 0xF];
+                cache[count++] = codec[(code >>  4) & 0xF];
+                cache[count++] = codec[(code & 0xF)];                
             } else if (code < 0x20 || code > 0x7F) {
                 cache[count++] = '\\';
+                cache[count++] = 'x';
                 cache[count++] = codec[(code >> 4) & 0xF];
-                cache[count++] = codec[(code & 0xF)];
+                cache[count++] = codec[(code & 0xF)];                
             } else cache[count++] = (byte)code;
         }
         
-        return new String(Arrays.copyOfRange(cache, 0, count));        
-    }
+        return new String(Arrays.copyOfRange(cache, 0, count));          
+    }    
     
     /**
      *  Dekodiert den String tollerant als URL und UTF-8.

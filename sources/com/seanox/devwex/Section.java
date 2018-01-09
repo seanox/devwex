@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -29,9 +29,9 @@ import java.util.StringTokenizer;
 
 /**
  *  Section stellt eine Schnittstelle zu den in den Sektionen von Initialize
- *  enthaltenen Werten zur Verf&uuml;gung.<br>
- *  <br>
- *      <dir>Hinweis</dir>
+ *  enthaltenen Werten zur Verf&uuml;gung.
+ *  
+ *  <h3>Hinweis</h3>
  *  F&uuml;r eine optimale Verarbeitung von INI-Dateien sollte immer die 
  *  Kombination von Initialize mit Section verwendet werden. So basiert die
  *  nachfolgende Beschreibung auf der Kombination beider Komponenten.<br>
@@ -71,9 +71,9 @@ import java.util.StringTokenizer;
  *  hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>, gefolgt
  *  von der hexadezimalen Zeichenfolge. Diese Schreibweise kann immer nur auf
  *  das komplette Element angewandt werden. Die Kombination oder Unterbrechung
- *  ist nicht m&ouml;glich.<br>
- *  <br>
- *      <dir>Beispiel</dir>
+ *  ist nicht m&ouml;glich.
+ *  
+ *  <h3>Beispiel</h3>
  *  <pre>
  *     001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
  *     002   PARAM-A                 = WERT-1         ;Kommentar
@@ -91,36 +91,37 @@ import java.util.StringTokenizer;
  *     014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
  *     015   0x504152414D2D45 [?]                     ;Kommentar
  *  </pre>
- *      <dir>Zeile 1</dir>
+ *  
+ *  <h4>Zeile 1</h4>
  *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Das
  *  Schl&uuml;sselwort <code>EXTENDS</code> verweist auf die Ableitung von den
  *  Sektionen <code>SECTION-A</code> und <code>SECTION-B</code>. Somit basiert
  *  <code>SECTION</code> auf den Schl&uuml;sseln und Werten der Sektionen
  *  <code>SECTION-A</code> und <code>SECTION-B</code>. Ab dem Semikolon werden
- *  die nachfolgenden Zeichen als Kommentar interpretiert.<br>
- *  <br>
- *      <dir>Zeile 2</dir>
+ *  die nachfolgenden Zeichen als Kommentar interpretiert.
+ *  
+ *  <h4>Zeile 2</h4>
  *  Dem Schl&uuml;ssel <code>PARAM-A</code> wird der Wert <code>WERT-1</code>
  *  zugewiesen. Die nachfolgenden Zeichen werden ab dem Semikolon als Kommentar
- *  interpretiert.<br>
- *  <br>
- *      <dir>Zeile 3</dir>
+ *  interpretiert.
+ *  
+ *  <h4>Zeile 3</h4>
  *  Dem Schl&uuml;ssel <code>PARAM-B</code> wird <code>WERT-2; WERT-3</code> als
  *  Wert zugewiesen. Durch die Option <code>[+]</code> am Ende vom
  *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
  *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
- *  dieser Zeile nicht m&ouml;glich.<br>
- *  <br>
- *      <dir>Zeile 4</dir>
+ *  dieser Zeile nicht m&ouml;glich.
+ *  
+ *  <h4>Zeile 4</h4>
  *  Die Wertzuweisung von Zeile 3 wird fortgesetzt und der Wert
  *  <code>WERT-4; WERT-5</code> dem bestehenden Wert vom Schl&uuml;ssel
  *  <code>PARAM-B</code> hinzugef&uuml;gt. Die Option <code>[+]</code> aus
  *  Zeile 3 wird ebenfalls in Zeile 4 &uuml;bernommen, womit auch hier der
  *  Zeilenkommentar abgeschaltet ist und alle Zeichen als Wertzuweisung
  *  verwendet werden. Die Eingabe eines Kommentars ist in dieser Zeile nicht
- *  m&ouml;glich. Weitere vorangestellte Optionen sind nicht m&ouml;glich.<br>
- *  <br>
- *      <dir>Zeile 5</dir>
+ *  m&ouml;glich. Weitere vorangestellte Optionen sind nicht m&ouml;glich.
+ *  
+ *  <h4>Zeile 5</h4>
  *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code> ist
  *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
  *  nach dem gleichnamigen Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
@@ -133,9 +134,9 @@ import java.util.StringTokenizer;
  *  Durch die Kombination mit der Option <code>[+]</code> am Ende vom
  *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
  *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
- *  dieser Zeile nicht m&ouml;glich.<br>
- *  <br>
- *      <dir>Zeile 6</dir>
+ *  dieser Zeile nicht m&ouml;glich.
+ *  
+ *  <h4>Zeile 6</h4>
  *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code> ist
  *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
  *  nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die Gross- und
@@ -145,18 +146,18 @@ import java.util.StringTokenizer;
  *  Enthalten die System-Properties der Java-Laufzeitumgebung keinen
  *  entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert, da
  *  auch kein alternativer Wert angegeben wurde.<br>
- *  Kommentare werden in dieser Zeile unterst&uuml;tzt.<br>
- *  <br>
- *      <dir>Zeile 8 - 15</dir>
+ *  Kommentare werden in dieser Zeile unterst&uuml;tzt.
+ *  
+ *  <h4>Zeile 8 - 15</h4>
  *  Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
  *  Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.<br>
  *  <br>
- *  Section 5.0.1 20171215<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Section 5.0.1 20180109<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0.1 20171215
+ *  @version 5.0.1 20180109
  */
 public class Section implements Cloneable {
 
@@ -374,16 +375,15 @@ public class Section implements Cloneable {
 
     /**
      *  R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
-     *  bzw. kann nicht ermittelt werden, liefert die Methode <code>null</code>
-     *  und im Smart-Modus einen leeren Wert, wenn ein g&uml;ltiger
-     *  Schl&uuml;ssel angegeben wird. Da im Smart-Modus leere Schl&uuml;ssel
-     *  automatisch bereinigt werden, wird der erstellte Schl&uuml;ssel mit
-     *  seinem leeren Standardwert nicht in der Section eingetragen.
-     *  mit einem leerer Wert erstellt. 
-     *  @param  key Name des Sch&uuml;ssels
-     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> und im
-     *          Smart-Modus einen leeren Wert, wenn ein g&uml;ltiger
-     *          Schl&uuml;ssel angegeben wird
+     *  bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
+     *  Wert, sonst {@code null}, bzw. im Smart-Modus einen leeren Wert.
+     *  Da im Smart-Modus leere Schl&uuml;ssel automatisch bereinigt werden,
+     *  wird der erstellte Schl&uuml;ssel mit seinem leeren Standardwert nicht
+     *  in der Section eingetragen.
+     *  @param  key       Name des Sch&uuml;ssels
+     *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
+     *  @return der Wert des Sch&uuml;ssels, sonst {@code null} bzw. den
+     *          alternativen Wert oder im Smart-Modus einen leeren
      */
     public synchronized String get(String key) {
         return this.get(key, null);
@@ -392,16 +392,14 @@ public class Section implements Cloneable {
     /**
      *  R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
      *  bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
-     *  Wert, sonst <code>null</code>, bzw. im Smart-Modus einen leeren Wert,
-     *  wenn ein g&uml;ltiger Schl&uuml;ssel angegeben wird. Da im Smart-Modus
-     *  leere Schl&uuml;ssel automatisch bereinigt werden, wird der erstellte
-     *  Schl&uuml;ssel mit seinem leeren Standardwert nicht in der Section
-     *  eingetragen.
+     *  Wert, sonst {@code null}, bzw. im Smart-Modus einen leeren Wert.
+     *  Da im Smart-Modus leere Schl&uuml;ssel automatisch bereinigt werden,
+     *  wird der erstellte Schl&uuml;ssel mit seinem leeren Standardwert nicht
+     *  in der Section eingetragen.
      *  @param  key       Name des Sch&uuml;ssels
      *  @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
-     *  @return der Wert des Sch&uuml;ssels, sonst <code>null</code> bzw. den
-     *          alternativen Wert oder im Smart-Modus einen leeren, wenn ein
-     *          g&uml;ltiger Schl&uuml;ssel angegeben wird
+     *  @return der Wert des Sch&uuml;ssels, sonst {@code null} bzw. den
+     *          alternativen Wert oder im Smart-Modus einen leeren
      */
     public synchronized String get(String key, String alternate) {
 
@@ -409,17 +407,16 @@ public class Section implements Cloneable {
         
         if (key != null)
             key = key.toUpperCase().trim();
-        if (key == null || key.isEmpty())
-            value = alternate;
+        if (key == null
+                || key.isEmpty())
+            value = null;
         else value = (String)this.entries.get(key);
-        if (value == null) {
-            if (alternate != null)
-                return alternate.trim();
-            if (this.smart
-                    && key != null
-                    && !key.isEmpty())
-                value = "";
-        }
+        
+        if (value == null)
+            value = alternate;
+        if (value == null
+                && this.smart)
+            value = "";
         
         return value;
     }

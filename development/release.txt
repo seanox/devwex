@@ -4,6 +4,10 @@
   BF: Section - Korrektur
       - im Smart-Modul mit der Get-Methode verwendete ungültige Schluessel oder
         alternativen Wert liefern wieder null
+  CR: HTTP AccessLog - Optimierung/Korrektur
+      - Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
+        0x00-0x20 / 0x80-0xFF verwenden \xXX und 
+        0x0100-0xFFFF verwendet \uXXXX
       
 5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager

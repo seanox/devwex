@@ -24,6 +24,7 @@
   <property name="workspace.documents" value="${workspace}/documents"/>
   <property name="workspace.storage" value="${workspace}/storage"/>
   <property name="workspace.settings" value="${workspace}/.settings"/>
+  <property name="workspace.releases" value="${workspace}/releases"/>
   
   <property name="build" value="${workspace}/build"/>
   <property name="build.sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
@@ -38,10 +39,6 @@
   <property name="build.development" value="${build.project}/development"/>
   <property name="build.extras" value="${build.development}/extras"/>
   <property name="build.settings" value="${build.project}/.settings"/>
-  
-  <property name="release" value="${workspace}/release"/>
-  
-  <property name="releases" value="${workspace}/releases"/>
   
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
@@ -373,7 +370,7 @@
       <fileset dir="${workspace.program}"/>
     </copy>    
     <copy file="${workspace}/.license" tofile="${build.project}/license.txt"/>
-    <copy file="${workspace}/development/release.txt" todir="${build.project}"/>
+    <copy file="${workspace.development}/release.txt" todir="${build.project}"/>
     <compress-stylesheet context="documents" file="${build.documents}/index.css"/>
     <compress-javascript context="manuals" file="${build.manuals}/seanox-devwex.js"/>
     <compress-stylesheet context="manuals" file="${build.manuals}/seanox-devwex.css"/>  
@@ -397,11 +394,11 @@
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>  
-    <delete file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
-    <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}.zip"
+    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>
+    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"
       basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
-      file="${releases}/seanox-${ant.project.name}-${release.version}.zip"/>
+      file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>
     
     <delete dir="${build}"/>
     <mkdir dir="${build}"/>
@@ -446,11 +443,11 @@
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>  
-    <delete file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
-    <zip destfile="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"
+    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"
       basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
-      file="${releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+      file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
 
     <delete dir="${build}"/>
   </target>  

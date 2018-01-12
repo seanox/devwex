@@ -245,6 +245,7 @@
         -keystore '${workspace.program}/keystore' -keypass changeIt -storepass changeIt
         -keyalg RSA -keysize 2048 -validity 365"/>
     </exec>
+    <copy file="${workspace.program}/keystore" todir="${workspace.development}" overwrite="true"/>
   </target> 
   
   <scriptdef name="clean" language="javascript">

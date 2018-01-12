@@ -44,8 +44,8 @@ import java.util.StringTokenizer;
  *  von Sektionen und Schl&uuml;sseln.<br>
  *  <br>
  *  In der Erweiterung lassen sich u.a. Sektionen vererben. Dazu folgt einer
- *  Sektion das Sch&uuml;sselwort <code>EXTENDS</code> und gefolgt von den
- *  Namen referenzierter Sektionen. Damit &uuml;bernimmt die Sektion alle
+ *  Sektion das Sch&uuml;sselwort {@code EXTENDS} und gefolgt von den Namen
+ *  referenzierter Sektionen. Damit &uuml;bernimmt die Sektion alle
  *  Schl&uuml;ssel und Werte der referenzierten Sektionen und kann diese
  *  erweitern oder &uuml;berschreiben.<br>
  *  <br>
@@ -54,8 +54,8 @@ import java.util.StringTokenizer;
  *  Folgezeile ohne erneute Angabe des Schl&uuml;ssels durch die Verwendung vom
  *  Pluszeichen fortgesetzt werden. Werte lassen sich zudem fest, variabel und
  *  optional zuweisen.<br>
- *  Durch die Option <code>[?]</code> am Ende eines Schl&uuml;ssels, wird nach
- *  einem gleichnamigen Schl&uuml;ssel in den System-Properties der
+ *  Durch die Option {@code [?]} am Ende eines Schl&uuml;ssels, wird nach einem
+ *  gleichnamigen Schl&uuml;ssel in den System-Properties der
  *  Java-Laufzeitumgebung gesucht. Kann keiner ermittelt werden, wird der
  *  optional angegebene Wert verwendet. Ohne Wert gilt ein solcher
  *  Schl&uuml;ssel als nicht angegeben und wird ignoriert.<br>
@@ -63,15 +63,15 @@ import java.util.StringTokenizer;
  *  Kommentare beginnen mit einem Semikolon, sind optional und lassen sich an
  *  jeder beliebigen Stelle in einer Zeile verwenden. Die nachfolgenden Zeichen
  *  sind somit kein Bestandteil von Sektion, Schl&uuml;ssel oder Wert.<br>
- *  Mit der Option <code>[+]</code> am Ende eines Schl&uuml;ssels, kann die
+ *  Mit der Option {@code [+]} am Ende eines Schl&uuml;ssels, kann die
  *  Verwendung von Kommentaren f&uuml;r diesen Schl&uuml;ssel deaktiviert und
  *  das Semikolon im Wert verwendet werden.<br>
  *  <br>
  *  Sektionen, Schl&uuml;ssel und Werte unterst&uuml;tzen auch eine
- *  hexadezimale Schreibweise. Diese beginnt mit <code>0x...</code>, gefolgt
- *  von der hexadezimalen Zeichenfolge. Diese Schreibweise kann immer nur auf
- *  das komplette Element angewandt werden. Die Kombination oder Unterbrechung
- *  ist nicht m&ouml;glich.
+ *  hexadezimale Schreibweise. Diese beginnt mit {@code 0x...}, gefolgt von der
+ *  hexadezimalen Zeichenfolge. Diese Schreibweise kann immer nur auf das
+ *  komplette Element angewandt werden. Die Kombination oder Unterbrechung ist
+ *  nicht m&ouml;glich.
  *  
  *  <h3>Beispiel</h3>
  *  <pre>
@@ -93,61 +93,61 @@ import java.util.StringTokenizer;
  *  </pre>
  *  
  *  <h4>Zeile 1</h4>
- *  Die Sektion mit dem Namen <code>SECTION</code> wird definiert. Das
- *  Schl&uuml;sselwort <code>EXTENDS</code> verweist auf die Ableitung von den
- *  Sektionen <code>SECTION-A</code> und <code>SECTION-B</code>. Somit basiert
- *  <code>SECTION</code> auf den Schl&uuml;sseln und Werten der Sektionen
- *  <code>SECTION-A</code> und <code>SECTION-B</code>. Ab dem Semikolon werden
- *  die nachfolgenden Zeichen als Kommentar interpretiert.
+ *  Die Sektion mit dem Namen {@code SECTION} wird definiert. Das
+ *  Schl&uuml;sselwort {@code EXTENDS} verweist auf die Ableitung von den
+ *  Sektionen {@code SECTION-A} und {@code SECTION-B}. Somit basiert
+ *  {@code SECTION} auf den Schl&uuml;sseln und Werten der Sektionen
+ *  {@code SECTION-A} und {@code SECTION-B}. Ab dem Semikolon werden die
+ *  nachfolgenden Zeichen als Kommentar interpretiert.
  *  
  *  <h4>Zeile 2</h4>
- *  Dem Schl&uuml;ssel <code>PARAM-A</code> wird der Wert <code>WERT-1</code>
- *  zugewiesen. Die nachfolgenden Zeichen werden ab dem Semikolon als Kommentar
+ *  Dem Schl&uuml;ssel {@code PARAM-A} wird der Wert {@code WERT-1} zugewiesen.
+ *  Die nachfolgenden Zeichen werden ab dem Semikolon als Kommentar
  *  interpretiert.
- *
+ *  
  *  <h4>Zeile 3</h4>
- *  Dem Schl&uuml;ssel <code>PARAM-B</code> wird <code>WERT-2; WERT-3</code> als
- *  Wert zugewiesen. Durch die Option <code>[+]</code> am Ende vom
- *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
- *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
- *  dieser Zeile nicht m&ouml;glich.
- *
+ *  Dem Schl&uuml;ssel {@code PARAM-B} wird {@code WERT-2; WERT-3} als Wert
+ *  zugewiesen. Durch die Option {@code [+]} am Ende vom Schl&uuml;ssel, wird
+ *  der Zeilenkommentar abgeschaltet und alle Zeichen f&uuml;r die
+ *  Wertzuweisung verwendet. Die Angabe eines Kommentars ist in dieser Zeile
+ *  nicht m&ouml;glich.
+ *  
  *  <h4>Zeile 4</h4>
  *  Die Wertzuweisung von Zeile 3 wird fortgesetzt und der Wert
- *  <code>WERT-4; WERT-5</code> dem bestehenden Wert vom Schl&uuml;ssel
- *  <code>PARAM-B</code> hinzugef&uuml;gt. Die Option <code>[+]</code> aus
- *  Zeile 3 wird ebenfalls in Zeile 4 &uuml;bernommen, womit auch hier der
- *  Zeilenkommentar abgeschaltet ist und alle Zeichen als Wertzuweisung
- *  verwendet werden. Die Eingabe eines Kommentars ist in dieser Zeile nicht
- *  m&ouml;glich. Weitere vorangestellte Optionen sind nicht m&ouml;glich.
- *  
+ *  {@code WERT-4; WERT-5} dem bestehenden Wert vom Schl&uuml;ssel
+ *  {@code PARAM-B} hinzugef&uuml;gt. Die Option {@code [+]} aus Zeile 3 wird
+ *  ebenfalls in Zeile 4 &uuml;bernommen, womit auch hier der Zeilenkommentar
+ *  abgeschaltet ist und alle Zeichen als Wertzuweisung verwendet werden. Die
+ *  Eingabe eines Kommentars ist in dieser Zeile nicht m&ouml;glich. Weitere
+ *  vorangestellte Optionen sind nicht m&ouml;glich.
+ *
  *  <h4>Zeile 5</h4>
- *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-C</code> ist
+ *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel {@code PARAM-C} ist
  *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
- *  nach dem gleichnamigen Schl&uuml;ssel <code>PARAM-C</code> gesucht, wobei
- *  die Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu
+ *  nach dem gleichnamigen Schl&uuml;ssel {@code PARAM-C} gesucht, wobei die
+ *  Gross- und Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu
  *  Bestandteile der Laufzeitumgebung sein oder kann beim Programmstart in der
- *  Form <code>-Dschluessel=wert</code> gesetzt werden.<br>
+ *  Form {@code -Dschluessel=wert} gesetzt werden.<br>
  *  Enthalten die System-Properties der Java-Laufzeitumgebung keinen
- *  entsprechenden Schl&uuml;ssel, wird alternativ <code>WERT-6; WERT-7</code>
- *  als Wert verwendet.<br>
- *  Durch die Kombination mit der Option <code>[+]</code> am Ende vom
+ *  entsprechenden Schl&uuml;ssel, wird alternativ {@code WERT-6; WERT-7} als
+ *  Wert verwendet.<br>
+ *  Durch die Kombination mit der Option {@code [+]} am Ende vom
  *  Schl&uuml;ssel, wird der Zeilenkommentar abgeschaltet und alle Zeichen
  *  f&uuml;r die Wertzuweisung verwendet. Die Angabe eines Kommentars ist in
  *  dieser Zeile nicht m&ouml;glich.
- *  
+ *
  *  <h4>Zeile 6</h4>
- *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel <code>PARAM-E</code> ist
+ *  Die Wertzuweisung f&uuml;r den Schl&uuml;ssel {@code PARAM-E} ist
  *  dynamisch. In den System-Properties der Java-Laufzeitumgebung wird dazu
  *  nach dem gleichnamigen Schl&uuml;ssel gesucht, wobei die Gross- und
  *  Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu Bestandteil
  *  der Laufzeitumgebung sein oder kann beim Programmstart in der Form
- *  <code>-Dschluessel=wert</code> gesetzt werden.<br>
+ *  {@code -Dschluessel=wert} gesetzt werden.<br>
  *  Enthalten die System-Properties der Java-Laufzeitumgebung keinen
  *  entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert, da
  *  auch kein alternativer Wert angegeben wurde.<br>
  *  Kommentare werden in dieser Zeile unterst&uuml;tzt.
- *  
+ *
  *  <h4>Zeile 8 - 15</h4>
  *  Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen,
  *  Schl&uuml;ssel und Werte die hexadezimale Schreibweise verwendet.<br>
@@ -210,12 +210,12 @@ public class Initialize implements Cloneable {
      *  Ermittelt aus dem String die enthaltenen Sektionen.
      *  Das Parsen ignoriert ung&uuml;ltige Sektionen, Schl&uuml;ssel und Werte.
      *  R&uuml;ckgabe die ermittelten Sektionen als Initialize.
-     *  Mit der Option <code>smart</code> kann ein smartes Verhalten aktiviert
+     *  Mit der Option {@code smart} kann ein smartes Verhalten aktiviert
      *  werden. Dadurch &uml;bernimmt {@link #parse(String, boolean)} nur
      *  Schl&uuml;ssel mit Sektionen die nicht leer sind. Die Methoden
      *  {@link #get(String)} verh&auml;lt sich bei nicht existierenden
      *  Schl&uuml;sseln so, als l&auml;gen diese mit einer leeren Sektion vor
-     *  und liefert so nie <code>null</code>. Zudem reagiert im Smart-Modus
+     *  und liefert so nie {@code null}. Zudem reagiert im Smart-Modus
      *  {@link #set(String, String)} bei einem leeren Wert wie die Methode
      *  {@link #remove(String)} und entfernt den Schl&uuml;ssel.
      *  @param  text  zu parsender String
@@ -305,9 +305,9 @@ public class Initialize implements Cloneable {
     }
 
     /**
-     *  R&uuml;ckgabe <code>true</code>, wenn die Sektion enthalten ist.
+     *  R&uuml;ckgabe {@code true}, wenn die Sektion enthalten ist.
      *  @param  key Name der Sektion
-     *  @return <code>true</code> wenn die Sektion enthalten ist
+     *  @return {@code true} wenn die Sektion enthalten ist
      */
     public synchronized boolean contains(String key) {
         
@@ -321,13 +321,13 @@ public class Initialize implements Cloneable {
     /**
      *  R&uuml;ckgabe der angegebenen Section.
      *  Ist dieser der Schl&uuml;ssel nicht enthalten bzw. kann nicht ermittelt
-     *  werden, liefert die Methode <code>null</code> und im Smart-Modus eine
-     *  leere Sektion, die nur in Verbindung mit einem g&uml;ltigen
-     *  Schl&uuml;ssel in Initialize eingetragen wird. Andernfalls ist die im
-     *  Smart-Modus erstellte Sektion ungebunden. 
+     *  werden, liefert die Methode {@code null} und im Smart-Modus eine leere
+     *  Sektion, die nur in Verbindung mit einem g&uml;ltigen Schl&uuml;ssel in
+     *  Initialize eingetragen wird. Andernfalls ist die im Smart-Modus
+     *  erstellte Sektion ungebunden. 
      *  @param  key Name der Section
-     *  @return die ermittelte Section, sonst <code>null</code> bzw. im
-     *          Smart-Modus eine leere Sektion
+     *  @return die ermittelte Section, sonst {@code null} bzw. im Smart-Modus
+     *          eine leere Sektion
      */
     public synchronized Section get(String key) {
         
@@ -357,7 +357,7 @@ public class Initialize implements Cloneable {
      *  den Schl&uuml;ssel. 
      *  @param  key     Name der Sektion
      *  @param  section Sektion
-     *  @return ggf. zuvor zugeordnete Sektion, sonst <code>null</code>
+     *  @return ggf. zuvor zugeordnete Sektion, sonst {@code null}
      */
     public synchronized Section set(String key, Section section) {
         
@@ -375,7 +375,7 @@ public class Initialize implements Cloneable {
     /**
      *  Entfernt die angegebene Sektion aus Initialize.
      *  @param  key Name der zu entfernenden Sektion
-     *  @return ggf. zuvor zugeordnete Sektion, sonst <code>null</code>
+     *  @return ggf. zuvor zugeordnete Sektion, sonst {@code null}
      */
     public synchronized Section remove(String key) {
   

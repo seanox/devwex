@@ -169,25 +169,25 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Entfernt aus dem String die Optionsinformationen im Format
-     *  <code>[...]</code>. R&uuml;ckgabe der String ohne endende Optionen.
+     *  Entfernt aus dem String Parameter und Optionen im Format {@code [...]}.
+     *  Bereinigt werden alle Angaben, ob voll- oder unvollst&auml;ndig, ab dem
+     *  ersten Vorkommen.
      *  @param  string zu bereinigender String
-     *  @return der String ohne endende Optionen
+     *  @return der String ohne Parameter und Optionen
      */
     private static String cleanOptions(String string) {
-
+        
         int cursor;
 
-        string = string.trim();
-        while (string.endsWith("]")
-                && (cursor = string.lastIndexOf("[")) >= 0)
+        cursor = string.indexOf('[');
+        if (cursor >= 0)
             string = string.substring(0, cursor).trim();
 
         return string;
     }
     
     /**
-     *  Ersetzt im String <code>search</code> durch <code>replace</code>.
+     *  Ersetzt im String {@code search} durch {@code replace}.
      *  Die Gross- und Kleinschreibung wird dabei ignoriert.
      *  @param  string  zu durchsuchender String
      *  @param  search  gesuchter String
@@ -433,7 +433,7 @@ class Worker implements Runnable {
      *  R&uuml;ckgabe das formatierte Datum, im Fehlerfall ein leerer String.
      *  @param  format Formatbeschreibung
      *  @param  date   zu formatierendes Datum
-     *  @param  zone   Zeitzone, <code>null</code> Standardzone
+     *  @param  zone   Zeitzone, {@code null} Standardzone
      *  @return das formatierte Datum als String, im Fehlerfall leerer String
      */
     private static String dateFormat(String format, Date date, String zone) {
@@ -515,9 +515,9 @@ class Worker implements Runnable {
     /**
      *  L&ouml;scht die Ressource, handelt es sich um ein Verzeichnis, werden
      *  alle Unterdateien und Unterverzeichnisse rekursive gel&ouml;scht.
-     *  R&uuml;ckgabe <code>true</code> im Fehlerfall <code>false</code>.
+     *  R&uuml;ckgabe {@code true} im Fehlerfall {@code false}.
      *  @param  resource zu l&ouml;schende Ressource
-     *  @return <code>true</code>, im Fehlerfall <code>false</code>
+     *  @return {@code true}, im Fehlerfall {@code false}
      */
     private static boolean fileDelete(File resource) {
 
@@ -541,13 +541,13 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Pr&uuml;ft ob die Ressource dem <code>IF-(UN)MODIFIED-SINCE</code>
-     *  entspricht. R&uuml;ckgabe <code>false</code> wenn die Ressource in Datum
-     *  und Dateigr&ouml;sse entspricht, sonst <code>true</code>.
+     *  Pr&uuml;ft ob die Ressource dem {@code IF-(UN)MODIFIED-SINCE}
+     *  entspricht. R&uuml;ckgabe {@code false} wenn die Ressource in Datum und
+     *  Dateigr&ouml;sse entspricht, sonst {@code true}.
      *  @param  file   Dateiobjekt
      *  @param  string Information der Modifikation
-     *  @return <code>true</code> wenn Unterschiede in Datum oder
-     *          Dateigr&ouml;sse ermittelt wurden
+     *  @return {@code true} wenn Unterschiede in Datum oder Dateigr&ouml;sse
+     *          ermittelt wurden
      */
     private static boolean fileIsModified(File file, String string) {
 
@@ -601,7 +601,7 @@ class Worker implements Runnable {
     /**
      *  Erstellt zu einem abstrakter File das physische File-Objekt.
      *  @param  file abstrakter File 
-     *  @return das physische File-Objekt, sonst <code>null</code>
+     *  @return das physische File-Objekt, sonst {@code null}
      */
     private static File fileCanonical(File file) {
      
@@ -618,13 +618,13 @@ class Worker implements Runnable {
      *  Aufruf der Methode noch nicht geladen, erfolgt dieses ohne Angabe von
      *  Parametern mit der ersten Anforderung.<br>
      *  Soll ein Modul mit Parametern initalisiert werden, muss das Modul in
-     *  der Sektion <code>INITIALIZE</code> deklariert oder &uuml;ber den
+     *  der Sektion {@code INITIALIZE} deklariert oder &uuml;ber den
      *  Context-ClassLoader vom Devwex-Module-SDK geladen werden.
-     *  R&uuml;ckgabe <code>true</code> wenn die Ressource geladen und die
-     *  Methode erfolgreich aufgerufen wurde.
+     *  R&uuml;ckgabe {@code true} wenn die Ressource geladen und die Methode
+     *  erfolgreich aufgerufen wurde.
      *  @param  resource Resource
      *  @param  invoke   Methode
-     *  @return <code>true</code>, im Fehlerfall <code>false</code>
+     *  @return {@code true}, im Fehlerfall {@code false}
      */
     private boolean invoke(String resource, String invoke) throws Exception {
 
@@ -845,7 +845,7 @@ class Worker implements Runnable {
         }
         
         if (result.length() <= 0)
-            result = this.docroot.concat(this.environment.get("path_base"));
+            result = this.docroot.concat(this.environment.get("path_url"));
 
         if (!module && absolute)
             result = result.concat("[A]");
@@ -1147,7 +1147,7 @@ class Worker implements Runnable {
      *  @throws Exception
      *      Im Fall nicht erwarteter Fehler
      */
-    private void initialize() throws Exception {
+    private void initiate() throws Exception {
 
         ByteArrayOutputStream buffer;
         Enumeration           enumeration;
@@ -1418,7 +1418,7 @@ class Worker implements Runnable {
         shadow = this.fields.get("req_path");
 
         //die Umgebungsvariabeln werden entsprechend der Ressource gesetzt
-        this.environment.set("path_base", shadow);
+        this.environment.set("path_url", shadow);
         this.environment.set("script_name", shadow);
         this.environment.set("script_url", shadow);
 
@@ -1474,7 +1474,7 @@ class Worker implements Runnable {
             this.resource = Worker.cleanOptions(this.resource);
 
         if (this.resource.length() <= 0)
-            this.resource = this.docroot.concat(this.environment.get("path_base"));
+            this.resource = this.docroot.concat(this.environment.get("path_url"));
 
         //die Ressource wird als File eingerichtet
         file = new File(this.resource);
@@ -1525,7 +1525,7 @@ class Worker implements Runnable {
             this.environment.set("script_uri", string.concat(this.environment.get("script_url")));
 
         //bei abweichendem Path wird die Location als Redirect eingerichtet
-        if (this.status == 0 && !this.environment.get("path_base").equals(shadow) && !virtual && !connect) {
+        if (this.status == 0 && !this.environment.get("path_url").equals(shadow) && !virtual && !connect) {
             this.environment.set("script_uri", string.concat(shadow));
             this.status = 302;
         }
@@ -1564,7 +1564,7 @@ class Worker implements Runnable {
 
                 shadow = this.environment.get("path_absolute");
                 if (shadow.length() <= 0)
-                    shadow = this.environment.get("path_base");
+                    shadow = this.environment.get("path_url");
                 if (!shadow.endsWith("/"))
                     shadow = shadow.concat("/");
 
@@ -1586,7 +1586,7 @@ class Worker implements Runnable {
         if (string.length() > 0) string = ("?").concat(string);
 
         //die Request URI wird gesetzt
-        this.environment.set("request_uri", this.environment.get("path_base").concat(string));
+        this.environment.set("request_uri", this.environment.get("path_url").concat(string));
 
         //die aktuelle HTTP-Methode wird ermittelt
         string = this.environment.get("request_method").toLowerCase();
@@ -2014,7 +2014,7 @@ class Worker implements Runnable {
     
     /**
      *  Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
-     *  <code>index.html</code> eine navigierbare HTML-Seite.
+     *  {@code index.html} eine navigierbare HTML-Seite.
      *  @param  directory Verzeichnis des Dateisystems
      *  @param  query     Option der Sortierung
      *  @return das Verzeichnisse als navigierbares HTML
@@ -2098,10 +2098,10 @@ class Worker implements Runnable {
         
         generator = Generator.parse(Worker.fileRead(file));
         
-        string = this.environment.get("path_base");
+        string = this.environment.get("path_url");
         if (!string.endsWith("/"))
             string = string.concat("/");
-        values.put("path_base", string);
+        values.put("path_url", string);
         
         //der Pfad wird fragmentiert, Verzeichnissstruktur koennen so als
         //einzelne Links abgebildet werden
@@ -2688,7 +2688,7 @@ class Worker implements Runnable {
             //die Connection wird initialisiert, um den Serverprozess nicht zu
             //behindern wird die eigentliche Initialisierung der Connection erst mit
             //laufendem Thread als asynchroner Prozess vorgenommen
-            try {this.initialize();
+            try {this.initiate();
             } catch (Exception exception) {
                 this.status = 500;
                 throw exception;
@@ -2873,9 +2873,9 @@ class Worker implements Runnable {
     }
 
     /**
-     *  R&uuml;ckgabe <code>true</code>, wenn der Worker aktiv zur
-     *  Verf&uuml;gung steht und somit weiterhin Requests entgegen nehmen kann.
-     *  @return <code>true</code>, wenn der Worker aktiv verf&uuml;bar ist
+     *  R&uuml;ckgabe {@code true}, wenn der Worker aktiv zur Verf&uuml;gung
+     *  steht und somit weiterhin Requests entgegen nehmen kann.
+     *  @return {@code true}, wenn der Worker aktiv verf&uuml;bar ist
      */
     boolean available() {
 

@@ -51,12 +51,12 @@ import java.util.Vector;
  *  Server-Konfigurationen in Konfigurationsdatei festgelegt wird, und die
  *  Konfiguration erfolgt &uuml;ber den Konstruktor. Die erstellten
  *  Server-Instanzen werden vom Laufzeit-Container (Service) mit der Methode
- *  <code>Server.run()</code> gestartet und per <code>Service.destroy()</code>
- *  zum Beenden aufgefordert. Der Aufruf beider Methoden ist asynchron.
+ *  {@code Server.run()} gestartet und per {@code Service.destroy()} zum
+ *  Beenden aufgefordert. Der Aufruf beider Methoden ist asynchron.
  *  Verz&ouml;gert sich das Beenden, wartet der Laufzeit-Container auf das Ende
  *  aller registrierten Server-Instanzen. Optional wird die Implementierung der
- *  Methode <code>Server.explain()</code> zur Abfrage allgemeiner
- *  Informationen, wie Protokoll und Netzwerkverbindung, unterst&uuml;tzt.
+ *  Methode {@code Server.explain()} zur Abfrage allgemeiner Informationen, wie
+ *  Protokoll und Netzwerkverbindung, unterst&uuml;tzt.
  *  
  *  <h3>Module</h3>
  *  Die f&uuml;r Hintergrundaktivit&auml;ten gedachten Erweiterungen stellen
@@ -73,20 +73,20 @@ import java.util.Vector;
  *  Modulen. Die Initialisierung erfolgt &uuml;ber den Konstruktor initial mit
  *  dem Start vom Laufzeit-Container (Service), dabei wird die Abfolge in der
  *  Konfigurationsdatei mit der Reihenfolge der Module innerhalb der Sektion
- *  <code>INITIALIZE</code> festgelegt, oder die Initialisierung erfolgt mit
- *  der ersten Anforderung eines Moduls zur Laufzeit. Die Konfiguration wird
- *  einem Module nur dann &uuml;bergeben, wenn es initial &uuml;ber die Sektion
- *  <code>INITIALIZE</code> geladen wird. Die Aufforderung zum Beenden erfolgt
- *  &uuml;ber die Methode <code>Module.destroy()</code>. Der Laufzeit-Container
+ *  {@code INITIALIZE} festgelegt, oder die Initialisierung erfolgt mit der
+ *  ersten Anforderung eines Moduls zur Laufzeit. Die Konfiguration wird einem
+ *  Module nur dann &uuml;bergeben, wenn es initial &uuml;ber die Sektion
+ *  {@code INITIALIZE} geladen wird. Die Aufforderung zum Beenden erfolgt
+ *  &uuml;ber die Methode {@code Module.destroy()}. Der Laufzeit-Container
  *  &uuml;berwacht das Beenden nicht aktiv und verwirft die Module durch das
  *  Entladen vom ClassLoader.Optional wird die Implementierung der Methode
- *  <code>Module.explain()</code> zur Abfrage allgemeiner Informationen, wie
+ *  {@code Module.explain()} zur Abfrage allgemeiner Informationen, wie
  *  Hersteller und Version, unterst&uuml;tzt.
  *  
  *  <h3>Arbeitsweise</h3>
  *  Alle f&uuml;r die Initialisierung und den Betrieb erforderlichen Daten
- *  werden aus der Konfigurationsdatei <code>devwex.ini</code> gelesen, die aus
- *  dem aktuellen Arbeitsverzeichnis geladen wird. Beim Start, Neustart und Stop
+ *  werden aus der Konfigurationsdatei {@code devwex.ini} gelesen, die aus dem
+ *  aktuellen Arbeitsverzeichnis geladen wird. Beim Start, Neustart und Stop
  *  werden feste Sequenzen zum Laden und Entladen von Servern und Modulen
  *  durchlaufen<br>
  *  Im Betrieb &uuml;berwacht der Service Konfiguration, Server sowie Module und
@@ -101,24 +101,24 @@ import java.util.Vector;
  *  <ul>
  *    <li>
  *      Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert, die
- *      mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+ *      mit dem VM-Argument {@code -Dlibraries} angegeben wurden.
  *    </li>
  *    <li>
- *      Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen und
- *      &uuml;ber den Konstruktor <code>Module(String options)</code>
+ *      Alle Module aus der Sektion {@code INITIALIZE} werden geladen und
+ *      &uuml;ber den Konstruktor {@code Module(String options)}
  *      initialisiert und registriert.
  *    </li>
  *    <li>
  *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
- *      auf <code>BAS</code> enden und zu denen eine Implementierung im
- *      Klassenpfad gefunden werden kann. Die gefundenen Server werden geladen,
- *      registriert und &uuml;ber den Konstruktor <code>Server(String name,
- *      Object initialize)</code> initialisiert. Dazu werden jedem Server der
- *      Name entsprechend der ermittelten Sektion sowie eine komplette Kopie
- *      der zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
+ *      auf {@code BAS} enden und zu denen eine Implementierung im Klassenpfad
+ *      gefunden werden kann. Die gefundenen Server werden geladen, registriert
+ *      und &uuml;ber den Konstruktor {@codeServer(String name,
+ *        Object initialize)} initialisiert. Dazu werden jedem Server der Name
+ *      entsprechend der ermittelten Sektion sowie eine komplette Kopie der
+ *      zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
  *      erfolgreicher Initialisierung wird der Server als (Daemon)Thread
- *      gestartet und kann seine Arbeit in der Methode
- *      <code>Server.run()</code> aufnehmen.
+ *      gestartet und kann seine Arbeit in der Methode {@code Server.run()}
+ *      aufnehmen.
  *    </li>
  *  </ul>
  *  
@@ -126,10 +126,10 @@ import java.util.Vector;
  *  <ul>
  *    <li>
  *      Ist das Modul noch nicht geladen, wird dies aus dem aktuellen
- *      Klassenpfad ermittelt, &uuml;ber <code>Module(String options)</code>
+ *      Klassenpfad ermittelt, &uuml;ber {@code Module(String options)}
  *      initialisiert und registriert. Eine Konfiguration wird dabei nicht
  *      &uuml;bergeben, da f&uuml;r Module nur eine zentrale Konfiguration in
- *      der Sektion <code>INITIALIZE</code> vorgesehen ist.
+ *      der Sektion {@code INITIALIZE} vorgesehen ist.
  *    </li>
  *    <li>
  *      Ist das Modul bereits geladen, wird die aktuelle Instanz verwendet.
@@ -141,11 +141,11 @@ import java.util.Vector;
  *  <ul>
  *    <li>
  *      Alle registrierten Server-Instanzen werden &uuml;ber die Methode
- *      <code>Server.destroy()</code> zum Beenden aufgefordert.
+ *      {@code Server.destroy()} zum Beenden aufgefordert.
  *    </li>
  *    <li>
  *      Alle registrierten Module werden &uuml;ber die Methode
- *      <code>Module.destroy()</code> zum Beenden aufgefordert.
+ *      {@code Module.destroy()} zum Beenden aufgefordert.
  *    </li>
  *    <li>
  *      Das Einleiten vom Beenden der Server verl&auml;uft asynchron. Der
@@ -157,23 +157,23 @@ import java.util.Vector;
  *    </li>
  *    <li>
  *      Der Klassenpfad wird um alle Dateien der Verzeichnisse erweitert, die
- *      mit dem VM-Argument <code>-Dlibraries</code> angegeben wurden.
+ *      mit dem VM-Argument {@code -Dlibraries} angegeben wurden.
  *    </li>
  *    <li>
- *      Alle Module aus der Sektion <code>INITIALIZE</code> werden geladen, und
- *      &uuml;ber den Konstruktor <code>Module(String options)</code>
+ *      Alle Module aus der Sektion {@code INITIALIZE} werden geladen, und
+ *      &uuml;ber den Konstruktor {@code Module(String options)}
  *      initialisiert und registriert.
  *    </li>
  *    <li>
  *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
- *      auf <code>BAS</code> enden und zu denen eine Implementierung im
- *      Klassenpfad gefunden werden kann. Die gefundenen Server werden geladen,
- *      registriert und &uuml;ber den Konstruktor <code>Server(String name,
- *      Object initialize)</code> initialisiert. Dazu werden jedem Server der
- *      Name entsprechend der ermittelten Sektion sowie eine komplette Kopie
- *      der zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
+ *      auf {@code BAS} enden und zu denen eine Implementierung im Klassenpfad
+ *      gefunden werden kann. Die gefundenen Server werden geladen, registriert
+ *      und &uuml;ber den Konstruktor {@code Server(String name,
+ *        Object initialize)} initialisiert. Dazu werden jedem Server der Name
+ *      entsprechend der ermittelten Sektion sowie eine komplette Kopie der
+ *      zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
  *      erfolgreicher Initialisierung wird der Server als Thread gestartet und
- *      kann seine Arbeit in der Methode <code>Server.run()</code> aufnehmen.
+ *      kann seine Arbeit in der Methode {@code Server.run()} aufnehmen.
  *    </li>
  *  </ul>
  *  
@@ -181,11 +181,11 @@ import java.util.Vector;
  *  <ul>
  *    <li>
  *      Alle registrierten Server-Instanzen werden &uuml;ber die Methode
- *      <code>Server.destroy()</code> zum Beenden aufgefordert.
+ *      {@code Server.destroy()} zum Beenden aufgefordert.
  *    </li>
  *    <li>
  *      Alle registrierten Module werden &uuml;ber die Methode
- *      <code>Module.destroy()</code> zum Beenden aufgefordert.
+ *      {@code Module.destroy()} zum Beenden aufgefordert.
  *    </li>
  *    <li>
  *      Das Einleiten vom Beenden der Server verl&auml;uft asynchron. Der
@@ -254,13 +254,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
     /**
      *  L&auml;dt die per Name angegebene Klasse &uuml;ber den servereigenen
-     *  ClassLoader. Ist dieser noch nicht eingerichtet wird <code>null</code>
+     *  ClassLoader. Ist dieser noch nicht eingerichtet wird {@code null}
      *  zur&uuml;ckgegeben. Kann die Klasse nicht geladen werden, f&uuml;hrt der
-     *  Aufruf in diesem Fall zur Ausnahme <code>ClassNotFoundException</code>.
+     *  Aufruf in diesem Fall zur Ausnahme {@code ClassNotFoundException}.
      *  @param  name Name der Klasse
      *  @return die &uuml;ber den servereigenen ClassLoader ermittelte Klasse,
      *          liegt dieser noch nicht vor oder wurde noch nicht eingerichtet
-     *          wird <code>null</code> zur&uuml;ck gegeben
+     *          wird {@code null} zur&uuml;ck gegeben
      *  @throws ClassNotFoundException
      *      Wenn die Klasse nicht geladen werden kann.
      */
@@ -283,7 +283,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      *  nicht behandelt und weitergereicht.
      *  @param  module  Modul-Klasse
      *  @param  options optinale Daten zur Einrichtung
-     *  @return die Klasse deren vorhandene Instanz, sonst <code>null</code>
+     *  @return die Klasse deren vorhandene Instanz, sonst {@code null}
      *  @throws Exception
      *      Bei Fehlern im Zusammenhang mit der Initialisierung.
      */
@@ -341,7 +341,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      *  liesen) und die Server neu initialisiert. In diesem Fall wird der
      *  Betriebzustand auf READY gesetzt und DESTROY verworfen.
      *  @param  mode Betriebsmodus
-     *  @return <code>true</code> bei erfolgreicher Ausf&uuml;hrung
+     *  @return {@code true} bei erfolgreicher Ausf&uuml;hrung
      */
     public static boolean initiate(int mode) {
 
@@ -506,27 +506,26 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 enumeration = section.elements();
                 while (enumeration.hasMoreElements()) {
 
-                    //die Ressource wird ermittelt
+                    //die Ressource wird ggf. mit Parametern/Optionen ermittelt
                     context = (String)enumeration.nextElement();
-                    string  = section.get(context).concat(" ");
-
-                    //die Position der Optionen wird ermittelt
-                    size = Math.min(string.indexOf(" "), string.concat("[").indexOf("["));
+                    scope   = section.get(context);
+                    string  = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$2");
+                    scope   = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$1");
 
                     try {
 
                         //die Klasses der Ressource wird geladen
-                        source = loader.loadClass(string.substring(0, size).trim());
-
+                        source = loader.loadClass(scope);
+                        
                         //das Modul wird initial eingerichtet, konnte dessen
                         //Instanz zuvor nicht beendet werden und liegen noch vor
                         //und wird es ignoriert um ein Vollaufen des Speichers
                         //zu verhindern
-                        Service.load(source, string.substring(size).trim());
+                        Service.load(source, string);
 
                     } catch (Throwable throwable) {
                         if (throwable instanceof ClassNotFoundException
-                                && string.matches("\\[\\s*\\*\\s*\\]"))
+                                && string.matches("(\\s*\\[\\s*\\*\\s*\\]\\s*)+"))
                             continue;
                         Service.print(throwable);
                     }
@@ -727,7 +726,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     
     /**
      *  Startet alle eingerichteten Server Instanzen neu.
-     *  @return <code>true</code> bei erfolgreichem Neustart
+     *  @return {@code true} bei erfolgreichem Neustart
      */
     public static boolean restart() {
         return Service.initiate(Service.RESTART);
@@ -735,7 +734,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
     /**
      *  Beendet den Service mit allen Server Instanzen.
-     *  @return <code>true</code> bei erfolgreicher Ausf&uuml;hrung
+     *  @return {@code true} bei erfolgreicher Ausf&uuml;hrung
      */
     public static boolean destroy() {
         return Service.initiate(Service.STOP);
@@ -805,7 +804,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     /**
      *  Protokolliert das &uuml;bergebene Objekt zeilenweise und mit
      *  vorangestelltem Zeitstempel in den Standard IO. Zur Ermittlung des
-     *  Protokolltexts wird <code>Object.toString()</code> vom &uuml;bergebenen
+     *  Protokolltexts wird {@code Object.toString()} vom &uuml;bergebenen
      *  Objekt verwendet. Bei der &uuml;bergabe von Fehlerobjekten wird der
      *  StackTrace protokolliert.
      *  @param object Objekt mit dem Protokolleintrag
@@ -817,14 +816,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     /**
      *  Protokolliert das &uuml;bergebene Objekt zeilenweise und mit
      *  vorangestelltem Zeitstempel in den Standard IO. Zur Ermittlung des
-     *  Protokolltexts wird <code>Object.toString()</code> vom &uuml;bergebenen
+     *  Protokolltexts wird {@code Object.toString()} vom &uuml;bergebenen
      *  Objekt verwendet. Bei der &uuml;bergabe von Fehlerobjekten wird der
      *  StackTrace protokolliert.
      *  Leere Informationen werden ignoriert.
      *  Die automatische Einr&uuml;ckung wird bei Exceptions ausgesetzt.
      *  @param object Objekt mit dem Protokolleintrag
-     *  @param strict <code>false</code> Unterdr&uuuml;cht das Voranstellen vom
-     *                Zeitstempel und es kann mit <code>\r\n</code> (Anzahl und
+     *  @param strict {@code false} Unterdr&uuuml;cht das Voranstellen vom
+     *                Zeitstempel und es kann mit {@code \r\n} (Anzahl und
      *                Zeichenfolge wird ignoriert) eine Leerzeilen ausgegeben
      *                werden   
      */

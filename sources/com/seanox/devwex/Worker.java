@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.1 20180109<br>
+ *  Worker 5.1 20180112<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20180109
+ *  @version 5.1 20180112
  */
 class Worker implements Runnable {
   
@@ -2111,10 +2111,10 @@ class Worker implements Runnable {
             entry = tokenizer.nextToken();
             path  = path.concat("/").concat(entry);
 
-            values.put("base", path);
+            values.put("path", path);
             values.put("name", entry);
             
-            generator.set("path", values);
+            generator.set("location", values);
         }
 
         //die Dateiliste wird ermittelt

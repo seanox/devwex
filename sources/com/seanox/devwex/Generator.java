@@ -44,13 +44,13 @@ import java.util.Hashtable;
  *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
  *  auf folgende Zeichen begrenzt:
- *      <dir><code>a-z A-Z 0-9 _-</code></dir>
+ *      <dir>{@code a-z A-Z 0-9 _-}</dir>
  *      
  *  <h3>Struktur und Beschreibung der Platzhalter</h3>
  *  <table>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
- *        <code>#[value]</code>
+ *        {@code #[value]}
  *      </td>
  *      <td valign="top">
  *        Setzt an dieser Stelle den Wert f&uuml;r &lt;value&gt; ein und
@@ -59,7 +59,7 @@ import java.util.Hashtable;
  *    </tr>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
- *        <code>#[namespace:value]</code>
+ *        {@code #[namespace:value]}
  *      </td>
  *      <td valign="top">
  *        Setzt an dieser Stelle den Wert f&uuml;r &lt;value&gt; nur in
@@ -69,7 +69,7 @@ import java.util.Hashtable;
  *    </tr>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
- *        <code>#[segment:[[...]]]</code>
+ *        {@code #[segment:[[...]]]}
  *      </td>
  *      <td valign="top">
  *        Definiert ein Segment. Die Verschachtelung und Verwendung weiterer
@@ -80,8 +80,8 @@ import java.util.Hashtable;
  *    </tr>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
- *        <code>#[0x0A]</code><br>
- *        <code>#[0x4578616D706C6521]</code>
+ *        {@code #[0x0A]}<br>
+ *        {@code #[0x4578616D706C6521]}
  *      </td>
  *      <td valign="top">
  *        Maskiert ein oder mehr Zeichen. Die Umwandlung erfolgt erst mit

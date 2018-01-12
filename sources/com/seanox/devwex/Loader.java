@@ -81,10 +81,10 @@ public class Loader extends URLClassLoader {
     /**
      *  Liefert einen InputStream, mit dem die durch name bezeichnete Ressource
      *  ausgelesen werden kann. Falls die Ressource nicht gefunden werden
-     *  konnte, wird <code>null</code> zur&uuml;ckgegeben.
+     *  konnte, wird {@code null} zur&uuml;ckgegeben.
      *  @param  name Name der Ressource
-     *  @return der InputStream zur Ressource, sonst <code>null</code> wenn
-     *          diese nicht ermittelt werden kann
+     *  @return der InputStream zur Ressource, sonst {@code null} wenn diese
+     *          nicht ermittelt werden kann
      */
     public InputStream getResourceAsStream(String name) {
 
@@ -145,10 +145,10 @@ public class Loader extends URLClassLoader {
     
     /**
      *  R&uuml;ckgabe der per Namen angeforderten Ressource als URL. Kann diese
-     *  nicht ermittelt werden, wird <code>null</code> zur&uuml;ckgegeben.
+     *  nicht ermittelt werden, wird {@code null} zur&uuml;ckgegeben.
      *  @param  name Name der Ressource, to be used as is.
-     *  @return die URL zur angeforderten Ressource, sonst <code>null</code>
-     *          wenn diese nicht ermittelt werden kann
+     *  @return die URL zur angeforderten Ressource, sonst {@code null} wenn
+     *          diese nicht ermittelt werden kann
      */
     public URL getResource(String name) {
 
@@ -199,14 +199,13 @@ public class Loader extends URLClassLoader {
     /**
      *  L&auml;dt die per Name angegebene Klasse. sse. Im Namen kann entweder
      *  der Punkt oder der Schr&auml;gstrich als Paket-Trennzeichen benutzt
-     *  werden. Mit der Option <code>resolve</code> kann entschieden werden, ob
-     *  die Aufl&ouml;sung von Abh&auml;ngigkeiten n&ouml;tig ist. Bei
-     *  <code>true</code> werden auch die von dieser Klasse ben&ouml;tigten
-     *  Klassen geladen.
+     *  werden. Mit der Option {@code resolve} kann entschieden werden, ob die
+     *  Aufl&ouml;sung von Abh&auml;ngigkeiten n&ouml;tig ist. Bei {@code true}
+     *  werden auch die von dieser Klasse ben&ouml;tigten Klassen geladen.
      *  @param  name    Name der Klasse
-     *  @param  resolve Option <code>true</code> um Abh&auml;ngigkeitem zu laden
+     *  @param  resolve Option {@code true} um Abh&auml;ngigkeitem zu laden
      *  @return die geladene Klasse, ist diese nicht ermittelbar, f&uuml;hrt der
-     *          Aufruf zur Ausnahme <code>ClassNotFoundException</code>
+     *          Aufruf zur Ausnahme {@code ClassNotFoundException}
      *  @throws ClassNotFoundException
      *      Wenn die Klass nicht gefunden werden kann.
      */

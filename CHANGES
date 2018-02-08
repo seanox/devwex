@@ -1,13 +1,19 @@
-5.0.1 2018xxxx
+5.1.0 2018xxxx
   BF: Initialize - Korrektur
-      - im Smart-Modul mit der Get-Methode erstellte Sections werden wieder gehalten
+      - im Smart-Modus mit der Get-Methode erstellte Sections werden wieder gehalten
   BF: Section - Korrektur
-      - im Smart-Modul mit der Get-Methode verwendete ungueltige Schluessel oder
+      - im Smart-Modus mit der Get-Methode verwendete ungueltige Schluessel oder
         alternativen Wert liefern wieder null
-  CR: HTTP AccessLog - Optimierung/Korrektur
-      - Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
+  CR: Projekt
+      - Entwicklung: Umstellung auf einen eigen Keystore unabhaengig vom Program(Release)-Verzeichnis
+  CR: HTTP(S) Optimierung/Korrektur
+      - Worker: Umbennung der Methode Worder::Initialize in Worker::Initiate  
+      - AccessLog: Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
         0x00-0x20 / 0x80-0xFF verwenden \xXX und 
         0x0100-0xFFFF verwendet \uXXXX
+      - Directory Index: Umstellung der BreadCrumb-Navigation von path/base/name auf location/path/name
+  CR: (X)CGI / HTTP-XAPI / Templates - Optimierung
+      - Environment-Variable path_base geaendert in path_url, analog zu script_url
       
 5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager
@@ -148,7 +154,7 @@
         Das Timeout und Entladen bei nicht endenden Servern wurde verworfen.
 
 4.3.0 20130707
-  BF: HTTP File Index - Korrektur vom CSS der Templates fuer IE 9/10
+  BF: HTTP Directory Index - Korrektur vom CSS der Templates fuer IE 9/10
   CR: Service - Optimierung/Erweiterung
       - Optimierung der Sequenz von Start, Restart und Stop
       - Erweiterung um den ShutdownHook fuer CTRL+C zum kontrollierten Herunterfahren
@@ -168,7 +174,7 @@
   CR: Configration - Optimierung
       - COMMONS RELOADING geaendert in RELOAD
       - COMMONS CLEARING geaendert in CLEANUP
-  CR: HTTP File Index - allgemeine Umgestaltung von Sortierung und Navigation
+  CR: HTTP Directory Index - allgemeine Umgestaltung von Sortierung und Navigation
   CR: HTTP Module - Erweiterung der XAPI um die optionale Uebergabe der Modul-Parameter
   CR: SERVERSTATUS - Erweiterung um Status 101
   CR: Test - Erweiterung der Pruefung der XAPI
@@ -202,7 +208,7 @@
       - Verarbeitung wurde zusammengefuehrt
       - Erweiterung um "Partial Content"
       - Erweiterung um den HTTP-Header If-Unmodified-Since
-  CR: HTTP File Index
+  CR: HTTP Directory Index
       - Template system.index.html geaendert in index.html
       - Einbettung der Icons in die HTML-Datei (data:image/x-icon;base64)
   CR: HTTP Templates - Optimierung
@@ -285,7 +291,7 @@
   CR: HTTP Filter - Optimierung
       - allgemeine Optimierung der Interpretation/Verwendung/Performanz
       - Parameter FIRSTLINE geaendert in REQUEST
-  CR: HTTP File Index - Ueberarbeitung/Optimierung
+  CR: HTTP Directory Index - Ueberarbeitung/Optimierung
       - Ueberarbeitung/Optimierung der Sortierung
       - Wegfall der Spalte Description (wird per Icon abgebildet)
       - Variable http-location entfaellt, alternativ kann script_uri verwendet werden
@@ -298,7 +304,7 @@
   CR: Generator - Verkuerzung/Vereinfachung der Syntax
   CR: HTTP - Optimierung der Generierung der UNIQUE_ID
   CR: HTTP DCGI - Verkuerzung der Protokoll-Signatur
-  CR: HTTP File Index - Ueberarbeitung vom Template und Integration von Icons
+  CR: HTTP Directory Index - Ueberarbeitung vom Template und Integration von Icons
       Seanox-Symbols wurde damit migriert.
   CR: MIMETYPE - Erweiterung
 
@@ -320,7 +326,7 @@
   CR: Devwex - Optimierung vom Start-Skript
       Vorbereitung fuer Erweiterung der Laufzeitumgebung durch PHP, Perl, ...
   CR: Generator - Verkuerzung der Generator-Syntax
-  CR: HTTP File Index - Umstellung auf die vereinfachte Generator-Syntax
+  CR: HTTP Directory Index - Umstellung auf die vereinfachte Generator-Syntax
 
 3.4.0 20081224
   BF: HTTP SSL - Korrektur der Option SERVER:SSL CLIENTAUTH
@@ -412,7 +418,7 @@
   CR: Server - Ueberarbeitung/Optimierung
       - Umstellung auf die neue SAPI
       - Ueberarbeitung/Optimierung von Connection-Pool/Connection-Management
-  CR: HTTP File Index - Optimierung der Sortierung fuer eine schnellere Generierung
+  CR: HTTP Directory Index - Optimierung der Sortierung fuer eine schnellere Generierung
   CR: HTTP DCGI/CGI - Optimierung der Fehlerbehandlung fuer detailliertere Status-Codes
 
 3.0.0 20061230
@@ -454,7 +460,7 @@
       - SERVER:CONNECTOR ist entfallen
   CR: HTTP Module - Erweiterung um detailliertere Fehlermeldungen
   CR: HTTP Filter - Konstante NULL geaendert in EMPTY
-  CR: HTTP File Index
+  CR: HTTP Directory Index
       - Optimierung der Performanz
       - die absteigenden Sortierung bezieht nun alle Kriterien ein
   CR: HTTP AccessLog - Optimierung der Fehlertoleranz bei Zeitsymbolen im Pfad
@@ -512,7 +518,7 @@
   CR: Remote - allgemeine Optimierung in der Request-Verarbeitung und der Konsolenausgabe
   CR: HTTP - Erweiterung der MIME-Types
   CR: HTTP Templates - wenige Anpassungen bei Markup und Style
-  CR: HTTP File Index - Erweiterung um die BreadCrumb-Navigation zum Verzeichnis-Pfad
+  CR: HTTP Directory Index - Erweiterung um die BreadCrumb-Navigation zum Verzeichnis-Pfad
   CR: HTTP Methods - Erweiterung vom Schluessel SERVER:BAS METHODS um die Unterstuetzung
       vom Wert ALL zur Annahme/Verarbeitung aller HTTP-Methoden. Ist eine angeforderte
       Methode nicht implementiert, wird der Request mit Status 501 beantwortet.
@@ -529,7 +535,7 @@
   CR: Remote - Kommando TIME ist entfallen
       Die Informationen vom Kommando TIME sind komplett in STATE enthalten.
   CR: Remote - Erweiterung von STAT und VERS zur Ausgabe der Version vom Servers
-  CR: HTTP File Index - Optimierung/Erweiterung
+  CR: HTTP Directory Index - Optimierung/Erweiterung
       - Aenderung der Richtung in der Sortierung
         Template: system.index.html
       - Erweiterung des Schluessel SERVER:BAS INDEX um die Option [S] zur Unterdrueckung
@@ -544,7 +550,7 @@
       Eine ueber den Schluessel BASEOPTIONS SMARTCLEARING konfigurierbare intelligente
       Bereinigung der Ressourcen.
   CR: HTTP Request - Optimierung der UTF-8 Dekodierung
-  CR: HTTP File Index - Optimierung
+  CR: HTTP Directory Index - Optimierung
       - Tag files:arts geaendert in files:base
         Aenderung der Sortierung von a/A in b/B
   Die Module Compress und Symbols muessen aktualisiert werden.
@@ -663,7 +669,7 @@
   CR: HTTP Server - Aenderung der Sektion SERVER:BAS
       - Schluessel SCHEME geaendert in SOCKET (Wert: SECURE oder NORMAL) und kann
         nicht mehr durch einen virtuellen Host ueberschrieben werden
-  CR: HTTP File Index - allgemeine Optimierung
+  CR: HTTP Directory Index - allgemeine Optimierung
       - Aufteilung vom Template system.index.in die Segmente "index" und "file"
       - Variable file-arts liefert den Wert "directory" oder "file"
   CR: HTTP Templates - allgemein Anpassungen/Optimierung (Markup und Style)
@@ -718,7 +724,7 @@
   CR: HTTP DCGI/CGI - Erweiterung
       - neu CGI-Variable PATH_ABSOULTE
         absolute Pfadinformation der URL bei absoluten Referenzen
-      - PATH_INFO wird durch PATH_BASE ersetzt
+      - PATH_INFO wird durch PATH_URL ersetzt
         Templates welche diese verwenden, z.B. index.htm, muessen angepasst werden.
       - PATH_INFO wird erst bei absoluten Referenzen mit der erweiterten Pfadinformation
         zur Verfuegung gestellt
@@ -799,7 +805,7 @@
 
 1.9.0 20020422
   BF: HTTP Reference - Optionen/Direktiven werden nun vor der Verwendung entfernt
-  BF: HTTP File Index - bei Verzeichnissen wurde der Dateityp entfernt
+  BF: HTTP Directory Index - bei Verzeichnissen wurde der Dateityp entfernt
   BF: HTTP AccessLog - wegbrechende Request werden jetzt mit Status 400 protokolliert
   CR: HTTP DCGI/CGI - Optimierung/Erweiterung/Korrektur
       - beginnt der DCGI/CGI-Response mit HTTP/ gefolgt vom Satus-Code, wird dieser
@@ -821,7 +827,7 @@
       Details sind bitte der Dokumentation zu entnehmen.
 
 1.8.0 20020320
-  BF: HTTP File Index - Optimierung der Sortierung
+  BF: HTTP Directory Index - Optimierung der Sortierung
       Standard: Dateityp (Verzeichnis/Datei) + Kriterium + Name
   BF: HTTP DCGI/CGI - nicht verwendete CGI Variablen wurden entfernt
   BF: HTTP - Anpassung der Prioritaeten der Fehlercodes
@@ -896,7 +902,7 @@
   Die Konfiguration wurde allgemein durch neue Schluessel und Vererbung erweitert.
   BF: HTTP Filter - Filter-Parameter entsprechen nun in der Syntax den Header-Parametern
   BF: HTTP - Korrektur der abgebrochenen Request-Datenstroeme owhohl noch Daten vorlagen
-  BF: HTTP File Index - Korrektur in der Template-Generierung bei leeren Verzeichnissen
+  BF: HTTP Directory Index - Korrektur in der Template-Generierung bei leeren Verzeichnissen
   CR: Devwex - Allgemeine Optimierung der Groesse
   CR: SERVER:BAS/VIRTUALHOST:BAS - Erweiterung der Sektion um den Schluessel IMPLEMENTS
       Die Konfiguration des nachfolgend benannten Server oder virtuellen Hosts wird

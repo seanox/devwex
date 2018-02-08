@@ -1,8 +1,8 @@
 5.1.0 2018xxxx
   BF: Initialize - Korrektur
-      - im Smart-Modul mit der Get-Methode erstellte Sections werden wieder gehalten
+      - im Smart-Modus mit der Get-Methode erstellte Sections werden wieder gehalten
   BF: Section - Korrektur
-      - im Smart-Modul mit der Get-Methode verwendete ungültige Schluessel oder
+      - im Smart-Modus mit der Get-Methode verwendete ungültige Schluessel oder
         alternativen Wert liefern wieder null
   CR: Projekt
       - Entwicklung: Umstellung auf einen eigen Keystore unabhängig vom Program(Release)-Verzeichnis

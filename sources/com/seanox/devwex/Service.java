@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -110,7 +110,7 @@ import java.util.Vector;
  *    </li>
  *    <li>
  *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
- *      auf {@code BAS} enden und zu denen eine Implementierung im Klassenpfad
+ *      auf {@code INI} enden und zu denen eine Implementierung im Klassenpfad
  *      gefunden werden kann. Die gefundenen Server werden geladen, registriert
  *      und &uuml;ber den Konstruktor {@codeServer(String name,
  *        Object initialize)} initialisiert. Dazu werden jedem Server der Name
@@ -166,7 +166,7 @@ import java.util.Vector;
  *    </li>
  *    <li>
  *      Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
- *      auf {@code BAS} enden und zu denen eine Implementierung im Klassenpfad
+ *      auf {@code INI} enden und zu denen eine Implementierung im Klassenpfad
  *      gefunden werden kann. Die gefundenen Server werden geladen, registriert
  *      und &uuml;ber den Konstruktor {@code Server(String name,
  *        Object initialize)} initialisiert. Dazu werden jedem Server der Name
@@ -196,12 +196,12 @@ import java.util.Vector;
  *      verwendeten ClassLoader entladen.
  *    </li>
  *  </ul>
- *  Service 5.0 20171104<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Service 5.1 20180218<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20171104
+ *  @version 5.1 20180218
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -299,8 +299,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     || module == null)
                 return null;            
             
-            //das Modul wird aus der Modulliste ermittelt, ist dieses noch
-            //nicht registriert, wird es neu initialisiert und eingetragen
+            //Das Modul wird aus der Modulliste ermittelt, ist dieses noch
+            //nicht registriert, wird es neu initialisiert und eingetragen.
+            //Wenn Module nicht richtig beendet werden koennen, bleiben diese
+            //ebenfall erhalten und benutzen dann noch den alten ClassLoader.
+            //Das Verhalten ist gewollt, damit kein Zombies erzeugt werden.
+            
             object = service.modules.get(module);
             if (object != null)
                 return object;
@@ -511,18 +515,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     scope   = section.get(context);
                     string  = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$2");
                     scope   = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$1");
-
-                    try {
-
-                        //die Klasses der Ressource wird geladen
-                        source = loader.loadClass(scope);
-                        
-                        //das Modul wird initial eingerichtet, konnte dessen
-                        //Instanz zuvor nicht beendet werden und liegen noch vor
-                        //und wird es ignoriert um ein Vollaufen des Speichers
-                        //zu verhindern
-                        Service.load(source, string);
-
+                    
+                    //das Modul wird geladen und initial eingerichtet
+                    try {Service.load(loader.loadClass(scope), string);
                     } catch (Throwable throwable) {
                         if (throwable instanceof ClassNotFoundException
                                 && string.matches("(\\s*\\[\\s*\\*\\s*\\]\\s*)+"))
@@ -537,25 +532,22 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
                     //der Server(Scope) wird aus der Basiskonfiguration ermittelt
                     context = (String)enumeration.nextElement();
-                    string  = context.replaceAll("(?i)(?:(^[^:]+)(:.*)*:bas)|(.*)$", "$1").trim();
-                    if (string.length() <= 0)
+                    if (!context.matches("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$"))
                         continue;
 
+                    string = context.replaceAll("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$", "$1").trim();
                     scope  = service.initialize.get(context).get("scope", "com.seanox.devwex");
                     string = string.substring(0, 1).toUpperCase().concat(string.substring(1).toLowerCase());
                     string = scope.concat(".").concat(string);
-
-                    //die Server Klasse wird geladen
-                    try {source = loader.loadClass(string);
-                    } catch (ClassNotFoundException exception) {
-                        continue;
-                    }
                     
                     object = null;
 
                     try {
 
-                        Service.print(String.format("SERVICE INITIATE SERVER %s", new Object[] {string}));
+                        Service.print(String.format("SERVICE INITIATE %s", new Object[] {context.replaceAll(":[^:]+$", "").trim()}));
+                        
+                        //die Server Klasse wird geladen
+                        source = loader.loadClass(string);
 
                         //der Server muss Runnable implementieren
                         if (!Runnable.class.isAssignableFrom(source))
@@ -563,8 +555,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         
                         //Server muessen ueber diese Methode verfuegen
                         source.getMethod("destroy", new Class[0]);
-                        
-                        context = context.replaceAll("(?i)(?:(^[^:]+)(:.*)*:bas)|(.*)$", "$1$2");
 
                         //der Server wird eingerichtet
                         object = source.getConstructor(new Class[] {String.class, Object.class});
@@ -604,7 +594,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 //wurde kein Server gefunden, wird eine Information ausgegeben
                 if (service.servers.size() <= 0)
-                    Service.print("SERVICE SERVERS NOT AVAILABLE");
+                    Service.print("SERVICE NOT AVAILABLE");
 
                 //die Dauer des Startvorgangs wird ermittelt
                 timing = (System.currentTimeMillis() -timing) /1000;

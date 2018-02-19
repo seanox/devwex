@@ -62,13 +62,13 @@
         <p>
           Seanox Devwex ist ein minimalistische Laufzeit-Container mit einer
           modularen Architektur f&uuml;r (Web)Server und Anwendungen. Die
-          enthaltene Server-Implementierung unterst&uuml;tzen u.a. das HTTP mit
+          enthaltene Server-Implementierung unterst&uuml;tzt u.a. das HTTP mit
           Virtual Hosting, Filter, HTTP-Modulen, SSL/TLS, XCGI/CGI1.1, Directory
           Index, Templates und einem auf Telnet basierenden Fernzugriff zur
           Steuerung des Laufzeit-Containers.<br>
           Weitere Server und Module sowie Anwendungen lassen sich &uuml;ber die
           verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container und die
-          enthaltenen Servern sind ein reine Java-Implementierung und durch
+          enthaltenen Servern sind eine reine Java-Implementierung und durch
           entsprechende Laufzeitumgebungen auf vielen Betriebssystem verwendbar.
         </p>
       </article>
@@ -523,31 +523,31 @@
           Server sind ein essentieller Bestandteil von Seanox Devwex und setzt
           f&uuml;r den Betrieb mindestens eine erfolgreich etabliere
           Server-Instant vorrausetzt.<br>
-          Bei der Initialisierung werden alle Sektionen die auf <code>BAS</code>
+          Bei der Initialisierung werden alle Sektionen die auf <code>INI</code>
           enden betrachtet und nach einer passenden Implementierung im ClassPath
           von Seanox Devwex gesucht. Den Klassennamen der Implementierung bildet
           der erste Teil vom Namen der Sektion vor dem ersten Doppelpunkt.
         </p>
         <pre>
-          [CLASS:BAS]
+          [CLASS:INI]
             ...
 
-          [CLASS:IDENTIFIER:BAS]
+          [CLASS:IDENTIFIER:INI]
             ...
         </pre>
         <p>
           Optional kann &uuml;ber den Schl&uuml;ssel SCOPE das Paket in der sich
           die Klasse befindet, festgelegt werden. Ohne die diese Angabe wird das
           Standard-Paket com.seanox.devewx verwendet.<br>
-          Wird zu einer Sektion die auf BAS endet keine Implementierung
+          Wird zu einer Sektion die auf INI endet keine Implementierung
           gefunden, wird diese ohne Fehlermeldung ignoriert.
         </p>
         <pre>
-          [CLASS:BAS]
+          [CLASS:INI]
             SCOPE = package.of.class
             ...
 
-          [CLASS:IDENTIFIER:BAS]
+          [CLASS:IDENTIFIER:INI]
             SCOPE = package.of.class
             ...
         </pre>
@@ -567,7 +567,7 @@
           passende Client-Implementierung enthalten. Die Client-Implementierung
           wird beim Aufruf in der Kommandozeile per Programm-Argumenten
           konfiguriert. F&uuml;r den Server erfolgt die Konfiguration in der
-          Sektion <code>[REMOTE:BAS]</code> der Konfigurationsdatei.
+          Sektion <code>[REMOTE:INI]</code> der Konfigurationsdatei.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Konfiguration:
@@ -612,7 +612,7 @@
             <th>Beschreibung</th>
           </tr>
           <tr>
-            <td>[SERVER:X:BAS]</td>
+            <td>[SERVER:X:INI]</td>
             <td>
               Server-Konfiguration<br>
               Netzwerk und Laufzeitverhalten
@@ -960,7 +960,7 @@
           Port 443 verwendet.
         </p>
         <pre>
-          [SERVER:X:BAS]
+          [SERVER:X:INI]
             PORT       = 443
             ...
 
@@ -979,7 +979,7 @@
           folgende Konfiguration:
         </p>
         <pre>
-          [SERVER:X:BAS]
+          [SERVER:X:INI]
             PORT       = 443
             ...
 
@@ -1138,7 +1138,7 @@
           Host wie folgt in der Konfigurationsdatei angelegt werden.
         </p>
         <pre>
-          [VIRTUAL:EXAMPLE.LOCAL:BAS]
+          [VIRTUAL:EXAMPLE.LOCAL:INI]
             ...
           [VIRTUAL:EXAMPLE.LOCAL:FLT]
             ...
@@ -1160,14 +1160,14 @@
         <p>
           Virtuelle Host sind eigenst&auml;ndige Konfigurationen, die
           prim&auml;r allen Servern zur Verf&uuml;gung stehen.<br>
-          &Uuml;ber <code>[VIRTUAL:BAS] SERVER</code> kann die Verwendung der
+          &Uuml;ber <code>[VIRTUAL:INI] SERVER</code> kann die Verwendung der
           Konfiguration auf bestimmte Server beschr&auml;nkt werden.
         </p>
         <header>
           Beispiel f&uuml;r die Beschr&auml;nkung auf einzelne Server:
         </header>
         <pre>
-          [VIRTUAL:X:BAS]
+          [VIRTUAL:X:INI]
             SERVER = SERVER:A SERVER:B SERVER:C
             ...
         </pre>
@@ -1579,7 +1579,7 @@
             <td>
               Nur in Verbindung mit der Option <code>[M]</code>, &ouml;ffnet die
               Zusatzoption <code>[X]</code> die Beschr&auml;nkung durch
-              <code>[SERVER:BAS] METHODS</code>. So werden &uuml;ber den
+              <code>[SERVER:INI] METHODS</code>. So werden &uuml;ber den
               virtuellen Path alle angefragten HTTP-Methoden an ein Modul
               weitergereicht.
             </td>
@@ -2289,7 +2289,7 @@
           <p>
             Mit dem Methoden-Alias <code>ALL</code> werden alle eingehenden
             HTTP-Methoden an das CGI weitergegeben. Der Alias umgeht dabei aber
-            nicht die Einschr&auml;nkung von <code>[SERVER:BAS] METHODS</code>.
+            nicht die Einschr&auml;nkung von <code>[SERVER:INI] METHODS</code>.
           </p>
         </section>
         <h2>Statuscodes</h2>
@@ -2785,7 +2785,7 @@
           </li>
           <li>
             Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
-            auf <code>BAS</code> enden und zu denen eine Implementierung im
+            auf <code>INI</code> enden und zu denen eine Implementierung im
             Klassenpfad gefunden werden kann. Die gefundenen Server werden
             geladen, registriert und &uuml;ber den Konstruktor
             <code>Server(String name, Object initialize)</code> initialisiert.
@@ -2842,7 +2842,7 @@
           </li>
           <li>
             Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die
-            auf <code>BAS</code> enden und zu denen eine Implementierung im
+            auf <code>INI</code> enden und zu denen eine Implementierung im
             Klassenpfad gefunden werden kann. Die gefundenen Server werden
             geladen, registriert und &uuml;ber den Konstruktor
             <code>Server(String name, Object initialize)</code> initialisiert.

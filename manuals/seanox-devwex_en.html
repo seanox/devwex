@@ -502,31 +502,31 @@
         <p>
           Servers are an essential part of Seanox Devwex and requires at least
           one successfully established server instance to run.<br>
-          During initialization, all sections ending in <code>BAS</code> are
+          During initialization, all sections ending in <code>INI</code> are
           considered and searched for a matching implementation in the Seanox
           Devwex ClassPath, the class name of the implementation is the first
           part of the section name before the first colon.
         </p>
         <pre>
-          [CLASS:BAS]
+          [CLASS:INI]
             ...
 
-          [CLASS:IDENTIFIER:BAS]
+          [CLASS:IDENTIFIER:INI]
             ...
         </pre>
         <p>
           Optionally, the SCOPE key can be used to specify the package in which
           the class is located. com. seanox. devewx is used without this
           key.<br>
-          If no implementation is found for a section ending on BAS, it will be
+          If no implementation is found for a section ending on INI, it will be
           ignored without an error message.
         </p>
         <pre>
-          [CLASS:BAS]
+          [CLASS:INI]
             SCOPE = package.of.class
             ...
 
-          [CLASS:IDENTIFIER:BAS]
+          [CLASS:IDENTIFIER:INI]
             SCOPE = package.of.class
             ...
         </pre>
@@ -543,7 +543,7 @@
           Alternatively, Seanox Devwex includes a compatible client
           implementation in addition to the server. The client implementation is
           configured in the command line with program arguments. For the server,
-          the configuration is done in the <code>[REMOTE:BAS]</code> section of
+          the configuration is done in the <code>[REMOTE:INI]</code> section of
           the configuration file. 
         </p>
         <header>
@@ -588,7 +588,7 @@
             <th>Description</th>
           </tr>
           <tr>
-            <td>[SERVER:X:BAS]</td>
+            <td>[SERVER:X:INI]</td>
             <td>
               Server configuration<br>
               Network and runtime behavior
@@ -926,7 +926,7 @@
           The port is freely selectable; by default, HTTPS uses port 443.
         </p>
         <pre>
-          [SERVER:X:BAS]
+          [SERVER:X:INI]
             PORT       = 443
             ...
 
@@ -945,7 +945,7 @@
           configuration is usually sufficient:
         </p>
         <pre>
-          [SERVER:X:BAS]
+          [SERVER:X:INI]
             PORT       = 443
             ...
 
@@ -1099,7 +1099,7 @@
           configuration file as follows.
         </p>
         <pre>
-          [VIRTUAL:EXAMPLE.LOCAL:BAS]
+          [VIRTUAL:EXAMPLE.LOCAL:INI]
             ...
           [VIRTUAL:EXAMPLE.LOCAL:FLT]
             ...
@@ -1122,14 +1122,14 @@
         <p>
           Virtual hosts are stand-alone configurations that are primarily
           available to all servers.<br>
-          With <code>[VIRTUAL:BAS] SERVER</code> the usage of the configuration
+          With <code>[VIRTUAL:INI] SERVER</code> the usage of the configuration
           can be limited to certain servers.
         </p>
         <header>
           Example of restriction to individual servers:
         </header>
         <pre>
-          [VIRTUAL:X:BAS]
+          [VIRTUAL:X:INI]
             SERVER = SERVER:A SERVER:B SERVER:C
             ...
         </pre>
@@ -1532,7 +1532,7 @@
             <td>Method Extension</td>
             <td>
               Only in conjunction with option <code>[M]</code>, the additional
-              option <code>[X]</code> opens the constraint by <code>[SERVER:BAS]
+              option <code>[X]</code> opens the constraint by <code>[SERVER:INI]
               METHODS</code>, so that all requested HTTP methods are passed to a
               module via the virtual path.
             </td>
@@ -2223,7 +2223,7 @@
           <p>
             The method alias <code>ALL</code> passes all incoming HTTP methods
             to the CGI, but the alias does not bypass the restriction of
-            <code>[SERVER:BAS] METHODS</code>.
+            <code>[SERVER:INI] METHODS</code>.
           </p>
         </section>
         <h2>Statuscodes</h2>
@@ -2708,7 +2708,7 @@
           </li>
           <li>
             All servers are determined by searching for sections that end in
-            <code>BAS</code> and to which an implementation can be found in the
+            <code>INI</code> and to which an implementation can be found in the
             class path, which are loaded, registered, and initialized via
             constructor <code>Server(String name, Object initialize)</code>. To
             do this, each server is given the name of the detected section and a
@@ -2763,7 +2763,7 @@
           </li>
           <li>
             All servers are determined by searching for sections that end in
-            <code>BAS</code> and to which an implementation can be found in the
+            <code>INI</code> and to which an implementation can be found in the
             class path, which are loaded, registered, and initialized via
             constructor <code>Server(String name, Object initialize)</code>. To
             do this, each server is given the name of the detected section and a

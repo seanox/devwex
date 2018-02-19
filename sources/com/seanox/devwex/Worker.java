@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.1 20180112<br>
+ *  Worker 5.1 20180218<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20180112
+ *  @version 5.1 20180218
  */
 class Worker implements Runnable {
   
@@ -162,6 +162,8 @@ class Worker implements Runnable {
      *  @param initialize Server Konfiguraiton
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
+        
+        context = context.replaceAll("(?i):[a-z]+$", "");
 
         this.context    = context;
         this.mount      = socket;
@@ -1333,7 +1335,7 @@ class Worker implements Runnable {
         if (string.length() > 0) {
 
             string  = ("virtual:").concat(string);
-            section = this.initialize.get(string.concat(":bas"));
+            section = this.initialize.get(string.concat(":ini"));
             shadow  = section.get("server").toLowerCase();
 
             //die Optionen werden mit allen Vererbungen ermittelt bzw. erweitert
@@ -2940,7 +2942,7 @@ class Worker implements Runnable {
             this.environment = (Section)this.initialize.get(this.context.concat(":env")).clone();
             this.filters     = (Section)this.initialize.get(this.context.concat(":flt")).clone();
             this.interfaces  = (Section)this.initialize.get(this.context.concat(":cgi")).clone();
-            this.options     = (Section)this.initialize.get(this.context.concat(":bas")).clone();
+            this.options     = (Section)this.initialize.get(this.context.concat(":ini")).clone();
             this.references  = (Section)this.initialize.get(this.context.concat(":ref")).clone();
             this.statuscodes = (Section)this.initialize.get("statuscodes").clone();
             this.mediatypes  = (Section)this.initialize.get("mediatypes").clone();

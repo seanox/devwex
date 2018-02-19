@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -34,12 +34,12 @@ import java.net.SocketException;
  *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
  *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
  *  <br>
- *  Remote 5.0 20170828<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Remote 5.1 20180218<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170828
+ *  @version 5.1 20180218
  */
 public class Remote implements Runnable {
 
@@ -70,7 +70,7 @@ public class Remote implements Runnable {
         server = server == null ? "" : server.trim();
         
         //die Konfiguration wird ermittelt
-        options = ((Initialize)data).get(server.concat(":bas"));
+        options = ((Initialize)data).get(server);
                 
         //der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));

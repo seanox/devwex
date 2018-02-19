@@ -17,6 +17,7 @@
   CR: SAPI
       - Erweiterung der Fehlerausgabe beim Laden/Starten
       - Umstellung der Ausgabe beim Initialiseren auf den Sektionsnamen
+      - Umstellung der Initialisieurng per Konstruktor auf den vollständigen Context (Sektionsnamen)
       
 5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager

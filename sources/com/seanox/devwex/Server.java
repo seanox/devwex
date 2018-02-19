@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -40,12 +40,12 @@ import javax.net.ssl.TrustManagerFactory;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.0 20170828<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Server 5.1 20180218<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170828
+ *  @version 5.1 20180218
  */
 public class Server implements Runnable {
 
@@ -66,15 +66,15 @@ public class Server implements Runnable {
 
     /**
      *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     *  @param  server Name des Servers
-     *  @param  data   Konfigurationsdaten des Servers
+     *  @param  context Name des Servers
+     *  @param  data    Konfigurationsdaten des Servers
      *  @throws Throwable
      *      Bei fehlerhafter Einrichtung des Servers.
      */
-    public Server(String server, Object data) throws Throwable {
+    public Server(String context, Object data) throws Throwable {
 
         TrustManagerFactory trustmanager;
-        SSLContext          context;
+        SSLContext          secure;
         String              buffer;
         String              string;
         StringTokenizer     tokenizer;
@@ -91,7 +91,7 @@ public class Server implements Runnable {
         int                 isolation;
         
         //der Servername wird uebernommen
-        this.context = server == null ? "" : server.trim();
+        this.context = context == null ? "" : context.trim();
 
         //die Konfiguration wird eingerichtet
         this.initialize = (Initialize)((Initialize)data).clone();
@@ -133,11 +133,11 @@ public class Server implements Runnable {
         }
         
         //die Serverkonfiguration wird ermittelt
-        options = this.initialize.get(this.context.concat(":bas"));
+        options = this.initialize.get(this.context);
 
         //die Hostadresse des Servers wird ermittelt
-        server  = options.get("address").toLowerCase();
-        address = server.equals("auto") ? null : InetAddress.getByName(server);
+        context = options.get("address").toLowerCase();
+        address = context.equals("auto") ? null : InetAddress.getByName(context);
 
         //der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));
@@ -156,12 +156,14 @@ public class Server implements Runnable {
         } catch (Throwable throwable) {
             volume = 0;
         }
+        
+        context = this.context.replaceAll("(?i):[a-z]+$", ":ssl");
 
         //entsprechend dem Serverschema wird der ServerSocket eingerichtet
-        if (this.initialize.contains(this.context.concat(":ssl"))) {
+        if (this.initialize.contains(context)) {
 
             //die SSL Konfiguration wird ermittelt
-            options = this.initialize.get(this.context.concat(":ssl"));
+            options = this.initialize.get(context);
 
             //der Typ des KeyStores wird ermittelt, Standard ist JKS
             keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
@@ -189,13 +191,13 @@ public class Server implements Runnable {
             trustmanager.init(keystore);
 
             //das SSL Protokoll wird ermittelt, Standard ist TLS
-            context = SSLContext.getInstance(options.get("protocol", "TLS"));
+            secure = SSLContext.getInstance(options.get("protocol", "TLS"));
 
             //der SecureContext wird mit Key- und TrustManager(n) initialisiert
-            context.init(keymanager.getKeyManagers(), trustmanager.getTrustManagers(), null);
+            secure.init(keymanager.getKeyManagers(), trustmanager.getTrustManagers(), null);
 
             //der Socket wird mit Adresse bzw. automatisch eingerichtet
-            this.socket = context.getServerSocketFactory().createServerSocket(port, volume, address);
+            this.socket = secure.getServerSocketFactory().createServerSocket(port, volume, address);
             
             //WICHTIG - Need und Want muessen unabhaenig gesetzt werden
             if (options.get("clientauth").toLowerCase().equals("on"))
@@ -258,7 +260,7 @@ public class Server implements Runnable {
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
         //die Serverkonfiguration wird ermittelt
-        options = this.initialize.get(this.context.concat(":bas"));
+        options = this.initialize.get(this.context);
 
         //MAXACCESS - die Anzahl max. gleichzeitiger Verbindungen wird ermittelt
         try {volume = Integer.parseInt(options.get("maxaccess"));

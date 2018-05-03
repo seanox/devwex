@@ -24,7 +24,7 @@
           <p>Advanced Server Development</p>
           <p>Seanox Software Solutions</p>
         </section>
-        <p>Systemhandbuch</p>
+        <p>Dokumentation</p>
         <p>Version #[ant:release-version] #[ant:release-date]</p>
       </article>
       <article>
@@ -1536,12 +1536,16 @@
             <td>[A]</td>
             <td>Absolute</td>
             <td>
-              Definiert einen virtuellen Teilpfad der auf physische
+              Definiert einen virtuellen Teilpfad, der auf physische
               Verzeichnisse oder Dateien verweist. Beginnt der Pfad einer
               Anfrage mit diesem virtuellen Teilpfad, wird die so definierte
               Ressource verwendet. Bei Verweisen auf Skripte oder Modul,
               k&ouml;nnen dieses die zus&auml;tzlichen Pfadinformationen
-              auswerten und anwenden.
+              auswerten und anwenden.<br>
+              Existieren f&uuml;r einen absoluten Pfad weitere qualifiziertere
+              Pfade, werden diese angesprochen. Somit decken absolute Pfade
+              einen breiten Pfadbereich ab, der aber im Detail explizit
+              aufgehoben werden kann.
             </td>
           </tr>
           <tr>
@@ -1628,7 +1632,7 @@
           <pre>DIRECTION-B = /doc &gt; ../documents [A]</pre>
           <p>
             Der Pfad <code>/doc</code> wurde absolute definiert. Somit wird
-            f&uuml;r alle Anfragen, welche mit <code>/doc</code> beginne, wie
+            f&uuml;r alle Anfragen, welche mit <code>/doc</code> beginnen, wie
             z.B <code>/documents</code>, <code>/documentation</code> oder
             <code>/doc/test.cgi?cmd=123</code>, das physische Verzeichnis
             <code>../documents</code> verwendet.

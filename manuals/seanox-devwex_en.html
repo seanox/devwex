@@ -24,7 +24,7 @@
           <p>Advanced Server Development</p>
           <p>Seanox Software Solutions</p>
         </section>
-        <p>System Manual (machine translation)</p>
+        <p>Manual (machine translation)</p>
         <p>Version #[ant:release-version] #[ant:release-date]</p>
       </article>
       <article>
@@ -1497,7 +1497,10 @@
               files; if the path of a request starts with this virtual subpath,
               the resource defined in this way is used; if a script or module is
               referenced, it can evaluate and apply the additional path
-              information.
+              information.<br>
+              If other more qualified paths exist for an absolute path, these
+              are used. Absolute paths cover a wide range of paths, but this can
+              be explicitly suppressed in detail.
             </td>
           </tr>
           <tr>

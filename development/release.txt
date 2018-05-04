@@ -1,4 +1,4 @@
-5.1.0 2018xxxx
+5.1.0 20180505
   BF: Initialize - Korrektur Smart-Modus
       - im Smart-Modus erstellte Sections werden wieder gehalten
   BF: Section - Korrektur Smart-Modus

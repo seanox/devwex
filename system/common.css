@@ -9,25 +9,21 @@ a[href] {
 a[href]:hover {
   color:#FFFFFF;
 }
+a[href]:active {
+  color:#999999;
+}
 
 select,
 button,
 input {
- font:1em sans-serif; color:#FFFFFF;
-  border:1px solid #FFAA44!important; border-radius:4px;
-  font-weight:normal;
-  background:none;
-    min-width:35px;
-  height:35px;
-  cursor:pointer;
-  
+  height:35px; min-width:35px; cursor:pointer;
+  font:1em sans-serif; color:#FFAA44; border:1px solid #FFAA44!important; border-radius:4px; background:none;
 }
 
 input[type='text'] {
   padding-left:0.5em; padding-right:0.5em;
   background:#595755; cursor:default;
 }
-
 
 button:hover,
 input[type='button']:hover,
@@ -37,13 +33,13 @@ button:focus,
 input[type='button']:focus,
 input[type='reset']:focus,
 input[type='submit']:focus {
-  background-color:#595755!important;
+  color:#FFFFFF; border-color:#FFFFFF!important;
 }
 button:active,
 input[type='button']:active,
 input[type='reset']:active,
 input[type='submit']:active {
-  opacity:0.5; filter:grayscale(100%);
+  color:#999999; border-color:#999999!important;
 }
 
 

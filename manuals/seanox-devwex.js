@@ -505,13 +505,7 @@ Sitemap.create = function() {
             var search = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
             search.removeClassName(Sitemap.STYLE_ERROR);
             var filter = Sitemap.Filter.compile(Sitemap.meta.search);
-            var update = function(chapter, filter, wait) {
-                if (!wait) {
-                    window.setTimeout(function() {
-                        update(chapter, filter, true);  
-                    });
-                    return;
-                }
+            var update = function(chapter, filter) {
                 var element = document.querySelector(Sitemap.SELECTOR_TOC_ANCHOR + "[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter + "']");
                 element.removeClassName(Sitemap.STYLE_MINOR);
                 try {
@@ -523,7 +517,7 @@ Sitemap.create = function() {
                 }
             };
             for (var chapter in Sitemap.index)
-                update(chapter, filter);
+                window.setTimeout(update, 0, chapter, filter);
         }, 250);
     }; 
     var filter = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);

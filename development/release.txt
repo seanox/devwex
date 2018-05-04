@@ -1,23 +1,25 @@
 5.1.0 2018xxxx
-  BF: Initialize - Korrektur Get-Methode
+  BF: Initialize - Korrektur Smart-Modus
       - im Smart-Modus erstellte Sections werden wieder gehalten
-  BF: Section - Korrektur Get-Methode
+  BF: Section - Korrektur Smart-Modus
       - im Smart-Modus angeforderte ungültige Schluessel liefern wieder null
-  CR: Projekt
-      - Entwicklung: Umstellung auf einen eigen Keystore unabhängig vom Program(Release)-Verzeichnis
+  CR: Projekt - Anpasung KeyStore
+      - Entwicklung: Umstellung auf einen eigenen KeyStore unabhängig vom Program(Release)-Verzeichnis
   CR: HTTP(S) Optimierung/Korrektur
       - Worker: Umbennung der Methode Worder::Initialize in Worker::Initiate  
       - AccessLog: Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
         0x00-0x20 / 0x80-0xFF verwenden \xXX und 0x0100-0xFFFF verwendet \uXXXX
       - Directory Index: Umstellung der BreadCrumb-Navigation von path/base/name auf location/path/name
   CR: (X)CGI / HTTP-XAPI / Templates - Optimierung
-      - Environment-Variable path_base geändert in path_url, analog zu script_url
-  CR: Konfiguration
-      - Änderung der Server/Service-Sektion, diese müssen jetzt auf :INI enden
-  CR: SAPI
+      - Environment-Variable path_base wurde geändert in path_url, analog zu script_url
+  CR: Konfiguration - Änderung der Server/Service-Sektion
+      - Änderung der Server/Service-Sektion, diese müssen jetzt auf :INI enden, bisher war es :BAS
+  CR: SAPI - Anpassung bei Initialisieurng und Fehlerausgabe
       - Erweiterung der Fehlerausgabe beim Laden/Starten
-      - Umstellung der Ausgabe beim Initialiseren auf den Sektionsnamen
-      - Umstellung der Initialisieurng per Konstruktor auf den vollständigen Context (Sektionsnamen)
+      - Umstellung der Ausgabe beim Initialiseren auf den Namen der Sektiones
+      - Umstellung der Initialisieurng per Konstruktor auf den vollständigen Context (Name der Sektion)
+  CR: Dokumenation - Allgemeine Korrektur und Anpassungen
+      - Allgemeine Korrektur und Anpassungen      
       
 5.0.0 20171206
   BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager

@@ -14,7 +14,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2017 Seanox Software Solutions
+Copyright (C) 2018 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -50,33 +50,15 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.0.0 20171206 (summary of the current version)  
-BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager  
-BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis  
-BF: HTTP Range - Korrekturen  
-BF: HTTP Locate - Korrektur der Pfadverarbeitung (Windows)  
-CR: Projekt - Optimierung  
-CR: Dokumentation / Layout - Überarbeitung/Optimierung/Erweiterung  
-CR: Service  
-CR: Generator - Überarbeitung/Optimierung/Erweiterung  
-CR: HTTP Session/Worker - Überarbeitung/Optimierung/Erweiterung  
-CR: HTTP Request - Überarbeitung/Optimierung  
-CR: HTTP DCGI - Überarbeitung/Optimierung/Umstellung auf XCGI  
-CR: HTTP AccessLog - Überarbeitung/Optimierung/Umstellung  
-CR: HTTP Filter - Überarbeitung/Optimierung/Erweiterung  
-CR: HTTP Virtual Paths - Optimierung  
-CR: HTTP MIMETYPES - Umbenannt in MEDIATYPES  
-CR: HTTP SERVER:BAS/VIRTUAL:BAS - MIMETYPE umbenannt in MEDIATYPE  
-CR: HTTP VIRTUAL:BAS - SERVER definiert welche Server den virtuellen Host verwenden dürfen  
-CR: HTTP Templates - Überarbeitung/Optimierung/Erweiterung  
-CR: HTTP - Erweiterung der CGI-Variablen  
-CR: HTTP SERVER:SSL  
-CR: HTTP XAPI - Überarbeitung/Optimierung/Erweiterung  
-CR: Initialize - Überarbeitung/Optimierung/Erweiterung  
-CR: Section - Überarbeitung/Optimierung/Erweiterung  
-CR: Remote - Überarbeitung/Optimierung/Erweiterung  
-CR: XAPI - Überarbeitung/Optimierung/Erweiterung  
-CR: SAPI - Überarbeitung/Optimierung/Erweiterung  
+## 5.1.0 2018xxxx (summary of the next version)  
+BF: Initialize - Korrektur Smart-Modus  
+BF: Section - Korrektur Smart-Modus  
+CR: Projekt - Anpasung KeyStore  
+CR: HTTP(S) Optimierung/Korrektur  
+CR: (X)CGI / HTTP-XAPI / Templates - Optimierung  
+CR: Konfiguration - Änderung der Server/Service-Sektion  
+CR: SAPI - Anpassung bei Initialisieurng und Fehlerausgabe  
+CR: Dokumenation - Allgemeine Korrektur und Anpassungen  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

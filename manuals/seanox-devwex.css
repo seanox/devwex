@@ -95,30 +95,24 @@ body main article table.architecture table {
 body main article table.architecture td {
   vertical-align:top; white-space:nowrap; 
 }
-body main article table.architecture > tbody > tr + tr > td {
-  padding-top:1rem;
+body main article table.architecture *.float {
 }
+body main article table.architecture *.float > * {
+  margin-right:1rem; float:left;
+}
+body main article table.architecture *.float > *:last-child {
+  margin-right:0em;
+}
+
 body main article table.architecture *.composite {
-}
-body main article table.architecture *.composite.float {
-  float:left;
-}
-body main article table.architecture *.composite.float + *.composite.float {
-  margin-left:1rem;    
 }
 body main article table.architecture *.composite.container {
   border:none;  
 }
-body main article table.architecture *.composite.container.float td {
-  padding:0rem;
-}
-body main article table.architecture *.composite.container.float td + td {
-  padding-left:1rem;
-}
 body main article table.architecture *.composite td,
 body main article table.architecture *.composite div {
   padding:0.5rem; vertical-align:middle; text-align:center;
-  color:#CCCCCC;
+  color:#CCCCCC; 
 }
 body main article table.architecture *.composite,
 body main article table.architecture *.composite.list > tbody > tr > td,
@@ -126,14 +120,14 @@ body main article table.architecture *.composite.section,
 body main article table.architecture *.composite.section > tbody > tr:first-child > td {
   border:1px solid #999999; 
 }
+body main article table.architecture td:not(.float) *.composite ~ *.section {
+  margin-top:1rem;
+}
 body main article table.architecture *.composite.section > tbody > tr:first-child > td {
   color:#FFFFFF; border-color:#FFFFFF;
 }
 body main article table.architecture *.composite.section > tbody > tr + tr > td {
   padding:1rem;
-}
-body main article table.architecture *.composite:not(.float) + *.composite:not(.float) {
-  margin-top:1rem;
 }
 body main article table.architecture *.interface {
   color:#FFAA44!important; border:1px solid #FFAA44!important;
@@ -141,18 +135,17 @@ body main article table.architecture *.interface {
 body main article table.architecture *.architecture-0017 {
   padding-bottom:calc(1rem + 3px)!important;
 }
-body main article table.architecture *.architecture-0024 {
+body main article table.architecture *.architecture-0021 {
   width:25%;
 }
-body main article table.architecture *.architecture-0039,
-body main article table.architecture *.architecture-0040,
-body main article table.architecture *.architecture-0068,
-body main article table.architecture *.architecture-0069 {
-  width:50%;
+body main article table.architecture *.architecture-0025 {
+  width:calc(75% - 1rem);
 }
-body main article table.architecture *.architecture-0021,
-body main article table.architecture *.architecture-0076 {
-  width:100%;
+body main article table.architecture *.architecture-0077 {
+  width:100%; 
+}
+body main article table.architecture > tbody > tr + tr > td {
+  padding-top:1rem;
 }
 
 
@@ -254,17 +247,14 @@ body main article > header {
   
   body > nav button {
     position:fixed; display:block; right:3rem;
-    opacity:0.5;
   }  
   body > nav button:focus,
   body > nav button:hover {
     opacity:1;
   } 
   body > nav button:active {
-    opacity:0.5!important; filter:grayscale(100%)!important;
   } 
   body > nav button.active {
-    opacity:1; filter:grayscale(0%);
   }  
   body > nav button + button {
     margin-top:1rem;

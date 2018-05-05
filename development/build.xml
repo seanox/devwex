@@ -147,11 +147,16 @@
     <sequential>
       <echo>Compressing: @{file}</echo> 
       <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
+      <replaceregexp file="@{file}" match="\t+" flags="g" replace=" " byline="true"/>
+      <replaceregexp file="@{file}" match="(?i)\s(!important)" flags="g" replace="\1" byline="true"/>
+      <replaceregexp file="@{file}" match="(?i)(\))\s+(?![a-z\s])" flags="g" replace="\1" byline="true"/>
       <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
       <replaceregexp file="@{file}" match="(?s)\s*(:)\s*" flags="g" replace="\1" byline="false"/>
       <replaceregexp file="@{file}" match="(?s)\s*(\()\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?i)(\s[a-z]+)(\()" flags="g" replace="\1 \2" byline="false"/>
+      <replaceregexp file="@{file}" match="(?i)(\s[a-z]+)\s+(\()" flags="g" replace="\1\2" byline="true"/>
+      <replaceregexp file="@{file}" match="(?i)(\s(?:not|only|and))(\()" flags="g" replace="\1 \2" byline="true"/>
+      <replaceregexp file="@{file}" match="(\))\s+(;)" flags="g" replace="\1\2" byline="true"/>
+      <replaceregexp file="@{file}" match="(?s)(\))\s+(;)" flags="g" replace="\1\2" byline="false"/>
       <replaceregexp file="@{file}" match="(?s)\s*(\))\s*" flags="g" replace="\1 " byline="false"/>
       <replaceregexp file="@{file}" match="(?s)\s*(;) +" flags="g" replace="\1 " byline="false"/>
       <replaceregexp file="@{file}" match="(?&lt;=[^;\s\{\}])\s*(?=[\r\n]+\s*\})" flags="g" replace=";" byline="false"/>

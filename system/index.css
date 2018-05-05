@@ -155,7 +155,7 @@ table tbody tr + tr td {
 table tbody tr.directory div + div:before,
 table tbody tr.file div + div:before {
   position:absolute; height:35px; width:35px; margin-left:-48px; margin-top:3px; display:inline-block;
-  content:"";
+  content:'';
 }
 table tbody tr.directory td div + div:before {
   background:
@@ -229,44 +229,44 @@ table tbody tr.file.rss td div + div:before {
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAACBElEQVRYhe2Yy3WDMBBFKYESXIJK0LFGe0pwCZSQDlxCloJhoRIogRIogRJeFhJgbIREYswmnKMV+lzN581ABtYCDbVgGsCEk4aFIZmByYKpQ0XlacMZo8vABFRUZic+4OsNTPiH2Q0D1gKGJGpVgK83GJIw8vJxmPHlxhjQ0B2G5OEwboIWYC1gZQ4rcxh5mazU0H0hBQ3dD4VJ2sSQRE1fs8Wut9Ngps2szMHq20N1e2PrkGxyrqUOTMOeeDostWFl7hU12W2H68zktgQLfUT05gKsxZ9hXGB68fuF4Ln11IFV/2sYH4ihlsLuSWEYeYlZfxvGyhwVlW6SFpPgzeXep3Baxvj4GWBlvhsmvrkWYNWnrvXuAlh9vx1m3mQUurjbxhJyGMwCKOKy2Tqv4O+DcaWgD936Cbxfc9V7a5MhmeKukKvSdIa1QEWlq8wx4SILJrs5p1YFmPCcVfF+pqLSa82sNzV9hWF8QxZI3yx7tODyYnGdcRB2VF5vYqBWxTqMFmsHrez7EuzbMKM5HxZNgRqwTuig1TmBNncnjOt9Vw8aLROw3DzvNdAT3KR6NNSORXKS9MDNp3jYKKhTnXoCjgew2/yxWA6bxc4HfOj9AmZPzCwmjl8EsdS2Mk9qpGpV7E7tTz7/MHGYhlrXMF1v5w2yaKjNHv5cnfXXCmioRa2KH/uXp5mDEd9qAAAAAElFTkSuQmCC)
     no-repeat center center;
 }
-table tbody tr.file[mime^="font/"] div + div:before,
-table tbody tr.file[mime*="font"] div + div:before {
+table tbody tr.file[mime^='font/'] div + div:before,
+table tbody tr.file[mime*='font'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABQklEQVRYhe2X0RGDIAyGO4IjOIIjcCW+d4SO4Ahu4iOSPjBCR+gIjuAI6UMUHyrY5qr0ruQuL3okH/wEwumUbcPIqYKwroLuVCGKa1QZi7s+COuKECjoFloRjIU2GteACsP00JAB9eqqFMEYVa7G66HZhln7uYNF82WYDPMxjFMFWWg/rRoyqhSNE+aLB/XniO6+FlQMg3oghJEQxsQgi+58SutLOhiW6MFgekgqFaEe5juL8HxNJhVZfWGJuBr41gciPF+Ph0HdzRIt38AdLhWvwiLRApNAKi+RhZYBJp/bgiOlYjkiDROCOwaEN+oYmv0kFX31mA/CsERjKJmvqh6a/WFYoqgMhLqjG9zlSd68fXmTBrp6D1NXWw18NN9v9TMZJsNIYaZq2f2t7W/9GMwvvLV5Fmtv7J3e2rMLV/y/7AllAGOhab1D4gAAAABJRU5ErkJggg==)
     no-repeat center center;
 }
-table tbody tr.file[mime^="image/"] div + div:before {
+table tbody tr.file[mime^='image/'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABj0lEQVRYhe2X0dGCMAzHOwIjOIIj9Gh8ZwRGcAQ3YAQfkfahIzACIzgCI/y/h8YqQiv6CfVOc5cHrzH50SZNKsRPAgK9236KCmjCp6iDMVShJplMDVVXmBPt06ZKXo5g0KgCmux6mpcRGDrwsbWLqyagocMjmH6do1Hn74OBlZnLv7xELTeLwLh1l3RRkEtOeN1t3wqDE+1jzu/setQkYWUGrc7QZN8G40Hc5dRBq3MQxtn0w99j+5dgXN+gHoYqIYRALTe8Q6OvdT5U4cHZH7Q6/huGA/cw1MLKbBSwUUVkdzD135dg3HlTB03dtDOyLjemq+XiI7g2F4ZBXLBAsvrkNNSGAsZkPgwnYegYvMOaZKjRwsqM1+3k+kwYLt/4feKd+vxwO3gD0bGv7uqTLGqSz8Fw5cwVDtgPIAy1A8AT7fnOgbdfoh3clPsAYtK2UQW0Oi7atf0cO9v+G7v2D2YVmPcN3FF9UNo6L1cZxv1QHnkdpJIhjKEq6TubhzcxnFVTv7VTvrHvNGWqfLb8AY6MHY1FvavzAAAAAElFTkSuQmCC)
     no-repeat center center;
 }
 table tbody tr.file.htm td div + div:before,
 table tbody tr.file.sgm td div + div:before,
-table tbody tr.file[mime^="application/"][mime$="tex"] div + div:before,
-table tbody tr.file[mime^="application/"][mime$="xml"]:not([class$="smil"]):not([class$="atom"]) div + div:before,
-table tbody tr.file[mime^="text/"][mime$="ml"] div + div:before {
+table tbody tr.file[mime^='application/'][mime$='tex'] div + div:before,
+table tbody tr.file[mime^='application/'][mime$='xml']:not([class$='smil']):not([class$='atom']) div + div:before,
+table tbody tr.file[mime^='text/'][mime$='ml'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABhklEQVRYhe1WwbXCIBDcEizBElICTzZ3S7AES7ADS/AYsx4owRIsISWkhPkHCPn+CAG+z3jIXsNOZplhgGittdYaC0Zt0PJpaR5ERIRW7yEMSF0tzYUgbCD8WJqHlUi4f7tMkLrK3WrI7gBhoFHbd2G6CXWXu91OIhP8fuM7hPsQ2QARNllNRIRGbSEMXPkYx84YEqIvVne9TyVCRIQrH1MGsFIxcON7CiAgu0MOESIvQVCip7UNK0foHGDszBdaEAMfps3YTdz4/HJwB9ZD9AVGbbLJtHyCcJ/b67w5BqQ1njVVCRELqrtUiV4QenivOcMWx3eJRE/99hT2EDZjahZGeKlERH9iZJTKuzt+3F4Biu5KTE/kTTyNEX/bRkJrAjb0NKyyiQwxEvqf90+i/qU3tIuRfnZHJ8cttK7whh5jhM2sz9xPHnOmLHlE/cJOjxE/dcTQJRJNTk56Y12FvPMviQrzKAIaf0R9tOYeUZ8jMjyiCp4Z7ydj1AZXPn6FRGut9U31A43IpTEdqKaXAAAAAElFTkSuQmCC)
     no-repeat center center;
 }
 table tbody tr.file.msg td div + div:before,
 table tbody tr.file.rtx td div + div:before,
-table tbody tr.file[mime^="message/"] div + div:before {
+table tbody tr.file[mime^='message/'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABoklEQVRYhe2WzbGDIBRGKcESUoIlMOG6t4SUkBLSgSVkScQFJViCJaQES/jeAkQx4M97MfpmcmfuDuUI30EY+9a3VhY0T47SDIpwlLYw4o5S5Lt1RUUP86DrrlFR58tgZaiB5skuIJonUKSHMICiFipLPwqishRKPP3MlHSDogaKWkjiHwGRxM0CUGPn7zMDzRNUVBvK82VTEJORFhXVZpuGmRkEuEv2VqHGg64WpOhyGoVhjLFu2VBR8TYIs/JF6L2TMAZI5PbB+i0gxpg2FIFZGMZcyP6kvgdSijw4ZgmMGej0W62+9+yEpYthGHNft0p9T13JT9PQa2BGh9Oc+s4Y19MrunybehVrSH5yRpR0mxgPVFTY8fV8FOZsGqk4DLBTX1EDlaXQPLHbooPqRpReBOMZEDPtZessXMyY7qgIZCh+AkviZhLxjL34dZLzBZL4nP4xu4Iw43zMgfymvH9gN68HU9INStxD+diqBr+ceny5amNH9aZA/Qnf+je9D1+sHJDKUnugHvEOXFEBSXy39m56B2kGyU9H6T2j8q3/WT9GAVdDO8D9qQAAAABJRU5ErkJggg==)
     no-repeat center center;
 }
-table tbody tr.file[mime^="audio/"] div + div:before {
+table tbody tr.file[mime^='audio/'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAwklEQVRYhe2UsQ3DMAwEPYJH8AgagYip3iNkhIzgDTyGIqnwCBkhI32KxK1EFRQEhAd86ccLxnGaDMMwlEGgBZF3ZD6KCUz6Y5J3yPxC4ncxPcYMB06aa+kzJDAhMeq53fsMiutWTGBCoKXLmGHQVvtna7k78o6TZnW1Edet2j3s6dBWW9ytrTae/JD1e/f9QFltUX+vwyqmVW2RqpmP66WqaiN516Lqf6ndegbU1Barev0mbbVbVTW1TW1VTO3R1f4AyCZlO/wRtz4AAAAASUVORK5CYII=)
     no-repeat center center;
 }
-table tbody tr.file[mime^="video/"] div + div:before {
+table tbody tr.file[mime^='video/'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA4klEQVRYhe2VzQ2CUBCEKYFSLOFFh7slWAKdUMbDfQdKoARKGg/yo8IDDStBs5vMgUB2v7A7mSSxWihWLqVkh601DSPZgQJuLg8XhymR08PRw1FABhT98xoFFN1wejiWyJdhHl52cCpnIMcLBZybN4YJqCmoWqnD9L3vcxZgBA0D6v5jbZihd/NjayqRD9b7xpra3tfT+Z01PUv/ZlZYWxvGrB2BMWvHYObmjWFerR1QqCR0d7CrrG2pvcubMWvHYHa1JkvtGIyldgzGrB2D2dWaLLWnfqVGOn+qyqUaZ/DfdQM3M2T80GZlkAAAAABJRU5ErkJggg==)
     no-repeat center center;
 }
-table tbody tr.file[mime^="application/vnd"]:not([mime*="font"]):not([mime*="help"]):not([mime*="cab"]) td div + div:before {
+table tbody tr.file[mime^='application/vnd']:not([mime*='font']):not([mime*='help']):not([mime*='cab']) td div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAACwElEQVRYhb1YwbWDIBC0hJSQElICTzb3lGAJKSEdWIJH43qghJRgCZZACfsPC4giyeL/+Xkvh6hshmF2BqyqqqrIqBMN8CCEiRAsIRjC66U68CGsm3WdupEPNuoUBo/QMig9EwLRoG9lQMAwCN25yRlCIHrCXVaAB9ktE6GwUScZkLrZm4CrT9Srs6CInmmENrnOjBH1oGRgdEcjvPbvgRWxk3swgBGuOaHuCMFk7u1OOH1whBchTMn1Qd/KmKkbQrDJ9V6dxfqjHhQzoDvq1ZmMOrlrdg9ktg4zabkZrpeljp4JYZJqb2Fh/Z2KOqEKLNhVnRFeIvHugnrC3XdW6IQSQMyE8XXEjMgAygGV6uxPAVGvzgubdZNrhq8CIrxegrsmXz0f0shhQL5rYn15lg5GSTkY7xmou3fCdAZIR8NWBgZ1R6jnTx3CnsP+8h0ggRVpPLjg/IZ+lraVFQ/Ztu1AvF5ohNaZqhFlVlL8CXdCoKIxCJYGeITfwaE5OKOOLFvOw8wgTDTAg3pQzodMrDlnE1TEUPGWwoNnAFFepR3mWEoS//0fIBhCPYuAj/CKN1t+mfc60d2Tg3Ht6vxjfxO1ec7GGfWOWacdmW6c8EzYtAct6JufabQPcieD7J9a786OwXbXsbngWqDLBknPoQiLblrlUZxPUQelrK0yzSbb3ij4IqHVjV9LGuG1u9ZGnWjQNxrgwYJd6rxl2o+Jsi1egiX4OOy6AGqEtmSDFLSRYef94EzehIQ+sFPzrcoTqxtxYP7VuWld0xnZdk/9yTBZmPDIgik94nqPQT2HUwIb4PTRS/wyJde9eAtTN6T19ricCc50JrFvcIa03lNKgDAY3eUMzGfThwLXi3tw6f8n3H8j3gxQ2TF3BewXZ51wQt2+jci8pfj6J7jsCC1rz2UV6u5fgQRA3AD+DdYkWfYfiE31Z8GsISQAAAAASUVORK5CYII=)
     no-repeat center center;
@@ -304,7 +304,7 @@ table tbody tr.file.uif td div + div:before,
 table tbody tr.file.ustar td div + div:before,
 table tbody tr.file.xpi td div + div:before,
 table tbody tr.file.zip td div + div:before,
-table tbody tr.file[mime="application/x-7z"] td div + div:before {
+table tbody tr.file[mime='application/x-7z'] td div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA90lEQVRYhe2Xyw3CMBBEKSElUEJKsPDkTgmUkg4ogWPk9cElpARKSAkuYTg4gBA/B6JYoF3pnaJYz97MylmttJ4UOxiKHYrTwYwyID32dGiLICCd3V5lOrMu0plgKpVRme9lBLFctC8yZj3GK9KjXzTSHn0SQUtp6utxiR3o0C7aovEQ7h/8kgyDqcaXQzZvNve5TOpvpOBIjz4LASl2mFWG0tSXL35C0dntq7Hxmcx5FghCGgVNnYc9UBBnlbnZ5TQiZbN7vuaXaWIHk00w1cu1/iLaKqMyKqMyKqMyRWTEDtm3uDlIvykPZBzadBlaGI/9El2YXCfOePeJaxyCWgAAAABJRU5ErkJggg==)
     no-repeat center center;
@@ -316,12 +316,12 @@ table tbody tr.file.xslt td div + div:before {
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABrUlEQVRYhe2XzbGCMBSFKSElWIIlZMx1bwmWQAl0YAkugZtFSqAESrAESjhvkfiMECTG4HOcl5mzYAbIR+65PxTFpy9oOq2uhsplECMFmACmfkUNYOrjYVp1yHHKwT00nb4LBjVJ1HLz5zCo5cbFGtB0+gQYWKlz8FlWl9s9njR1eWF4v12G2R3RUDnR+F1ZPMNkLMx+u/iiR3s8CTMEYVqqwDTASBF8tqESLVVTJZ5MUbiQ1CTvrm2x8n1wZ2IYKaCpcyYfy6TDjL4cDZVgdZ4qLVzPh+lFX+SEwZpVOAXGeqSl6m0w1pyeapLXU3HZMylaK8IEKqYXol84pt43NowU86mcmNrXNLVN0NetIbrUHnxje70qRnGpDSbETF02vfOEbClMvSv1ntwJGClsTXEnOFN988Bo6ia6GthmlrFHvTtOP8QZflbh2SehUVLlRoJwn7rr4rMKbphW9Jj6R5MdjBSo5WZWcw31aRhNXQ5/vA4TaVQYKWKUDBO7vNqz5BuA1SUZJlQ1w/epQ5RGE8D3/Tf9w3weDKtLsFXkkK3ssTCh4TuzXvxFXn39AFK8W1PI+nirAAAAAElFTkSuQmCC)
     no-repeat center center;
 }
-table tbody tr.file[mime="application/x-trash"] td div + div:before {
+table tbody tr.file[mime='application/x-trash'] td div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAABJUlEQVRYhe3X0Q2CMBAG4BvBERzBERr53cMRGMENGMFHsH1wBEZgBEdwhPMBRCSFFnrng6HJnxDSNF9K7wCibrA9HdiCV6eEIanRYxwKrpBHx6EQB/WYhQt+djR7iIGSMSUMO9QiIAkMEZEISAojApLEJIOkMUkgDcxqUDKmQt5e+4Jm0drpfSYuqhgiIi5hguk6tTombv3jecNsmA2zYf4SwxYNV8i/7pVmzza7eudXyNmi0cHccHm/PINzWwizQ6GCISLq/xpmQF6IBiYEmoRoYaZAsxBNzBgUhGhjvkAhyE8w7x2JqTLVxzR4NDFVpneAPWckCFIp7ZnDOgsafOU37FAvzqjVx1TNJIjvZsc2u67Okj7iA9njOTR31eh2KwgZgZ4ve4VCbmCi+ekAAAAASUVORK5CYII=)
     no-repeat center center;
 }
-table tbody tr.file[mime^="text/"] div + div:before {
+table tbody tr.file[mime^='text/'] div + div:before {
   background:
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAA9ElEQVRYhe3Vyw2DMAwGYEZgBEboCBZx74zACB2BDToCxzTOgREYgRE6intAlfrgmdh9ICz9Ejc+kJM/SX592OM5Ks4UMpAGUiZkJuwCw33yUg4T+HVM2IiBRDAeWyZTR4OkMP1zJEgSEw2SxkSBNDDBIKHT1DEdD2/x2K4CyR7tiTSQ6mMsZGwRRuOwYkJmC5k6Zh6LsGPUMOxMEdTgFkEeQ3kZ1OIXPIljpGZ7mP4WzctFedkTecz9slqSgW4SxUjN9jBsIRts4rm8FOLnd+YxDiudPzPVxqN5fun2dmbH7Jj/wpC5ssdWJeswplbPEsw35wbJJNZG20FFQQAAAABJRU5ErkJggg==)
     no-repeat center center;
@@ -334,29 +334,29 @@ table tbody tr td + td div:after {
   content:attr(text);
 }
 table tbody tr td + td span:after{
-  content:attr(type)" File";
+  content:attr(type)' File';
 }
 table tbody tr td div + div:after {
   display:block; color:#999999;
 }
 table tbody tr.directory td div + div:after {
-  content:"Directory";
+  content:'Directory';
 }
 table tbody tr.file td div + div:after {
-  content:"File";
+  content:'File';
 }
-table tbody tr.file[mime^="application/"] div + div:after {
-  content:"Application File";
+table tbody tr.file[mime^='application/'] div + div:after {
+  content:'Application File';
 }
-table tbody tr.file[mime="application/octet-stream"] td div + div:after {
-  content:"Binary File";
+table tbody tr.file[mime='application/octet-stream'] td div + div:after {
+  content:'Binary File';
 }
 table tbody tr.file.bin td div + div:after,
 table tbody tr.file.com td div + div:after,
 table tbody tr.file.cpl td div + div:after,
 table tbody tr.file.exe td div + div:after,
 table tbody tr.file.scr td div + div:after {
-  content:"Application Executable File";
+  content:'Application Executable File';
 }
 table tbody tr.file.dll td div + div:after,
 table tbody tr.file.drv td div + div:after,
@@ -364,7 +364,7 @@ table tbody tr.file.inf td div + div:after,
 table tbody tr.file.lib td div + div:after,
 table tbody tr.file.so td div + div:after,
 table tbody tr.file.sys td div + div:after {
-  content:"Application Extension File";
+  content:'Application Extension File';
 }
 table tbody tr.file.azw td div + div:after,
 table tbody tr.file.tr2 td div + div:after,
@@ -390,42 +390,42 @@ table tbody tr.file.prc td div + div:after,
 table tbody tr.file.rtf td div + div:after,
 table tbody tr.file.smil td div + div:after,
 table tbody tr.file.xps td div + div:after {
-  content:"Document File";
+  content:'Document File';
 }
 table tbody tr.file.bat td div + div:after,
 table tbody tr.file.cmd td div + div:after,
 table tbody tr.file.hta td div + div:after,
 table tbody tr.file.ps1 td div + div:after,
 table tbody tr.file.sh td div + div:after {
-  content:"Executable Script File";
+  content:'Executable Script File';
 }
 table tbody tr.file.atom td div + div:after,
 table tbody tr.file.rss td div + div:after {
-  content:"Feed File";
+  content:'Feed File';
 }
-table tbody tr.file[mime^="font/"] div + div:after,
-table tbody tr.file[mime*="font"] div + div:after {
-  content:"Font File";
+table tbody tr.file[mime^='font/'] div + div:after,
+table tbody tr.file[mime*='font'] div + div:after {
+  content:'Font File';
 }
-table tbody tr.file[mime^="image/"] div + div:after {
-  content:"Graphic File";
+table tbody tr.file[mime^='image/'] div + div:after {
+  content:'Graphic File';
 }
 table tbody tr.file.htm td div + div:after,
 table tbody tr.file.sgm td div + div:after,
-table tbody tr.file[mime^="application/"][mime$="tex"] div + div:after,
-table tbody tr.file[mime^="application/"][mime$="xml"]:not([class$="smil"]):not([class$="atom"]) div + div:after,
-table tbody tr.file[mime^="text/"][mime$="ml"] div + div:after {
-  content:"Markup Language File";
+table tbody tr.file[mime^='application/'][mime$='tex'] div + div:after,
+table tbody tr.file[mime^='application/'][mime$='xml']:not([class$='smil']):not([class$='atom']) div + div:after,
+table tbody tr.file[mime^='text/'][mime$='ml'] div + div:after {
+  content:'Markup Language File';
 }
-table tbody tr.file[mime^="message/"] div + div:after {
-  content:"Message File";
+table tbody tr.file[mime^='message/'] div + div:after {
+  content:'Message File';
 }
-table tbody tr.file[mime^="audio/"] div + div:after,
-table tbody tr.file[mime^="video/"] div + div:after {
-  content:"Multimedia File";
+table tbody tr.file[mime^='audio/'] div + div:after,
+table tbody tr.file[mime^='video/'] div + div:after {
+  content:'Multimedia File';
 }
-table tbody tr.file[mime^="application/vnd"]:not([mime*="font"]):not([mime*="help"]) td div + div:after {
-  content:"Office Document File";
+table tbody tr.file[mime^='application/vnd']:not([mime*='font']):not([mime*='help']) td div + div:after {
+  content:'Office Document File';
 }
 table tbody tr.file.bcpio td div + div:after,
 table tbody tr.file.boz td div + div:after,
@@ -460,29 +460,29 @@ table tbody tr.file.uif td div + div:after,
 table tbody tr.file.ustar td div + div:after,
 table tbody tr.file.xpi td div + div:after,
 table tbody tr.file.zip td div + div:after,
-table tbody tr.file[mime="application/x-7z"] td div + div:after {
-  content:"Packed Container File";
+table tbody tr.file[mime='application/x-7z'] td div + div:after {
+  content:'Packed Container File';
 }
 table tbody tr.file.css td div + div:after,
 table tbody tr.file.xsl td div + div:after,
 table tbody tr.file.xslt td div + div:after {
-  content:"Style Sheet File";
+  content:'Style Sheet File';
 }
-table tbody tr.file[mime="application/x-trash"] td div + div:after {
-  content:"Temporary File";
+table tbody tr.file[mime='application/x-trash'] td div + div:after {
+  content:'Temporary File';
 }
-table tbody tr.file[mime^="text/"] div + div:after {
-  content:"Text File";
+table tbody tr.file[mime^='text/'] div + div:after {
+  content:'Text File';
 }
 table tbody tr.directory td:first-child + td div:after {
-  content:"Directory";
+  content:'Directory';
 }
 table tbody tr.file td:first-child + td div:after {
   text-transform:uppercase;
   content:attr(text);
 }
 table tbody tr.directory td:first-child + td + td div:after {
-  content:"-";
+  content:'-';
 }
 
 

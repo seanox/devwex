@@ -1,6 +1,6 @@
 5.1.1 2018xxxx
   BF: HTTP(S) Correction
-     - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
+      - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
 
 5.1.0 20180505
   BF: Initialize - Korrektur Smart-Modus
@@ -898,7 +898,7 @@
       [I] DCGI Aufruf der Anwendung mit der Swapdatei
 
 1.3.0 20010803
-  BF: Service - Korrektur der OutOfMemoryExceptionvom bei zu vielen Services-Threads
+  BF: Service - Korrektur der OutOfMemoryException bei zu vielen Service-Threads
   CR: Devwex - allgemeine Optimierung
   CR: Generator - Überarbeitung/Optimierung/Erweiterung
   CR: HTTP REF - Erweiterung der virtl. Verzeichnisse um den Parameter [R] für Redirections

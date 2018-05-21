@@ -1,3 +1,7 @@
+5.1.1 2018xxxx
+  BF: HTTP(S) Correction
+     - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
+
 5.1.0 20180505
   BF: Initialize - Korrektur Smart-Modus
       - im Smart-Modus erstellte Sections werden wieder gehalten

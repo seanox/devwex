@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.1 20180218<br>
+ *  Worker 5.1 20180521<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20180218
+ *  @version 5.1 20180521
  */
 class Worker implements Runnable {
   
@@ -774,7 +774,7 @@ class Worker implements Runnable {
                 buffer = buffer.concat("/");
             
             //die qualifizierteste laengste Refrerenz wird ermittelt
-            if (locale.startsWith(buffer)
+            if (locale.startsWith(buffer.toLowerCase())
                     && buffer.length() > 0 && reference.length() <= buffer.length()) {
 
                 //optional wird die Sperrung des Verzeichnis ermittelt
@@ -812,7 +812,7 @@ class Worker implements Runnable {
                 buffer = buffer.concat("/");
 
             //die ACC-Eintraege zur Authentifizierung werden zusammengesammelt
-            if (string.contains("[ACC:") && locale.startsWith(buffer)
+            if (string.contains("[ACC:") && locale.startsWith(buffer.toLowerCase())
                     && buffer.length() > 0 && shadow.length() <= buffer.length()) {
                 
                 shadow = buffer;

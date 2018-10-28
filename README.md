@@ -50,15 +50,8 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.1.0 20180505 (summary of the current version)  
-BF: Initialize - Korrektur Smart-Modus  
-BF: Section - Korrektur Smart-Modus  
-CR: Projekt - Anpasung KeyStore  
-CR: HTTP(S) Optimierung/Korrektur  
-CR: (X)CGI / HTTP-XAPI / Templates - Optimierung  
-CR: Konfiguration - Änderung der Server/Service-Sektion  
-CR: SAPI - Anpassung bei Initialisieurng und Fehlerausgabe  
-CR: Dokumenation - Allgemeine Korrektur und Anpassungen  
+## 5.1.1 2019xxxx (summary of the next version)  
+BF: HTTP(S) Correction  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

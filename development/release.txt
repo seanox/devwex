@@ -1,6 +1,16 @@
-5.1.1 2019xxxx
+5.2.0 2019xxxx
   BF: HTTP(S) Correction
-      - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
+      - Basic Authentication / Digest Access Authentication: rules are used again
+        case-insentive
+  CR: Generator: Optimization / Review
+      - Optimization: Handling of segments/scopes/fragements
+        Improvement of dedicated and partial use
+      - Omission of namespaces, replacement by the dedicated/partial use of segments
+      - Change of syntax, omission of : for segments   
+        old: #[foo:[[...]]], new: #[foo[[...]]]
+      - Change of the parser/renderer:
+        The template is initially prepared, the later addition of placeholders and/or
+        segments is no longer supported.  
 
 5.1.0 20180505
   BF: Initialize - Korrektur Smart-Modus

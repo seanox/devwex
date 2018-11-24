@@ -50,8 +50,9 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.1.1 2019xxxx (summary of the next version)  
+## 5.2.0 2019xxxx (summary of the next version)  
 BF: HTTP(S) Correction  
+CR: Generator: Optimization / Review  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

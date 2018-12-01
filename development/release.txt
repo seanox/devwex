@@ -10,7 +10,11 @@
         old: #[foo:[[...]]], new: #[foo[[...]]]
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
-        segments is no longer supported.  
+        segments is no longer supported.
+  CR: HTTP(S) Optimierung
+      - AccessLog: Change to a print formatted syntax
+        date/time %t... variables %[...]
+      - AccessLog: Change in default structure from filename to: <host>_<date>-access.log    
 
 5.1.0 20180505
   BF: Initialize - Korrektur Smart-Modus
@@ -917,9 +921,6 @@
   CR: Logging - SystemLogWriter wurde entfernt
 
 1.2.0 20010529
-  Allgemeine Optimierung in Hinblick auf die Stabilität, Performance und Grösse.
-  Diverse Fehler in der Verarbeitung von Request- und Verzeichnisdaten wurden behoben.
-  Die Konfiguration wurde allgemein durch neue Schlüssel und Vererbung erweitert.
   BF: HTTP Filter - Filter-Parameter entsprechen nun in der Syntax den Header-Parametern
   BF: HTTP - Korrektur der abgebrochenen Request-Datenströme owhohl noch Daten vorlagen
   BF: HTTP Directory Index - Korrektur in der Template-Generierung bei leeren Verzeichnissen

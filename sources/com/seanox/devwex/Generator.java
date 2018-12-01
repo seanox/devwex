@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ *  Copyright (C) 2018 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -28,18 +28,14 @@ import java.util.Hashtable;
 
 /**
  *  Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) 
- *  in einer Vorlage (Template). Platzhaltern k&ouml;nnen Schl&uuml;ssel, 
- *  Schl&uuml;ssel mit Namensr&auml;umen und Segmente sein.<br>
- *  Schl&uuml;ssel sind die einfachste Form und werden mit einem gleichnamigen
- *  Wert gef&uuml;llt.<br> 
- *  Schl&uuml;ssel mit Namensraum (Scope) werden ebenfalls mit einem 
- *  gleichnamigen Wert gef&uuml;llt, aber nur, wenn beim Generieren der passende 
- *  Namensraum angegeben wird. Schl&uuml;ssel mit abweichendem Namensraum
- *  werden beim Generieren ignoriert und die Platzhalter bleiben f&uuml;r die 
- *  nachfolgende Generierung erhalten.<br>
- *  Segmente sind Strukturen innerhalb einer Vorlage und k&ouml;nnen
- *  verschiedene Platzhalter und Namensr&auml;ume sowie weitere Segmente
- *  enthalten. Sie lassen sich als Teilvorlage beschreiben und verwenden.
+ *  in einer Vorlage (Model/Template). Dazu wird der Vorlage eine Werte-Liste
+ *  mit Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
+ *  Platzhalter, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
+ *  Platzhalter durch die Werte ersetzt.<br>
+ *  Platzhalter können auch Segmente sein, diese bilden dann eine Teilstruktur
+ *  in der Vorlage und lassen sich dediziert und partiell verwenden sowie
+ *  bef&uuml;llen. Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen
+ *  erhalten und sind wiederverwendbar.<br>
  *  
  *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
@@ -59,23 +55,13 @@ import java.util.Hashtable;
  *    </tr>
  *    <tr>
  *      <td valign="top" nowrap="nowrap">
- *        {@code #[namespace:value]}
+ *        {@code #[scope[[...]]]}
  *      </td>
  *      <td valign="top">
- *        Setzt an dieser Stelle den Wert f&uuml;r &lt;value&gt; nur in
- *        Verbindung mit dem korrespondierenden Namensraum (Scope) ein und
- *        entfernt den Platzhalter.
- *      </td>
- *    </tr>
- *    <tr>
- *      <td valign="top" nowrap="nowrap">
- *        {@code #[segment:[[...]]]}
- *      </td>
- *      <td valign="top">
- *        Definiert ein Segment. Die Verschachtelung und Verwendung weiterer
- *        Segmente ist m&ouml;glich. Da die Platzhalter zum Einf&uuml;gen von
- *        Segmenten erhalten bleiben, k&ouml;nnen diese zum Aufbau von Listen
- *        verwendet werden.
+ *        Definiert ein Segment/Scope. Die Verschachtelung und Verwendung
+ *        weiterer Segmente ist m&ouml;glich. Da die Platzhalter zum
+ *        Einf&uuml;gen von Segmenten erhalten bleiben, k&ouml;nnen diese zum
+ *        Aufbau von Listen verwendet werden.
  *      </td>
  *    </tr>
  *    <tr>
@@ -92,42 +78,56 @@ import java.util.Hashtable;
  *  </table>
  *  
  *  <h3>Arbeitsweise</h3>
- *  Die Generierung erfolgt dreistufig (Level 0 - 2) auf Byte-Ebene.
- *  Es gibt einen Parser (Level 0) und einen Prozessor (Level 1) sowie eine
- *  Finalisierung des Prozessors (Level 2).<br>
- *  Der Parser ermittelt rekursiv die Namensr&auml;ume und Segmente
- *  (Teilvorlagen) innerhalb der Vorlage und bereitet die Verwendung der
- *  Platzhalter zum Bef&uuml;llen durch den Prozessor vor.<br>
- *  Der Prozessor bef&uuml;llt die Platzhalter in einer Vorlage. Bei der
- *  Finalisierung dekodiert der Prozessor die kodierten Platzhalter und
- *  entfernt ggf. nicht aufgel&ouml;ste.<br>
- *  Parser und Prozessor arbeiten tolerant und ignorieren die Gross- und
- *  Kleinschreibung sowie fehlerhafte Platzhalter, Strukturen, Namensr&auml;ume
- *  und Schl&uuml;ssel.<br>
+ *  Das Model (Byte-Array) wird initial geparst.
+ *  Dabei werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
+ *  Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die Scopes
+ *  mit den Segmenten (Teilvorlagen) ermittelt und durch einen einfachen
+ *  Platzhalter ersetzt. Nach dem Parsen entsteht ein finales Model mit
+ *  optimierten Platzhaltern und extrahierten Segmenten, welches zur Laufzeit
+ *  nicht ge&auml;ndert werden kann.<br>
  *  <br>
- *  Generator 5.0 20170902<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
+ *  Zur Nutzung des Models stehen dann verschiedene M&ouml;glichkeiten zur
+ *  Verf&uuml;gung.<br>
+ *  <br>
+ *  Mit {@link #set(Hashtable)} werden im Model die Platzhalter durch die
+ *  &uuml;bergeben Werte ersetzt. Platzhalter zudem keine Werte existieren,
+ *  bleiben erhalten. Platzhalter die ein Segment/Scope repr&auml;sentieren
+ *  werden diese ebenfalls gesetzt, wenn in den Werten ein korrespondierder
+ *  Schl&uuml;ssel existiert. Bei Segmenten/Scopes bleibt der Platzhalter zur
+ *  erneuten Verwendung erhalten und folgt direkt dem eingef&uuml;gten Wert.<br>
+ *  <br>
+ *  Bei {@link #set(String, Hashtable)} wird nur der angegeben Scope
+ *  bef&uuml;llt. Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und
+ *  mit den &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin
+ *  entfernt und der Inhalt als Wert vor dem Platzhalter eingef&uuml;gt. Somit
+ *  bleibt auch dieser Segment-/Scope-Platzhalter zur erneuten Verwendung
+ *  erhalten.<br>
+ *  <br>
+ *  Die Methoden {@link #extract(String)} und {@link #extract(String, Hashtable)}
+ *  dienen der exklusiven Nutzung von Segmenten (Teilvorlagen), die partiell
+ *  bef&uuml;llt und aufbereitet werden. Beide Methoden liefern finale
+ *  Ergebnisse, die dem Aufruf von {@link #set(Hashtable)} in Kombination mit
+ *  {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
+ *  konzentrieren.<br>
+ *  <br>
+ *  Generator 5.1 20181127<br>
+ *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.0 20170902
+ *  @version 5.1 20181127
  */
 public class Generator {
 
     /** Segmente der Vorlage */
-    private Hashtable segments;
+    private Hashtable scopes;
 
-    /** Datenbuffer der Vorlage */
+    /** Model, Datenbuffer der Vorlage */
     private byte[] model;
 
-    /**
-     *  Konstruktor, richtet den Generator initial ein.
-     *  @param model Vorlage als Bytes
-     */
-    private Generator(byte[] model) {
-
-        this.segments = new Hashtable();
-        this.model    = this.prepare(model, null, null, 0);
+    /** Konstruktor, erstellt einen leeren Generator. */
+    private Generator() {
+        this.scopes = new Hashtable();
     }
 
     /**
@@ -136,105 +136,330 @@ public class Generator {
      *  @return der Generator mit der als Bytes &uuml;bergebenen Vorlage
      */
     public static Generator parse(byte[] model) {
-        return new Generator(model == null ? new byte[0] : (byte[])model.clone());
+        
+        Generator generator = new Generator();
+        generator.model = generator.scan(model);
+        return generator;
     }
     
     /**
-     *  Ermittelt ab der angegebenen Position in einem Datenfragmet die Position
-     *  des n&auml;chsten Platzhalters oder Segments. Kann keine Position
-     *  ermittelt werden, liefert die Methode einen negativen Wert.
-     *  @param  bytes  Datenfragmet
+     *  Ermittelt ob an der angegebenen Position in einem Model(Fragmet) ein
+     *  gueltiger Platzhalter beginnt. In dem Fall wird die Laenge des
+     *  kompletten Platzhalters zurueckgegeben. Kann kein Platzhalter ermittelt
+     *  werden, wird die Laenge 0 zurueckgegeben. Liegen im Model keine
+     *  weiteren Daten zur Analyse vor (Datenende ist erreicht) wird ein
+     *  negativer Wert zurueckgegeben.
+     *  @param  model  Model(Fragmet)
      *  @param  cursor Position
-     *  @return die Position des n&auml;chsten Platzhalters oder Segments, sonst
-     *          ein negativer Wert
+     *  @return die Position des n&auml;chsten Platzhalters oder Segments,
+     *          sonst ein negativer Wert
      */
-    private static int scan(byte[] bytes, int cursor) {
+    private static int scan(byte[] model, int cursor) {
         
-        int digit;
-        int offset;
-        int size;
-        int colon;
-        
-        offset = cursor;
-        colon  = 0;
+        if (model == null
+                || cursor >= model.length)
+            return -1;        
 
-        //Phase 1: Identifizierung eines Platzhalters
-        //  - die unterstuetzen Formate: #[...], #[...:[[...]]]
+        //Phase 0: Identifizierung eines Platzhalters
+        //  - die unterstuetzen Formate: #[...], #[...[[...]]]
         //  - Hauptmerkmal sind die ersten zwei Zeichen
         //  - alle Platzhalter beginnen mit #[...
-        if (cursor +1 > bytes.length
-                || bytes[cursor] != '#' || bytes[++cursor] != '[')
-            return -1;
-        
-        //Phase 2: Begrenzung des Platzhalters
-        //  - zulaessig sind nur folgende Zeichen: a-z A-Z 0-9 _-
-        //    abweichende Zeichen werden als Platzhalter ignoriert
-        //  - indirekt werden auch : sowie [ und ] unterstuetzt, was aber nur zur
-        //    internen Klassifizierung und Begrenzung verwendet wird
-        while (++cursor < bytes.length) {
-            digit = bytes[cursor];
-            if (!(digit >= 'a' && digit <= 'z')
-                    && !(digit >= 'A' && digit <= 'Z')
-                    && !(digit >= '0' && digit <= '9')
-                    && digit != '_' && digit != '-'
-                    && digit != ':' && digit != '[' && digit != ']')
-                return -1;
+        if (cursor +1 >= model.length
+                || model[cursor] != '#'
+                || model[cursor +1] != '[')
+            return 0;
             
-            //nur gueltige Segemente werden gefunden, sonst ignoriert
-            //  - das vorangehende Zeichen muss ein Doppelpunkt sein
-            //  - das folgende zwei Zeichen muss eine oeffende eckige Klammern
-            //    sein, da diese das Segment einschliesst
-            //  - die nachfolgende Datenmenge muss fuer die drei schliessenden
-            //    Klammern ausreichen
-            if (digit == '[' && (bytes[cursor -1] != ':'
-                    || cursor +4 >= bytes.length
-                    || bytes[++cursor] != '['))
-                return -1;
-            
-            //gueltige Segemente werden analysiert
-            //  - Segment koennen weitere Segmente einschliessen, daher muss
-            //    nach weiteren eingeschlossenen Segmenten und nach dem Schluss
-            //    des aktuellen Segments gesucht werden
-            //  - zur Suche nach den Segmenten wird die Methode rekursive
-            //    verwendet
-            //  - die Bewertung der gefundenen Platzhalter erfolgt ueber die
-            //    letzten frei Zeichen, dabei muss es sich um drei schliessenden
-            //    eckige Klammern handeln, sonst ist es kein Segment 
-            //  - werden weitere Segmente gefunden, wird der Cursor an das Ende
-            //    des gefundenen Segments gesetzt, was das mehrfache Lesen der
-            //    Daten minimiert
-            if (digit == '[') {
-                while (++cursor < bytes.length) {
-                    if (cursor +2 >= bytes.length)
-                        return -1;
-                    size = Generator.scan(bytes, cursor);
-                    if (size < 0) {
-                        if (bytes[cursor] == ']'
-                                && bytes[++cursor] == ']'
-                                && bytes[++cursor] == ']')
-                            return cursor -offset +1;
-                    } else cursor += size -1;
-                }
+        int offset = cursor;
+        int deep   = 0;
+
+        int[] stack = new int[65535];
+        while (cursor < model.length) {
+
+            //Der aktuelle Level wird ermittelt.
+            int level = 0;
+            if (deep > 0)
+                level = stack[deep];
+
+            //Phase 1: Erkennung vom Start eines Platzhalters
+            //  - die unterstuetzen Formate: #[...], #[...[[...]]]
+            //  - Hauptmerkmal sind die ersten zwei Zeichen
+            //  - alle Platzhalter beginnen mit #[...
+            //Ein Platzhalter kann nur beginnen, wenn noch kein Stack und damit
+            //kein Platzhalter existiert oder wenn zuvor ein
+            //Segment-Platzhalter ermittelt wurde. In beiden Faellen ist das
+            //Level ungleich 1 und es startet ein weiterer Stack mit Level 1.
+            if (cursor +1 < model.length
+                    && model[cursor] == '#'
+                    && model[cursor +1] == '['
+                    && level != 1) {
+                stack[++deep] = 1;
+                cursor += 2;
+                continue;
             }
             
-            //der Doppelpunkt Begrenzt den Namensraum
-            //  - der Doppelpunkt darf nur einmal vorkommen
-            if (digit == ':' && ++colon > 1)
-                return -1;
+            //Phase 1A: Qualifizierung eines Segment-Platzhalters
+            //  - es wird der aktive Level 1 erwartet
+            //  - es wird die Zeichenfolge [[ gefunden
+            //Der aktuelle Stack wird auf Level 2 gesetzt.
+            if (cursor +1 < model.length
+                    && model[cursor] == '['
+                    && model[cursor +1] == '['
+                    && level == 1) {
+                stack[deep] = 2;
+                cursor += 2;
+                continue;
+            }
+
+            //Phase 2: Erkennung vom Ende eines erkannten Platzhalters
+            //Der Level muss 1 sein und es muss das Zeichen [ gefunden werden.
+            //Dann wird der aktulle Stack entfernt, da die Suche hier
+            //abgeschlossen ist.
+            if (model[cursor] == ']'
+                    && level == 1) {
+                if (--deep  <= 0)
+                    break;
+                cursor += 1;
+                continue;
+            }
+
+            //Phase 2A: Erkennung vom Ende eines erkannten Platzhalters
+            //Der Level muss 1 sein und es muss das Zeichen [ gefunden werden.
+            //Dann wird der aktulle Stack entfernt, da die Suche hier
+            //abgeschlossen ist.
+            if (cursor +2 < model.length
+                    && model[cursor +0] == ']'
+                    && model[cursor +1] == ']'
+                    && model[cursor +2] == ']'
+                    && level == 2) {
+                cursor += 2;
+                if (--deep <= 0)
+                    break;
+                cursor += 1;
+                continue;
+            }
             
-            //gueltige Platzhalter werden gefunden
-            //  - das folgende Zeichen muss eine oeffende eckige Klammer sein,
-            //    da diese den Schluessel vom Platzhalter einschliesst
-            //  - fuer den Schluessel sind nur folgende Zeichen zulaessig:
-            //    a-z A-Z 0-9 _-
-            //    abweichende Zeichen werden als Platzhalter ignoriert
-            //  - dem Schluessel muss die schliessende eckige Klammer folgen,
-            //    da diese den Schluessel vom Platzhalter einschliesst
-            if (digit == ']')
-                return cursor -offset +1;
+            cursor++;
         }
         
-        return -1;
+        //Fall 1: Der Stack ist nicht leer
+        //Somit wurde ein Platzhalter erkannt, der nicht abgeschlossen ist.
+        //Der Scan ist hungrig und geht von einem unvollstaendigen Platzhalter
+        //aus. Daher ist der Offset von Start-Position bis zum Ende vom Model.
+        if (deep > 0)
+            return model.length -offset;
+        
+        //Fall 2: Der Stack ist leer
+        //Der Platzhalter wurde komplett ermittelt und der Offset entspricht
+        //der Laenge des kompletten Platzhalter mit ggf. enthaltenen Segmenten.
+        return cursor -offset +1;
+    }
+
+    /**
+     *  Analysiert das Model und bereitet es final vor.
+     *  Dazu werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
+     *  Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die
+     *  Scopes mit den Segmenten (Teilvorlagen) ermittelt und durch einen
+     *  einfachen Platzhalter ersetzt. Nach dem Parsen entsteht ein finales
+     *  Model mit optimierten Platzhaltern und extrahierten Segmenten, welches
+     *  zur Laufzeit nicht ge&auml;ndert werden kann
+     *  @param  model Model
+     *  @return das final aufbereitete Model
+     */
+    private byte[] scan(byte[] model) {
+        
+        if (model == null)
+            return new byte[0];
+        
+        int cursor = 0;
+        while (true) {
+            int offset = Generator.scan(model, cursor++);
+            if (offset < 0)
+                break;
+            if (offset == 0)
+                continue;
+                
+            cursor--;            
+
+            byte[] patch = new byte[0];
+            String fetch = new String(model, cursor, offset);
+            if (fetch.matches("^(?si)#\\[[a-z]([\\w\\-]*\\w)*\\[\\[.*\\]\\]\\]$")) {
+                
+                //der Scope wird ermittelt aus: #[scope[[segment]]]
+                String scope = fetch.substring(2);
+                scope = scope.substring(0, scope.indexOf('['));
+                scope = scope.toLowerCase();
+                
+                //das Segment wird aus dem Model extrahiert
+                byte[] cache = new byte[offset -scope.length() -7];
+                System.arraycopy(model, cursor +scope.length() +4, cache, 0, cache.length);
+                
+                //der Scope wird mit dem Segment registriert, wenn der Scope
+                //noch nicht existiert
+                if (!this.scopes.containsKey(scope))
+                    this.scopes.put(scope, this.scan(cache));
+                
+                //als neuer Platzhalter wird nur der Scope verwendet
+                patch = ("#[").concat(scope).concat("]").getBytes();
+            } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)*\\]$")) {
+                patch = fetch.toLowerCase().getBytes();
+            } else if (fetch.matches("^(?i)#\\[0x([0-9a-f]{2})+\\]$")) {
+                cursor += fetch.length() +1;
+                continue;
+            }
+            
+            //das Model wird mit dem Patch neu aufgebaut
+            byte[] cache = new byte[model.length -offset +patch.length];
+            System.arraycopy(model, 0, cache, 0, cursor);
+            System.arraycopy(patch, 0, cache, cursor, patch.length);
+            System.arraycopy(model, cursor +offset, cache, cursor +patch.length, model.length -cursor -offset);
+            model = cache;
+            
+            cursor += patch.length +1;
+        }
+        
+        return model;
+    }
+    
+    /**
+     *  Bef&uuml;llt das aktulle Model mit den &uuml;bergebenen Werten.
+     *  Optional kann das Befüllen durch die Angabe eines Scopes auf ein
+     *  Segment begrenzt werden und/oder mit {@code clean} festgelegt werden,
+     *  ob der R&uuml;ckgabewert finalisiert und alle ausstehenden Platzhalter
+     *  entfernt bzw. aufgel&ouml;st werden.
+     *  @param  scope  Scope bzw. Segment
+     *  @param  values Werte
+     *  @param  clean  {@code true} zur finalen Bereinigung
+     *  @return das bef&uuml;llte Model(Fragment)
+     */    
+    private byte[] assemble(String scope, Hashtable values, boolean clean) {
+        
+        Enumeration enumeration;
+        String      label;
+        String      fetch;
+        
+        byte[]      cache;
+        byte[]      patch;
+
+        if (this.model == null)
+            return new byte[0];
+
+        //Normalisierung der Werte (Kleinschreibung + Glaetten der Schluessel)
+        if (values == null)
+            values = new Hashtable();
+        enumeration = values.keys();
+        values = new Hashtable(values);
+        while (enumeration.hasMoreElements()) {
+            label = (String)enumeration.nextElement();
+            values.put(label.toLowerCase().trim(), values.get(label));
+        }
+        
+        //Optional wird der Scope ermittelt.
+        if (scope != null) {
+            scope = scope.toLowerCase().trim();
+
+            //Wird einer angegeben der nicht existiert, ist nichts zu tun.
+            if (!this.scopes.containsKey(scope))
+                return this.model;
+            
+            //Scopes werden unabhaengig aufbereitet und spaeter wie ein
+            //einfacher aber exklusiver Platzhalter verarbeitet.
+            patch = this.extract(scope, values);
+            
+            values.clear();
+            values.put(scope, patch);
+        }
+        
+        int cursor = 0;
+        while (true) {
+            int offset = Generator.scan(this.model, cursor++);
+            if (offset < 0)
+                break;
+            if (offset == 0)
+                continue;
+                
+            cursor--;
+
+            patch = new byte[0];
+            fetch = new String(this.model, cursor, offset);
+            if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)*\\]$")) {
+                fetch = fetch.substring(2, fetch.length() -1);
+                
+                //die Platzhalter nicht uebermittelter Schluessel werden
+                //ignoriert, mit 'clean' werden die Platzhalter geloescht
+                if (!values.containsKey(fetch)
+                        && !clean) {
+                    cursor += fetch.length() +3 +1;
+                    continue;
+                }
+                
+                //der Patch wird ueber den Schluessel ermittelt
+                Object object = values.get(fetch);
+
+                //Ist der Schluessel ein Segment und der Wert ist ein Hashtable
+                //mit Werten, wird das Segment rekursive befuellt. Zum Schutz
+                //vor unendlichen Rekursionen, wird der aktuelle Scope aus der
+                //Werte-Liste entfernt. Bsp. #[A[[#[B[[#[A[[...]]]...]]]...]]]
+                if (this.scopes.containsKey(fetch)
+                        && object instanceof Hashtable) {
+                    patch = this.extract(fetch, (Hashtable)object);
+                } else if (object instanceof byte[]) {
+                    patch = (byte[])object;
+                } else if (object != null) {
+                    patch = String.valueOf(object).getBytes();
+                }
+                
+                if (!clean) {
+                
+                    //ggf. werden die # Zeichen kodiert, um die Platzhalter und
+                    //Struktur im Model zu schuetzen
+                    int index = 0;
+                    while (index < patch.length) {
+                        if (patch[index++] != '#')
+                            continue;
+                        cache = new byte[patch.length +6];
+                        System.arraycopy(patch, 0, cache, 0, index);
+                        System.arraycopy(("[0x23]").getBytes(), 0, cache, index, 6);
+                        System.arraycopy(patch, index, cache, index +6, patch.length -index);
+                        patch = cache;
+                    }
+                    
+                    if (this.scopes.containsKey(fetch)) {
+                        fetch = ("#[").concat(fetch).concat("]");
+                        cache = new byte[patch.length +fetch.length()];
+                        System.arraycopy(patch, 0, cache, 0, patch.length);
+                        System.arraycopy(fetch.getBytes(), 0, cache, patch.length, fetch.length());
+                        patch = cache;
+                    }
+                }
+                
+            } else if (fetch.matches("^(?i)#\\[0x([0-9a-f]{2})+\\]$")) {
+                
+                //Hexadezimale Platzhalter werden nur mit clean aufgeloest, da
+                //diese ungewollte (Steuerzeichen)Zeichen enthalten koennen,
+                //was das Rendern behindert.
+                if (!clean) {
+                    cursor += fetch.length() +1;
+                    continue;            
+                }
+                
+                //der hexadezimale Code wird in Bytes konvertiert
+                fetch = fetch.substring(4, fetch.length() -1); 
+                fetch = ("ff").concat(fetch);
+                patch = new BigInteger(fetch, 16).toByteArray();
+                patch = Arrays.copyOfRange(patch, 2, patch.length);                
+            }
+            
+            //das Model wird mit dem Patch neu aufgebaut
+            cache = new byte[this.model.length -offset +patch.length];
+            System.arraycopy(this.model, 0, cache, 0, cursor);
+            System.arraycopy(patch, 0, cache, cursor, patch.length);
+            System.arraycopy(this.model, cursor +offset, cache, cursor +patch.length, this.model.length -cursor -offset);
+            this.model = cache;
+            
+            cursor += patch.length +1;
+        }
+        
+        return this.model;
     }
 
     /**
@@ -243,7 +468,7 @@ public class Generator {
      *  @return alle Scopes der Segmente als Enumeration
      */
     public Enumeration scopes() {
-        return this.segments.keys();
+        return this.scopes.keys();
     }
 
     /**
@@ -251,7 +476,7 @@ public class Generator {
      *  @return die aktuell bef&uuml;llte Vorlage
      */
     public byte[] extract() {
-        return this.prepare(this.model, null, null, 2);
+        return this.assemble(null, null, true).clone();
     }
     
     /**
@@ -262,21 +487,7 @@ public class Generator {
      *          wird ein leeres Byte-Array zur&uuml;ckgegeben
      */
     public byte[] extract(String scope) {
-
-        byte[] model;
-        
-        if (scope != null) {
-            scope = scope.toLowerCase().trim();
-            if (!scope.isEmpty() && !scope.matches("[a-z0-9_-]+"))
-                return new byte[0];
-        }
-        
-        model = null;
-        if (scope != null)
-            model = (byte[])this.segments.get(scope);
-        if (model == null)
-            model = new byte[0];
-        return this.prepare(model, null, null, 2);
+        return this.extract(scope, null);
     }
     
     /**
@@ -289,209 +500,21 @@ public class Generator {
      */
     public byte[] extract(String scope, Hashtable values) {
         
-        byte[] model;
-        
-        if (scope != null) {
-            scope = scope.toLowerCase().trim();
-            if (!scope.isEmpty() && !scope.matches("[a-z0-9_-]+"))
-                return new byte[0];
-        }
-        
-        model = null;
         if (scope != null)
-            model = (byte[])this.segments.get(scope);        
-        if (model == null)
-            model = new byte[0];
-        model = this.prepare(model, scope, values, 1);
-        return this.prepare(model, null, null, 2);
-    }
-
-    /**
-     *  Bereitet in der &uuml;bergeben Vorlage alle Plazthalter zum angegebenen
-     *  Scope bzw. Segment vor bzw. auf oder bereinigt diese.
-     *  @param  model  Vorlage
-     *  @param  scope  Scope bzw. Segment
-     *  @param  values Werte
-     *  @param  level  Verarbeitungsschritt
-     *  @return die ge&auml;nderten Daten als ByteArray
-     */
-    private byte[] prepare(byte[] model, String scope, Hashtable values, int level) {
-
-        Enumeration enumeration;
-        String      label;
-        String      trace;
-        Object      object;
-        
-        String[]    stack;
-        
-        byte[]      cache;
-        byte[]      value;
-        
-        int         cursor;
-        int         offset;
-        int         shift;
-        int         index;
-        
-        if (scope == null)
-            scope = "";
-        trace = scope;
-        stack = scope.trim().split("\\s+");
-        
-        if (values == null || level != 1)
-            values = new Hashtable();
-
-        //die Werte werden normalisiert, aber nicht in der Rekursion
-        if (stack.length <= 1) {
-            values = new Hashtable(values);
-            enumeration = new Hashtable(values).keys();
-            while (enumeration.hasMoreElements()) {
-                label = (String)enumeration.nextElement();
-                values.put(label.toLowerCase().trim(), values.get(label));
-            }
-        }
-        
-        for (cursor = 0; cursor < model.length; cursor++) {
-            
-            offset = Generator.scan(model, cursor);
-            if (offset < 0)
-                continue;
-            
-            shift = 0;
-            value = null;
-            
-            //der Platzhalter wird als Ausschnitt ermittelt, einleitende
-            //und beendende Zeichen werden abgeschnitten, womit Scope,
-            //Trennung und Schluessel verbleiben
-            cache = Arrays.copyOfRange(model, cursor +2, cursor +offset -1);
-            scope = new String(cache);
-            index = scope.indexOf(':'); 
             scope = scope.toLowerCase().trim();
-            
-            if (scope.matches("^0x([0-9a-f]{2})+$")) {
-
-                //Platzhalter mit maskierten Daten werden nur beim Release
-                //aufgeloest und sonst ignoriert
-                if (level > 1) {
-                    
-                    scope = ("ff").concat(scope.substring(2));
-                    value = new BigInteger(scope, 16).toByteArray();
-                    value = Arrays.copyOfRange(value, 2, value.length);
-                }
-                
-            } else if (level > 1) {
-
-                //ab Level Release werden alle Platzhalter bereinigt
-                //neue Scopes werden in diesem Level ignoriert
-                value = new byte[0];
-                
-            } else if (cache[cache.length -1] == ']') {
-                
-                //es werden immer die letzten drei Bytes betrachtet
-                //eine schliessende Klammer an dieser Stelle kann nur auf 
-                //ein Segment hinweisen
-
-                //Scope und Daten vom Segment werden ermittelt
-                scope = scope.substring(0, Math.max(0, index)).trim();
-                cache = Arrays.copyOfRange(cache, index +3, cache.length -2);
-                
-                //rekursiv wird nach weiteren innere Segmente gesucht
-                cache = this.prepare(cache, null, null, 0);
-
-                //das Segmente wird registriert
-                this.segments.put(scope, cache);
-
-                //Segmente werden an der Stelle wo diese verwendet werden durch
-                //einen Platzhalter abgebildet
-                value = ("#[").concat(scope).concat("]").getBytes();
-                
-                //mit dem negativem Offset wird der Cursor vor den Platzhalter
-                //positioniert, damit der normale Prepare-Prozess greift, wenn
-                //ein Segement erst nach dem Parsen ermittelt ermittelt wird
-                shift = -value.length; 
-                
-            } else if (level < 1) {
-
-                //im Level Initialize werden alle Platzhalter ignoriert
-                
-            } else {
-                
-                if (this.segments.containsKey(scope)) {
-                    
-                    if (trace.concat(" ").indexOf((" ").concat(scope).concat(" ")) >= 0) {
-                        
-                        //endlose Rekursionen werden unterbunden
-                        //der Scope darf nicht im Trace enthalten sein
-                        value = new byte[0];                        
-                        
-                    } else {
-                        
-                        //Segmente werden nur mit gueltigem Scope/Filter verarbeitet,
-                        //ohne Scope/Filer werden diese ignoriert
-                        if (scope.equals(stack[0])) {
-
-                            //der Inhalt von Segmenten laesst sich ueber
-                            //gleichnamige Werte ueberschreiben, das Verhalten mit
-                            //dem Fortfuehren vom Platzhalter bleibt dabei erhalten
-                            if (values.containsKey(scope)) {
-                                
-                                //der Wert wird ueber den Schluessel ermittelt
-                                object = values.get(scope);
-                                if (object instanceof byte[])
-                                    value = (byte[])object;
-                                else if (object != null)
-                                    value = String.valueOf(object).getBytes();
-                                
-                            } else {
-                                
-                                //das Segement wird rekursiv aufgeloest
-                                value = this.prepare((byte[])this.segments.get(scope), scope.concat(" ").concat(trace).trim(), values, 1);
-                            }
-                            
-                            //der Platzhalter bleibt erhalten, was durch die
-                            //Verschiebung vom Cursor erreicht wird, die Laenge
-                            //vom Value kann hier ignoriert werden, da diese am
-                            //Ende beruecksichtig wird
-                            shift  = offset +1;
-                            offset = 0;
-                        }
-                    }
-                    
-                } else {
-
-                    //Schluessel und Scope werden ermittelt
-                    label = scope.substring(index +1).trim();
-                    scope = scope.substring(0, Math.max(0, index)).trim();
-                    
-                    //nur bei uebereinstimmenden Scope wird der Platzhalter
-                    //beruecksichtigt bzw. verarbeitet
-                    if (scope.equals(stack[0]) || scope.isEmpty()) {
-
-                        //der Wert wird ueber den Schluessel ermittelt
-                        object = values.get(label);
-                        if (object instanceof byte[])
-                            value = (byte[])object;
-                        else if (object != null)
-                            value = String.valueOf(object).getBytes();
-                    }
-                }
-            }
-            
-            if (value != null) {
-            
-                //die Daten werden eingefuegt
-                cache = new byte[model.length -offset +value.length];
-                System.arraycopy(model, 0, cache, 0, cursor);
-                System.arraycopy(value, 0, cache, cursor, value.length);
-                System.arraycopy(model, cursor +offset, cache, cursor +value.length, model.length -cursor -offset);
-                model = cache;
-            }
-            
-            //der neue Cursor wird berechnet
-            cursor += value == null ? offset -1 : value.length -1;
-            cursor += shift;
-        }
+        if (scope == null
+                || !scope.matches("^[a-z]([\\w-]*\\w)*$"))
+            return new byte[0];
         
-        return model;
+        //Intern wird fuer das Segmente (Teilmodel)ein Kopie vom Generator
+        //erstellt und dadurch partiell befuellt.
+        Generator generator = new Generator();
+        generator.scopes = (Hashtable)this.scopes.clone();
+        generator.scopes.remove(scope);
+        generator.model = (byte[])this.scopes.get(scope);
+        if (generator.model == null)
+            generator.model = new byte[0];
+        return generator.assemble(null, values, true);
     }
 
     /**
@@ -499,7 +522,7 @@ public class Generator {
      *  @param values Werte
      */
     public void set(Hashtable values) {
-        this.model = this.prepare(this.model, null, values, 1);
+        this.set(null, values);
     }
 
     /**
@@ -508,13 +531,12 @@ public class Generator {
      *  @param values Werte
      */
     public void set(String scope, Hashtable values) {
-        
-        if (scope != null) {
+
+        if (scope != null)
             scope = scope.toLowerCase().trim();
-            if (!scope.isEmpty() && !scope.matches("[a-z0-9_-]+"))
-                return;
-        }        
-        
-        this.model = this.prepare(this.model, scope, values, 1);
+        if (scope != null
+                && !scope.matches("^[a-z]([\\w-]*\\w)*$"))
+            return;
+        this.model = this.assemble(scope, values, false);
     }
 }

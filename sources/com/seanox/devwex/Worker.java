@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.1 20180521<br>
+ *  Worker 5.1 20181129<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20180521
+ *  @version 5.1 20181129
  */
 class Worker implements Runnable {
   
@@ -2224,7 +2224,7 @@ class Worker implements Runnable {
         values.put("sort", query);
 
         values.put("file", bytes);
-        generator.set("file", values);
+        generator.set(values);
 
         return generator.extract();
     }
@@ -2776,15 +2776,13 @@ class Worker implements Runnable {
     /** Protokollierte den Zugriff im Protokollmedium. */
     private void register() throws Exception {
 
-        Enumeration  enumeration;
+        Enumeration  source;
         Generator    generator;
-        Hashtable    elements;
-        OutputStream output;
-        String       access;
+        Hashtable    values;
+        OutputStream stream;
         String       format;
+        String       output;
         String       string;
-        
-        int          offset;
         
         //der Client wird ermittelt
         string = this.environment.get("remote_addr");
@@ -2800,64 +2798,56 @@ class Worker implements Runnable {
             
             //das Format vom ACCESSLOG wird ermittelt
             format = this.options.get("accesslog");
-            format = format.replaceAll("(?i)#\\[0x[0-9A-Z]+\\]", "");
             
-            //die Zeitsymbole im Dateinamen werden aufgeloest
-            format = format.replaceAll("[\\x00-\\x20]", " ").trim();
-            format = format.replaceAll("%", "%%");
-            format = format.replaceAll("(?i)#\\[T:([^\\]]+)\\]", "%1\\$t$1");
+            //Konvertierung der String-Formater-Syntax in Generator-Syntax
+            format = format.replaceAll("#", "#[0x23]");
+            format = format.replaceAll("%%", "#[0x25]");
+            format = format.replaceAll("%\\[", "#[");
+            format = format.replaceAll("%t", "%1\\$t");
+ 
+            //die Zeitsymbole werden aufgeloest
             format = String.format(Locale.US, format, new Object[] {new Date()});
+
+            //Format und Pfad werden am Zeichen > getrennt
+            if (format.contains(">")) {
+                output = format.split(">")[1].trim();
+                format = format.split(">")[0].trim();
+            } else output = "";
             
-            offset = format.indexOf('>');
-            access = offset >= 0 ? format.substring(offset +1).trim() : "";
-            if (offset >= 0) 
-                format = format.substring(0, offset).trim();
-            
-            //ohne Format oder mit OFF wird der Access-Log ignoriert und es
-            //erfolgt keine Protokollierung
-            if (access.length() <= 0
-                    &&(format.toLowerCase().equals("off")
-                            || format.length() <= 0))
+            //ohne Format und/oder mit OFF wird kein Access-Log erstellt
+            if (format.length() <= 0
+                    || format.toLowerCase().equals("off"))
                 return;
 
-            format = format.replaceAll("(?si)#\\[0x[0-9A-Z]+\\]", "");
-            format = format.replaceAll("(?s)[\\x00-\\x06]", " ");
-            format = format.replaceAll("(#\\[[^\\]]*\\])", "\00$1\01");            
-
-            access = access.replaceAll("(?si)#\\[0x[0-9A-Z]+\\]", "");
-            access = access.replaceAll("(?s)[\\x00-\\x06]", " ");
-            access = access.replaceAll("(#\\[[^\\]]*\\])", "\00$1\01");            
-            
-            elements = new Hashtable();
-            
-            enumeration = this.environment.elements();
-            while (enumeration.hasMoreElements()) {
-                string = (String)enumeration.nextElement();
-                elements.put(string, Worker.textEscape(this.environment.get(string)));
-            }
+            values = new Hashtable();
+            source = this.environment.elements();
+            while (source.hasMoreElements()) {
+                string = (String)source.nextElement();
+                values.put(string, Worker.textEscape(this.environment.get(string)));
+            }            
             
             generator = Generator.parse(format.getBytes());
-            generator.set(elements);
+            generator.set(values);
             format = new String(generator.extract());
-            format = format.replaceAll("(?:\000+\01)|(?:(\\W)\00\01\\1)", "-");
-            format = format.replaceAll("[\00\01]", "");
+            format = format.replaceAll("(?<=\\s)(''|\"\")((?=\\s)|$)", "-");
+            format = format.replaceAll("(\\s)((?=\\s)|$)", "$1-"); 
             format = format.concat(System.lineSeparator());
             
-            generator = Generator.parse(access.getBytes());
-            generator.set(elements);
-            access = new String(generator.extract());
-            access = access.replaceAll("(?:\000+\01)|(?:(\\W)\00\01\\1)", "-");
-            access = access.replaceAll("[\00\01]", "").trim();
-
+            generator = Generator.parse(output.getBytes());
+            generator.set(values);
+            output = new String(generator.extract());
+            output = output.replaceAll("(?<=\\s)(''|\"\")((?=\\s)|$)", "-");
+            output = output.replaceAll("(\\s)((?=\\s)|$)", "$1-").trim(); 
+            
             //wurde kein ACCESSLOG definiert wird in den StdIO,
             //sonst in die entsprechende Datei geschrieben
-            if (access != null && access.length() > 0) {
-                output = new FileOutputStream(access, true);
-                try {output.write(format.getBytes());
+            if (output.length() > 0) {
+                stream = new FileOutputStream(output, true);
+                try {stream.write(format.getBytes());
                 } finally {
-                    output.close();
+                    stream.close();
                 }
-            } else Service.print(format, false);
+            } else Service.print(format, false);            
         }
     }
     

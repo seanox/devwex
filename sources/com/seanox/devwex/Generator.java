@@ -23,8 +23,10 @@ package com.seanox.devwex;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  *  Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) 
@@ -32,11 +34,20 @@ import java.util.Hashtable;
  *  mit Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
  *  Platzhalter, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
  *  Platzhalter durch die Werte ersetzt.<br>
- *  Platzhalter können auch Segmente sein, diese bilden dann eine Teilstruktur
- *  in der Vorlage und lassen sich dediziert und partiell verwenden sowie
+ *  Platzhalter k&ouml;nnen auch Segmente sein, die in der Vorlage eine
+ *  Teilstruktur bilden, die sich dediziert und partiell verwenden sowie
  *  bef&uuml;llen. Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen
- *  erhalten und sind wiederverwendbar.<br>
- *  
+ *  erhalten und sind iterativ wiederverwendbar.<br>
+ *  <br>
+ *  Der Generator arbeitete aus Byte-Level.<br>
+ *  Als Werte f&uuml;r die Platzhalter werden prim&auml;r byte-Arrays erwartet,
+ *  f&uuml;r alle anderen Typen wird {@code String.valueOf(value).getBytes()}
+ *  verwendet. Bei Segmenten werden Werte vom Typ {@link Hashtable} und
+ *  {@link Collection} als Struktur mit beliebiger Tiefe verarbeitet.
+ *  {@link Hashtable} enthalten dabei Werte f&uuml;r die Platzhalter in einem
+ *  Segment und eine {@link Collection} erzeugt durch die tiefe, sich
+ *  wiederholende rekursive Generierung komplexe Strukturen.<br>
+ *
  *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
  *  auf folgende Zeichen begrenzt:
@@ -110,12 +121,12 @@ import java.util.Hashtable;
  *  {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
  *  konzentrieren.<br>
  *  <br>
- *  Generator 5.1 20181127<br>
+ *  Generator 5.1 20181214<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20181127
+ *  @version 5.1 20181214
  */
 public class Generator {
 
@@ -322,7 +333,7 @@ public class Generator {
     
     /**
      *  Bef&uuml;llt das aktulle Model mit den &uuml;bergebenen Werten.
-     *  Optional kann das Befüllen durch die Angabe eines Scopes auf ein
+     *  Optional kann das Bef&uuml;llen durch die Angabe eines Scopes auf ein
      *  Segment begrenzt werden und/oder mit {@code clean} festgelegt werden,
      *  ob der R&uuml;ckgabewert finalisiert und alle ausstehenden Platzhalter
      *  entfernt bzw. aufgel&ouml;st werden.
@@ -338,6 +349,7 @@ public class Generator {
         String      fetch;
         
         byte[]      cache;
+        byte[]      model;
         byte[]      patch;
 
         if (this.model == null)
@@ -402,6 +414,25 @@ public class Generator {
                 if (this.scopes.containsKey(fetch)
                         && object instanceof Hashtable) {
                     patch = this.extract(fetch, (Hashtable)object);
+                } else if (this.scopes.containsKey(fetch)
+                        && object instanceof Collection) {
+                    //Collections erzeugt durch die tiefe, sich wiederholende
+                    //rekursive Generierung komplexe Strukturen/Tabellen.
+                    Iterator iterator = ((Collection)object).iterator();
+                    while (iterator.hasNext()) {
+                        object = iterator.next();
+                        if (object instanceof Hashtable) {
+                            model = this.extract(fetch, (Hashtable)object);
+                        } else if (object instanceof byte[]) {
+                            model = (byte[])object;
+                        } else if (object != null) {
+                            model = String.valueOf(object).getBytes();
+                        } else continue;
+                        cache = new byte[patch.length +model.length];
+                        System.arraycopy(patch, 0, cache, 0, patch.length);
+                        System.arraycopy(model, 0, cache, patch.length, model.length);
+                        patch = cache; 
+                    }
                 } else if (object instanceof byte[]) {
                     patch = (byte[])object;
                 } else if (object != null) {

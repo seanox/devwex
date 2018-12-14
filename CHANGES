@@ -8,6 +8,7 @@
       - Omission of namespaces, replacement by the dedicated/partial use of segments
       - Change of syntax, omission of : for segments   
         old: #[foo:[[...]]], new: #[foo[[...]]]
+      - Enhancement by a deep/recursive processing of Hashtable + Collections  
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
         segments is no longer supported.

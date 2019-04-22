@@ -17,6 +17,7 @@
       - AccessLog: Change to a print formatted syntax
         date/time %t... variables %[...]
       - AccessLog: Change in default structure from filename to: <host>_<date>-access.log    
+  CR: Project: Uniform use of ./LICENSE and ./CHANGES    
 
 5.1.0 20180505
   BF: Initialize: Korrektur Smart-Modus

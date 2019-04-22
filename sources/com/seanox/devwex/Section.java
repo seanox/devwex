@@ -161,7 +161,7 @@ import java.util.StringTokenizer;
  */
 public class Section implements Cloneable {
 
-    /** Hashtable mit den Sch&uuml;sseln */
+    /** Map mit den Sch&uuml;sseln */
     private volatile LinkedHashMap entries;
     
     /** Option zur Aktivierung vom Smart-Modus */

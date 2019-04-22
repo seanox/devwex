@@ -161,7 +161,7 @@ import java.util.StringTokenizer;
  */
 public class Initialize implements Cloneable {
 
-    /** Hashtable der Sektionen */
+    /** Map der Sektionen */
     private volatile LinkedHashMap entries;
     
     /** Option zur Aktivierung vom Smart-Modus */

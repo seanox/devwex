@@ -54,7 +54,7 @@ Go to the program directory and start the program directly or by script.
 BF: HTTP(S) Correction  
 CR: Generator: Correction when rendering successive placeholders #[...]#[...]  
 CR: Generator: Optimization / Review  
-CR: HTTP(S) Optimierung  
+CR: HTTP(S): Optimierung  
 CR: Project: Uniform use of ./LICENSE and ./CHANGES  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)

@@ -13,7 +13,7 @@
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
         segments is no longer supported.
-  CR: HTTP(S) Optimierung
+  CR: HTTP(S): Optimierung
       - AccessLog: Change to a print formatted syntax
         date/time %t... variables %[...]
       - AccessLog: Change in default structure from filename to: <host>_<date>-access.log    
@@ -26,7 +26,7 @@
       - im Smart-Modus angeforderte ungueltige Schluessel liefern wieder null
   CR: Projekt: Anpasung KeyStore
       - Entwicklung: Umstellung auf einen eigenen KeyStore unabhaengig vom Program(Release)-Verzeichnis
-  CR: HTTP(S) Optimierung/Korrektur
+  CR: HTTP(S): Optimierung/Korrektur
       - Worker: Umbennung der Methode Worder::Initialize in Worker::Initiate  
       - AccessLog: Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
         0x00-0x20 / 0x80-0xFF verwenden \xXX und 0x0100-0xFFFF verwendet \uXXXX

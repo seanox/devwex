@@ -2,7 +2,8 @@ main > p {
   color:#999999;
 }
 main > p + p {
-  color:#CCCCCC; display:none;
+  color:#CCCCCC;
+  display:none;
 }
 main > p + p[class~='#[http_status]'] {
   display:block;

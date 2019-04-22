@@ -2,6 +2,7 @@
   BF: HTTP(S) Correction
       - Basic Authentication / Digest Access Authentication: rules are used again
         case-insentive
+  CR: Generator: Correction when rendering successive placeholders #[...]#[...]      
   CR: Generator: Optimization / Review
       - Optimization: Handling of segments/scopes/fragements
         Improvement of dedicated and partial use
@@ -18,50 +19,50 @@
       - AccessLog: Change in default structure from filename to: <host>_<date>-access.log    
 
 5.1.0 20180505
-  BF: Initialize - Korrektur Smart-Modus
+  BF: Initialize: Korrektur Smart-Modus
       - im Smart-Modus erstellte Sections werden wieder gehalten
-  BF: Section - Korrektur Smart-Modus
+  BF: Section: Korrektur Smart-Modus
       - im Smart-Modus angeforderte ungueltige Schluessel liefern wieder null
-  CR: Projekt - Anpasung KeyStore
+  CR: Projekt: Anpasung KeyStore
       - Entwicklung: Umstellung auf einen eigenen KeyStore unabhaengig vom Program(Release)-Verzeichnis
   CR: HTTP(S) Optimierung/Korrektur
       - Worker: Umbennung der Methode Worder::Initialize in Worker::Initiate  
       - AccessLog: Optimierung der Maskierung vom ASCII Bereich 0x00-0x20 / 0x80-0xFF / 0x0100-0xFFFF
         0x00-0x20 / 0x80-0xFF verwenden \xXX und 0x0100-0xFFFF verwendet \uXXXX
       - Directory Index: Umstellung der BreadCrumb-Navigation von path/base/name auf location/path/name
-  CR: (X)CGI / HTTP-XAPI / Templates - Optimierung
+  CR: (X)CGI / HTTP-XAPI / Templates: Optimierung
       - Environment-Variable path_base wurde geaendert in path_url, analog zu script_url
-  CR: Konfiguration - Aenderung der Server/Service-Sektion
+  CR: Konfiguration: Aenderung der Server/Service-Sektion
       - Aenderung der Server/Service-Sektion, diese muessen jetzt auf :INI enden, bisher war es :BAS
-  CR: SAPI - Anpassung bei Initialisieurng und Fehlerausgabe
+  CR: SAPI: Anpassung bei Initialisieurng und Fehlerausgabe
       - Erweiterung der Fehlerausgabe beim Laden/Starten
       - Umstellung der Ausgabe beim Initialiseren auf den Namen der Sektiones
       - Umstellung der Initialisieurng per Konstruktor auf den vollstaendigen Context (Name der Sektion)
-  CR: Dokumenation - Allgemeine Korrektur und Anpassungen
+  CR: Dokumenation: Allgemeine Korrektur und Anpassungen
       - Allgemeine Korrektur und Anpassungen      
       
 5.0.0 20171206
-  BF: HTTP SERVER:SSL - Korrektur vom fehlenden TrustManager
-  BF: HTTP PUT - Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis
+  BF: HTTP SERVER:SSL: Korrektur vom fehlenden TrustManager
+  BF: HTTP PUT: Korrektur/Optimierung in der Unterscheidung von Datei/Verzeichnis
       Die Ressource ist ein Directory, wenn keine Content-Length gesendet wird.
       Ob die URL auf Slash endet oder nicht, ist egal.
-  BF: HTTP Range - Korrekturen
+  BF: HTTP Range: Korrekturen
       - HTTP Range x-x verrechnete sich ggf. um ein Byte
       - HTTP Range -x lieferte nicht die letzten Bytes
       - HTTP Range verwendet nun auch Status 416
       - Toleranz wurde verringert, ungueltige Werte werden nicht mehr interpoliert
-  BF: HTTP Locate - Korrektur der Pfadverarbeitung (Windows)
+  BF: HTTP Locate: Korrektur der Pfadverarbeitung (Windows)
       Der Dot-(Back)Slash-Bug in Windows (Punkt vor dem (Back)Slash) wurde korrigiert.
       Beispiel: https://example.local/forbidden./foo.html konnte den Schutz von
       /forbidden aushebeln, da /forbidden. offiziell nicht existiert, Windows aber
       automatisch daraus /forbidden macht und ggf. hinterlegte Regeln und Direktiven
       nicht greifen, da diese nicht /forbidden. abdecken.
-  CR: Projekt - Optimierung
+  CR: Projekt: Optimierung
       - Umstellung auf Java5/8
       - Umstellung der Testumgebung auf JUnit
       - Umstellung der Historie auf den internen ChangeLog (release.txt)
       - Optimierung vom Build-Prozess/Skript
-  CR: Dokumentation / Layout - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Dokumentation / Layout: Ueberarbeitung/Optimierung/Erweiterung
   CR: Service
       - CLEANUP Ueberarbeitung/Optimierung
         Unterstuetzt nur noch on/off, Standardwert: off
@@ -73,13 +74,13 @@
         benutzt, wird nur noch devwex.jar benoetigt.
       - Aenderung der Methode Service.call(Class, String) in Service.load(Class, String)
       - Erweiterung um Service.print(String, boolean)        
-  CR: Generator - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Generator: Ueberarbeitung/Optimierung/Erweiterung
       - Umbenennung in Template
       - Vereinfachung/Umstellung der Syntax auf #[...] #[0x...] #[...:[[...]]]
       - Erweiterung um maskierte Text/Daten/Zeichen
       - Generierung vom Segmenten wird jetzt direkt im mit der Set-Methode unterstuetzt
       - Optimierung vom Parser und in der Verarbeitung
-  CR: HTTP Session/Worker - Ueberarbeitung/Optimierung/Erweiterung
+  CR: HTTP Session/Worker: Ueberarbeitung/Optimierung/Erweiterung
       - Umbenennung in Worker
       - Implementierung der der HTTP-Methoden in separaten do-Methoden
       - allgemeine Umstellung auf die einheitliche Verwendung von CGI-Variablen
@@ -88,21 +89,21 @@
       - Variable "realm" entfaellt, dafuer gibt es die CGI-Variablen: auth_user, auth_type, auth_realm
       - Variable "reference" geaendert in "location"
       - Variable "process" geaendert in "gateway"
-  CR: HTTP Request - Ueberarbeitung/Optimierung
+  CR: HTTP Request: Ueberarbeitung/Optimierung
       - Zusammenfassung von SLICING und TIMEOUT
         Das initiale Lesen vom Request wird nun durch TIMEOUT begrenzt.
         SLICING als eigenstaendiger Parameter entfaellt.
-  CR: HTTP DCGI - Ueberarbeitung/Optimierung/Umstellung auf XCGI
+  CR: HTTP DCGI: Ueberarbeitung/Optimierung/Umstellung auf XCGI
       - das CGI-Environment wird dem HTTP-Request vorangestellt
         CGI-Environment[CRLF][CRLF]Request-Header[CRLF][CRLF]Request-Body
       - DCGI/XCGI Option [I] geaendert in [X]
       - DCGI/XCGI Option [F] geaendert in [N] (Name)
       - DCGI/XCGI Option [E] entfaellt
-  CR: HTTP AccessLog - Ueberarbeitung/Optimierung/Umstellung
+  CR: HTTP AccessLog: Ueberarbeitung/Optimierung/Umstellung
       - Erweiterung um benutzerdefinierte Ausgaben/Formate
         ASCII Bereich 0x00-0x06 wird als Leerzeichen verwendet
       - Erweiterung um die Verwendung von CGI-Variablen auch im Dateinamen
-  CR: HTTP Filter - Ueberarbeitung/Optimierung/Erweiterung
+  CR: HTTP Filter: Ueberarbeitung/Optimierung/Erweiterung
       - Erweiterung um "matches" und die Verwendung von RegEx
       - Umstellung der AND-Verknuepfung von [A] auf [+]
       - Umstellung auf die ausschliessliche Verwendung von CGI-Variablen
@@ -110,16 +111,16 @@
       Konvertierung: Parameter-A wird zu http_parameter_a
       Neu ist die CGI-Variable request, dieser entspricht der ersten Zeile vom HTTP-Request.
       Bsp. GET /... HTTP/1.0
-  CR: HTTP Virtual Paths - Optimierung
+  CR: HTTP Virtual Paths: Optimierung
       - Virtuelle Pfade fuer einzelne Dateien wird wieder unterstuetzt         
-  CR: HTTP MIMETYPES - Umbenannt in MEDIATYPES
-  CR: HTTP SERVER:BAS/VIRTUAL:BAS - MIMETYPE umbenannt in MEDIATYPE
-  CR: HTTP VIRTUAL:BAS - SERVER definiert welche Server den virtuellen Host verwenden duerfen
-  CR: HTTP Templates - Ueberarbeitung/Optimierung/Erweiterung
+  CR: HTTP MIMETYPES: Umbenannt in MEDIATYPES
+  CR: HTTP SERVER:BAS/VIRTUAL:BAS: MIMETYPE umbenannt in MEDIATYPE
+  CR: HTTP VIRTUAL:BAS: SERVER definiert welche Server den virtuellen Host verwenden duerfen
+  CR: HTTP Templates: Ueberarbeitung/Optimierung/Erweiterung
       - als Variablen stehen nur noch die CGI-Variablen zur Verfuegung
       - Fehlerseiten/Statusseiten lassen sich gruppieren (status-000.html, status-0xx.html oder nur status.html).
         Die Ausgabe kann ueber die CGI-Variable http_status gesteuert werden.
-  CR: HTTP - Erweiterung der CGI-Variablen
+  CR: HTTP: Erweiterung der CGI-Variablen
       - neu: auth_user, auth_type, auth_realm
       - neu: remote_user = auth_user
   CR: HTTP SERVER:SSL
@@ -130,27 +131,27 @@
       - CLIENTAUTH: Erweiterung um die Option AUTO fuer eine tollerantes Verhalten
         bei ungueltigen oder fehlenden Zertifikaten (Request wird vom Server beantwortet,
         ggf. mit einer Fehlerseite)   
-  CR: HTTP XAPI - Ueberarbeitung/Optimierung/Erweiterung     
+  CR: HTTP XAPI: Ueberarbeitung/Optimierung/Erweiterung     
       - Vereinfachung der API auf die Mehtoden Module.service() in Module.filter()
         zur Implementierung von Web-Modulen und Filtern          
-  CR: Initialize - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Initialize: Ueberarbeitung/Optimierung/Erweiterung
       - Erweiterung um multiples EXTENDS
       - Erweiterung um die Verarbeitung von Hex-Daten (Maskierung von Daten/Zeichen)
       - Erweiterung um eine wahlweises "smarte" Verhalten
         Schluessel werden automatisch angelegt, leere automatisch verworfen, ...
       - namensgleiche Sektionen und Werte fuehren nun zum konsequenten Ueberschreiben
         ein Teilen von Sektionen ist nicht mehr moeglich
-  CR: Section - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Section: Ueberarbeitung/Optimierung/Erweiterung
       - Erweiterung um die Verarbeitung von Hex-Daten (Maskierung von Daten/Zeichen)
       - Erweiterung um eine wahlweises "smarte" Verhalten
         Schluessel werden automatisch angelegt, leere automatisch verworfen, ...
       - Erweiterung um das Laden von Umgebungsvariablen (Reihenfolge: Wert, System-Properties, Umgebungsvariable)
       - namensgleiche Sektionen und Werte fuehren nun zum konsequenten Ueberschreiben
         ein Teilen von Sektionen ist nicht mehr moeglich
-  CR: Remote - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Remote: Ueberarbeitung/Optimierung/Erweiterung
       - Response: Wegfall vom Praefix "INFO:" beim
       - STATE geaendert in STATUS
-  CR: XAPI - Ueberarbeitung/Optimierung/Erweiterung
+  CR: XAPI: Ueberarbeitung/Optimierung/Erweiterung
       - Aenderung der Methode Module.getCaption() in Module.explain()
         Die Methode ist optional.
       - Aenderung der Methode Module.destroy() diese muss nun implementiert werden
@@ -158,7 +159,7 @@
         Diese erfolgt nur noch ueber den Konstruktor Module(String options).
         Der Aufruf der Methoden Module.initialize(String options) entfaellt.
       - Erweiterung vom Logging beim Laden
-  CR: SAPI - Ueberarbeitung/Optimierung/Erweiterung
+  CR: SAPI: Ueberarbeitung/Optimierung/Erweiterung
       - Aenderung der Methode Server.getCaption() in Server.explain()
         Die Methode ist optional.
       - Aenderung der Methode Server.destroy() diese muss nun implementiert werden 
@@ -179,49 +180,49 @@
         Das Timeout und Entladen bei nicht endenden Servern wurde verworfen.
 
 4.3.0 20130707
-  BF: HTTP Directory Index - Korrektur vom CSS der Templates fuer IE 9/10
-  CR: Service - Optimierung/Erweiterung
+  BF: HTTP Directory Index: Korrektur vom CSS der Templates fuer IE 9/10
+  CR: Service: Optimierung/Erweiterung
       - Optimierung der Sequenz von Start, Restart und Stop
       - Erweiterung um den ShutdownHook fuer CTRL+C zum kontrollierten Herunterfahren
-  CR: HTTP - Erweiterung um die Methode OPTIONS
-  CR: HTTP Configuration - Optimierung/Erweiterung
+  CR: HTTP: Erweiterung um die Methode OPTIONS
+  CR: HTTP Configuration: Optimierung/Erweiterung
       - Umstellung der Syntax fuer Referenzen von >> auf >
         Betrifft u.a. SERVER:REF/FLT/CGI, VIRTUAL:REF/FLT/CGI
       - SERVER:BAS/VIRTUAL:BAS METHODS, Wegfall vom Alias ALL
       - SERVER:REF/VIRTUAL:REF, Erweiterung um die Options [X]
         Weitergabe aller HTTP-Methoden an ein Modul, unabhaengig von SERVER:BAS METHODS
         und VIRTUAL:BAS METHODS
-  CR: HTTP Module - Optimierung/Bereinigung
+  CR: HTTP Module: Optimierung/Bereinigung
       - Wegfall der Einspruenge: COMMAND, PROCESS, LOGGING, METHOD, LISTING, STATUS
 
 4.2.0 20130401
-  BF: HTTP Module - Korrektur in der Uebergabe der Konfiguration bei der Initialisierung
-  CR: Configration - Optimierung
+  BF: HTTP Module: Korrektur in der Uebergabe der Konfiguration bei der Initialisierung
+  CR: Configration: Optimierung
       - COMMONS RELOADING geaendert in RELOAD
       - COMMONS CLEARING geaendert in CLEANUP
-  CR: HTTP Directory Index - allgemeine Umgestaltung von Sortierung und Navigation
-  CR: HTTP Module - Erweiterung der XAPI um die optionale Uebergabe der Modul-Parameter
-  CR: SERVERSTATUS - Erweiterung um Status 101
-  CR: Test - Erweiterung der Pruefung der XAPI
+  CR: HTTP Directory Index: allgemeine Umgestaltung von Sortierung und Navigation
+  CR: HTTP Module: Erweiterung der XAPI um die optionale Uebergabe der Modul-Parameter
+  CR: SERVERSTATUS: Erweiterung um Status 101
+  CR: Test: Erweiterung der Pruefung der XAPI
       Uebergabe der Konfiguration bei der Initialisierung
 
 4.1.0 20120815
-  BF: HTTP Virtual Host - Korrektur in der Verwendung von VIRTUAL:BAS TIMEOUT
+  BF: HTTP Virtual Host: Korrektur in der Verwendung von VIRTUAL:BAS TIMEOUT
       Im Fehlerfall wurde der Wert nicht beruecksichtigt.
-  BF: Server - Korrektur/Optimierung der Session/Connection-Expansion
+  BF: Server: Korrektur/Optimierung der Session/Connection-Expansion
       Fuer den Fall, wenn kein MAXACCESS gesetzt wurde.
-  BF: HTTP GET/HEAD - Korrekturen
+  BF: HTTP GET/HEAD: Korrekturen
       - Verzeichnisse: Wegfall von Content-Length und Last-Modified im Response-Header
       - Verzeichnisse: If-Modified-Since/If-Unmodified-Since wird ignoriert
         Im Fehlerfall wurden Request fuer Verzeichnisse auch mit Status 304 beantwortet.
-  CR: Projekt - Umstellung der Ant-Tags auf das Format @@@ant-[property]
-  CR: Service - Erweiterung von -Dlibraries zum das Laden von Verzeichnisse
-  CR: Module - Optimierung/Bereinigung
+  CR: Projekt: Umstellung der Ant-Tags auf das Format @@@ant-[property]
+  CR: Service: Erweiterung von -Dlibraries zum das Laden von Verzeichnisse
+  CR: Module: Optimierung/Bereinigung
       XAPI: Wegfall der optionalen Methoden mount/unmount
-  CR: Server - Erweiterung
+  CR: Server: Erweiterung
       - Option [S] fuer SERVER:BAS TIMEOUT / VIRTUAL:BAS TIMEOUT zur strikten Trennung
         ausgehender Datenstroeme bei Leerlauf oder minderer Transferraten (z.B. < 4096 b/s)
-  CR: HTTP - Optimierung/Korrektur
+  CR: HTTP: Optimierung/Korrektur
       - Anpassung der CGI-Variablen SCRIPT_NAME bei der Verwendung absoluter Pfaden
         mit fester Skriptzuordnung.
   CR: HTTP Configuration
@@ -229,94 +230,94 @@
       - SERVER:BAS IDENTITY OFF deaktiviert die Serverkennung im Response-Header
       - das System-Verzeichnis als ist virtuelles Verzeichnis standardmaessig deaktiviert
       - AccessLog: Verlagerung ins Root-Verzeichnis
-  CR: HTTP GET/HEAD - Optimierung/Erweiterung
+  CR: HTTP GET/HEAD: Optimierung/Erweiterung
       - Verarbeitung wurde zusammengefuehrt
       - Erweiterung um "Partial Content"
       - Erweiterung um den HTTP-Header If-Unmodified-Since
   CR: HTTP Directory Index
       - Template system.index.html geaendert in index.html
       - Einbettung der Icons in die HTML-Datei (data:image/x-icon;base64)
-  CR: HTTP Templates - Optimierung
+  CR: HTTP Templates: Optimierung
       - HTML5/CSS: allgemeine Optimierung; Reduktion der Transferdaten bis zu 20%
       - Status-Templates: Aenderung vom Format des Dateinamen status-[code].html
 
 4.0.0 20110701
-  BF: HTTP Basic Authentication - Korrektur
+  BF: HTTP Basic Authentication: Korrektur
       - Status 401/302: Geschuetzte Bereiche konnten ueber Status 302/401/404 "abtaste"
         werden (kein Sicherheitsrisiko). Nun wird konsequent Status 401 zurueckgegeben.
       - leerer Realm-Text: Im Fehlerfall erzeugte ein leerer Realm-Text einen
         fehlerhaften/ungewollten Pseudo-Realm.
-  BF: HTTP Response - Korrektur von Content-Length/Content-Type/Last-Modified
+  BF: HTTP Response: Korrektur von Content-Length/Content-Type/Last-Modified
       - Content-Length/Content-Type/Last-Modified nur bei Status 200
       - Content-Length/Content-Type entfaellt in Fehler- und Status-Header, da keine
         angeforderten Ressourcen/Daten/Verzeichnisse uebertragen werden.
       - Content-Length/Content-Type nur bei existierenden Ressourcen/Verzeichnissen
       - Last-Modified, nur bei existierenden Ressourcen
-  CR: Projekt - Umstellung auf Java 1.4
+  CR: Projekt: Umstellung auf Java 1.4
       Die optionale Verwendung von SSE entfaellt.
-  CR: Configuration - Optimierung
+  CR: Configuration: Optimierung
       - Wegfall vom Komma, Werte werden durch Leerzeichen getrennt
         Betriff besonders die Sektionen / Schluessel: METHODS/DEFAULT/MIMETYPES
-  CR: Server - Optimierung
+  CR: Server: Optimierung
       - Konfiguration: Schluessel SERVER:SSL CONTEXT entfaellt
-  CR: HTTP Configuration - Optimierung
+  CR: HTTP Configuration: Optimierung
       - Sektion SERVER:REF/VIRTUAL:REF Option [access:...] geaendert in [acc:...]
       - SERVER:BAS/VIRTUAL:BAS DEFAULT Trennung der Werte durch Leerzeichen
       - SERVER:BAS/VIRTUAL:BAS METHODS Trennung der Werte durch Leerzeichen
-  CR: HTTP Filter - Optimierung/Erweiterung
+  CR: HTTP Filter: Optimierung/Erweiterung
       - direkt Verwendung von Modulen ueber XAPI
       - neue Bedingungen: CONTAINS, ALWAYS, EMPTY
         Die Konstante EMPTY entfaellt und wird ersetzt durch die Bedingung EMPTY.
         Die Bedingung INDEX wurde in CONTAINS geaendert.
-  CR: HTTP Authentication - Optimierung/Erweiterung
+  CR: HTTP Authentication: Optimierung/Erweiterung
       - Erweiterung um Digest Access Authentication (DAA)
       - Basic Authentication: im Realm-Text enthaltene " werden jetzt maskiert
         Das vermeidet Fehlinterpretationen beim Client.
       - Erweiterung um die Verwendung von Gruppen (Sektion REF + ACC)
         Benutzer lassen sich zu Gruppen zusammenfassen.
-  CR: HTTP AccessLog - Erweiterung um die Unterstuetzung von ' im Datei-Namen/-Pfad
-  CR: MIMETYPES - Trennung durch Leerzeichen statt Komma
-  CR: Manual - Verbesserung der Druckausgabe
+  CR: HTTP AccessLog: Erweiterung um die Unterstuetzung von ' im Datei-Namen/-Pfad
+  CR: MIMETYPES: Trennung durch Leerzeichen statt Komma
+  CR: Manual: Verbesserung der Druckausgabe
 
 3.5.0 20101010
-  BF: Devwex - Korrektur
+  BF: Devwex: Korrektur
       - Startskript (Windows): Korrektur, wenn Variablen auf Backslash enden
         Im Fehlerfall fuehrte es zum Fehler beim Aufrufer der Java-VM.
       - Startskript (Windows): Korrektur beim Nachladen von Skripten
-  BF: HTTP Module - Korrektur
+  BF: HTTP Module: Korrektur
       Der Einsprung COMMAND wird noch aufgerufen, wenn COMMAND definiert wurde.
-  BF: HTTP DCGI/CGI - Korrektur
+  BF: HTTP DCGI/CGI: Korrektur
       Gleichnamige Request-Header werden jetzt korrekt uebergeben.
-  CR: Projekt - Umstellung der Versionsverwaltung auf Mercurial
-  CR: Devwex - Optimierung/Erweiterung
+  CR: Projekt: Umstellung der Versionsverwaltung auf Mercurial
+  CR: Devwex: Optimierung/Erweiterung
       - Optimierung der Groesse
       - Umstellung der Konfiguration auf Initialize + Section
         Die Umstellung der SAPI fuehrt u.U. zur Inkompatibilitaet von alten Modulen.
       - Startskript (Windows): Erweiterung um das Laden weiterer Batch-Skripte
-  CR: Service - Optimierung
+  CR: Service: Optimierung
       - Usage: Optimierung/Verkuerzung der Konsolenausgabe
       - Garbage Collector: wird nur noch bei abfallender Systemlast angefordert
-  CR: Module - Optimierung
+  CR: Module: Optimierung
       - Methode Module::Mount zur Anbindung geaendert in Module::Bind
         fuehrt u.U. zur Inkompatibilitaet von alten Modulen
       - Umgebungsvariable module_core mit Konfiguration geaendert in module_opts
         fuehrt u.U. zur Inkompatibilitaet von alten Modulen
-  CR: HTTP Server - Optimierung/Erweiterung
+  CR: HTTP Server: Optimierung/Erweiterung
       - Ueberarbeitung/Optimierung von Connection-Pool/Connection-Management
       - Erweiterung um SERVER:BAS BACKLOG
         Maximale Anzahl zurueckgestellter Anfragen beim Erreichen von MAXACCESS
         max. Anzahl zeitgleicher Verbindungen
       - Erweiterung um ISOLATION
         Maximale Leerlaufzeit von Verbindungen bis zur Bereinigung
-  CR: HTTP - Optimierung
+  CR: HTTP: Optimierung
       - Anpassung der Request-Verarbeitung
       - Wegfall vom Request-Objekt, funktionale Verlagerung in das Session-Objekt
-  CR: HTTP Module - Optimierung
+  CR: HTTP Module: Optimierung
       - Methode Session::Swap zur Einbindung von HTTP-Modulen geaendert in Session::Call
-  CR: HTTP Filter - Optimierung
+  CR: HTTP Filter: Optimierung
       - allgemeine Optimierung der Interpretation/Verwendung/Performanz
       - Parameter FIRSTLINE geaendert in REQUEST
-  CR: HTTP Directory Index - Ueberarbeitung/Optimierung
+  CR: HTTP Directory Index: Ueberarbeitung/Optimierung
       - Ueberarbeitung/Optimierung der Sortierung
       - Wegfall der Spalte Description (wird per Icon abgebildet)
       - Variable http-location entfaellt, alternativ kann script_uri verwendet werden
@@ -326,82 +327,82 @@
         der bei CGI uebliche Praefix http_ entfaellt
 
 3.4.3 20100410
-  CR: Generator - Verkuerzung/Vereinfachung der Syntax
-  CR: HTTP - Optimierung der Generierung der UNIQUE_ID
-  CR: HTTP DCGI - Verkuerzung der Protokoll-Signatur
-  CR: HTTP Directory Index - Ueberarbeitung vom Template und Integration von Icons
+  CR: Generator: Verkuerzung/Vereinfachung der Syntax
+  CR: HTTP: Optimierung der Generierung der UNIQUE_ID
+  CR: HTTP DCGI: Verkuerzung der Protokoll-Signatur
+  CR: HTTP Directory Index: Ueberarbeitung vom Template und Integration von Icons
       Seanox-Symbols wurde damit migriert.
-  CR: MIMETYPE - Erweiterung
+  CR: MIMETYPE: Erweiterung
 
 3.4.2 20091003
-  BF: HTTP DCGI/CGI - Korrektur der max. Ausfuehrungszeit
+  BF: HTTP DCGI/CGI: Korrektur der max. Ausfuehrungszeit
       Diese schliesst nun die Uebertragung der Request-Daten an das DCGI/CGI ein.
-  CR: Module - Erweiterung der XAPI/Sequenz und den Aufruf der Methoden mount/unmount
-  CR: Konfiguration - Umstellung auf FastCGI
+  CR: Module: Erweiterung der XAPI/Sequenz und den Aufruf der Methoden mount/unmount
+  CR: Konfiguration: Umstellung auf FastCGI
       - Umstellung der PHP-Distribution auf FastCGI
 
 3.4.1 20090516
-  CR: Projekt - Umstellung der Testumgebung auf SSX
-  BF: Service - Korrektur vom ClassLoader
+  CR: Projekt: Umstellung der Testumgebung auf SSX
+  BF: Service: Korrektur vom ClassLoader
       Im Fehlerfall wurde die Paketinformation nicht korrekt ermittelt.
-  CR: Service - Optimierung vom Ressourcen- und Speicher-Management
+  CR: Service: Optimierung vom Ressourcen- und Speicher-Management
 
 3.4.0 20090301
-  CR: Projekt - Umstellung der Lizenz auf die GPL 2.0
-  CR: Devwex - Optimierung vom Start-Skript
+  CR: Projekt: Umstellung der Lizenz auf die GPL 2.0
+  CR: Devwex: Optimierung vom Start-Skript
       Vorbereitung fuer Erweiterung der Laufzeitumgebung durch PHP, Perl, ...
-  CR: Generator - Verkuerzung der Generator-Syntax
-  CR: HTTP Directory Index - Umstellung auf die vereinfachte Generator-Syntax
+  CR: Generator: Verkuerzung der Generator-Syntax
+  CR: HTTP Directory Index: Umstellung auf die vereinfachte Generator-Syntax
 
 3.4.0 20081224
-  BF: HTTP SSL - Korrektur der Option SERVER:SSL CLIENTAUTH
+  BF: HTTP SSL: Korrektur der Option SERVER:SSL CLIENTAUTH
       Im Fehlerfall wurde die Einstellung nicht beruecksichtigt.
-  BF: HTTP Response - Korrektur der Verwendung von Content-Type
+  BF: HTTP Response: Korrektur der Verwendung von Content-Type
       Der Response-Header wird noch gesetzt, wenn der Content-Type ermittelbar ist.
-  CR: Devwex - allgemeine Optimierung bei Performanz und Groesse
-  CR: Service - Erweiterung um einen Application-ClassLoader
+  CR: Devwex: allgemeine Optimierung bei Performanz und Groesse
+  CR: Service: Erweiterung um einen Application-ClassLoader
        Module werden unabhaengiger und lassen sich zur Laufzeit laden und entladen.
-  CR: Konfiguration - Optimierung
+  CR: Konfiguration: Optimierung
       - Schluessel COMMON SMARTCLEARING geaendert in CLEARING
-  CR: Generator - Ueberarbeitung/Optimierung
-  CR: Server - Optimierung der Konfiguration
+  CR: Generator: Ueberarbeitung/Optimierung
+  CR: Server: Optimierung der Konfiguration
       Der Schluessel SOCKET wird nicht mehr unterstuetzt, da die Art des Sockets jetzt
       vom Server selbst erkannt wird.
 
 3.3.0 20080524
-  BF: HTTP DCGI/CGI - Korrektur in der Belegung der CGI-Umgebungsvariablen SCRIPT_NAME
-  BF: Server - Korrektur der Konfiguration
+  BF: HTTP DCGI/CGI: Korrektur in der Belegung der CGI-Umgebungsvariablen SCRIPT_NAME
+  BF: Server: Korrektur der Konfiguration
       - Korrektur bei der Vererbung der Sektionen MIMETYPES und STATUSCODES
-  BF: Configuration - Korrektur der Option + zur Fortfuehrung eines Schluessels
-  CR: Devwex - allgemeine Optimierung bei Performanz und Groesse
-  CR: Server - Optimierung/Erweiterung der Konfiguration,
+  BF: Configuration: Korrektur der Option + zur Fortfuehrung eines Schluessels
+  CR: Devwex: allgemeine Optimierung bei Performanz und Groesse
+  CR: Server: Optimierung/Erweiterung der Konfiguration,
       - Verlagerung der SSL/TLS Konfiguration in die eigenstaendige Sektion SERVER:SSL
 
 3.2.0 20080329
-  BF: HTTP Basic Authentication - Korrektur
+  BF: HTTP Basic Authentication: Korrektur
       Basic Authentication kann wieder auf einzelne Dateien angewandt werden
-  BF: Server - Korrektur vom Schluessel SERVER:BAS DEFAULT
+  BF: Server: Korrektur vom Schluessel SERVER:BAS DEFAULT
       Pfade mit Slash bzw. Backslash werden nicht mehr unterstuetzt, da diese auf
       andere Verzeichnisse verweisen koennen.
-  BF: HTTP References - Korrektur/Optimierung
+  BF: HTTP References: Korrektur/Optimierung
       - das Sperren von Verzeichnissen erfolgt nun ausschliesslich auf Basis virtueller
         Verzeichnisse, die Angabe physischer ist nicht mehr erforderlich
-  CR: Configuration - Optimierung/Erweiterung
+  CR: Configuration: Optimierung/Erweiterung
       - Erweiterung eine allgemeine Vererbung von Sektionen
         Die Vererbung ueber den Schluessel IMPLEMENTS wird nicht mehr unterstuetzt.
       - Sektion BASEOPTIONS geaendert in COMMON
       - Erweiterung um die Option +
         Beginnt eine Zeile mit dieser Option, wird der vorherige Schluessel fortgesetzt.
-  CR: Module - Optimierung/Erweiterung
+  CR: Module: Optimierung/Erweiterung
       - SAPI: Optimierung der Service::UseModul im Umgang mit InvocationTargetException
         Der Cause wird jetzt weitergereicht und die Methode muss nicht mehr mit
         Throwable behandelt werden.
-  CR: Server - Optimierung
+  CR: Server: Optimierung
       - Konfiguration: Mit der allgemeinen Vererbung innerhalb der Konfigurationsdatei
         wird der Parameter IMPLEMENTS nicht mehr unterstuetzt
       - Endet der Server, werden alle Connections/Sessions ebenfalls zwangsweise
         geschlossen/beendet und ggf. laufende DCGI/CGI-Prozesse beendet
-  CR: HTTP DCGI/CGI - Optimierung
+  CR: HTTP DCGI/CGI: Optimierung
       - allgemeine Optimierung der Anbindung
       - DCGI-Header: CGI-ENVIRONMENT geaendert in CGI
       - Umgebungsvariable GATEWAY_INTERFACE wird nur noch beim (D)CGI-Aufruf gesetzt
@@ -409,53 +410,53 @@
         den kompletten Modulaufruf mit allen Optionen und Parametern
       - Enden Request und/oder Server-Instanz, wird der DCGI/CGI-Prozess ebenfalls
         zwangsweise geschlossen/beendet
-  CR: HTTP AccessLog - Erweiterung um OFF bei SERVER:BAS ACCESSLOG zur Abschaltung
-  CR: HTTP Basic Authentication - Ueberarbeitung/Optimierung/Erweiterung
+  CR: HTTP AccessLog: Erweiterung um OFF bei SERVER:BAS ACCESSLOG zur Abschaltung
+  CR: HTTP Basic Authentication: Ueberarbeitung/Optimierung/Erweiterung
       - Aufteilung in die Sektionen REF und ACC (Access Control Center)
       - Sektion ACC: zur Verwaltung von Benutzer, Passwoerter und Gruppen
       - Sektion REF: zur Deklaration der Basic Authentication und der Realm-Text
 
 3.1.0 20071017
-  CR: Projekt - Anpassung zur Kompatibilitaet Java 1.2.x bis 1.6.x
-  CR: Devwex - allgemeine Optimierung bei Performanz, Fehlerausgabe und Groesse
-  CR: Devwex - neuer finaler Stand der SAPI (Server-API) und XAPI (Module-API)
-  CR: Service - Umstellung der Server-API
+  CR: Projekt: Anpassung zur Kompatibilitaet Java 1.2.x bis 1.6.x
+  CR: Devwex: allgemeine Optimierung bei Performanz, Fehlerausgabe und Groesse
+  CR: Devwex: neuer finaler Stand der SAPI (Server-API) und XAPI (Module-API)
+  CR: Service: Umstellung der Server-API
       - Server muessen Runnable sowie die Methode Server::GetCaption und Server::Destroy
         implementieren. Die Signatur vom Konstruktor wurde in Server::Server(String, Object)
         geaendert. Die Konfiguration wird als Initialize-Objekt uebergeben.
       - Verwaltung und Kontrolle der Server-Instanzen wurde ueberarbeitet. Die Server-Instanzen
         werden kontrolliert gestartet. Das selbsttaetige Starten mit dem Konstruktors
         ist nicht mehr zulaessig.
-  CR: Service - Erweiterung
+  CR: Service: Erweiterung
       - In der erweiterten Ausgabe werden nun die geladenen Ressourcen aufgelistet.
-  CR: Configuration - Optimierung der Fehlerbehandlung
+  CR: Configuration: Optimierung der Fehlerbehandlung
       Scheitert beim Neustart das Laden der Konfiguration, wird die zuletzt erfolgreich
       geladene verwendet.
-  CR: Remote - Ueberarbeitung/Optimierung
+  CR: Remote: Ueberarbeitung/Optimierung
       - Umstellung auf die neue SAPI
       - Ueberarbeitung/Optimierung von Connection-Pool/Connection-Management
-  CR: Module - Optimierung/Erweiterung
+  CR: Module: Optimierung/Erweiterung
       - Erweiterung um die Option [*] bei der Initialisierung von Modulen
         So gekennzeichnete Module sind optional und fuehren zu keiner Fehlerausgabe,
         wenn diese nicht verfuegbar sind.
         Bsp. MODULE EXAMPLE = com.seanox.module.Example [*]
       - allgemeine Verbesserung bei Erkennung und Verarbeitung der Modul-Optionen
-  CR: Server - Ueberarbeitung/Optimierung
+  CR: Server: Ueberarbeitung/Optimierung
       - Umstellung auf die neue SAPI
       - Ueberarbeitung/Optimierung von Connection-Pool/Connection-Management
-  CR: HTTP Directory Index - Optimierung der Sortierung fuer eine schnellere Generierung
-  CR: HTTP DCGI/CGI - Optimierung der Fehlerbehandlung fuer detailliertere Status-Codes
+  CR: HTTP Directory Index: Optimierung der Sortierung fuer eine schnellere Generierung
+  CR: HTTP DCGI/CGI: Optimierung der Fehlerbehandlung fuer detailliertere Status-Codes
 
 3.0.0 20061230
-  BF: HTTP COMMAND/DCGI/CGI - Korrektur vom Symbol [P]
+  BF: HTTP COMMAND/DCGI/CGI: Korrektur vom Symbol [P]
       Im Fehlerfall wurde der komplette Pfad verwendet.
-  BF: HTTP DCGI/CGI - Korrektur vom Server-Status beim Ueberschreiten der max. Verarbeitungszeit
+  BF: HTTP DCGI/CGI: Korrektur vom Server-Status beim Ueberschreiten der max. Verarbeitungszeit
       Im Fehlerfall wurde Status 503 statt Status 500 gesetzt.
-  BF: HTTP DCGI/CGI - Korrektur bei der Verwendung der Methode ALL in der Deklaration
-  CR: Devwex - Optimierung in: Kompatibilitaet zu Java 1.2.x, Performanz und Groesse
-  CR: Service - Optimierung
+  BF: HTTP DCGI/CGI: Korrektur bei der Verwendung der Methode ALL in der Deklaration
+  CR: Devwex: Optimierung in: Kompatibilitaet zu Java 1.2.x, Performanz und Groesse
+  CR: Service: Optimierung
       - Umstellung als Singleton zur einfachere Integration in andere Anwendungen
-  CR: Service - Optimierung der Sequenz von Start, Restart und Stop
+  CR: Service: Optimierung der Sequenz von Start, Restart und Stop
           Sequenz (komplett):
       Server Beenden, Module Beenden, Konfiguration laden, Bibliotheken laden, Module
       initialisieren, Server Instanzen starten
@@ -464,159 +465,159 @@
       - Ausgabe: Optimierung der Kommandozeilenausgabe
         Diese erfolgt nun zeilenweise mit Zeitstempel, zusammenhaengende Informationen
         werden strukturiert ausgegeben.
-  CR: Konfiguration - Optimierung
+  CR: Konfiguration: Optimierung
       - Umstellung auf eine strenge zeilenweise Verarbeitung.
       Die Reihenfolge der Sektionen und Schluessel bestimmt nun u.a. die Reihenfolge
       der Initialisierung von Server und Modulen sowie die Abfolge der HTTP Filter.
-  CR: Remote - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Remote: Ueberarbeitung/Optimierung/Erweiterung
       - Umstellung auf die SAPI (Server API) und damit in eine modulare Server Instanz
       - Konfiguration: Umstellung auf die eigene Sektion SERVER:REMOTE:BAS
         Die Schluessel REMOTEPORT und REMOTEADDRESS der Sektion BASEOPTIONS entfallen
       - Aenderung vom Timeout von 65535 auf 10 Sekunden
       - Kommando STOP: Erweiterung um die Ausgabe vom Rueckgabewert
-  CR: Server - der Schluessel SERVER:MOD SERVER:CONNECTOR wurde verworfen
+  CR: Server: der Schluessel SERVER:MOD SERVER:CONNECTOR wurde verworfen
       Die Deklaration von Servern wird nur noch ueber SERVER:BAS CONNECTOR unterstuetzt
-  CR: HTTP Server - Konfiguration: Sektion VIRTUALHOST geaendert in VIRTUAL
-  CR: HTTP Module - Update der XAPI auf Seanox Module-API 1.2006.12xx oder hoeher
-  CR: HTTP Module - Vereinfachung der Sektion SERVER:MOD
+  CR: HTTP Server: Konfiguration: Sektion VIRTUALHOST geaendert in VIRTUAL
+  CR: HTTP Module: Update der XAPI auf Seanox Module-API 1.2006.12xx oder hoeher
+  CR: HTTP Module: Vereinfachung der Sektion SERVER:MOD
       - Wegfall vom Praefix SESSION:
         SESSION:FILTER ist FILTER, SESSION:LOGGING ist LOGGING, ...
         FILTER, LOGGING, COMMAND, PROCESS, METHOD, LISTING, STATUS, SERVICE
       - SERVER:CONNECTOR ist entfallen
-  CR: HTTP Module - Erweiterung um detailliertere Fehlermeldungen
-  CR: HTTP Filter - Konstante NULL geaendert in EMPTY
+  CR: HTTP Module: Erweiterung um detailliertere Fehlermeldungen
+  CR: HTTP Filter: Konstante NULL geaendert in EMPTY
   CR: HTTP Directory Index
       - Optimierung der Performanz
       - die absteigenden Sortierung bezieht nun alle Kriterien ein
-  CR: HTTP AccessLog - Optimierung der Fehlertoleranz bei Zeitsymbolen im Pfad
-  CR: HTTP - Optimierung der UNIQUE_ID
-  CR: HTTP COMMAND/DCGI/CGI - Erweiterung um detailliertere Fehlermeldungen
-  CR: SDK - Vereinfachung der Verzeichnisstruktur
+  CR: HTTP AccessLog: Optimierung der Fehlertoleranz bei Zeitsymbolen im Pfad
+  CR: HTTP: Optimierung der UNIQUE_ID
+  CR: HTTP COMMAND/DCGI/CGI: Erweiterung um detailliertere Fehlermeldungen
+  CR: SDK: Vereinfachung der Verzeichnisstruktur
 
 2.10.0 20060415
-  BF: Service - Korrektur beim Laden einer nicht vorhandenen Konfiguration
-  BF: Configuration - Korrektur beim initialen Aufloesen der Systemvariablen
-  BF: Remote - Korrektur vom Restart (Kompatibilitaetsproblem bei Java 1.2.x)
-  BF: Generator - Korrektur beim Loeschen/Bereinigen von Segmeneten
-  BF: HTTP SSL - Korrektur beim Schliessen des InputStream vom Keystore im Fehlerfall
-  BF: Devwex - Optimierung im Umgang mit Steuerzeichen (Bereinigung/Behandlung/Verwendung)
-  CR: Service - Erweiterung/Optimierung
+  BF: Service: Korrektur beim Laden einer nicht vorhandenen Konfiguration
+  BF: Configuration: Korrektur beim initialen Aufloesen der Systemvariablen
+  BF: Remote: Korrektur vom Restart (Kompatibilitaetsproblem bei Java 1.2.x)
+  BF: Generator: Korrektur beim Loeschen/Bereinigen von Segmeneten
+  BF: HTTP SSL: Korrektur beim Schliessen des InputStream vom Keystore im Fehlerfall
+  BF: Devwex: Optimierung im Umgang mit Steuerzeichen (Bereinigung/Behandlung/Verwendung)
+  CR: Service: Erweiterung/Optimierung
       - Erweiterung um den Startparameter -Dlibraries zum Laden zusaetzlicher Bibliotheken
       - Erweiterung vom Startbefehl um die Option * (Bsp. start*) zur Aktivierung
         der erweiterten Fehlerausgabe
       - Optimierung der Fehler- Behandlung/Ausgabe
-  CR: HTTP SSL - Erweiterung um SERVER:SSL CONTEXT zur Angabe der SSL-Implementierung
+  CR: HTTP SSL: Erweiterung um SERVER:SSL CONTEXT zur Angabe der SSL-Implementierung
       Standard: javax.ssl.net
 
 2.9.0 20051220
-  BF: HTTP - Korrektur im Umgang mit der mitteleuropaeischen Sommer- und Winterzeit
-  BF: HTTP - Korrektur im Umgang mit unerwartet wegbrechenden bzw. beendeten Verbindungen
+  BF: HTTP: Korrektur im Umgang mit der mitteleuropaeischen Sommer- und Winterzeit
+  BF: HTTP: Korrektur im Umgang mit unerwartet wegbrechenden bzw. beendeten Verbindungen
       In einigen Faellen blieben Verbindungen als Objekt erhalten und wurden nicht
       beraeumt. Dies konnte zum permanenten Status 503 sowie zu einer untypischen
       hohen CPU Belastung fuehren (Danke Rainer Geigenberger).
-  BF: HTTP - Korrektur der Pfad-Verarbeitung
+  BF: HTTP: Korrektur der Pfad-Verarbeitung
       Unter Windows XP existiert ein Bug wenn Pfade \ \ \ enthalten. Diese verweisen
       dann auf nicht physische Verzeichnisse. Daher werden Pfade jetzt auf physische
       Existenz geprueft. Ein Sicherheitsrisiko bestand dadurch nicht.
-  CR: Devwex - Optimierung bei Stabilitaet und Performanz
-  CR: Service - Erweiterung der Konfiguration um den Schluessel BASEOPTIONS RELOADING
+  CR: Devwex: Optimierung bei Stabilitaet und Performanz
+  CR: Service: Erweiterung der Konfiguration um den Schluessel BASEOPTIONS RELOADING
       (De)Aktiviert den automatischen Neustart bei Aenderungen an der Konfigurationsdatei.
-  CR: Service - Erweiterung der Konfiguration um den Schluessel SERVER:BAS SLICING
+  CR: Service: Erweiterung der Konfiguration um den Schluessel SERVER:BAS SLICING
       Dient zur zeitlichen Begrenzung der Serveranfrage.
-  CR: Generator - Optimierung in Performanz und Ressourcenbedarf
+  CR: Generator: Optimierung in Performanz und Ressourcenbedarf
       Das Parsen der Templates erfolgt erst vor dem ersten Zugriff auf Segmente
       und Strukturen.
-  CR: Module - Optimierung/Erweiterung
+  CR: Module: Optimierung/Erweiterung
       - Verfall der Initialisierung ueber SERVER:MOD SERVER:INITIALIZE:*
       - Die Initialisierung wird nur noch ueber die Sektion INITIALIZE unterstuetzt.
       - dem Konstruktor werden nun Konfiguration und Modultyp uebergeben
         das entspricht der kommende Version der Seanox Devwex Modul API
-  CR: Konfiguration - Schluessel mit der Option [?] sind nun optional und werden
+  CR: Konfiguration: Schluessel mit der Option [?] sind nun optional und werden
       ohne Wert nicht mehr uebernommen. Somit ist eine optionale Konfiguration mit
       dem Start des Servers moeglich und dient als Vorbereitung der in Zukunft bereitgestellten
       Laufzeitmodule fuer Java, PHP, Perl und andere.
 
 2.8.0 20050801
-  BF: HTTP Response - Korrektur der Zeitangabe im Header bei Verwendung von GMT
-  BF: Generator - Korrektur bei der Verarbeitung unbekannter Parameter und Segmente
+  BF: HTTP Response: Korrektur der Zeitangabe im Header bei Verwendung von GMT
+  BF: Generator: Korrektur bei der Verarbeitung unbekannter Parameter und Segmente
       Im Fehlerfall wurden Requests, welche Templates verwenden, ohne Response geschlossen.
-  CR: Remote - allgemeine Optimierung in der Request-Verarbeitung und der Konsolenausgabe
-  CR: HTTP - Erweiterung der MIME-Types
-  CR: HTTP Templates - wenige Anpassungen bei Markup und Style
-  CR: HTTP Directory Index - Erweiterung um die BreadCrumb-Navigation zum Verzeichnis-Pfad
-  CR: HTTP Methods - Erweiterung vom Schluessel SERVER:BAS METHODS um die Unterstuetzung
+  CR: Remote: allgemeine Optimierung in der Request-Verarbeitung und der Konsolenausgabe
+  CR: HTTP: Erweiterung der MIME-Types
+  CR: HTTP Templates: wenige Anpassungen bei Markup und Style
+  CR: HTTP Directory Index: Erweiterung um die BreadCrumb-Navigation zum Verzeichnis-Pfad
+  CR: HTTP Methods: Erweiterung vom Schluessel SERVER:BAS METHODS um die Unterstuetzung
       vom Wert ALL zur Annahme/Verarbeitung aller HTTP-Methoden. Ist eine angeforderte
       Methode nicht implementiert, wird der Request mit Status 501 beantwortet.
-  CR: HTTP Request - Optimierung/Erweiterung der Verarbeitung von Pfaden und Referenzen
+  CR: HTTP Request: Optimierung/Erweiterung der Verarbeitung von Pfaden und Referenzen
       Virtuelle Pfade werden nun auch innerhalb von absoluten Pfaden unterstuetzt.
 
 2.7.0 20050315
-  BF: HTTP Request - Korrektur vom Ausbrechen aus dem DocRoot ueber einen Mix aus
+  BF: HTTP Request: Korrektur vom Ausbrechen aus dem DocRoot ueber einen Mix aus
       Text, MIME- und UTF-8-Kodierung in den Pfaden. Die dynamische Ermittlung der
       Kodierung vom Pfad wurde zu Gunsten der Sicherheit auf eine feste umgestellt.
       Der Mix von Text, MIME- und UTF8-Kodierung wird weiterhin unterstuetzt.
-  CR: Devwex - allgemeine Optimierung in Performanz und Groesse
-  CR: Service - Erweiterung um detailliertere (Fehler)Ausgaben beim Start vom Service
-  CR: Remote - Kommando TIME ist entfallen
+  CR: Devwex: allgemeine Optimierung in Performanz und Groesse
+  CR: Service: Erweiterung um detailliertere (Fehler)Ausgaben beim Start vom Service
+  CR: Remote: Kommando TIME ist entfallen
       Die Informationen vom Kommando TIME sind komplett in STATE enthalten.
-  CR: Remote - Erweiterung von STAT und VERS zur Ausgabe der Version vom Servers
-  CR: HTTP Directory Index - Optimierung/Erweiterung
+  CR: Remote: Erweiterung von STAT und VERS zur Ausgabe der Version vom Servers
+  CR: HTTP Directory Index: Optimierung/Erweiterung
       - Aenderung der Richtung in der Sortierung
         Template: system.index.html
       - Erweiterung des Schluessel SERVER:BAS INDEX um die Option [S] zur Unterdrueckung
         versteckter (System)Dateien/Verzeichnisse, womit diese nicht mehr im File-Index
         angezeigt werden. Ein direkter Zugriff auf diese ist weiterhin moeglich.
-  CR: Module - Erweiterung um Start-Parameter und -Optionen
+  CR: Module: Erweiterung um Start-Parameter und -Optionen
       Module vom Type Process unterstuetzen nun auch Start-Parameter und -Optionen,
       die mit der Umgebungsvariablen MODULE_CORE uebergeben werden.
 
 2.6.0 20041224
-  CR: Service - Erweiterung um SmartClearing
+  CR: Service: Erweiterung um SmartClearing
       Eine ueber den Schluessel BASEOPTIONS SMARTCLEARING konfigurierbare intelligente
       Bereinigung der Ressourcen.
-  CR: HTTP Request - Optimierung der UTF-8 Dekodierung
-  CR: HTTP Directory Index - Optimierung
+  CR: HTTP Request: Optimierung der UTF-8 Dekodierung
+  CR: HTTP Directory Index: Optimierung
       - Tag files:arts geaendert in files:base
         Aenderung der Sortierung von a/A in b/B
   Die Module Compress und Symbols muessen aktualisiert werden.
-  CR: HTTP DCGI/CGI - Optimierung/Erweiterung
+  CR: HTTP DCGI/CGI: Optimierung/Erweiterung
       - Begrenzung vom Response-Header auf 65535 Bytes
         ein Ueberlauf fuehrt zum Status 500 (laut RFC sind nur 32768 Bytes moeglich)
       - Entkopplung des Timeout der Skript-Ausfuehrung vom Datenstrom
         Erweiterung um den Schluessel SERVER:BAS DURATION zur Begrenzung der maximalen
         Ausfuehrungszeit
-  CR: Remote - Optimierung
+  CR: Remote: Optimierung
       - Umstellung der Erkennung vom Datenleerlauf auf SO_TIMEOUT
       - Requests sind nur noch mit gueltigem Ende der Kommandozeilen (CR/LF) zulaessig
         Die tolerante Ausfuehrung mit dem Timeout ist nicht mehr moeglich.
 
 2.5.0 20040803
-  CR: HTTP Request - Optimierung in der Verarbeitung
+  CR: HTTP Request: Optimierung in der Verarbeitung
       Zur primaeren Verarbeitung wird nur noch der Request-Header gelesen.
       Der Body wird nur noch bei Bedarf direkt an den Anforderer uebergeben, womit
       der Request nicht mehr komplett in den Speicher geladen wird.
-  CR: AccessLog - Erweiterung um die Unterstuetzung von Symbolen der Zeit im Dateipfad
-  CR: Module - Bereitstellung vom Devwex SDK
+  CR: AccessLog: Erweiterung um die Unterstuetzung von Symbolen der Zeit im Dateipfad
+  CR: Module: Bereitstellung vom Devwex SDK
       - neue Bibliothek als Basis zur Modulentwicklung
 
 2.4.0 20040525
-  BF: Server - Korrektur der Initialisierung von der Sektion SERVER:MOD
+  BF: Server: Korrektur der Initialisierung von der Sektion SERVER:MOD
       Beruecksichtigte die Eintraege mit SERVER:INITIALIZE nicht.
-  BF: Server - Erweiterung der Vererbung
+  BF: Server: Erweiterung der Vererbung
       Ohne werden definierte Connectoren nicht korrekt ermittelt.
-  BF: Server - Optimierung/Verbesserung der Performanz vom Restart
+  BF: Server: Optimierung/Verbesserung der Performanz vom Restart
       Der theoretische Fall des Haengens (laengere Wartezeit) wurde beseitigt.
-  BF: HTTP Module - Korrektur der Anbindung per Session::Swap
+  BF: HTTP Module: Korrektur der Anbindung per Session::Swap
       Bei den per SERVICE definierten Modulen wird nun der Konstruktor und auch
       wieder die Methode Module::Service aufgerufen.
-  BF: HTTP - Korrektur vom Response der Status-Klasse 1xx
+  BF: HTTP: Korrektur vom Response der Status-Klasse 1xx
       Entsprechend der RFC 2616 wird nur eine Header aber kein Body gesendet.
       Eventuelle fuer diese Klasse definierte Templates werden ignoriert.
-  CR: Server - Optimierung/Erweiterung
+  CR: Server: Optimierung/Erweiterung
       - COMMAND: Erweiterung um die Option [M] der Moduldeklaration
       - Konfiguration: Sektion RESPONSECODES geaendert in STATUSCODES
       - Konsolenausgabe: Erweiterung der Kennung um das Protokoll (TCP, UDP, ...)
-  CR: Module - Optimierung/Erweiterung
+  CR: Module: Optimierung/Erweiterung
       - API: Erweiterung der Schnittstelle(n)
             zur einfachen Implementierung von:
         Server, Service, Filter, Command, Process, Method, Index, Status und Logging
@@ -639,12 +640,12 @@
         und Verwaltung der Session und das optionale Schliessen des Sockets.
         Request-Verarbeitung, Protokollierung und Fehlerbehandlung muessen im Service
         implementiert werden.
-  CR: HTTP DCGI - Umstellung vom Datenformat
+  CR: HTTP DCGI: Umstellung vom Datenformat
       0x07 0x07 <Variable> 0x07 <Wert> 0x07 <Variable> 0x07 <Wert> 0x07 ... 0x01
       Das Byte 0x07 ist das Trennungszeichen der einzelnen Fragment.
       Das Environment wird dem klassischen CGI-Daten vorangestellt, beginnt mit
       der Doppelfolge 0x07 0x07 und endet mit 0x01.
-  CR: HTTP DCGI/CGI - Erweiterung um den Response-Header HTTP/STATUS
+  CR: HTTP DCGI/CGI: Erweiterung um den Response-Header HTTP/STATUS
       Beginnt der Response-Header mit HTTP/STATUS (Gross- und Kleinschreibung wird
       ignoriert), wird das Skript komplett abgearbeitet und der Datenstrom vom Server
       ausgelesen, nicht aber an den Client weitergereicht. Die Beantwortung vom
@@ -652,12 +653,12 @@
       werden dabei unterstuetzt.
 
 2.3.0 20040212
-  CR: Devwex - Erweiterung um das optionale Startmodul Starting
+  CR: Devwex: Erweiterung um das optionale Startmodul Starting
       Eine Java basierte Alternative zur dynamischen Erweiterung des ClassPaths.
 
 2.2.0 20040124
-  BF: HTTP DCGI/CGI - Korrektur vom AccessLog bei Server-Status ungleich 200
-  CR: Server - Optimierung/Erweiterung
+  BF: HTTP DCGI/CGI: Korrektur vom AccessLog bei Server-Status ungleich 200
+  CR: Server: Optimierung/Erweiterung
       - Konfiguration: Sektion BASEOPTIONS Schluessel EMAIL, Sektion SERVER:BAS Schluessel
         NAME, Sektion VIRTUALHOST:BAS Schluessel NAME sind entfallen
       - BASEOPTIONS EMAIL entfaellt, kann mit SERVER:ENV SERVER_ADMIN gesetzt werden
@@ -672,7 +673,7 @@
         Nutzer, Passwort und Realm-Text sind davon nicht betroffen
       - Konfiguration: SERVER:BAS MAXACCESS
         ungueltigen Werten (< 1) werden mit dem Standard 100 verwendet
-  CR: Module API - Ueberarbeitung/Optimierung
+  CR: Module API: Ueberarbeitung/Optimierung
       - Erweiterung der Konfiguration um die Sektion INITIALIZE zur Initialisierung
         von Modulen mit dem (Re)Start vom Service
       - Erweiterung der Sektion SERVER:MOD um SERVER:INITALIZE zur Initialisierung
@@ -680,73 +681,73 @@
       - Erweiterung der Sektion SERVER:MOD um SERVER:CONNECTOR sowie der Sektion
         SERVER:BAS um CONNECTOR zur Einbindung eigener Server-Connectoren
       - Verlagerung der Synchronisation von Objekten in die Module
-  CR: Generator - Ueberarbeitung/Optimierung
+  CR: Generator: Ueberarbeitung/Optimierung
       Leistungssteigerung: bis zu 100-fache Steigerung der Template-Verarbeitung
-  CR: Configuration - Ueberarbeitung/Optimierung/Erweiterung
+  CR: Configuration: Ueberarbeitung/Optimierung/Erweiterung
       Umstellung auf Initialize und Parameters
-  CR: Remote - Kommando STAT geaendert in STATE
-  CR: Devwex - Optimierung bei Stabilitaet, Performanz, Groesse und Konsolenausgabe
+  CR: Remote: Kommando STAT geaendert in STATE
+  CR: Devwex: Optimierung bei Stabilitaet, Performanz, Groesse und Konsolenausgabe
 
 2.1.0 20030901
-  BF: HTTP HEAD - Korrektur von IF-MODIFIED-SINCE
+  BF: HTTP HEAD: Korrektur von IF-MODIFIED-SINCE
       - Optimierung/Erweiterung der Methode HEAD und DELETE
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: HTTP Server - Aenderung der Sektion SERVER:BAS
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: HTTP Server: Aenderung der Sektion SERVER:BAS
       - Schluessel SCHEME geaendert in SOCKET (Wert: SECURE oder NORMAL) und kann
         nicht mehr durch einen virtuellen Host ueberschrieben werden
-  CR: HTTP Directory Index - allgemeine Optimierung
+  CR: HTTP Directory Index: allgemeine Optimierung
       - Aufteilung vom Template system.index.in die Segmente "index" und "file"
       - Variable file-arts liefert den Wert "directory" oder "file"
-  CR: HTTP Templates - allgemein Anpassungen/Optimierung (Markup und Style)
-  CR: Initializeblock - Optimierung in der Ermittlung von Systemproperties
-  CR: Manual - Optimierung/Erweiterung
+  CR: HTTP Templates: allgemein Anpassungen/Optimierung (Markup und Style)
+  CR: Initializeblock: Optimierung in der Ermittlung von Systemproperties
+  CR: Manual: Optimierung/Erweiterung
       - Erweiterung um die englische Dokumentation
       - Erweiterung um das Verzeichnis "manuals" fuer Modul- und Server-Dokumentation
 
 2.0.0 20030620
-  BF: HTTP Request - Korrektur der Pfad-Verarbeitung von < und > unter Windows
+  BF: HTTP Request: Korrektur der Pfad-Verarbeitung von < und > unter Windows
       - Bug in der Windows Java VM
-  BF: HTTP Filter - Korrektur der Intoleranz in der Schreibweise der Methoden
-  BF: Server - Anpassung der Konsolenausgabe und Korrektur der Dokumentation
-  CR: Projekt - Umstellung auf Package com.seanox.devwex
-  CR: Devwex - Intergration vom Modulkonzept
+  BF: HTTP Filter: Korrektur der Intoleranz in der Schreibweise der Methoden
+  BF: Server: Anpassung der Konsolenausgabe und Korrektur der Dokumentation
+  CR: Projekt: Umstellung auf Package com.seanox.devwex
+  CR: Devwex: Intergration vom Modulkonzept
       Die neuen APIs unterstuetzen beim Hinzufuegen neuer oder beim Erweitern und
       Aendern bestehender Funktionen.
-  CR: HTTP CGI - Erweiterung um die Methode ALL
+  CR: HTTP CGI: Erweiterung um die Methode ALL
       Mit diesem Alias werden alle eingehenden HTTP-Methoden an das CGI weitergeleitet.
-  CR: HTTP Command - Begrenzung der Verarbeitung auf den Request-Header
+  CR: HTTP Command: Begrenzung der Verarbeitung auf den Request-Header
       Die Daten des Request werden nicht mehr durchgereicht.
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: Remote - allgemeine Optimierung (inkl. der Ausgabe)
-  CR: HTTP Filter - Optimierung und Erweiterung
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: Remote: allgemeine Optimierung (inkl. der Ausgabe)
+  CR: HTTP Filter: Optimierung und Erweiterung
       - Filter werden bei nun jedem Server-Status angewandt, nicht 400 und 5xx
       - Erweiteurung um die Methode ALL, womit alle Methode greifen
       - Verweise auf Scripte und Resourcen werden direkt und ohne Redirection ausgefuehrt
-  CR: HTTP Request - Ueberarbeitung vom Handling der Referenzen
+  CR: HTTP Request: Ueberarbeitung vom Handling der Referenzen
 
 1.16.0 20030415
-  BF: HTTP HEAD - Korrektur des u.U. doppelten Header
-  CR: Service - allgemeine Optimierung
+  BF: HTTP HEAD: Korrektur des u.U. doppelten Header
+  CR: Service: allgemeine Optimierung
       Ressourcen-Management, Performanz, Datenzugriffe, Fehlerbehandlung
-  CR: Configuration - Erweiterung um die Option [?]
+  CR: Configuration: Erweiterung um die Option [?]
       Entsprechend gekennzeichnete Schluessel werden ueber die Systemproperties der
       Java Laufzeitumgebung Umgebung aufgeloest. Ist dies nicht moeglich wird ein
       optional angegebener Wert verwendet.
-  CR: HTTP SSL/TLS - Integration SSL/TLS mit JSSE
-  CR: HTTP Server - Optimierung vom Request- und CGI-Handling (Performance, Systemauslastung)
-  CR: HTTP Server - Timeout wirkt bei SO_LINGER und DCGI/CGI
+  CR: HTTP SSL/TLS: Integration SSL/TLS mit JSSE
+  CR: HTTP Server: Optimierung vom Request- und CGI-Handling (Performance, Systemauslastung)
+  CR: HTTP Server: Timeout wirkt bei SO_LINGER und DCGI/CGI
       DCGI/CGI endet mit Status 500, wenn keine Daten zurueckgegeben werden.
-  CR: Service - Erweiterung der Ausgabe von Systeminformationen auf der Konsole
-  CR: Remote - Begrenzung der Verbindungsdauer auf max. 65535 ms
+  CR: Service: Erweiterung der Ausgabe von Systeminformationen auf der Konsole
+  CR: Remote: Begrenzung der Verbindungsdauer auf max. 65535 ms
 
 1.15.0 20030219
-  BF: HTTP Request - Gross- und Kleinschreibung der Request-Methoden wird nun ignoriert
-  CR: HTTP Templates - Anpassung der Systemtemplates
+  BF: HTTP Request: Gross- und Kleinschreibung der Request-Methoden wird nun ignoriert
+  CR: HTTP Templates: Anpassung der Systemtemplates
       - Inhalt und Struktur der Dateinamen
-  CR: Manual - Umstellung auf HTML
-  CR: HTTP REF - Optimierung vom Handling der Referenzen
-  CR: HTTP Request - Vereinfachung in der Normalisierung der Pfade
-  CR: HTTP DCGI/CGI - Erweiterung
+  CR: Manual: Umstellung auf HTML
+  CR: HTTP REF: Optimierung vom Handling der Referenzen
+  CR: HTTP Request: Vereinfachung in der Normalisierung der Pfade
+  CR: HTTP DCGI/CGI: Erweiterung
       - neu CGI-Variable PATH_ABSOULTE
         absolute Pfadinformation der URL bei absoluten Referenzen
       - PATH_INFO wird durch PATH_URL ersetzt
@@ -755,194 +756,194 @@
         zur Verfuegung gestellt
 
 1.14.0 20021224
-  BF: HTTP REF - Korrektur bei Redirections in Kombination mit Basic Authentication
+  BF: HTTP REF: Korrektur bei Redirections in Kombination mit Basic Authentication
       und absoluten Verweisen
-  BF: HTTP CGI/DCGI - Korrektur vom Response der HEAD Methode
+  BF: HTTP CGI/DCGI: Korrektur vom Response der HEAD Methode
       Der Response war. u.U. unvollstaendig, wenn die Methode nicht fuer das Interface
       eingerichtet wurde.
-  CR: HTTP REF - allgemeine Ueberarbeitung in der Kontrolle und Steuerung der Referenzen
-  CR: HTTP REF - Erweiterung der Sektion der Referenzen um die Option [access:none]
+  CR: HTTP REF: allgemeine Ueberarbeitung in der Kontrolle und Steuerung der Referenzen
+  CR: HTTP REF: Erweiterung der Sektion der Referenzen um die Option [access:none]
       Die Basic Authentication kann damit partiell aufgehoben werden.
-  CR: HTTP Basic Authentication - Optimierung/Erweiterung
+  CR: HTTP Basic Authentication: Optimierung/Erweiterung
       Basic Authentication laesst sich bis auf Dateien anwenden, was jedoch nicht
       von alles Browsern problemlos unterstuetzt wird.
-  CR: HTTP AccessLog - Optimierung
+  CR: HTTP AccessLog: Optimierung
       Der Zeilenumbruch wird nun passend zum Betriebssystem im Format verwendet.
       MAC: [CR], UNIX/Linux: [LF], Windows: [CRLF]
-  CR: HTTP DCGI/CGI - Entkopplung der HTTP-Methoden
+  CR: HTTP DCGI/CGI: Entkopplung der HTTP-Methoden
       Somit koennen weitere HTTP-Methoden implementiert werden.
 
 1.13.0 20021024
-  BF: HTTP - Korrektur beim Schutz vom Verzeichnis \"/\" mit der Option [access]
-  CR: Remote - Optimierung/Ueberarbeitung
+  BF: HTTP: Korrektur beim Schutz vom Verzeichnis \"/\" mit der Option [access]
+  CR: Remote: Optimierung/Ueberarbeitung
       Der Telnet-Zugriff wurde optimiert und ressourcensparender gestaltet.
-  CR: HTTP Request - Begrenzung vom Header auf 65535 Bytes und 100 Sekunden fuer
+  CR: HTTP Request: Begrenzung vom Header auf 65535 Bytes und 100 Sekunden fuer
       die Initialisierung
-  CR: HTTP - Optimierung vom Decode fuer BASE64 und DOT
+  CR: HTTP: Optimierung vom Decode fuer BASE64 und DOT
 
 1.12.0 20020917
-  CR: HTTP - Optimierung der UNIQUE_ID
-  CR: HTTP Request - allgemeine Optimierung/Ueberarbeitung vom Handler
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: HTTP - Erweiterung um Basic Authorization
+  CR: HTTP: Optimierung der UNIQUE_ID
+  CR: HTTP Request: allgemeine Optimierung/Ueberarbeitung vom Handler
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: HTTP: Erweiterung um Basic Authorization
       Der Zugriff auf Verzeichnisse kann mit Benutzer und Passwort geschuetzt werden.
-  CR: HTTP - Optimierung/Ueberarbeitung vom Handling der virtuellen Verzeichnisse
+  CR: HTTP: Optimierung/Ueberarbeitung vom Handling der virtuellen Verzeichnisse
 
 1.11.0 20020819
-  BF: HTTP HEAD - Korrektur bei gesperrten Verzeichnissen
+  BF: HTTP HEAD: Korrektur bei gesperrten Verzeichnissen
       Es werden keine Informationen mehr ueber enthaltene Dateien ausgegeben.
-  CR: HTTP Filter - Erweiterung um Referenzen erweitert
+  CR: HTTP Filter: Erweiterung um Referenzen erweitert
       Die Filter unterstuetzen damit gemeinsame Templates und Adresse Weiterleitung.
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: HTTP Request - allgemeine Optimierung der Request-Verarbeitung
-  CR: HTTP DCGI/CGI - Begrenzung der Laenge vom Datenstream durch Content-Length
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: HTTP Request: allgemeine Optimierung der Request-Verarbeitung
+  CR: HTTP DCGI/CGI: Begrenzung der Laenge vom Datenstream durch Content-Length
       Ist diese im Request nicht enthalten werden alle Bytes an das DCGI/CGI uebergeben.
 
 1.10.2 20020728
-  BF: Configuration - Schluessel INTERUPT wurde in INTERRUPT geaendert
-  BF: HTTP AccessLog - Synchronisation der Protokollierung
+  BF: Configuration: Schluessel INTERUPT wurde in INTERRUPT geaendert
+  BF: HTTP AccessLog: Synchronisation der Protokollierung
       Fuer einen besseren Dateizugriff bei parallelen Request.
 
 1.10.1 20020601
-  BF: HTTP Request - Korrektur/Ueberarbeitung
+  BF: HTTP Request: Korrektur/Ueberarbeitung
       - sicherer und fehlertolerantere Pfad-Verarbeitung
       - Korrektur vom Absturz der MS Java VM bei ueberlangen Requests/Pfaden
 
 1.10.0 20020520
-  BF: HTTP Request - Optimierung fuer eine flexiblere Verarbeitung
-  BF: HTTP DCGI - Korrektur vom fehlerhaften CRLF Eintrag im DCGI-Header
-  BF: HTTP Mimetype - Optimierung in Ermittlung/Aufloesung
-  BF: HTTP HEAD - Korrektur der fehlenden CONTENT-LENGTH
-  BF: HTTP DCGI/CGI - Korrektur vom AccessLog
+  BF: HTTP Request: Optimierung fuer eine flexiblere Verarbeitung
+  BF: HTTP DCGI: Korrektur vom fehlerhaften CRLF Eintrag im DCGI-Header
+  BF: HTTP Mimetype: Optimierung in Ermittlung/Aufloesung
+  BF: HTTP HEAD: Korrektur der fehlenden CONTENT-LENGTH
+  BF: HTTP DCGI/CGI: Korrektur vom AccessLog
       Der per DCGI/CGI gesetzte Serverstatus wird jetzt richtig uebernommen.
       Ohne Serverstatus wird 200 verwendet.
-  BF: HTTP DCGI/CGI - Korrektur in der Verarbeitung vom Serverstatus
-  BF: HTTP AccessLog - Optimierung
+  BF: HTTP DCGI/CGI: Korrektur in der Verarbeitung vom Serverstatus
+  BF: HTTP AccessLog: Optimierung
       Die Protokollierung wurde der Request-Verarbeitung nachgelagert.
       U.a. blockiert somit die Connection nicht mehr bei ggf. laengeren Auffuehrungszeiten
       beim Aufloesen vom REMOTE-HOST in grossen Netzwerken.
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: Server - Optimierung in der Verwendung vom Parameter SERVER:BAS:ADDRESS
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: Server: Optimierung in der Verwendung vom Parameter SERVER:BAS:ADDRESS
       Dynamische Adressen werden nun auch ohne Neustart des Servers bei AUTO beruecksichtigt.
-  CR: SERVER/VIRTUALHOST - Erweiterung der Sektion REF
+  CR: SERVER/VIRTUALHOST: Erweiterung der Sektion REF
       Die Option [A] wird nun fuer Verzeichnisse und Dateien unterstuetzt.
       Bsp. APPS = /apps >> ../apps/index.php [A]
 
 1.9.0 20020422
-  BF: HTTP Reference - Optionen/Direktiven werden nun vor der Verwendung entfernt
-  BF: HTTP Directory Index - bei Verzeichnissen wurde der Dateityp entfernt
-  BF: HTTP AccessLog - wegbrechende Request werden jetzt mit Status 400 protokolliert
-  CR: HTTP DCGI/CGI - Optimierung/Erweiterung/Korrektur
+  BF: HTTP Reference: Optionen/Direktiven werden nun vor der Verwendung entfernt
+  BF: HTTP Directory Index: bei Verzeichnissen wurde der Dateityp entfernt
+  BF: HTTP AccessLog: wegbrechende Request werden jetzt mit Status 400 protokolliert
+  CR: HTTP DCGI/CGI: Optimierung/Erweiterung/Korrektur
       - beginnt der DCGI/CGI-Response mit HTTP/ gefolgt vom Satus-Code, wird dieser
         vom Server uebernommen
       - REMOTE-HOST wird nicht mehr vom Server ermittelt, da es in grossen Netzwerken
         zu langen Antwortzeiten fuehren konnte
         Die Ermittlung vom REMOTE-HOST fuer den Accesslog wurde beibehalten.
-  CR: HTTP Filter - Optimierung/Erweiterung
+  CR: HTTP Filter: Optimierung/Erweiterung
       - Erweiterung um die Funktionen STARTS und ENDS
       - Erweiterung um die Verwendung der CGI-Variablen
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: Initialize / Initializeblock - Optimierung/Erweiterung
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: Initialize / Initializeblock: Optimierung/Erweiterung
       - Erweiterung um die Option [+]
         Enden Schluessel oder Werte mit [+] wird nun der komplette Werteeintrag verarbeitet
         wodurch auch das Semikolon verwendet werden kann. Kommentare sind in diesen
         Zeilen dann nicht mehr moeglich.
-  CR: SERVER/VIRTUALHOST - Erweiterung um die Sektion REF
+  CR: SERVER/VIRTUALHOST: Erweiterung um die Sektion REF
       - die Sektion REF unterstuetzt die Konfiguration von Systemreferenzen
       Details sind bitte der Dokumentation zu entnehmen.
 
 1.8.0 20020320
-  BF: HTTP Directory Index - Optimierung der Sortierung
+  BF: HTTP Directory Index: Optimierung der Sortierung
       Standard: Dateityp (Verzeichnis/Datei) + Kriterium + Name
-  BF: HTTP DCGI/CGI - nicht verwendete CGI Variablen wurden entfernt
-  BF: HTTP - Anpassung der Prioritaeten der Fehlercodes
-  BF: HTTP Request - Location verwendet ohne Host die Adresse des Servers verwendet
-  BF: Service - Korrektur der OutOfMemoryException bei zu vielen Servern
+  BF: HTTP DCGI/CGI: nicht verwendete CGI Variablen wurden entfernt
+  BF: HTTP: Anpassung der Prioritaeten der Fehlercodes
+  BF: HTTP Request: Location verwendet ohne Host die Adresse des Servers verwendet
+  BF: Service: Korrektur der OutOfMemoryException bei zu vielen Servern
       Der Server war dann auch ueber das Remote Control nicht mehr erreichbar.
-  BF: HTTP Server - Korrektur der Konfiguration
+  BF: HTTP Server: Korrektur der Konfiguration
       Die Vererbung von ACCESSLOG und BLOCKSIZE funktioniert wieder.
-  CR: Session - allgemeine Optimierung
-  CR: Response - allgemeine Optimierung
+  CR: Session: allgemeine Optimierung
+  CR: Response: allgemeine Optimierung
 
 1.7.0 20020220
-  BF: HTTP DCGI/CGI - Optimierung/Korrektur der Pfade
+  BF: HTTP DCGI/CGI: Optimierung/Korrektur der Pfade
       Bei den Pfaden der Scripte wird nun abhaengig vom Dateisystem Slash oder Backslash
       verwendet.
-  CR: Initialize - Ueberarbeitung/Optimierung/Erweiterung
-  CR: Initializeblock - Ueberarbeitung/Optimierung/Erweiterung
-  CR: Server - Parameter SERVER:BAS:ADDRESS unterstuetzt nun auch den Wert AUTO
+  CR: Initialize: Ueberarbeitung/Optimierung/Erweiterung
+  CR: Initializeblock: Ueberarbeitung/Optimierung/Erweiterung
+  CR: Server: Parameter SERVER:BAS:ADDRESS unterstuetzt nun auch den Wert AUTO
       Damit werden alle im System verfuegbaren IP Adressen verwendet.
 
 1.6.0 20020128
-  BF: Server - Korrektur der u.U. scheiternden parallelen Zugriffe
-  CR: HTTP DCGI - Umstellung auf StdIO, SWAPROOT entfaellt damit
-  CR: HTTP DCGI/CGI/COMMAND - Umstellung der Parameter auf [I] [C] [P] [F] [E]
-  CR: HTTP - Optimierung/Verkuerzung der UNIQUE_ID (Umstellung alphanumerisch)
-  CR: Devwex - allgemeine Optimierung in Groesse und Performance
-  CR: Server - Schluessel SERVER:BAS:PROCESSES ist entfallen
-  CR: HTTP DCGI/CGI/COMMAND - SERVER_SOFTWARE enthaelt nun die Serverversion
+  BF: Server: Korrektur der u.U. scheiternden parallelen Zugriffe
+  CR: HTTP DCGI: Umstellung auf StdIO, SWAPROOT entfaellt damit
+  CR: HTTP DCGI/CGI/COMMAND: Umstellung der Parameter auf [I] [C] [P] [F] [E]
+  CR: HTTP: Optimierung/Verkuerzung der UNIQUE_ID (Umstellung alphanumerisch)
+  CR: Devwex: allgemeine Optimierung in Groesse und Performance
+  CR: Server: Schluessel SERVER:BAS:PROCESSES ist entfallen
+  CR: HTTP DCGI/CGI/COMMAND: SERVER_SOFTWARE enthaelt nun die Serverversion
 
 1.5.0 20011228
-  BF: Service - Korrektur der OutOfMemoryException bei zu vielen Services-Threads
-  BF: HTTP Request - Decodierung wurde ausgebaut und flexibler gestaltet
+  BF: Service: Korrektur der OutOfMemoryException bei zu vielen Services-Threads
+  BF: HTTP Request: Decodierung wurde ausgebaut und flexibler gestaltet
       Die Filterfunktionen komplett mit einbezogen wurden.
-  BF: HTTP Request - Korrektur in der Verarbeitung vom ß
-  BF: HTTP Redirection - Korrektur im Umgang mit einer Query
-  BF: HTTP CGI - Korrektur in der Verarbeitung/Ueberwachung vom Timeout
-  BF: HTTP DCGI/CGI - Korrektur bei der Erstellung der swap-Files
+  BF: HTTP Request: Korrektur in der Verarbeitung vom ß
+  BF: HTTP Redirection: Korrektur im Umgang mit einer Query
+  BF: HTTP CGI: Korrektur in der Verarbeitung/Ueberwachung vom Timeout
+  BF: HTTP DCGI/CGI: Korrektur bei der Erstellung der swap-Files
       Diese wurden seit 1.3.0 20011201 mit jedem Zugriff angelegt.
       Die Erstellung der swap-Files erfolgt nur noch fuer das DCGI.
-  BF: HTTP Generator - Korrektur der Fehler-/Status-Templates
+  BF: HTTP Generator: Korrektur der Fehler-/Status-Templates
       Der ERROR-Block wurde nicht beruecksichtigt.
-  CR: Devwex - allgemeine Optimierung der Groesse
-  CR: HTTP Filter - Erweiterung um:
+  CR: Devwex: allgemeine Optimierung der Groesse
+  CR: HTTP Filter: Erweiterung um:
       - die Option [A] zur AND Verknuepfung
       - den Vergleichswert NULL zur Pruefung auf Leer
         Bsp. FILTER = GET IS NULL ... [A] GET ... [A] ...
 
 1.4.0 20011201
-  CR: HTTP DCGI/CGI - Erweiterung um die Optionen [U] und [S] um Java-Applications
+  CR: HTTP DCGI/CGI: Erweiterung um die Optionen [U] und [S] um Java-Applications
       per DCGI verwenden zu koennen
       Bsp. WAP = POST GET >> java -cp [S].wap [U] [I]
 
 1.3.1 20011112
-  BF: HTTP DCGI/CGI - Abgleich der Parameter/Optionen
+  BF: HTTP DCGI/CGI: Abgleich der Parameter/Optionen
       Bei Aufruf ohne Parameter/Optionen wird der Anwendung die Script-Datei nur
       in den Umgebungsvariablen uebergeben.
       [C] CGI Aufruf der Anwendung mit Scriptdatei
       [I] DCGI Aufruf der Anwendung mit der Swapdatei
 
 1.3.0 20010803
-  BF: Service - Korrektur der OutOfMemoryException bei zu vielen Service-Threads
-  CR: Devwex - allgemeine Optimierung
-  CR: Generator - Ueberarbeitung/Optimierung/Erweiterung
-  CR: HTTP REF - Erweiterung der virtl. Verzeichnisse um den Parameter [R] fuer Redirections
-  CR: Messenger - Ueberarbeitung/Optimierung/Erweiterung
-  CR: Initialize - Ueberarbeitung/Optimierung/Erweiterung
-  CR: Logging - SystemLogWriter wurde entfernt
+  BF: Service: Korrektur der OutOfMemoryException bei zu vielen Service-Threads
+  CR: Devwex: allgemeine Optimierung
+  CR: Generator: Ueberarbeitung/Optimierung/Erweiterung
+  CR: HTTP REF: Erweiterung der virtl. Verzeichnisse um den Parameter [R] fuer Redirections
+  CR: Messenger: Ueberarbeitung/Optimierung/Erweiterung
+  CR: Initialize: Ueberarbeitung/Optimierung/Erweiterung
+  CR: Logging: SystemLogWriter wurde entfernt
 
 1.2.0 20010529
-  BF: HTTP Filter - Filter-Parameter entsprechen nun in der Syntax den Header-Parametern
-  BF: HTTP - Korrektur der abgebrochenen Request-Datenstroeme owhohl noch Daten vorlagen
-  BF: HTTP Directory Index - Korrektur in der Template-Generierung bei leeren Verzeichnissen
-  CR: Devwex - Allgemeine Optimierung der Groesse
-  CR: SERVER:BAS/VIRTUALHOST:BAS - Erweiterung der Sektion um den Schluessel IMPLEMENTS
+  BF: HTTP Filter: Filter-Parameter entsprechen nun in der Syntax den Header-Parametern
+  BF: HTTP: Korrektur der abgebrochenen Request-Datenstroeme owhohl noch Daten vorlagen
+  BF: HTTP Directory Index: Korrektur in der Template-Generierung bei leeren Verzeichnissen
+  CR: Devwex: Allgemeine Optimierung der Groesse
+  CR: SERVER:BAS/VIRTUALHOST:BAS: Erweiterung der Sektion um den Schluessel IMPLEMENTS
       Die Konfiguration des nachfolgend benannten Server oder virtuellen Hosts wird
       dann als Basiskonfiguration geladen und Konfigurationen koennen vererbt werden.
-  CR: HTTP Request - Erweiterung um der Parameter VERSION
+  CR: HTTP Request: Erweiterung um der Parameter VERSION
       ohne Auswirkungen auf die Funktionalitaet
-  CR: HTTP SERVER:BAS - Erweiterung der Serverkonfiguration um den Schluessel Timeout
+  CR: HTTP SERVER:BAS: Erweiterung der Serverkonfiguration um den Schluessel Timeout
       Dieser gibt den maximal zulaessige Datenleerlauf in Millisekunden an.
       Der Wert 0 bedeutet das der Timeout nicht beruecksichtigt wird.
 
 1.1.0 20010425
-  BF: HTTP - Korrektur vom Response mit Code 304/302
-  CR: HTTP REF - Erweiterung der virtl. Verzeichnisse um den Parameter [C] zum sperren
+  BF: HTTP: Korrektur vom Response mit Code 304/302
+  CR: HTTP REF: Erweiterung der virtl. Verzeichnisse um den Parameter [C] zum sperren
       Anfragen zu solchen Verzeichnissen werden mit Status 403 beantwortet.
-  CR: HTTP DCGI - Erweiterung um an das CGI 1.1 angelehnte Schnittstelle fuer Applikation
+  CR: HTTP DCGI: Erweiterung um an das CGI 1.1 angelehnte Schnittstelle fuer Applikation
       die z.B. keine Umgebungsvariablen lesen koennen
-  CR: HTTP COMMAND - Erweiterung um Parameter [I] zur Aktivierung/Nutzung vom DCGI
-  CR: HTTP CGI - Erweiterung um Parameter [I] zur Aktivierung/Nutzung vom DCGI
+  CR: HTTP COMMAND: Erweiterung um Parameter [I] zur Aktivierung/Nutzung vom DCGI
+  CR: HTTP CGI: Erweiterung um Parameter [I] zur Aktivierung/Nutzung vom DCGI
 
 1.0.0 20010411
   NT: Devwex steht als Release bereit.

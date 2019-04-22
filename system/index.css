@@ -13,8 +13,11 @@ a:hover {
 
 /** path: breadcrumb navigation */
 main > h1 + h2 a:before {
-  display:inline-block; margin:0em 0.5em;
-  border:0.4em solid transparent; border-left-color:#FFAA44; border-right:none;
+  display:inline-block;
+  margin:0em 0.5em;
+  border:0.4em solid transparent;
+  border-left-color:#FFAA44;
+  border-right:none;
   content:'';
 }
 main > h1 + h2 a:first-child:before {
@@ -25,7 +28,9 @@ main > h1 + h2 a:first-child:before {
 
 /** table */
 table {
-  width:100%; border-spacing:0px; border-collapse:collapse;
+  width:100%;
+  border-spacing:0px;
+  border-collapse:collapse;
   border-bottom:2px solid #FFAA44;
 }
 table tr td div {
@@ -36,14 +41,16 @@ table tr td div {
 
 /** table header: sorting */
 table thead th {
-  position:relative; text-align:right;
+  position:relative;
+  text-align:right;
   border-bottom:2px solid #FFAA44;
 }
 table thead th:first-child {
   text-align:left;
 }
 table thead h3 {
-  margin-top:0px; padding-top:0px;
+  margin-top:0px;
+  padding-top:0px;
 }
 table thead a[href='?n']:before,
 table thead a[href='?N']:before {
@@ -85,7 +92,9 @@ table thead a[href='?s']:before,
 table thead a[href='?S']:before,
 table thead a[href='?d']:before,
 table thead a[href='?D']:before {
-  position:relative; display:inline-block; margin:0em 0.5em;
+  position:relative;
+  display:inline-block;
+  margin:0em 0.5em;
   border:0.4em solid transparent;
   content:' ';
 }
@@ -118,7 +127,8 @@ table.dd tbody tr td:nth-child(4) {
 
 /** table: is empty message */
 table thead + thead {
-  display:none; color:#999999;
+  display:none;
+  color:#999999;
 }
 table.x {
   border-bottom:none;
@@ -140,7 +150,8 @@ table.x tbody {
 
 /** table body */
 table tbody tr td {
-  vertical-align:top; padding:1em 0em;
+  vertical-align:top;
+  padding:1em 0em;
 }
 table tbody tr td + td {
   text-align:right;
@@ -154,7 +165,12 @@ table tbody tr + tr td {
 /** column icon */
 table tbody tr.directory div + div:before,
 table tbody tr.file div + div:before {
-  position:absolute; height:35px; width:35px; margin-left:-48px; margin-top:3px; display:inline-block;
+  position:absolute;
+  height:35px;
+  width:35px;
+  margin-left:-48px;
+  margin-top:3px;
+  display:inline-block;
   content:'';
 }
 table tbody tr.directory td div + div:before {
@@ -337,7 +353,8 @@ table tbody tr td + td span:after{
   content:attr(type)' File';
 }
 table tbody tr td div + div:after {
-  display:block; color:#999999;
+  display:block;
+  color:#999999;
 }
 table tbody tr.directory td div + div:after {
   content:'Directory';

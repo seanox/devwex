@@ -8,10 +8,11 @@
       - Omission of namespaces, replacement by the dedicated/partial use of segments
       - Change of syntax, omission of : for segments   
         old: #[foo:[[...]]], new: #[foo[[...]]]
-      - Enhancement by a deep/recursive processing of Hashtable + Collections  
+      - Enhancement by a deep/recursive processing of Map + Collections  
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
         segments is no longer supported.
+      - Consistent conversion from Hashtable to (Hash)Map  
   CR: HTTP(S) Optimierung
       - AccessLog: Change to a print formatted syntax
         date/time %t... variables %[...]

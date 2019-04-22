@@ -24,9 +24,11 @@ package com.seanox.devwex;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  *  Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) 
@@ -34,19 +36,24 @@ import java.util.Iterator;
  *  mit Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
  *  Platzhalter, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
  *  Platzhalter durch die Werte ersetzt.<br>
- *  Platzhalter k&ouml;nnen auch Segmente sein, die in der Vorlage eine
- *  Teilstruktur bilden, die sich dediziert und partiell verwenden sowie
- *  bef&uuml;llen. Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen
- *  erhalten und sind iterativ wiederverwendbar.<br>
  *  <br>
  *  Der Generator arbeitete aus Byte-Level.<br>
- *  Als Werte f&uuml;r die Platzhalter werden prim&auml;r byte-Arrays erwartet,
- *  f&uuml;r alle anderen Typen wird {@code String.valueOf(value).getBytes()}
- *  verwendet. Bei Segmenten werden Werte vom Typ {@link Hashtable} und
- *  {@link Collection} als Struktur mit beliebiger Tiefe verarbeitet.
- *  {@link Hashtable} enthalten dabei Werte f&uuml;r die Platzhalter in einem
- *  Segment und eine {@link Collection} erzeugt durch die tiefe, sich
- *  wiederholende rekursive Generierung komplexe Strukturen.<br>
+ *  Werte werden daher prim&auml;r als byte-Arrays erwartet werden. Alle anderen
+ *  Datentypen mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
+ *  <br>
+ *  Platzhalter lassen sich auch als Segmente verwenden.<br>
+ *  Segmente sind Teilstrukturen die bis zu einer Tiefe von 65535 Ebenen
+ *  verschachtelt werden können. Diese Teilstrukturen lassen sich global oder
+ *  per Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
+ *  Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
+ *  sind iterativ wiederverwendbar.<br>
+ *  Als Werte werden f&uuml;r Segmente die Datentypen {@link Collection} und
+ *  {@link Map} erwartet. Eine {@link Map} enth&auml;lt dann die Werte f&uuml;r
+ *  die Platzhalter innerhalb des Segments. Eine {@link Collection} f&uuml;r zu
+ *  einer Iteration &uuml;ber eine Menge von {@link Map} und ist vergleichbar
+ *  mit dem iterativen Aufruf der Methode {@link #set(String, Map)}.<br>
+ *  Beides, {@link Map} und {@link Collection}, erzeugt tiefe, komplexe ggf.
+ *  sich wiederholende und rekursive Strukturen.
  *
  *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
@@ -82,7 +89,7 @@ import java.util.Iterator;
  *      </td>
  *      <td valign="top">
  *        Maskiert ein oder mehr Zeichen. Die Umwandlung erfolgt erst mit
- *        {@link #extract(String, Hashtable)}, {@link #extract(String)} bzw.
+ *        {@link #extract(String, Map)}, {@link #extract(String)} bzw.
  *        {@link #extract()} zum Schluss der Generierung.
  *      </td>
  *    </tr>
@@ -100,45 +107,44 @@ import java.util.Iterator;
  *  Zur Nutzung des Models stehen dann verschiedene M&ouml;glichkeiten zur
  *  Verf&uuml;gung.<br>
  *  <br>
- *  Mit {@link #set(Hashtable)} werden im Model die Platzhalter durch die
+ *  Mit {@link #set(Map)} werden im Model die Platzhalter durch die
  *  &uuml;bergeben Werte ersetzt. Platzhalter zudem keine Werte existieren,
  *  bleiben erhalten. Platzhalter die ein Segment/Scope repr&auml;sentieren
  *  werden diese ebenfalls gesetzt, wenn in den Werten ein korrespondierder
  *  Schl&uuml;ssel existiert. Bei Segmenten/Scopes bleibt der Platzhalter zur
  *  erneuten Verwendung erhalten und folgt direkt dem eingef&uuml;gten Wert.<br>
  *  <br>
- *  Bei {@link #set(String, Hashtable)} wird nur der angegeben Scope
- *  bef&uuml;llt. Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und
- *  mit den &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin
- *  entfernt und der Inhalt als Wert vor dem Platzhalter eingef&uuml;gt. Somit
- *  bleibt auch dieser Segment-/Scope-Platzhalter zur erneuten Verwendung
- *  erhalten.<br>
+ *  Bei {@link #set(String, Map)} wird nur der angegeben Scope bef&uuml;llt.
+ *  Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und mit den
+ *  &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin entfernt und
+ *  der Inhalt als Wert vor dem Platzhalter eingef&uuml;gt. Somit bleibt auch
+ *  dieser Segment-/Scope-Platzhalter zur erneuten Verwendung erhalten.<br>
  *  <br>
- *  Die Methoden {@link #extract(String)} und {@link #extract(String, Hashtable)}
+ *  Die Methoden {@link #extract(String)} und {@link #extract(String, Map)}
  *  dienen der exklusiven Nutzung von Segmenten (Teilvorlagen), die partiell
  *  bef&uuml;llt und aufbereitet werden. Beide Methoden liefern finale
- *  Ergebnisse, die dem Aufruf von {@link #set(Hashtable)} in Kombination mit
+ *  Ergebnisse, die dem Aufruf von {@link #set(Map)} in Kombination mit
  *  {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
  *  konzentrieren.<br>
  *  <br>
- *  Generator 5.1 20181214<br>
- *  Copyright (C) 2018 Seanox Software Solutions<br>
+ *  Generator 5.2 20190422<br>
+ *  Copyright (C) 2019 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20181214
+ *  @version 5.2 20190422
  */
 public class Generator {
 
     /** Segmente der Vorlage */
-    private Hashtable scopes;
+    private HashMap scopes;
 
     /** Model, Datenbuffer der Vorlage */
     private byte[] model;
 
     /** Konstruktor, erstellt einen leeren Generator. */
     private Generator() {
-        this.scopes = new Hashtable();
+        this.scopes = new HashMap();
     }
 
     /**
@@ -325,7 +331,7 @@ public class Generator {
             System.arraycopy(model, cursor +offset, cache, cursor +patch.length, model.length -cursor -offset);
             model = cache;
             
-            cursor += patch.length +1;
+            cursor += patch.length;
         }
         
         return model;
@@ -342,26 +348,26 @@ public class Generator {
      *  @param  clean  {@code true} zur finalen Bereinigung
      *  @return das bef&uuml;llte Model(Fragment)
      */    
-    private byte[] assemble(String scope, Hashtable values, boolean clean) {
+    private byte[] assemble(String scope, Map values, boolean clean) {
         
-        Enumeration enumeration;
-        String      label;
-        String      fetch;
+        Iterator iterator;
+        String   label;
+        String   fetch;
         
-        byte[]      cache;
-        byte[]      model;
-        byte[]      patch;
+        byte[]   cache;
+        byte[]   model;
+        byte[]   patch;
 
         if (this.model == null)
             return new byte[0];
 
         //Normalisierung der Werte (Kleinschreibung + Glaetten der Schluessel)
         if (values == null)
-            values = new Hashtable();
-        enumeration = values.keys();
-        values = new Hashtable(values);
-        while (enumeration.hasMoreElements()) {
-            label = (String)enumeration.nextElement();
+            values = new HashMap();
+        iterator = values.keySet().iterator();
+        values = new HashMap(values);
+        while (iterator.hasNext()) {
+            label = (String)iterator.next();
             values.put(label.toLowerCase().trim(), values.get(label));
         }
         
@@ -407,22 +413,22 @@ public class Generator {
                 //der Patch wird ueber den Schluessel ermittelt
                 Object object = values.get(fetch);
 
-                //Ist der Schluessel ein Segment und der Wert ist ein Hashtable
-                //mit Werten, wird das Segment rekursive befuellt. Zum Schutz
-                //vor unendlichen Rekursionen, wird der aktuelle Scope aus der
+                //Ist der Schluessel ein Segment und der Wert ist eine Map mit
+                //Werten, wird das Segment rekursive befuellt. Zum Schutz vor
+                //unendlichen Rekursionen, wird der aktuelle Scope aus der
                 //Werte-Liste entfernt. Bsp. #[A[[#[B[[#[A[[...]]]...]]]...]]]
                 if (this.scopes.containsKey(fetch)
-                        && object instanceof Hashtable) {
-                    patch = this.extract(fetch, (Hashtable)object);
+                        && object instanceof Map) {
+                    patch = this.extract(fetch, (Map)object);
                 } else if (this.scopes.containsKey(fetch)
                         && object instanceof Collection) {
                     //Collections erzeugt durch die tiefe, sich wiederholende
                     //rekursive Generierung komplexe Strukturen/Tabellen.
-                    Iterator iterator = ((Collection)object).iterator();
+                    iterator = ((Collection)object).iterator();
                     while (iterator.hasNext()) {
                         object = iterator.next();
-                        if (object instanceof Hashtable) {
-                            model = this.extract(fetch, (Hashtable)object);
+                        if (object instanceof Map) {
+                            model = this.extract(fetch, (Map)object);
                         } else if (object instanceof byte[]) {
                             model = (byte[])object;
                         } else if (object != null) {
@@ -487,7 +493,7 @@ public class Generator {
             System.arraycopy(this.model, cursor +offset, cache, cursor +patch.length, this.model.length -cursor -offset);
             this.model = cache;
             
-            cursor += patch.length +1;
+            cursor += patch.length;
         }
         
         return this.model;
@@ -499,7 +505,7 @@ public class Generator {
      *  @return alle Scopes der Segmente als Enumeration
      */
     public Enumeration scopes() {
-        return this.scopes.keys();
+        return Collections.enumeration(this.scopes.keySet());
     }
 
     /**
@@ -529,7 +535,7 @@ public class Generator {
      *  @return das gef&uuml;llte Segment, kann dieses nicht ermittelt werden,
      *          wird ein leeres Byte-Array zur&uuml;ckgegeben
      */
-    public byte[] extract(String scope, Hashtable values) {
+    public byte[] extract(String scope, Map values) {
         
         if (scope != null)
             scope = scope.toLowerCase().trim();
@@ -540,7 +546,7 @@ public class Generator {
         //Intern wird fuer das Segmente (Teilmodel)ein Kopie vom Generator
         //erstellt und dadurch partiell befuellt.
         Generator generator = new Generator();
-        generator.scopes = (Hashtable)this.scopes.clone();
+        generator.scopes = (HashMap)this.scopes.clone();
         generator.scopes.remove(scope);
         generator.model = (byte[])this.scopes.get(scope);
         if (generator.model == null)
@@ -552,7 +558,7 @@ public class Generator {
      *  Setzt die Daten f&uuml;r einen Scope oder ein Segment.
      *  @param values Werte
      */
-    public void set(Hashtable values) {
+    public void set(Map values) {
         this.set(null, values);
     }
 
@@ -561,7 +567,7 @@ public class Generator {
      *  @param scope  Scope bzw. Segment
      *  @param values Werte
      */
-    public void set(String scope, Hashtable values) {
+    public void set(String scope, Map values) {
 
         if (scope != null)
             scope = scope.toLowerCase().trim();

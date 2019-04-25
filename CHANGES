@@ -7,16 +7,16 @@
       - Optimization: Handling of segments/scopes/fragements
         Improvement of dedicated and partial use
       - Omission of namespaces, replacement by the dedicated/partial use of segments
-      - Change of syntax, omission of : for segments   
+      - Change of syntax, omission of character ':' for segments   
         old: #[foo:[[...]]], new: #[foo[[...]]]
       - Enhancement by a deep/recursive processing of Hashtable + Collections  
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
         segments is no longer supported.
-  CR: HTTP(S): Optimierung
-      - AccessLog: Change to a print formatted syntax
+  CR: HTTP(S) - AccessLog: Optimization
+      - Change to a print formatted syntax
         date/time %t... variables %[...]
-      - AccessLog: Change in default structure from filename to: <host>_<date>-access.log    
+      - Change in default structure from filename to: <host>_<date>-access.log    
   CR: Project: Uniform use of ./LICENSE and ./CHANGES    
 
 5.1.0 20180505

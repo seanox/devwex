@@ -14,7 +14,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2018 Seanox Software Solutions
+Copyright (C) 2019 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -54,7 +54,7 @@ Go to the program directory and start the program directly or by script.
 BF: HTTP(S) Correction  
 CR: Generator: Correction when rendering successive placeholders #[...]#[...]  
 CR: Generator: Optimization / Review  
-CR: HTTP(S): Optimierung  
+CR: HTTP(S) - AccessLog: Optimization  
 CR: Project: Uniform use of ./LICENSE and ./CHANGES  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)

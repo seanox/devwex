@@ -732,16 +732,16 @@
               <td>... &gt; ../system/access.log</td>
               <td>
                 Format und Pfad der Logdatei zur Protokollierung der Zugriffe.<br>
-                Ohne Pfad wird der Standard-I/O verwendet, <code>OFF</code>
-                deaktiviert wird die Protokollierung.<br>
-                Im Format und Pfad lassen sich CGI-Umgebungsvariablen sowie
-                Symbole von Datum und Zeit im Format <code>#[...]</code>
-                verwenden.<br>
+                Ohne Pfad wird der Standard-I/O verwendet und <code>OFF</code>
+                deaktiviert die Protokollierung.<br>
+                Im Format und Pfad wird die Argumenten basierte
+                Formatierungsanweisung (Print Formatted) unterst&uuml;tzt, mit
+                der sich CGI-Umgebungsvariablen im Format <code>%[...]</code>
+                sowie Symbole von Datum und Zeit im Format <code>%t...</code>
+                verwenden lassen.<br>
                 Die Datum-/Zeit-Symbol basieren auf den <a target="_extern"
-                  href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
+                    href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
                   Date/Time Conversions</a> der Formatter-Class.<br>
-                Die Syntax verwendet einen zus&auml;tzlich der Namensraum:
-                <code>#[T:...]</code>.
               </td>
             </tr>
             <tr>
@@ -1270,7 +1270,7 @@
           </tr>
           <tr>
             <td></td>
-            <td>MATCHES</td>
+            <td>MATCH</td>
             <td>
               Der Wert der Variablen entspricht dem Vergleichswert als
               regul&auml;ren Ausdruck.

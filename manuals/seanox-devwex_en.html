@@ -708,12 +708,13 @@
                 Format and path of the log file for logging accesses.<br>
                 Without path the Standard I/O is used, <code>OFF</code> disables
                 logging.<br>
-                In the format and path, CGI environment variables and symbols of
-                date and time can be used in format <code>#[...]</code>.<br>
+                Format and Path supports a print formatted syntax, with which
+                CGI environment variables in the format <code>%[...]</code> and
+                symbols of date and time in the format <code>%t...</code> can be
+                used.<br>
                 The date/time symbols are based on the <a target="_extern"
-                  href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
-                Date/Time Conversions</a> of the formatter class.<br>
-                The syntax uses an additional namespace: <code>#[T:...]</code>.
+                    href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
+                  Date/Time Conversions</a> of the formatter class.<br>
               </td>
             </tr>
             <tr>
@@ -1232,7 +1233,7 @@
           </tr>
           <tr>
             <td></td>
-            <td>MATCHES</td>
+            <td>MATCH</td>
             <td>
               The value of the variable corresponds to the comparison value as a
               regular expression.

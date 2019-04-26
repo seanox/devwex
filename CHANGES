@@ -2,7 +2,8 @@
   BF: HTTP(S) Correction
       - Basic Authentication / Digest Access Authentication: rules are used again
         case-insentive
-  CR: Generator: Correction when rendering successive placeholders #[...]#[...]      
+  BF: Generator: Correction when rendering successive placeholders #[...]#[...]
+  BF: HTTP(S) - Request: Optimization/correction for invalid requests/connections without data streams
   CR: Generator: Optimization / Review
       - Optimization: Handling of segments/scopes/fragements
         Improvement of dedicated and partial use

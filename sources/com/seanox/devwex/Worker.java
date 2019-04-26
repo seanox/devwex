@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2019 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.1 20181129<br>
- *  Copyright (C) 2018 Seanox Software Solutions<br>
+ *  Worker 5.2 20190425<br>
+ *  Copyright (C) 2019 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20181129
+ *  @version 5.2 20190425
  */
 class Worker implements Runnable {
   
@@ -2663,10 +2663,12 @@ class Worker implements Runnable {
         //reagieren zu koennen
         if (this.isolation != 0)
             this.isolation = System.currentTimeMillis();
-            
+
         //der Response wird ausgegeben
-        this.output.write(string.getBytes());
-        this.output.write(bytes);
+        if (this.output != null) {
+            this.output.write(string.getBytes());
+            this.output.write(bytes);
+        }
         
         //das Datenvolumen wird uebernommen
         this.volume += bytes.length;  

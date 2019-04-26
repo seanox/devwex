@@ -252,8 +252,9 @@
     <delete file="${workspace.program}/keystore"/>
     <exec executable="keytool">
       <arg line="-genkey -alias Server -dname 'CN=127.0.0.1'
-        -keystore '${workspace.program}/keystore' -keypass changeIt -storepass changeIt
-        -keyalg RSA -keysize 2048 -validity 365"/>
+        -keystore '${workspace.program}/keystore' -keypass changeIt -keyalg RSA -keysize 2048 
+        -storetype PKCS12 -storepass changeIt
+        -validity 365"/>
     </exec>
     <copy file="${workspace.program}/keystore" todir="${workspace.development}" overwrite="true"/>
   </target> 

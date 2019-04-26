@@ -18,7 +18,8 @@
         date/time %t... variables %[...]
       - Change in default structure from filename to: <host>_<date>-access.log    
   CR: Project: Uniform use of ./LICENSE and ./CHANGES    
-
+  CR: KeyStore: Change to use PKCS12
+  
 5.1.0 20180505
   BF: Initialize: Korrektur Smart-Modus
       - im Smart-Modus erstellte Sections werden wieder gehalten

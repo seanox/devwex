@@ -56,6 +56,7 @@ CR: Generator: Correction when rendering successive placeholders #[...]#[...]
 CR: Generator: Optimization / Review  
 CR: HTTP(S) - AccessLog: Optimization  
 CR: Project: Uniform use of ./LICENSE and ./CHANGES  
+CR: KeyStore: Change to use PKCS12  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

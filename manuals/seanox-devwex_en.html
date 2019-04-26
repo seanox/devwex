@@ -936,7 +936,7 @@
             CLIENTAUTH = OFF
 
             KEYSTORE   = keystore
-            TYPE       = JKS
+            TYPE       = PKCS12
             ALGORITHM  = SunX509
             PASSWORD   = changeIt
             ...
@@ -1018,13 +1018,13 @@
           Server and client certificates can be created as follows:
         </header>
         <pre>
-          ./java/bin/keytool -genkeypair -alias Server -keyalg RSA -keysize 2048 -validity 365
-                             -dname 'CN=Server'
-                             -keystore server.jks -keypass changeIt -storepass changeIt
+          ./java/bin/keytool -genkeypair -alias Server -dname 'CN=Server' -validity 365
+                             -keystore server.keystore -keyalg RSA -keysize 2048 -keypass changeIt
+                             -storetype PKCS12 -storepass changeIt
         </pre>
         <pre>
           ./java/bin/keytool -exportcert -alias Server -file server.cer
-                             -keystore server.jks -storepass changeIt
+                             -keystore server.keystore -storepass changeIt
         </pre>
         <p>
           The keystore for the client is created and the public client
@@ -1034,13 +1034,13 @@
           certificate.
         </p>
         <pre>
-          ./java/bin/keytool -genkeypair -alias Client -keyalg RSA -keysize 2048 -validity 365
-                             -dname 'CN=Client'
-                             -keystore client.jks -keypass changeIt -storepass changeIt
+          ./java/bin/keytool -genkeypair -alias Client -dname 'CN=Client' -validity 365 
+                             -keystore client.keystore -keyalg RSA -keysize 2048 -keypass changeIt
+                             -storetype PKCS12 -storepass changeIt
         </pre>
         <pre>
           ./java/bin/keytool -exportcert -alias Client -file client.cer
-                             -keystore client.jks -storepass changeIt
+                             -keystore client.keystore -storepass changeIt
         </pre>
         <p>
           The keystores of the server and client are migrated to each other.<br>
@@ -1048,12 +1048,12 @@
         </p>
         <pre>
           ./java/bin/keytool -importcert -alias Client -file client.cer
-                             -keystore server.jks -storepass changeIt
+                             -keystore server.keystore -storepass changeIt
                              -noprompt
         </pre>
         <pre>
           ./java/bin/keytool -importcert -alias Server -file server.cer
-                             -keystore client.jks -storepass changeIt
+                             -keystore client.keystore -storepass changeIt
                              -noprompt
         </pre>
         <p>
@@ -1064,14 +1064,14 @@
         </p>
         <pre>
           ./java/bin/keytool -importkeystore
-                             -srckeystore server.jks -srcstorepass changeIt
+                             -srckeystore server.keystore -srcstorepass changeIt
                              -destkeystore server.p12 -deststoretype PKCS12
                              -keypass changeIt -storepass changeIt
                              -noprompt
         </pre>
         <pre>
           ./java/bin/keytool -importkeystore -alias ClientA
-                             -srckeystore client.jks -srcstorepass changeIt
+                             -srckeystore client.keystore -srcstorepass changeIt
                              -destkeystore client.p12 -deststoretype PKCS12
                              -keypass changeIt -storepass changeIt
                              -noprompt

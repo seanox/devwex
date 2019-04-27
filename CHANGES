@@ -1,4 +1,4 @@
-5.2.0 2019xxxx
+5.2.0 201905xx
   BF: HTTP(S) Correction
       - Basic Authentication / Digest Access Authentication: rules are used again
         case-insentive

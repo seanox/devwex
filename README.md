@@ -134,7 +134,7 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.2.0 20190502 (summary of the current version)  
+## 5.2.0 201905xx (summary of the next version)  
 BF: HTTP(S) Correction  
 BF: Generator: Correction when rendering successive placeholders #[...]#[...]  
 BF: HTTP(S) - Request: Optimization/correction for invalid requests/connections without data streams  

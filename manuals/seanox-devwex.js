@@ -63,7 +63,7 @@ if (typeof Element.prototype.cssSelector !== "function")
  */     
 if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
-        this.removeClassName("hidden");
+        this.classList.remove("hidden");
     };
 
 /**
@@ -72,7 +72,7 @@ if (typeof Element.prototype.show !== "function")
  */      
 if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
-        this.addClassName("hidden");
+        this.classList.add("hidden");
     };
 
 /**
@@ -82,74 +82,7 @@ if (typeof Element.prototype.hide !== "function")
  */  
 if (typeof Element.prototype.visible !== "function")
     Element.prototype.visible = function() {
-        return !this.containsClassName("hidden");
-    };
-
-/**
- *  Enhancement of the JavaScript API
- *  Adds one or more specified CSS classes for the element.
- *  @param  className class names to be added (space separeted)
- */      
-if (typeof Element.prototype.addClassName !== "function")
-    Element.prototype.addClassName = function(className) {
-        className = (className || "").trim();
-        if (!className)
-            return;
-        this.removeClassName(className);
-        className = className.split(/\s+/);
-        if (!Array.isArray(className))
-            className = new Array(className);
-        var element = this;
-        className.forEach(function(className, index, array) {
-            element.className = (element.className + " " + className).trim(); 
-        });
-    };
-
-/**
- *  Enhancement of the JavaScript API
- *  Removes one or more specified CSS classes for the element.
- *  @param  className class names to be removed (space separeted)
- */  
-if (typeof Element.prototype.removeClassName !== "function")
-    Element.prototype.removeClassName = function(className) {
-        className = (className || "").trim();
-        if (!className)
-            return;
-        className = className.split(/\s+/);
-        if (!Array.isArray(className))
-            className = new Array(className);
-        var element = this;
-        className.forEach(function(className, index, array) {
-            var regexp = new RegExp("\\s+" + className + "\\s+", "ig");
-            element.className = (" " + element.className + " ").replace(regexp, ' ').trim(); 
-            if (!element.className)
-                element.removeAttribute("class");
-        });
-    };
-
-/**
- *  Enhancement of the JavaScript API
- *  Checks whether one or more specified CSS classes are set for the element.
- *  @param  className class names to be tested (space separeted)
- *  @return true, if all specified CSS classes are set for the element
- */    
-if (typeof Element.prototype.containsClassName !== "function")
-    Element.prototype.containsClassName = function(className) {
-        className = (className || "").trim();
-        if (!className)
-            return false;
-        var classNameA = className.toLowerCase().split(/\s+/);
-        if (!Array.isArray(classNameA))
-            classNameA = new Array(classNameA);
-        var classNameB = (this.className || "").trim().toLowerCase().split(/\s+/);
-        if (!Array.isArray(classNameB))
-            classNameB = new Array(classNameB);
-        classNameA.forEach(function(className, index, array) {
-            if (className
-                    && classNameB.contains(className))
-                array[index] = "";
-        });
-        return !classNameA.join("").trim();
+        return !this.classList.contains("hidden");
     };
 
 /**
@@ -268,8 +201,8 @@ Sitemap.create = function() {
             if (Sitemap.chapter) {
                 var toc = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
                 if (focus)
-                    toc.addClassName(Sitemap.STYLE_FOCUS);
-                else toc.removeClassName(Sitemap.STYLE_FOCUS);
+                    toc.classList.add(Sitemap.STYLE_FOCUS);
+                else toc.classList.remove(Sitemap.STYLE_FOCUS);
                 var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
                 elements.forEach(function(element, index, array) {
                     var numbers = element.getAttribute(Sitemap.ATTRIBUTE_NUMBER).split("."); 
@@ -287,7 +220,7 @@ Sitemap.create = function() {
             }
             var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
             elements.forEach(function(element, index, array) {
-                if (element.containsClassName("toc"))
+                if (element.classList.contains("toc"))
                     element.show();
                 else element.hide();
             });
@@ -448,7 +381,7 @@ Sitemap.create = function() {
             && !Sitemap.SELECTOR_TOC_ARTICLE) {
         if (element.tagName == "ARTICLE") {
             Sitemap.SELECTOR_TOC_ARTICLE = element.cssSelector();
-            element.addClassName("toc");
+            element.classList.add("toc");
         }
         element = element.parentNode;
     }
@@ -503,17 +436,17 @@ Sitemap.create = function() {
                 return;
             Sitemap.meta.search = Sitemap.meta.filter;
             var search = document.querySelector(Sitemap.SELECTOR_TOC_FILTER);
-            search.removeClassName(Sitemap.STYLE_ERROR);
+            search.classList.remove(Sitemap.STYLE_ERROR);
             var filter = Sitemap.Filter.compile(Sitemap.meta.search);
             var update = function(chapter, filter) {
                 var element = document.querySelector(Sitemap.SELECTOR_TOC_ANCHOR + "[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + chapter + "']");
-                element.removeClassName(Sitemap.STYLE_MINOR);
+                element.classList.remove(Sitemap.STYLE_MINOR);
                 try {
                     if (!Sitemap.Filter.validate(Sitemap.index[chapter], filter))
-                        element.addClassName(Sitemap.STYLE_MINOR);
+                        element.classList.add(Sitemap.STYLE_MINOR);
                 } catch (exception) {
                     if (search)
-                        search.addClassName(Sitemap.STYLE_ERROR);
+                        search.classList.add(Sitemap.STYLE_ERROR);
                 }
             };
             for (var chapter in Sitemap.index)
@@ -554,8 +487,8 @@ Sitemap.create = function() {
     var control = 0;
     window.setInterval(function() {
         var element = document.querySelector(Sitemap.SELECTOR_TOC_ARTICLE);
-        if (!element.containsClassName("hidden"))
-            if (element.containsClassName("focus"))
+        if (!element.classList.contains("hidden"))
+            if (element.classList.contains("focus"))
                 element = 2;
             else element = 1;
         else element = 3;
@@ -564,9 +497,9 @@ Sitemap.create = function() {
         control = element;
         var elements = document.querySelectorAll(Sitemap.SELECTOR_CONTROL + " button");
         elements.forEach(function(element, index, array) {
-            element.removeClassName("active");
+            element.classList.remove("active");
         });
-        document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(" + element + ")").addClassName("active");        
+        document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(" + element + ")").classList.add("active");        
     }, 100);
 };
 
@@ -654,7 +587,7 @@ Sitemap.navigate = function(chapter) {
     window.setTimeout(function() {
         var elements = document.querySelectorAll(Sitemap.SELECTOR_ARTICLE);
         elements.forEach(function(element, index, array) {
-            if (!element.containsClassName("toc")
+            if (!element.classList.contains("toc")
                     && element.querySelector("*[" + Sitemap.ATTRIBUTE_CHAPTER + "='" + Sitemap.chapter.chapter + "']"))
                 element.show();
             else element.hide();
@@ -667,8 +600,8 @@ Sitemap.navigate = function(chapter) {
         var elements = document.querySelectorAll(Sitemap.SELECTOR_TOC_ANCHOR);
         elements.forEach(function(element, index, array) {
             if (element.getAttribute(Sitemap.ATTRIBUTE_CHAPTER) == chapter.chapter)
-                element.addClassName("active");
-            else element.removeClassName("active");
+                element.classList.add("active");
+            else element.classList.remove("active");
         });        
     });
 };
@@ -716,7 +649,7 @@ window.addEventListener("load", function() {
     elements = elements.getElementsByTagName("*");
     elements = Array.prototype.slice.call(elements, 0);
     elements.forEach(function(element, index, array) {
-        element.addClassName("architecture-" + (index).pad(4));
+        element.classList.add("architecture-" + (index).pad(4));
     });
 });
 
@@ -732,5 +665,23 @@ window.addEventListener("load", function() {
             element.show();
         else element.hide();
     });
-    document.querySelector("body > main").addClassName("active");
+    document.querySelector("body > main").classList.add("active");
+});
+
+/**
+ *  Event when loading the page
+ *  Adds the base UserAgent as style class to the body element.
+ */    
+window.addEventListener("load", function() {
+    var client = (navigator.userAgent || "").match(/\b(?:chrome|firefox|edge)\b/i);
+    if (client)
+        document.body.classList.add(String(client).toLowerCase());
+});
+
+/**
+ *  Event when loading the page
+ *  Clears the filter when loading the page.
+ */    
+window.addEventListener("load", function() {
+    document.querySelector(Sitemap.SELECTOR_TOC_RESET).click();
 });

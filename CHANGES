@@ -1,3 +1,6 @@
+5.3.0 2020xxxx
+  CR: Project: Automatic update of the version in README.md
+
 5.2.0 20190502
   BF: HTTP(S) Correction
       - Basic Authentication / Digest Access Authentication: rules are used again case-insentive

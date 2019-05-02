@@ -205,7 +205,20 @@
     </tstamp>    
     <replaceregexp file="${workspace}/README.md"
       match="(?si)(?&lt;=\(C\)\s)\d{4}\b" flags="g" byline="true"
-      replace="${now.year}"/>    
+      replace="${now.year}"/>  
+    
+    <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
+    <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)(?:^|^(?:.*?[\r\n]+))(\d(?:\.\d)+) \d+\s.*$" replace="release.version.current=\1" byline="false"/>
+    <loadproperties>
+      <file file="${workspace}/CHANGES.tmp"/>
+    </loadproperties>
+    <delete file="${workspace}/CHANGES.tmp"/>
+    <replaceregexp file="${workspace}/README.md"
+      match="(Seanox Devwex(?: (?:Sources|Test))* )\d+(\.\d+)*" flags="g" byline="false"
+      replace="\1${release.version.current}"/>
+    <replaceregexp file="${workspace}/README.md"
+      match="(seanox-devwex-(?:test-)*)\d+(?:\.\d+)*((?:-src)*\.zip)" flags="g" byline="false"
+      replace="\1${release.version.current}\2"/>
   </target>
   
   <target name="compress" if="windows">

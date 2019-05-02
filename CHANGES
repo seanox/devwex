@@ -1,7 +1,6 @@
 5.2.0 20190502
   BF: HTTP(S) Correction
-      - Basic Authentication / Digest Access Authentication: rules are used again
-        case-insentive
+      - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
   BF: Generator: Correction when rendering successive placeholders #[...]#[...]
   BF: HTTP(S) - Request: Optimization/correction for invalid requests/connections without data streams
   CR: Generator: Optimization / Review

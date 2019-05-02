@@ -333,6 +333,7 @@
     <include name="development/devwex.ini"/>
     <include name="documents/index.css"/>
     <include name="documents/index.html"/>
+    <include name="manuals/seanox-icons.zip"/>
     <include name="manuals/seanox-devwex_de.html"/>
     <include name="manuals/seanox-devwex_en.html"/>
     <include name="manuals/seanox-devwex.css"/>  

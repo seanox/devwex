@@ -119,8 +119,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 # Downloads
 [Seanox Devwex 5.2.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.2.0.zip)  
-[Seanox Devwex Sources 5.2.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.2.0-src.zip)  
-[Seanox Devwex Test 5.2.0](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.2.0.zip) 
+[Seanox Devwex 5.2.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.2.0-src.zip)  
+[Seanox Devwex 5.2.0 Test](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.2.0.zip) 
 
 
 # Extensions

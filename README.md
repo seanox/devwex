@@ -134,14 +134,10 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.2.0 20190502 (summary of the current version)  
-BF: HTTP(S) Correction  
-BF: Generator: Correction when rendering successive placeholders #[...]#[...]  
-BF: HTTP(S) - Request: Optimization/correction for invalid requests/connections without data streams  
-CR: Generator: Optimization / Review  
-CR: HTTP(S) - AccessLog: Optimization  
-CR: Project: Uniform use of ./LICENSE and ./CHANGES  
-CR: KeyStore: Change to use PKCS12  
+## 5.3.0 2020xxxx (summary of the next version)  
+BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
+CR: Project: Automatic update of the version in README.md  
+CR: Build: Harmonization when updating the version  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

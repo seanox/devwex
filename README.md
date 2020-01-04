@@ -1,3 +1,16 @@
+<p>
+  <a href="https://github.com/seanox/devwex/pulls">
+    <img src="https://img.shields.io/badge/development-passive-blue?style=for-the-badge">
+  </a>
+  <a href="https://github.com/seanox/devwex/issues">
+    <img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge">
+  </a>
+  <a href="http://seanox.de/contact">
+    <img src="https://img.shields.io/badge/support-active-green?style=for-the-badge">
+  </a>
+</p>
+
+
 # Description
 Seanox Devwex is a minimalist runtime container with a modular architecture for
 (web) servers and applications. The included server instances support HTTP with

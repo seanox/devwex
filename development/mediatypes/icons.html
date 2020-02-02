@@ -138,14 +138,14 @@
       data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANgSURBVFhH7ZdLaBRBEIZXI6LgQUFRyEnwgRG8iKKgrJnuDQHBdxAJgkTwFIgKglFIMOTgxQfmIIooSB47sz4QEUGNehDBFx5EVIQERBGFePARFXHGv3r+3cyYXdKjm9t+ULD1T1d1dU1Pz2yqQoVy4Of0psBTj8fLfNep5lRj42fV5sDTge+qLgQfLpf5rr4qeQMvPY1TjY2fc1aHxdQupFQWUEwLbJiuHX6fWhAWo9OUygI63QkboGtHcDk9PSzG2UKpLGBxZ2AP6NqDFfxAYDNdQ5BVOonhdi9hqAE5r4jRtcf31BsEHqJr8D39PdyAdob48ww1SFekO3TtQaJHCDxF14AC3xWbtJQh/gRDDcg5AOukaw8mvobAS3QN6MzuYo9s1BDXWyjG0x0MNaC4YVgLXXtQyFkE3qdrTZB1Nox0Ru2lnJKzhdpWSvaYVbrqNV1rENMUKaaJMvS6eaGWcSjZg0R70JkvdEeB23Eat+HmKHPVi0IxeK1wuORbGRbj1FCyB5M1hsErplKKgev38pOWMhSjOBzFZDYaza2fRckec1aY4MxcSjHQtevRiYtb3VIOl9u+CzG/giA1gZI9cmBJQrR1OaUYZkP2rJ3xt2HC7nwxsk84XIpvg72nmwy/15kdJtTrKCGhU1N4jHNqDeUY2BsX88UEPemZlEXvgj2lm4zAa6jCvviNAnZSQrcydSOr1gcox8Amvl0o5k56EmXpTA52g25ysJIPSHCQrvjmiTDFeGpQrvkX9PygvX0itFXh6vVnXv/KMAO6eRfXY6+HRCDhMyQ4ThedqV2cLyZqGPdplObqtwwzwH8JO0I3OSjkFhJk6aaCc+kpmGg/VonPx/jkeUPMTxSHV4nexjAD9CHYPrrJQdJeJOinG0MeeUmOSeVNjHeOfB7o7fItxCEFsP8mh8VmdlBKDiY4hgme0y1JdKMWAw9BNbtWTyk56Eyr7IfoeZEUs7lzmYawMyOHYGLkXwJW89OsytOvYEfN4429wyFFkSMfi2hEV7sR/5FdGcJBOYdD/g05af2cWo/kJ2GDTPwNv2WTNsvekdWj8GXw21DwQ1zD+aR9/H4C68B4HAkNVUxZPvw+vQjJsXFVPyzsGt7u+dXjd1Y26n93ISmRrrWO2+orVChJKvUHPkyaf79DnnoAAAAASUVORK5CYII=
     </script>  
     <script type="text/javascript">
-      window.addEventListener("load", function() {
+      window.addEventListener("load", () => {
           var icons;
           icons = document.querySelector("script[type='text/icons']");
           icons = icons.innerHTML;
           icons = icons.replace(/x00/g, ' ');
           icons = icons.replace(/(((\r\n)|(\n\r)|[\r\n])\s*?){2,}/g, '\00');
           icons = icons.split(/\00/);
-          icons.forEach(function(element, index, array) {
+          icons.forEach((element, index, array) => {
               element = element.trim()
               if (!element)
                   return;
@@ -153,7 +153,7 @@
               var data = element.match(/^\s*data:image[^\r\n]+/gm) || [];
               var root = document.querySelector("main section");
               root.innerHTML += "<h3>" + name + "</h3>";
-              data.forEach(function(element, index, array) {
+              data.forEach((element, index, array) => {
                   root.innerHTML += "<div></div>";
                   var node = document.querySelector("main div:last-child");
                   node.style.background = "url('" + element + "') no-repeat center center";

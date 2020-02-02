@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2019 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.2 20190425<br>
- *  Copyright (C) 2019 Seanox Software Solutions<br>
+ *  Worker 5.3 20200202<br>
+ *  Copyright (C) 2020 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.2 20190425
+ *  @version 5.3 20200202
  */
 class Worker implements Runnable {
   
@@ -1701,7 +1701,7 @@ class Worker implements Runnable {
         String string;
         
         string = String.valueOf(this.status);
-        string = ("HTTP/1.0 ").concat(string).concat(" ").concat(this.statuscodes.get(string)).trim();
+        string = ("HTTP/1.0 ").concat(string).concat(" ").concat(Worker.cleanOptions(this.statuscodes.get(string))).trim();
         if (this.options.get("identity").toLowerCase().equals("on"))
             string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
         string = string.concat("\r\n").concat(Worker.dateFormat("'Date: 'E, dd MMM yyyy HH:mm:ss z", new Date(), "GMT"));
@@ -1935,14 +1935,13 @@ class Worker implements Runnable {
                                     
                                 try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$2")));
                                 } catch (Throwable throwable) {
-
                                     //keine Fehlerbehandlung erforderlich
                                 } 
 
-                                //ggf. werden die Statuscodes mit eigenen
-                                //bzw. unbekannten Codes und Text temporaer
-                                //angereichert, mit dem Ende der Connection
-                                //wird die Liste verworfen
+                                //ggf. werden die Statuscodes mit eigenen bzw.
+                                //unbekannten Codes und Text temporaer
+                                //angereichert, mit dem Ende der Connection wird
+                                //die Liste verworfen
                                 string = string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$3");
                                 if (string.length() > 0
                                         && !this.statuscodes.contains(String.valueOf(this.status)))
@@ -1950,9 +1949,9 @@ class Worker implements Runnable {
                             }
                             
                             //beginnt der Response mit HTTP/STATUS, wird der
-                            //Datenstrom ausgelesen, nicht aber an den
-                            //Client weitergeleitet, die Beantwortung vom
-                            //Request uebernimmt in diesem Fall der Server
+                            //Datenstrom ausgelesen, nicht aber an den Client
+                            //weitergeleitet, die Beantwortung vom Request
+                            //uebernimmt in diesem Fall der Server
 
                             if (header != null) {
 
@@ -2613,9 +2612,11 @@ class Worker implements Runnable {
         //der Generator wird eingerichtet, dabei werden fuer die STATUS
         //Klasse 1xx, den STATUS 302 (Redirection), 200 (Success) sowie die
         //METHOD:HEAD/METHOD:OPTIONS keine Templates verwendet
-        generator = Generator.parse(this.status == 302 || this.status == 200
-                || this.status /100 == 1 || method.equals("head")
-                || method.equals("options") ? null : Worker.fileRead(new File(this.resource)));
+        string = String.valueOf(this.status);
+        string = this.statuscodes.get(string);
+        generator = Generator.parse(method.equals("head")
+                || method.equals("options")
+                || string.toUpperCase().contains("[M]") ? null : Worker.fileRead(new File(this.resource)));
         
         //der Header wird mit den Umgebungsvariablen zusammengefasst,
         //die serverseitig gesetzten haben dabei die hoehere Prioritaet
@@ -2635,7 +2636,7 @@ class Worker implements Runnable {
         
         string = String.valueOf(this.status);
         elements.put("HTTP_STATUS", string);
-        elements.put("HTTP_STATUS_TEXT", this.statuscodes.get(string));
+        elements.put("HTTP_STATUS_TEXT", Worker.cleanOptions(this.statuscodes.get(string)));
         
         //die allgemeinen Elemente werden gefuellt
         generator.set(elements);

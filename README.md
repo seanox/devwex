@@ -1,5 +1,6 @@
 <p>
-  <a href="https://github.com/seanox/devwex/pulls">
+  <a href="https://github.com/seanox/devwex/pulls"
+      title="Development is waiting for new issues / requests / ideas">
     <img src="https://img.shields.io/badge/development-passive-blue?style=for-the-badge">
   </a>
   <a href="https://github.com/seanox/devwex/issues">
@@ -111,7 +112,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2019 Seanox Software Solutions
+Copyright (C) 2020 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -149,8 +150,10 @@ Go to the program directory and start the program directly or by script.
 # Changes (Change Log)
 ## 5.3.0 2020xxxx (summary of the next version)  
 BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
+BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
 CR: Project: Automatic update of the version in README.md  
 CR: Build: Harmonization when updating the version  
+CR: HTTP(S) - Status: Added to the option [H] (Header Only)  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

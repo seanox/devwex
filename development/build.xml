@@ -93,7 +93,7 @@
     <sequential>
       <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
       <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;script[^&gt;]*?\ssrc=.*?&lt;/script&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace="" />
+      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
       <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/style&gt;\s*&lt;style[^&lt;]*?&gt;\s*" flags="g" byline="false"
         replace="\1  "/>
       <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/script&gt;\s*&lt;script[^&lt;]*?&gt;\s*" flags="g" byline="false"

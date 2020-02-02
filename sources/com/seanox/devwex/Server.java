@@ -4,7 +4,7 @@
  *  Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  *  Devwex, Advanced Server Development
- *  Copyright (C) 2018 Seanox Software Solutions
+ *  Copyright (C) 2020 Seanox Software Solutions
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of version 2 of the GNU General Public License as published
@@ -40,12 +40,12 @@ import javax.net.ssl.TrustManagerFactory;
  *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  *  <br>
- *  Server 5.1 20180218<br>
+ *  Server 5.1 20200202<br>
  *  Copyright (C) 2018 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.1 20180218
+ *  @version 5.1 20200202
  */
 public class Server implements Runnable {
 
@@ -101,24 +101,14 @@ public class Server implements Runnable {
         //Wert. Zur Konfiguration ist der Mediatype als Schluessel einfacher.
         
         //die Mediatypes werden eingerichtet
+        //die Mediatypes werden entsprechend den Dateiendungen aufgebaut
+        //unvollstaendige Eintraege werden nicht beruecksichtig
         section = new Section(true);
-
-        //die Mediatypes werden ermittelt
         options = this.initialize.get("mediatypes");
-
         if (options != null) {
-
-            //die Contenttypes werden ermittelt
             enumeration = options.elements();
-    
-            //die Mediatypes werden entsprechend den Dateiendungen aufgebaut
-            //unvollstaendige Eintraege werden nicht beruecksichtig
             while (enumeration.hasMoreElements()) {
-    
-                //der Mediatype wird ermittelt
                 string = (String)enumeration.nextElement();
-    
-                //die Dateiendungen werden ermittelt
                 tokenizer = new StringTokenizer(options.get(string));
                 while (tokenizer.hasMoreTokens()) {
                     buffer = tokenizer.nextToken().trim();
@@ -126,8 +116,6 @@ public class Server implements Runnable {
                         section.set(buffer, string.toLowerCase());
                 }
             }
-    
-            //die Mediatypes werden uberschrieben
             options.clear();
             options.merge(section);
         }

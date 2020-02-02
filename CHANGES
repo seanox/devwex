@@ -1,7 +1,11 @@
 5.3.0 2020xxxx
   BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)
+  BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml
   CR: Project: Automatic update of the version in README.md
   CR: Build: Harmonization when updating the version
+  CR: HTTP(S) - Status: Added to the option [H] (Header Only)
+      The option is used in devwex.ini section STATUSCODES and indicates a status,
+      so that requests with this status are answered only with a header and without body.
 
 5.2.0 20190502
   BF: HTTP(S) Correction

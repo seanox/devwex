@@ -159,10 +159,9 @@ CR: HTTP(S) - Status: Added to the option [H] (Header Only)
 
 
 # Contact
-[Support](http://seanox.de/contact?support)  
-[Development](http://seanox.de/contact?development)  
-[Project](http://seanox.de/contact?service)  
-[Page](http://seanox.de/contact)  
+[Issues](https://github.com/seanox/devwex/issues)  
+[Requests](https://github.com/seanox/devwex/pulls)  
+[Mail](http://seanox.de/contact)
 
 
 # Thanks!

@@ -3,7 +3,7 @@
   BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml
   CR: Project: Automatic update of the version in README.md
   CR: Build: Harmonization when updating the version
-  CR: HTTP(S) - Status: Added to the option [H] (Header Only)
+  CR: HTTP(S) - Status: Added option [H] (Header Only)
       The option is used in devwex.ini section STATUSCODES and indicates a status,
       so that requests with this status are answered only with a header and without body.
 

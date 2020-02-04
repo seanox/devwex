@@ -153,7 +153,7 @@ BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_h
 BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
 CR: Project: Automatic update of the version in README.md  
 CR: Build: Harmonization when updating the version  
-CR: HTTP(S) - Status: Added to the option [H] (Header Only)  
+CR: HTTP(S) - Status: Added option [H] (Header Only)  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

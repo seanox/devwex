@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.3 20200202<br>
+ *  Worker 5.3 20200204<br>
  *  Copyright (C) 2020 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.3 20200202
+ *  @version 5.3 20200204
  */
 class Worker implements Runnable {
   
@@ -2616,7 +2616,7 @@ class Worker implements Runnable {
         string = this.statuscodes.get(string);
         generator = Generator.parse(method.equals("head")
                 || method.equals("options")
-                || string.toUpperCase().contains("[M]") ? null : Worker.fileRead(new File(this.resource)));
+                || string.toUpperCase().contains("[H]") ? null : Worker.fileRead(new File(this.resource)));
         
         //der Header wird mit den Umgebungsvariablen zusammengefasst,
         //die serverseitig gesetzten haben dabei die hoehere Prioritaet

@@ -108,7 +108,7 @@
         <h2>Architecture</h2>
         <p>
           Seanox Devwex is a multithreaded runtime container for
-          (server)modules, which are integrated via the provided Server and
+          (server)modules, which are integrated via the provided Server API and
           Module API. The own ClassLoader supports the loading and unloading of
           servers and modules at the runtime. 
         </p>
@@ -143,7 +143,7 @@
         </p>
         <h3>Module API (XAPI)</h3>
         <p>
-          The module API integrates implementations that act in the background
+          The Module API integrates implementations that act in the background
           and do not provide direct external functions.
         </p>
         <h3>HTTP</h3>
@@ -237,7 +237,7 @@
       <article>
         <h1>Configuration</h1>
         <p>
-          Seanox Devwex uses a central configuration from the current working
+          Seanox Devwex uses a central configuration in the current working
           directory, which is pre-configured with the installation and stored in
           the program directory <code>./devwex/program</code> in the file
           <code>devwex.ini</code>. The configuration is divided into sections
@@ -497,7 +497,7 @@
           With the option <code>[*]</code> a module can be marked as
           optional.<br>
           If the module is not present during initialization, this option does
-          not lead to an error output.
+          not cause to an error output.
         </p>
         <h2>Server</h2>
         <p>
@@ -517,8 +517,7 @@
         </pre>
         <p>
           Optionally, the SCOPE key can be used to specify the package in which
-          the class is located. com. seanox. devewx is used without this
-          key.<br>
+          the class is located. Without this key com.seanox.devewx is used.<br>
           If no implementation is found for a section ending on INI, it will be
           ignored without an error message.
         </p>
@@ -624,7 +623,7 @@
         <p>
           This section contains the configuration for HTTP servers and their
           associated virtual hosts.<br>
-          The configuration for HTTP servers and virtual hosts is the same,
+          The configurations for HTTP servers and virtual hosts is the same,
           except for the network specific keys: <code>ADDRESS</code>,
           <code>PORT</code>, <code>BACKLOG</code>, <code>ISOLATION</code> and
           <code>MAXACCESS</code> which are omitted for virtual hosts, since they
@@ -824,7 +823,7 @@
           to each physical host individually and shared.
         </p>
         <p>
-          For the management of public and private key pairs, as well as all
+          For the management of public and private key, as well as all
           certificates required to map a chain of trust and determine the
           trustworthiness of certificates, Java supports file-based keystores as
           key and certificate stores, among other things.
@@ -847,11 +846,11 @@
         </p>
         <p>
           <strong>
-            TLS and SSL are part of the connection setup in Java and are
-            therefore bound to physical hosts. This makes it difficult to use
-            certificates for virtual hosts and only works for sub-domains. The
-            use of physical hosts with virtual IP addresses is recommended for
-            the provision of different domains.
+            TLS and SSL are part of the connection setup with Java and are
+            therefore bound to physical hosts. The use of certificates for
+            virtual hosts is thus made more difficult and works with
+            certificates that have the virtual host entered as an alternative
+            applicant name (DNS name).
           </strong>
         </p>
         <header>
@@ -901,7 +900,7 @@
             <td>JCEKS|JKS|DKS|PKCS11|PKCS12|...</td>
             <td>
               Type of used keystore.<br>
-              Default value: <code>JKS</code> (if not specified)
+              Default value from the JDK: <code>PKCS12</code> (if not specified)
             </td>
           </tr>
           <tr>
@@ -909,7 +908,8 @@
             <td>SunX509|PKIX|...</td>
             <td>
               Algorithm of encryption from keystore.<br>
-              Default value: <code>SunX509</code> (if not specified)
+              Default value from the JDK: <code>SunX509</code> /
+              <code>PKIX</code> (if not specified)
             </td>
           </tr>
           <tr>
@@ -963,7 +963,7 @@
           documentation for the JRE used.
         </p>
         <header>
-          Example of how to create server certificates in the keystore:
+          Example of how to create a server certificate in the keystore:
         </header>
         <pre>
           ./java/bin/keytool -genkey -keyalg RSA -keysize 2048 -validity 365
@@ -1031,7 +1031,7 @@
           The keystore for the client is created and the public client
           certificate is exported.<br>
           Both are temporary in this example and will be needed later on for the
-          creation of the server keysore and the export of the client
+          creation of the server keystore and the export of the client
           certificate.
         </p>
         <pre>
@@ -1147,9 +1147,10 @@
         </header>
         <pre>NAME = METHOD CONDITION FUNCTION VARIABLE VALUE [+] ... &gt; REFERENCE [R]</pre>
         <p>
-          All CGI environment variables with their values are available to the
-          filters in coded and decoded form, and upper and lower case letters
-          are ignored for the variables as well as the values.
+          Filters are provided with all CGI environment variables and their
+          values, if necessary in coded and decoded form. Upper and lower case
+          is ignored for the variables as well as the values. The specification
+          of a reference is optional.
         </p>
         <header>
           Overview of the elements of the filter printout:
@@ -1271,7 +1272,7 @@
             <td></td>
             <td>[M]</td>
             <td>
-              Reference to the use of an HTTP module referenced.<br>
+              Reference to the use of a HTTP module.<br>
               Addressing the module is not a final step, but terminating the
               filter sequence only occurs if a module changes the response
               status and/or sends data to the client.
@@ -1292,8 +1293,8 @@
         <p>
           The CGI variables and values depend on the request header and the
           request body is not read out for filters, which means that data and
-          parameters such as HTTP method <code>POST</code> in the body are not
-          available.
+          parameters such as those passed in the body for the HTTP method
+          <code>POST</code> are not available.
         </p>
         <header>
           Overview of available variables (selection):
@@ -1559,7 +1560,7 @@
               combination with the option <code>[D]</code> Digest Access
               Authentication.<br>
               In both cases, authorization against the Access Control List is
-              performed in sections <code>[SERVER:ACC]</code> /
+              performed in section <code>[SERVER:ACC]</code> /
               <code>[VIRTUAL:ACC]</code>.
             </td>
           </tr>
@@ -1623,20 +1624,21 @@
           a checksum or a password to protect against reconstruction.
         </p>
         <p>
-          The configuration of the Basic / Digest-Access-Authentication consists
+          The configuration of the Basic / Digest Access Authentication consists
           of a virtual or physical path in the section <code>[SERVER:REF]</code>
-          or <code>[VIRTUAL:REF]</code>, where with <code>[acc:...]</code> the
-          reference to the permissions and optionally the description to the
-          area (Realm) and with the option <code>[D]</code> the use of
-          Digest-Access-Authentication is defined.<br>
-          A special function is <code>[acc:none]</code> because this value
-          cancels the parent authorization for the specified path and all child
-          paths. If other valid ACC references are specified in the same
-          definition, <code>[acc:none]</code> is ignored.<br>
-          The permissions are defined in the standalone section
-          <code>[SERVER:ACC]</code> or <code>[VIRTUAL: ACC]</code> and consist
-          of one or more groups with individual permissions, consisting of user
-          and password. 
+          or <code>[VIRTUAL:REF]</code> in combination with the option
+          <code>[acc:...]</code> as reference to the permissions and optionally
+          with the options <code>[realm:...]</code> for the description of the
+          area and <code>[D]</code> for the use of Digest Access
+          Authentication.<br>
+          With <code>[acc:none]</code>, the parent authorization for the
+          specified path and all subordinate paths can be cancelled and, if
+          necessary, further authorizations in deeper sub-directories can be
+          used again.<br>
+          The permissions are defined in the independent section
+          <code>[SERVER:ACC]</code> or <code>[VIRTUAL:ACC]</code> and consist of
+          one or more groups with individual permissions, consisting of user and
+          password. 
         </p>
         <header>
           Examples of basic access authentication:
@@ -1747,7 +1749,7 @@
         </header>
         <pre>VARIABLE = VALUE</pre>
         <header>
-          Examples of setting up environment variables:
+          Example for setting up an environment variable:
         </header>
         <pre>WEBSERVER = DEVWEX</pre>
         <p>
@@ -1913,7 +1915,7 @@
         <section>
           <pre>CGI = POST GET &gt; c:/perl/bin/perl.exe [C]</pre>
           <p>
-            The file extension <code>php</code> is assigned to Perl as a CGI
+            The file extension <code>cgi</code> is assigned to Perl as a CGI
             application.
           </p>
         </section>
@@ -1950,7 +1952,7 @@
           gateway.<br>
           Unlike XCGI and CGI, modules are not loaded as external applications,
           but are executed directly in the runtime environment of the server via
-          the module API (XAPI), which provides very fast access times and
+          the Module API (XAPI), which provides very fast access times and
           direct access to the components from the runtime container.
         </p>
         <header>
@@ -2014,7 +2016,7 @@
           </tr>
           <tr>
             <td>HTTP_HOST</td>
-            <td>experimental.seanox.com</td>
+            <td>seanox.local</td>
             <td>
               Domain name or IP address of the target address requested by the
               client
@@ -2079,7 +2081,7 @@
           <tr>
             <td>REQUEST_METHOD</td>
             <td>POST</td>
-            <td>HTTP request methods</td>
+            <td>HTTP request method</td>
           </tr>
           <tr>
             <td>REQUEST_URI</td>
@@ -2108,7 +2110,7 @@
           </tr>
           <tr>
             <td>SERVER_NAME</td>
-            <td>experimental.seanox.com</td>
+            <td>seanox.local</td>
             <td>Name or IP address of the server in the network</td>
           </tr>
           <tr>
@@ -2182,7 +2184,7 @@
         <section>
           <b>Tip</b>
           <p>
-            As of version 4. x of PHP, configuration of parameter
+            As of version 4.x of PHP, configuration of parameter
             <code>cgi.rfc2616_headers = 1</code> is required for the correct
             function of PHP function <code>header();</code>, for the security of
             execution <code>cgi.force_redirect = 0</code> and those and
@@ -2233,16 +2235,16 @@
         </section>
         <h2>Statuscodes</h2>
         <p>
-          The server acknowledges all HTTP requests with a status code,
-          informing the client about the processing of the request, primary the
-          server status is a numeric value with an optional message.<br>
+          The server answers all HTTP requests with a status code and informs
+          the client about the processing of the requests.Primary the server
+          status is a numeric value with an optional message.<br>
           Status codes are global and are used by all servers and virtual hosts.
         </p>
         <header>
           Formulation of a status code:
         </header>
         <code>
-          CODE = TEXT
+          CODE = TEXT [OPTION]
         </code>
         <header>
           Examples of status codes:
@@ -2254,6 +2256,24 @@
         <code>
           HTTP/1.0 404 Document Not Found
         </code>
+        <header>
+          Overview of available options:
+        </header>
+        <table>
+          <tr>
+            <th>Option</th>
+            <th>Example Value</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>[H]</td>
+            <td>Header Only</td>
+            <td>
+              Responses with a status code that uses this option contain only a
+              header and no content.
+            </td>
+          </tr>
+        </table>
         <h2>Mediatypes</h2>
         <p>
           The Mediatype, also known as Internet Media Type, Content Type and
@@ -2278,7 +2298,8 @@
         </code>
         <p>
           The media type <code>text/html</code> is assigned to the file
-          extension <code>*.html</code>, <code>*.htm</code>.
+          extension <code>*.html</code>, <code>*.htm</code> and
+          <code>*.shtml</code>.
         </p>
       </article>
       <article>
@@ -2594,7 +2615,7 @@
             <td class="float">
               <table class="composite">
                 <tr>
-                  <td class="interface">Module-API (XAPI)</td>
+                  <td class="interface">Module API (XAPI)</td>
                 </tr>
               </table>
               <table class="composite">
@@ -2649,7 +2670,7 @@
                           </table>
                           <table class="composite list">
                             <tr>
-                              <td colspan="2" class="interface">HTTP-Module-API (XAPI+)</td>
+                              <td colspan="2" class="interface">HTTP Module API (XAPI+)</td>
                             </tr>
                             <tr>
                               <td class="interface">XCGI</td>
@@ -2799,11 +2820,11 @@
           The extension of Seanox Devwex is possible in several ways.
         </p>
         <p>
-          The service provides a server, module, and HTTP module API. Special
-          interfaces and abstractions are not included in the service itself,
-          which uses them and controls all servers and modules via reflections
-          and silent standards/interfaces, which may require detailed knowledge
-          of the components and operation of Seanox Devwex.
+          The service provides a Server API, Module API, and HTTP Module API.
+          Special interfaces and abstractions are not included in the service
+          itself, which uses them and controls all servers and modules via
+          reflections and silent standards/interfaces, which may require
+          detailed knowledge of the components and operation of Seanox Devwex.
         </p>
         <p>
           The implementation with Seanox Commons as part of the Seanox Devwex
@@ -2812,8 +2833,8 @@
           provides additional ClassLoader layers.
         </p>
         <p>
-          The following describes only the server, module, and HTTP module APIs
-          contained in the service.
+          The following describes only the Server API, Module API, and HTTP
+          Module API contained in the service.
         </p>
         <h2>Server</h2>
         <p>
@@ -2824,15 +2845,19 @@
         </p>
         <h3>API (SAPI)</h3>
         <p>
-          The server API is based on the implementation of the runnable
-          interface, initialization is done by the constructor and the server
-          instances created are started by the runtime container (Service) with
-          the method <code>Server.run()</code> and prompted to quit by
-          <code>Service.destroy()</code>. The call of both methods is
-          asynchronous, the runtime container waits for the end. Optionally, the
-          implementation of method <code>Server.explain()</code> for querying
-          general information such as protocol and network connection is
-          supported.
+          The Server API is based on the implementation of the Runnable
+          interface. The initialization takes place via the constructor
+          <code>Server(String name, Object initialize)</code>code>. The order of
+          initialization is determined by the order of the server configurations
+          in the configuration file.<br>
+          The created server instances are started by the runtime container
+          (service) with the method <code>Server.run()</code> and are requested
+          to terminate by <code>Service.destroy()</code>. Both methods are
+          called asynchronously. If the termination is delayed, the runtime
+          container waits for all registered server instances to finish.
+          Optionally, the implementation of the <code>Server.explain()</code>
+          method for querying general information, such as protocol and network
+          connection, is supported. 
         </p>
         <h3>Implementation</h3>
         <pre>
@@ -2965,7 +2990,7 @@
           worker is the request processing instance and has access to the
           server, socket, request, response, configuration and environment. With
           the configuration you can set further parameters and options for a
-          filter, which are then optionally passed as a string.
+          filter, which are then optionally passed as string.
         </p>
         <h4>Implementation</h4>
         <pre>
@@ -3026,7 +3051,7 @@
           worker is the request processing instance and has access to the
           server, socket, request, response, configuration and environment. With
           the configuration, further parameters and options can be set for a
-          module, which are then optionally passed as a string.
+          module, which are then optionally passed as string.
         </p>
         <h4>Implementation</h4>
         <pre>

@@ -6,6 +6,10 @@
   CR: HTTP(S) - Status: Added option [H] (Header Only)
       The option is used in devwex.ini section STATUSCODES and indicates a status,
       so that requests with this status are answered only with a header and without body.
+  BF: HTTP(S) - Request: Correction of the request validation
+      In some cases the request is aborted with status 400 when the network connector is busy,
+      because the worker assumed that no data is being sent.
+      Statuses 408 and 413 may have been overwritten with status 400.
 
 5.2.0 20190502
   BF: HTTP(S) Correction

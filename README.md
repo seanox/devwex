@@ -154,6 +154,7 @@ BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+
 CR: Project: Automatic update of the version in README.md  
 CR: Build: Harmonization when updating the version  
 CR: HTTP(S) - Status: Added option [H] (Header Only)  
+BF: HTTP(S) - Request: Correction of the request validation  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

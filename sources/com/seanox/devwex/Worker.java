@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.3 20200204<br>
+ *  Worker 5.3 20200216<br>
  *  Copyright (C) 2020 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.3 20200204
+ *  @version 5.3 20200216
  */
 class Worker implements Runnable {
   
@@ -1238,17 +1238,25 @@ class Worker implements Runnable {
                     //die Daten werden gespeichert
                     buffer.write(digit);
 
-                } else Thread.sleep(this.interrupt);
+                    //der Header des Request wird auf 65535 Bytes begrenzt
+                    if (buffer.size() >= 65535
+                            && cursor < 4) {
+                        this.status = 413;
+                        break;
+                    }
+                    
+                    //der Request wird auf kompletter Header geprueft
+                    if (cursor == 4)
+                        break;
 
-                //der Header des Request wird auf 65535 Bytes begrenzt
-                if (buffer.size() >= 65535 && cursor < 4) {
-                    this.status = 413;
-                    break;
-                }
 
-                //der Request wird auf kompletter Header geprueft
-                if (cursor == 4 || digit < 0)
-                    break;
+                } else {
+
+                    //der Datenstrom wird auf Ende geprueft
+                    if (digit >= 0)
+                        Thread.sleep(this.interrupt);
+                    else break;
+                } 
             }
 
         } catch (Throwable throwable) {
@@ -1280,7 +1288,9 @@ class Worker implements Runnable {
         this.fields.set("req_method", shadow);
 
         //ohne HTTP-Methode ist die Anfrage ungueltig, somit STATUS 400
-        if (shadow.length() <= 0 && this.status <= 0) this.status = 400;
+        if (this.status == 0
+                && shadow.length() <= 0)
+            this.status = 400;
 
         //Protokoll und Version vom Request werden ermittelt aber ignoriert
         offset = string.lastIndexOf(' ');

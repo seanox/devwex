@@ -151,10 +151,10 @@ Go to the program directory and start the program directly or by script.
 ## 5.3.0 2020xxxx (summary of the next version)  
 BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
 BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
+BF: HTTP(S) - Request: Correction of the request validation  
 CR: Project: Automatic update of the version in README.md  
 CR: Build: Harmonization when updating the version  
 CR: HTTP(S) - Status: Added option [H] (Header Only)  
-BF: HTTP(S) - Request: Correction of the request validation  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

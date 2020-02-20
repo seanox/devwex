@@ -2228,10 +2228,10 @@
           <b>Tipp</b>
           <p>
             Das Arbeitsverzeichnis der CGI-Anwendungen ist das Verzeichnis von
-            dem aus Seanox Devwex gestartet wurde.<br>
-            Sollen z.B. Konfigurationsdateien wie die <code>php.ini</code>
-            ber&uuml;cksichtigt werden, sollten diese im Arbeitsverzeichnis von
-            Seanox Devwex abgelegt werden.
+            dem aus Seanox Devwex gestartet wurde, was ggf. bei der
+            Konfiguration der CGI-Anwendungen ber&uuml;cksichtigt werden muss,
+            wenn z.B. Pfad für Ressourcen und Konfigurationsdateien, wie bei PHP
+            zur <code>php.ini</code>, festgelegt werden m&uml;ssen.
           </p>
         </section>
         <section>
@@ -2246,7 +2246,7 @@
         <section>
           <b>Hinweis</b>
           <p>
-            Ab Version 4.x von PHP ist die Konfiguration vom Parameter
+            In PHP ist die Konfiguration vom Parameter
             <code>cgi.rfc2616_headers = 1</code> f&uuml;r die korrekte Funktion
             der PHP-Funktion <code>header();</code>, f&uuml;r die Sicherheit
             bei der Ausf&uuml;hrung <code>cgi.force_redirect = 0</code> und die

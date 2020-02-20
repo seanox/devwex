@@ -2166,10 +2166,10 @@
           <b>Tip</b>
           <p>
             The working directory of the CGI applications is the directory from
-            which Seanox Devwex was started.<br>
-            For example, if configuration files such as the <code>php.ini</code>
-            are to be considered, they should be placed in the working directory
-            of Seanox Devwex.
+            which Seanox Devwex was started, which may need to be taken into
+            consideration when configuring the CGI applications, e.g. if paths
+            for resources and configuration files needs to be defined, as with
+            PHP for <code>php.ini</code>.
           </p>
         </section>
         <section>
@@ -2184,7 +2184,7 @@
         <section>
           <b>Tip</b>
           <p>
-            As of version 4.x of PHP, configuration of parameter
+            In PHP, configuration of parameter
             <code>cgi.rfc2616_headers = 1</code> is required for the correct
             function of PHP function <code>header();</code>, for the security of
             execution <code>cgi.force_redirect = 0</code> and those and
@@ -2866,10 +2866,10 @@
               public Server(String name, Object initialize) {
                   ...
 
-                  Der Server wird durch Seanox Devwex über den Konstruktor
-                  initiiert. Liegt dieser nicht vor, wird der Server als
-                  inkompatible betrachtet und nicht geladen. Die Konfiguration
-                  wird neben dem Namen als Initialize-Objekt übergeben.
+                  The server is initiated by Seanox Devwex via the constructor.
+                  If the constructor is not available, the server is considered
+                  incompatible and is not loaded. The configuration is passed
+                  next to the name as an Initialize object.
               }
 
               public String explain() {

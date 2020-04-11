@@ -34,15 +34,15 @@ import java.util.Map;
  *  Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) 
  *  in einer Vorlage (Model/Template). Dazu wird der Vorlage eine Werte-Liste
  *  mit Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
- *  Platzhalter, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
+ *  Platzhaltern, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
  *  Platzhalter durch die Werte ersetzt.<br>
  *  <br>
- *  Der Generator arbeitete aus Byte-Level.<br>
- *  Werte werden daher prim&auml;r als byte-Arrays erwartet werden. Alle anderen
- *  Datentypen mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
+ *  Der Generator arbeitet aus Byte-Level.<br>
+ *  Werte werden daher prim&auml;r als byte-Arrays erwartet. Anderen Datentypen
+ *  werden mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
  *  <br>
  *  Platzhalter lassen sich auch als Segmente verwenden.<br>
- *  Segmente sind Teilstrukturen die bis zu einer Tiefe von 65535 Ebenen
+ *  Segmente sind Teilstrukturen, die bis zu einer Tiefe von 65535 Ebenen
  *  verschachtelt werden können. Diese Teilstrukturen lassen sich global oder
  *  per Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
  *  Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
@@ -53,7 +53,7 @@ import java.util.Map;
  *  einer Iteration &uuml;ber eine Menge von {@link Map} und ist vergleichbar
  *  mit dem iterativen Aufruf der Methode {@link #set(String, Map)}.<br>
  *  Beides, {@link Map} und {@link Collection}, erzeugt tiefe, komplexe ggf.
- *  sich wiederholende und rekursive Strukturen.
+ *  sich wiederholende rekursive Strukturen.
  *
  *  <h3>Beschreibung der Syntax</h3>
  *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
@@ -101,28 +101,29 @@ import java.util.Map;
  *  Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die Scopes
  *  mit den Segmenten (Teilvorlagen) ermittelt und durch einen einfachen
  *  Platzhalter ersetzt. Nach dem Parsen entsteht ein finales Model mit
- *  optimierten Platzhaltern und extrahierten Segmenten, welches zur Laufzeit
- *  nicht ge&auml;ndert werden kann.<br>
+ *  optimierten Platzhaltern und extrahierten Segmenten, was zur Laufzeit nicht
+ *  ge&auml;ndert werden kann.<br>
  *  <br>
  *  Zur Nutzung des Models stehen dann verschiedene M&ouml;glichkeiten zur
  *  Verf&uuml;gung.<br>
  *  <br>
  *  Mit {@link #set(Map)} werden im Model die Platzhalter durch die
- *  &uuml;bergeben Werte ersetzt. Platzhalter zudem keine Werte existieren,
+ *  &uuml;bergeben Werte ersetzt. Platzhalter zudenen keine Werte existieren,
  *  bleiben erhalten. Platzhalter die ein Segment/Scope repr&auml;sentieren
- *  werden diese ebenfalls gesetzt, wenn in den Werten ein korrespondierder
+ *  werden ebenfalls gesetzt, wenn in den Werten ein korrespondierder
  *  Schl&uuml;ssel existiert. Bei Segmenten/Scopes bleibt der Platzhalter zur
  *  erneuten Verwendung erhalten und folgt direkt dem eingef&uuml;gten Wert.<br>
  *  <br>
  *  Bei {@link #set(String, Map)} wird nur der angegeben Scope bef&uuml;llt.
  *  Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und mit den
- *  &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin entfernt und
- *  der Inhalt als Wert vor dem Platzhalter eingef&uuml;gt. Somit bleibt auch
- *  dieser Segment-/Scope-Platzhalter zur erneuten Verwendung erhalten.<br>
+ *  &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin werden entfernt
+ *  und der Inhalt wird als Wert vor dem Platzhalter eingef&uuml;gt. Somit
+ *  bleibt auch der Platzhalter von Segmenten/Scopes zur erneuten Verwendung
+ *  erhalten.<br>
  *  <br>
  *  Die Methoden {@link #extract(String)} und {@link #extract(String, Map)}
  *  dienen der exklusiven Nutzung von Segmenten (Teilvorlagen), die partiell
- *  bef&uuml;llt und aufbereitet werden. Beide Methoden liefern finale
+ *  bef&uuml;llt und aufbereitet werden. Beide Methoden erstellen finale
  *  Ergebnisse, die dem Aufruf von {@link #set(Map)} in Kombination mit
  *  {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
  *  konzentrieren.<br>

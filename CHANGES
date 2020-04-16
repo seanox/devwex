@@ -1,4 +1,4 @@
-5.3.0 2020xxxx
+5.3.0 202007xx
   BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)
   BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml
   BF: HTTP(S) - Request: Correction of the request validation
@@ -10,6 +10,8 @@
   CR: HTTP(S) - Status: Added option [H] (Header Only)
       The option is used in devwex.ini section STATUSCODES and indicates a status,
       so that requests with this status are answered only with a header and without body.
+  CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405
+      Previously the requests were answered with status 403. 
 
 5.2.0 20190502
   BF: HTTP(S) Correction

@@ -148,13 +148,14 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.3.0 2020xxxx (summary of the next version)  
+## 5.3.0 202007xx (summary of the next version)  
 BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
 BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
 BF: HTTP(S) - Request: Correction of the request validation  
 CR: Project: Automatic update of the version in README.md  
 CR: Build: Harmonization when updating the version  
 CR: HTTP(S) - Status: Added option [H] (Header Only)  
+CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

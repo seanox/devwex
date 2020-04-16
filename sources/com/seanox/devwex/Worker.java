@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  *  kompletter Abbruch.
  *  <br>
- *  Worker 5.3 20200216<br>
+ *  Worker 5.3 20200416<br>
  *  Copyright (C) 2020 Seanox Software Solutions<br>
  *  Alle Rechte vorbehalten.
  *
  *  @author  Seanox Software Solutions
- *  @version 5.3 20200216
+ *  @version 5.3 20200416
  */
 class Worker implements Runnable {
   
@@ -1454,8 +1454,8 @@ class Worker implements Runnable {
         virtual = (digit & 1) != 0;
         connect = (digit & (2|4)) != 0;
 
-        //HINWEIS - Auch Module koennen die Option [R] besitzen, diese wird
-        //dann aber ignoriert, da die Weiterleitung zu Modulen nur ueber deren
+        //HINWEIS - Auch Module koennen die Option [R] besitzen, diese wird dann
+        //aber ignoriert, da die Weiterleitung zu Modulen nur ueber deren
         //virtuellen Pfad erfolgt
 
         if ((this.status == 0 || this.status == 404) && (digit & 8) != 0) this.status = 403;
@@ -1657,12 +1657,16 @@ class Worker implements Runnable {
                 this.environment.set("gateway_interface", "CGI/1.1");
 
                 //die Methode wird geprueft ob diese fuer das CGI zugelassen ist
-                //ist die Methode nicht zugelassen wird STATUS 403 gesetzt
+                //ist die Methode nicht zugelassen wird STATUS 405 gesetzt
                 string = (" ").concat(this.environment.get("request_method")).concat(" ").toLowerCase();
                 shadow = (" ").concat(method).concat(" ");
 
-                if (method.length() > 0 && !shadow.contains(string) && !shadow.contains(" all ")
-                        && this.status < 500 && this.status != 302) this.status = 403;
+                if (method.length() > 0
+                        && !shadow.contains(string)
+                        && !shadow.contains(" all ")
+                        && this.status < 500
+                        && this.status != 302)
+                    this.status = 405;
             }
         }
         
@@ -1874,7 +1878,8 @@ class Worker implements Runnable {
                 length -= size;
                 
                 //die maximale Prozesslaufzeit wird geprueft
-                if (duration > 0 && duration < System.currentTimeMillis()) {
+                if (duration > 0
+                        && duration < System.currentTimeMillis()) {
                     this.status = 504;
                     break;
                 }
@@ -1995,8 +2000,6 @@ class Worker implements Runnable {
                     }
                 }
 
-                Thread.sleep(this.interrupt);
-
                 //die maximale Prozesslaufzeit wird geprueft
                 if (duration > 0
                         && duration < System.currentTimeMillis()) {
@@ -2009,6 +2012,8 @@ class Worker implements Runnable {
                 if (input.available() <= 0
                         && !process.isAlive())
                     break;
+                
+                Thread.sleep(this.interrupt);
             }
             
         } finally {

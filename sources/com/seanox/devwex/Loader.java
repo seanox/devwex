@@ -1,23 +1,23 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- *  Diese Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
+ * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+ * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2017 Seanox Software Solutions
+ * Devwex, Advanced Server Development
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.seanox.devwex;
 
@@ -34,16 +34,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- *  Loader, stellt Funktionen zum Laden von Bibliotheken zur Verf&uuml;gung.
- *  Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
- *  k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.<br>
- *  <br>
- *  Loader 5.0 20170302<br>
- *  Copyright (C) 2017 Seanox Software Solutions<br>
- *  Alle Rechte vorbehalten.
+ * Loader, stellt Funktionen zum Laden von Bibliotheken zur Verf&uuml;gung.
+ * Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
+ * k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.<br>
+ * <br>
+ * Loader 5.0 20170302<br>
+ * Copyright (C) 2017 Seanox Software Solutions<br>
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 5.0 20170302
+ * @author  Seanox Software Solutions
+ * @version 5.0 20170302
  */
 public class Loader extends URLClassLoader {
     
@@ -57,17 +57,17 @@ public class Loader extends URLClassLoader {
     private volatile List libraries;
 
     /**
-     *  Konstruktor, richtet den Loader ein.
-     *  @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
+     * Konstruktor, richtet den Loader ein.
+     * @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
      */
     public Loader(List libraries) {
         this(Loader.class.getClassLoader(), libraries);
     }
 
     /**
-     *  Konstruktor, richtet den Loader ein.
-     *  @param loader    &uuml;bergeordneter ClassLoader
-     *  @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
+     * Konstruktor, richtet den Loader ein.
+     * @param loader    &uuml;bergeordneter ClassLoader
+     * @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
      */
     public Loader(ClassLoader loader, List libraries) {
 
@@ -79,12 +79,12 @@ public class Loader extends URLClassLoader {
     }
 
     /**
-     *  Liefert einen InputStream, mit dem die durch name bezeichnete Ressource
-     *  ausgelesen werden kann. Falls die Ressource nicht gefunden werden
-     *  konnte, wird {@code null} zur&uuml;ckgegeben.
-     *  @param  name Name der Ressource
-     *  @return der InputStream zur Ressource, sonst {@code null} wenn diese
-     *          nicht ermittelt werden kann
+     * Liefert einen InputStream, mit dem die durch name bezeichnete Ressource
+     * ausgelesen werden kann. Falls die Ressource nicht gefunden werden konnte,
+     * wird {@code null} zur&uuml;ckgegeben.
+     * @param  name Name der Ressource
+     * @return der InputStream zur Ressource, sonst {@code null} wenn diese
+     *     nicht ermittelt werden kann
      */
     public InputStream getResourceAsStream(String name) {
 
@@ -144,11 +144,11 @@ public class Loader extends URLClassLoader {
     }
     
     /**
-     *  R&uuml;ckgabe der per Namen angeforderten Ressource als URL. Kann diese
-     *  nicht ermittelt werden, wird {@code null} zur&uuml;ckgegeben.
-     *  @param  name Name der Ressource, to be used as is.
-     *  @return die URL zur angeforderten Ressource, sonst {@code null} wenn
-     *          diese nicht ermittelt werden kann
+     * R&uuml;ckgabe der per Namen angeforderten Ressource als URL. Kann diese
+     * nicht ermittelt werden, wird {@code null} zur&uuml;ckgegeben.
+     * @param  name Name der Ressource, to be used as is.
+     * @return die URL zur angeforderten Ressource, sonst {@code null} wenn
+     *     diese nicht ermittelt werden kann
      */
     public URL getResource(String name) {
 
@@ -197,17 +197,17 @@ public class Loader extends URLClassLoader {
     }
     
     /**
-     *  L&auml;dt die per Name angegebene Klasse. sse. Im Namen kann entweder
-     *  der Punkt oder der Schr&auml;gstrich als Paket-Trennzeichen benutzt
-     *  werden. Mit der Option {@code resolve} kann entschieden werden, ob die
-     *  Aufl&ouml;sung von Abh&auml;ngigkeiten n&ouml;tig ist. Bei {@code true}
-     *  werden auch die von dieser Klasse ben&ouml;tigten Klassen geladen.
-     *  @param  name    Name der Klasse
-     *  @param  resolve Option {@code true} um Abh&auml;ngigkeitem zu laden
-     *  @return die geladene Klasse, ist diese nicht ermittelbar, f&uuml;hrt der
-     *          Aufruf zur Ausnahme {@code ClassNotFoundException}
-     *  @throws ClassNotFoundException
-     *      Wenn die Klass nicht gefunden werden kann.
+     * L&auml;dt die per Name angegebene Klasse. sse. Im Namen kann entweder der
+     * Punkt oder der Schr&auml;gstrich als Paket-Trennzeichen benutzt werden.
+     * Mit der Option {@code resolve} kann entschieden werden, ob die
+     * Aufl&ouml;sung von Abh&auml;ngigkeiten n&ouml;tig ist. Bei {@code true}
+     * werden auch die von dieser Klasse ben&ouml;tigten Klassen geladen.
+     * @param  name    Name der Klasse
+     * @param  resolve Option {@code true} um Abh&auml;ngigkeitem zu laden
+     * @return die geladene Klasse, ist diese nicht ermittelbar, f&uuml;hrt der
+     *     Aufruf zur Ausnahme {@code ClassNotFoundException}
+     * @throws ClassNotFoundException
+     *     Wenn die Klass nicht gefunden werden kann.
      */
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException {

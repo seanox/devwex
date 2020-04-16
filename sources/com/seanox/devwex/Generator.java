@@ -1,23 +1,23 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- *  Diese Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
+ * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+ * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2018 Seanox Software Solutions
+ * Devwex, Advanced Server Development
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.seanox.devwex;
 
@@ -31,109 +31,109 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- *  Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) 
- *  in einer Vorlage (Model/Template). Dazu wird der Vorlage eine Werte-Liste
- *  mit Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
- *  Platzhaltern, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
- *  Platzhalter durch die Werte ersetzt.<br>
- *  <br>
- *  Der Generator arbeitet aus Byte-Level.<br>
- *  Werte werden daher prim&auml;r als byte-Arrays erwartet. Anderen Datentypen
- *  werden mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
- *  <br>
- *  Platzhalter lassen sich auch als Segmente verwenden.<br>
- *  Segmente sind Teilstrukturen, die bis zu einer Tiefe von 65535 Ebenen
- *  verschachtelt werden können. Diese Teilstrukturen lassen sich global oder
- *  per Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
- *  Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
- *  sind iterativ wiederverwendbar.<br>
- *  Als Werte werden f&uuml;r Segmente die Datentypen {@link Collection} und
- *  {@link Map} erwartet. Eine {@link Map} enth&auml;lt dann die Werte f&uuml;r
- *  die Platzhalter innerhalb des Segments. Eine {@link Collection} f&uuml;r zu
- *  einer Iteration &uuml;ber eine Menge von {@link Map} und ist vergleichbar
- *  mit dem iterativen Aufruf der Methode {@link #set(String, Map)}.<br>
- *  Beides, {@link Map} und {@link Collection}, erzeugt tiefe, komplexe ggf.
- *  sich wiederholende rekursive Strukturen.
+ * Generator, generiert Daten durch das Bef&uuml;llen von Platzhaltern (Tags) in
+ * einer Vorlage (Model/Template). Dazu wird der Vorlage eine Werte-Liste mit
+ * Schl&uuml;sseln &uuml;bergeben. Entsprechen die Schl&uuml;ssel den
+ * Platzhaltern, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
+ * Platzhalter durch die Werte ersetzt.<br>
+ * <br>
+ * Der Generator arbeitet aus Byte-Level.<br>
+ * Werte werden daher prim&auml;r als byte-Arrays erwartet. Anderen Datentypen
+ * werden mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
+ * <br>
+ * Platzhalter lassen sich auch als Segmente verwenden.<br>
+ * Segmente sind Teilstrukturen, die bis zu einer Tiefe von 65535 Ebenen
+ * verschachtelt werden können. Diese Teilstrukturen lassen sich global oder per
+ * Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
+ * Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
+ * sind iterativ wiederverwendbar.<br>
+ * Als Werte werden f&uuml;r Segmente die Datentypen {@link Collection} und
+ * {@link Map} erwartet. Eine {@link Map} enth&auml;lt dann die Werte f&uuml;r
+ * die Platzhalter innerhalb des Segments. Eine {@link Collection} f&uuml;r zu
+ * einer Iteration &uuml;ber eine Menge von {@link Map} und ist vergleichbar mit
+ * dem iterativen Aufruf der Methode {@link #set(String, Map)}.<br>
+ * Beides, {@link Map} und {@link Collection}, erzeugt tiefe, komplexe ggf. sich
+ * wiederholende rekursive Strukturen.
  *
- *  <h3>Beschreibung der Syntax</h3>
- *  Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
- *  auf folgende Zeichen begrenzt:
- *      <dir>{@code a-z A-Z 0-9 _-}</dir>
- *      
- *  <h3>Struktur und Beschreibung der Platzhalter</h3>
- *  <table>
- *    <tr>
- *      <td valign="top" nowrap="nowrap">
- *        {@code #[value]}
- *      </td>
- *      <td valign="top">
- *        Setzt an dieser Stelle den Wert f&uuml;r &lt;value&gt; ein und
- *        entfernt den Platzhalter.
- *      </td>
- *    </tr>
- *    <tr>
- *      <td valign="top" nowrap="nowrap">
- *        {@code #[scope[[...]]]}
- *      </td>
- *      <td valign="top">
- *        Definiert ein Segment/Scope. Die Verschachtelung und Verwendung
- *        weiterer Segmente ist m&ouml;glich. Da die Platzhalter zum
- *        Einf&uuml;gen von Segmenten erhalten bleiben, k&ouml;nnen diese zum
- *        Aufbau von Listen verwendet werden.
- *      </td>
- *    </tr>
- *    <tr>
- *      <td valign="top" nowrap="nowrap">
- *        {@code #[0x0A]}<br>
- *        {@code #[0x4578616D706C6521]}
- *      </td>
- *      <td valign="top">
- *        Maskiert ein oder mehr Zeichen. Die Umwandlung erfolgt erst mit
- *        {@link #extract(String, Map)}, {@link #extract(String)} bzw.
- *        {@link #extract()} zum Schluss der Generierung.
- *      </td>
- *    </tr>
- *  </table>
- *  
- *  <h3>Arbeitsweise</h3>
- *  Das Model (Byte-Array) wird initial geparst.
- *  Dabei werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
- *  Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die Scopes
- *  mit den Segmenten (Teilvorlagen) ermittelt und durch einen einfachen
- *  Platzhalter ersetzt. Nach dem Parsen entsteht ein finales Model mit
- *  optimierten Platzhaltern und extrahierten Segmenten, was zur Laufzeit nicht
- *  ge&auml;ndert werden kann.<br>
- *  <br>
- *  Zur Nutzung des Models stehen dann verschiedene M&ouml;glichkeiten zur
- *  Verf&uuml;gung.<br>
- *  <br>
- *  Mit {@link #set(Map)} werden im Model die Platzhalter durch die
- *  &uuml;bergeben Werte ersetzt. Platzhalter zudenen keine Werte existieren,
- *  bleiben erhalten. Platzhalter die ein Segment/Scope repr&auml;sentieren
- *  werden ebenfalls gesetzt, wenn in den Werten ein korrespondierder
- *  Schl&uuml;ssel existiert. Bei Segmenten/Scopes bleibt der Platzhalter zur
- *  erneuten Verwendung erhalten und folgt direkt dem eingef&uuml;gten Wert.<br>
- *  <br>
- *  Bei {@link #set(String, Map)} wird nur der angegeben Scope bef&uuml;llt.
- *  Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und mit den
- *  &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin werden entfernt
- *  und der Inhalt wird als Wert vor dem Platzhalter eingef&uuml;gt. Somit
- *  bleibt auch der Platzhalter von Segmenten/Scopes zur erneuten Verwendung
- *  erhalten.<br>
- *  <br>
- *  Die Methoden {@link #extract(String)} und {@link #extract(String, Map)}
- *  dienen der exklusiven Nutzung von Segmenten (Teilvorlagen), die partiell
- *  bef&uuml;llt und aufbereitet werden. Beide Methoden erstellen finale
- *  Ergebnisse, die dem Aufruf von {@link #set(Map)} in Kombination mit
- *  {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
- *  konzentrieren.<br>
- *  <br>
- *  Generator 5.2 20190422<br>
- *  Copyright (C) 2019 Seanox Software Solutions<br>
- *  Alle Rechte vorbehalten.
+ * <h3>Beschreibung der Syntax</h3>
+ * Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
+ * auf folgende Zeichen begrenzt:
+ *     <dir>{@code a-z A-Z 0-9 _-}</dir>
+ *     
+ * <h3>Struktur und Beschreibung der Platzhalter</h3>
+ * <table>
+ *   <tr>
+ *     <td valign="top" nowrap="nowrap">
+ *       {@code #[value]}
+ *     </td>
+ *     <td valign="top">
+ *       Setzt an dieser Stelle den Wert f&uuml;r &lt;value&gt; ein und entfernt
+ *       den Platzhalter.
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top" nowrap="nowrap">
+ *       {@code #[scope[[...]]]}
+ *     </td>
+ *     <td valign="top">
+ *       Definiert ein Segment/Scope. Die Verschachtelung und Verwendung
+ *       weiterer Segmente ist m&ouml;glich. Da die Platzhalter zum
+ *       Einf&uuml;gen von Segmenten erhalten bleiben, k&ouml;nnen diese zum
+ *       Aufbau von Listen verwendet werden.
+ *     </td>
+ *   </tr>
+ *   <tr>
+ *     <td valign="top" nowrap="nowrap">
+ *       {@code #[0x0A]}<br>
+ *       {@code #[0x4578616D706C6521]}
+ *     </td>
+ *     <td valign="top">
+ *       Maskiert ein oder mehr Zeichen. Die Umwandlung erfolgt erst mit
+ *       {@link #extract(String, Map)}, {@link #extract(String)} bzw.
+ *       {@link #extract()} zum Schluss der Generierung.
+ *     </td>
+ *   </tr>
+ * </table>
+ * 
+ * <h3>Arbeitsweise</h3>
+ * Das Model (Byte-Array) wird initial geparst.
+ * Dabei werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
+ * Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die Scopes mit
+ * den Segmenten (Teilvorlagen) ermittelt und durch einen einfachen Platzhalter
+ * ersetzt. Nach dem Parsen entsteht ein finales Model mit optimierten
+ * Platzhaltern und extrahierten Segmenten, was zur Laufzeit nicht ge&auml;ndert
+ * werden kann.<br>
+ * <br>
+ * Zur Nutzung des Models stehen dann verschiedene M&ouml;glichkeiten zur
+ * Verf&uuml;gung.<br>
+ * <br>
+ * Mit {@link #set(Map)} werden im Model die Platzhalter durch die
+ * &uuml;bergeben Werte ersetzt. Platzhalter zudenen keine Werte existieren,
+ * bleiben erhalten. Platzhalter die ein Segment/Scope repr&auml;sentieren
+ * werden ebenfalls gesetzt, wenn in den Werten ein korrespondierder
+ * Schl&uuml;ssel existiert. Bei Segmenten/Scopes bleibt der Platzhalter zur
+ * erneuten Verwendung erhalten und folgt direkt dem eingef&uuml;gten Wert.<br>
+ * <br>
+ * Bei {@link #set(String, Map)} wird nur der angegeben Scope bef&uuml;llt.
+ * Dazu wird eine Kopie vom Segment (Teilvorlage) erstellt und mit den
+ * &uuml;bergebenen Werten bef&uuml;llt, alle Platzhalter darin werden entfernt
+ * und der Inhalt wird als Wert vor dem Platzhalter eingef&uuml;gt. Somit bleibt
+ * auch der Platzhalter von Segmenten/Scopes zur erneuten Verwendung
+ * erhalten.<br>
+ * <br>
+ * Die Methoden {@link #extract(String)} und {@link #extract(String, Map)}
+ * dienen der exklusiven Nutzung von Segmenten (Teilvorlagen), die partiell
+ * bef&uuml;llt und aufbereitet werden. Beide Methoden erstellen finale
+ * Ergebnisse, die dem Aufruf von {@link #set(Map)} in Kombination mit
+ * {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
+ * konzentrieren.<br>
+ * <br>
+ * Generator 5.2 20190422<br>
+ * Copyright (C) 2019 Seanox Software Solutions<br>
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 5.2 20190422
+ * @author  Seanox Software Solutions
+ * @version 5.2 20190422
  */
 public class Generator {
 
@@ -149,9 +149,9 @@ public class Generator {
     }
 
     /**
-     *  Erstellt einen neuen Generator auf Basis der &uuml;bergebenen Vorlage.
-     *  @param  model Vorlage als Bytes
-     *  @return der Generator mit der als Bytes &uuml;bergebenen Vorlage
+     * Erstellt einen neuen Generator auf Basis der &uuml;bergebenen Vorlage.
+     * @param  model Vorlage als Bytes
+     * @return der Generator mit der als Bytes &uuml;bergebenen Vorlage
      */
     public static Generator parse(byte[] model) {
         
@@ -161,16 +161,16 @@ public class Generator {
     }
     
     /**
-     *  Ermittelt ob an der angegebenen Position in einem Model(Fragmet) ein
-     *  gueltiger Platzhalter beginnt. In dem Fall wird die Laenge des
-     *  kompletten Platzhalters zurueckgegeben. Kann kein Platzhalter ermittelt
-     *  werden, wird die Laenge 0 zurueckgegeben. Liegen im Model keine
-     *  weiteren Daten zur Analyse vor (Datenende ist erreicht) wird ein
-     *  negativer Wert zurueckgegeben.
-     *  @param  model  Model(Fragmet)
-     *  @param  cursor Position
-     *  @return die Position des n&auml;chsten Platzhalters oder Segments,
-     *          sonst ein negativer Wert
+     * Ermittelt ob an der angegebenen Position in einem Model(Fragmet) ein
+     * gueltiger Platzhalter beginnt. In dem Fall wird die Laenge des kompletten
+     * Platzhalters zurueckgegeben. Kann kein Platzhalter ermittelt werden, wird
+     * die Laenge 0 zurueckgegeben. Liegen im Model keine weiteren Daten zur
+     * Analyse vor (Datenende ist erreicht) wird ein negativer Wert
+     * zurueckgegeben.
+     * @param  model  Model(Fragmet)
+     * @param  cursor Position
+     * @return die Position des n&auml;chsten Platzhalters oder Segments, sonst
+     *     ein negativer Wert
      */
     private static int scan(byte[] model, int cursor) {
         
@@ -273,15 +273,15 @@ public class Generator {
     }
 
     /**
-     *  Analysiert das Model und bereitet es final vor.
-     *  Dazu werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
-     *  Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die
-     *  Scopes mit den Segmenten (Teilvorlagen) ermittelt und durch einen
-     *  einfachen Platzhalter ersetzt. Nach dem Parsen entsteht ein finales
-     *  Model mit optimierten Platzhaltern und extrahierten Segmenten, welches
-     *  zur Laufzeit nicht ge&auml;ndert werden kann
-     *  @param  model Model
-     *  @return das final aufbereitete Model
+     * Analysiert das Model und bereitet es final vor.
+     * Dazu werden alle Platzhalter auf syntaktische Richtigkeit gepr&uuml;ft.
+     * Ggf. werden ung&uuml;ltige Platzhalter entfernt. Zudem werden die Scopes
+     * mit den Segmenten (Teilvorlagen) ermittelt und durch einen einfachen
+     * Platzhalter ersetzt. Nach dem Parsen entsteht ein finales Model mit
+     * optimierten Platzhaltern und extrahierten Segmenten, welches zur Laufzeit
+     * nicht ge&auml;ndert werden kann
+     * @param  model Model
+     * @return das final aufbereitete Model
      */
     private byte[] scan(byte[] model) {
         
@@ -339,15 +339,15 @@ public class Generator {
     }
     
     /**
-     *  Bef&uuml;llt das aktulle Model mit den &uuml;bergebenen Werten.
-     *  Optional kann das Bef&uuml;llen durch die Angabe eines Scopes auf ein
-     *  Segment begrenzt werden und/oder mit {@code clean} festgelegt werden,
-     *  ob der R&uuml;ckgabewert finalisiert und alle ausstehenden Platzhalter
-     *  entfernt bzw. aufgel&ouml;st werden.
-     *  @param  scope  Scope bzw. Segment
-     *  @param  values Werte
-     *  @param  clean  {@code true} zur finalen Bereinigung
-     *  @return das bef&uuml;llte Model(Fragment)
+     * Bef&uuml;llt das aktulle Model mit den &uuml;bergebenen Werten.
+     * Optional kann das Bef&uuml;llen durch die Angabe eines Scopes auf ein
+     * Segment begrenzt werden und/oder mit {@code clean} festgelegt werden, ob
+     * der R&uuml;ckgabewert finalisiert und alle ausstehenden Platzhalter
+     * entfernt bzw. aufgel&ouml;st werden.
+     * @param  scope  Scope bzw. Segment
+     * @param  values Werte
+     * @param  clean  {@code true} zur finalen Bereinigung
+     * @return das bef&uuml;llte Model(Fragment)
      */    
     private byte[] assemble(String scope, Map values, boolean clean) {
         
@@ -501,40 +501,40 @@ public class Generator {
     }
 
     /**
-     *  R&uuml;ckgabe aller Scopes der Segmente als Enumeration.
-     *  Freie Scopes (ohne Segment) sind nicht enthalten.
-     *  @return alle Scopes der Segmente als Enumeration
+     * R&uuml;ckgabe aller Scopes der Segmente als Enumeration.
+     * Freie Scopes (ohne Segment) sind nicht enthalten.
+     * @return alle Scopes der Segmente als Enumeration
      */
     public Enumeration scopes() {
         return Collections.enumeration(this.scopes.keySet());
     }
 
     /**
-     *  R&uuml;ckgabe der aktuell bef&uuml;llten Vorlage.
-     *  @return die aktuell bef&uuml;llte Vorlage
+     * R&uuml;ckgabe der aktuell bef&uuml;llten Vorlage.
+     * @return die aktuell bef&uuml;llte Vorlage
      */
     public byte[] extract() {
         return this.assemble(null, null, true).clone();
     }
     
     /**
-     *  Extrahiert ein angegebenes Segment und setzt dort die Daten.
-     *  Die Daten der Vorlage werden davon nicht ber&uuml;hrt.
-     *  @param  scope Segment
-     *  @return das gef&uuml;llte Segment, kann dieses nicht ermittelt werden,
-     *          wird ein leeres Byte-Array zur&uuml;ckgegeben
+     * Extrahiert ein angegebenes Segment und setzt dort die Daten.
+     * Die Daten der Vorlage werden davon nicht ber&uuml;hrt.
+     * @param  scope Segment
+     * @return das gef&uuml;llte Segment, kann dieses nicht ermittelt werden,
+     *     wird ein leeres Byte-Array zur&uuml;ckgegeben
      */
     public byte[] extract(String scope) {
         return this.extract(scope, null);
     }
     
     /**
-     *  Extrahiert ein angegebenes Segment und setzt dort die Daten.
-     *  Die Daten der Vorlage werden davon nicht ber&uuml;hrt.
-     *  @param  scope  Segment
-     *  @param  values Werteliste
-     *  @return das gef&uuml;llte Segment, kann dieses nicht ermittelt werden,
-     *          wird ein leeres Byte-Array zur&uuml;ckgegeben
+     * Extrahiert ein angegebenes Segment und setzt dort die Daten.
+     * Die Daten der Vorlage werden davon nicht ber&uuml;hrt.
+     * @param  scope  Segment
+     * @param  values Werteliste
+     * @return das gef&uuml;llte Segment, kann dieses nicht ermittelt werden,
+     *     wird ein leeres Byte-Array zur&uuml;ckgegeben
      */
     public byte[] extract(String scope, Map values) {
         
@@ -556,17 +556,17 @@ public class Generator {
     }
 
     /**
-     *  Setzt die Daten f&uuml;r einen Scope oder ein Segment.
-     *  @param values Werte
+     * Setzt die Daten f&uuml;r einen Scope oder ein Segment.
+     * @param values Werte
      */
     public void set(Map values) {
         this.set(null, values);
     }
 
     /**
-     *  Setzt die Daten f&uuml;r einen Scope oder ein Segment.
-     *  @param scope  Scope bzw. Segment
-     *  @param values Werte
+     * Setzt die Daten f&uuml;r einen Scope oder ein Segment.
+     * @param scope  Scope bzw. Segment
+     * @param values Werte
      */
     public void set(String scope, Map values) {
 

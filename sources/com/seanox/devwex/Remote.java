@@ -1,23 +1,23 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- *  Diese Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
+ * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+ * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2020 Seanox Software Solutions
+ * Devwex, Advanced Server Development
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.seanox.devwex;
 
@@ -30,16 +30,16 @@ import java.net.Socket;
 import java.net.SocketException;
 
 /**
- *  Remote, stellt Client- und Server- Funktionalit&auml;ten f&uuml;r die auf
- *  Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
- *  Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
- *  <br>
- *  Remote 5.1.1 20200416<br>
- *  Copyright (C) 2020 Seanox Software Solutions<br>
- *  Alle Rechte vorbehalten.
+ * Remote, stellt Client- und Server- Funktionalit&auml;ten f&uuml;r die auf
+ * Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
+ * Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
+ * <br>
+ * Remote 5.1.1 20200416<br>
+ * Copyright (C) 2020 Seanox Software Solutions<br>
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 5.1.1 20200416
+ * @author  Seanox Software Solutions
+ * @version 5.1.1 20200416
  */
 public class Remote implements Runnable {
 
@@ -53,11 +53,11 @@ public class Remote implements Runnable {
     private volatile String caption;
 
     /**
-     *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     *  @param  server Name des Servers
-     *  @param  data   Konfigurationsdaten des Servers
-     *  @throws Throwable
-     *      Bei fehlerhafter Einrichtung des Servers.
+     * Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
+     * @param  server Name des Servers
+     * @param  data   Konfigurationsdaten des Servers
+     * @throws Throwable
+     *     Bei fehlerhafter Einrichtung des Servers.
      */
     public Remote(String server, Object data) throws Throwable {
 
@@ -93,22 +93,22 @@ public class Remote implements Runnable {
     }
     
     /**
-     *  R&uuml;ckgabe der Serverkennung.
-     *  @return die Serverkennung
+     * R&uuml;ckgabe der Serverkennung.
+     * @return die Serverkennung
      */
     public String explain() {
         return this.caption;
     }
 
     /**
-     *  Sendet den Befehl per Telnet an den Server. R&uuml;ckgabe die Antwort
-     *  des Servers als ByteArray, im Fehlerfall ein leeres ByteArray.
-     *  @param  address Servername oder IP Adresse
-     *  @param  port    Serverport
-     *  @param  request Remoterequest
-     *  @return der Response als ByteArray
-     *  @throws Exception
-     *      Bei fehlerhaftem Datenzugriff.
+     * Sendet den Befehl per Telnet an den Server. R&uuml;ckgabe die Antwort des
+     * Servers als ByteArray, im Fehlerfall ein leeres ByteArray.
+     * @param  address Servername oder IP Adresse
+     * @param  port    Serverport
+     * @param  request Remoterequest
+     * @return der Response als ByteArray
+     * @throws Exception
+     *     Bei fehlerhaftem Datenzugriff.
      */
     public static byte[] call(String address, int port, String request) throws Exception {
 
@@ -158,9 +158,9 @@ public class Remote implements Runnable {
     }
 
     /**
-     *  Liest den eingehenden Request, f&uuml;hrt das entsprechende Kommando aus
-     *  und gibt den resultierenden Response zur&uuml;ck.
-     *  @param socket eingerichteter Socket mit dem Request
+     * Liest den eingehenden Request, f&uuml;hrt das entsprechende Kommando aus
+     * und gibt den resultierenden Response zur&uuml;ck.
+     * @param socket eingerichteter Socket mit dem Request
      */
     private static void service(Socket socket) {
 

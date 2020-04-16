@@ -11,8 +11,10 @@
       The option is used in devwex.ini section STATUSCODES and indicates a status,
       so that requests with this status are answered only with a header and without body.
   CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405
-      Previously the requests were answered with status 403. 
-  CR: Remote: Optimization / reduction of code    
+      Previously the requests were answered with status 403.
+  CR: HTTP(S) - CGI: Update of the PHP preparation
+  CR: Remote: Optimization / reduction of code
+  CR: Sources: Update of the comment format
 
 5.2.0 20190502
   BF: HTTP(S) Correction

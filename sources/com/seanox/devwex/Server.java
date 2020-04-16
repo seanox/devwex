@@ -1,23 +1,23 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- *  Diese Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
+ * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+ * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2020 Seanox Software Solutions
+ * Devwex, Advanced Server Development
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.seanox.devwex;
 
@@ -35,17 +35,17 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
- *  Server stellt als physischer Host, den Zugriff im Netzwerk f&uuml;r eine
- *  spezielle Adresse an einem speziellen Port zur Verf&uuml;gung. Mit dem Start
- *  von Devwex werden alle in der Konfigurationsdatei angegebenen Server
- *  gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
- *  <br>
- *  Server 5.1 20200202<br>
- *  Copyright (C) 2018 Seanox Software Solutions<br>
- *  Alle Rechte vorbehalten.
+ * Server stellt als physischer Host, den Zugriff im Netzwerk f&uuml;r eine
+ * spezielle Adresse an einem speziellen Port zur Verf&uuml;gung. Mit dem Start
+ * von Devwex werden alle in der Konfigurationsdatei angegebenen Server
+ * gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
+ * <br>
+ * Server 5.1 20200202<br>
+ * Copyright (C) 2018 Seanox Software Solutions<br>
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 5.1 20200202
+ * @author  Seanox Software Solutions
+ * @version 5.1 20200202
  */
 public class Server implements Runnable {
 
@@ -65,11 +65,11 @@ public class Server implements Runnable {
     private volatile Vector worker;
 
     /**
-     *  Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     *  @param  context Name des Servers
-     *  @param  data    Konfigurationsdaten des Servers
-     *  @throws Throwable
-     *      Bei fehlerhafter Einrichtung des Servers.
+     * Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
+     * @param  context Name des Servers
+     * @param  data    Konfigurationsdaten des Servers
+     * @throws Throwable
+     *     Bei fehlerhafter Einrichtung des Servers.
      */
     public Server(String context, Object data) throws Throwable {
 
@@ -207,8 +207,8 @@ public class Server implements Runnable {
     }
 
     /**
-     *  R&uuml;ckgabe der Serverkennung.
-     *  @return die Serverkennung
+     * R&uuml;ckgabe der Serverkennung.
+     * @return die Serverkennung
      */
     public String explain() {
         return this.caption;

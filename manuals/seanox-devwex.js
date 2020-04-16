@@ -1,16 +1,16 @@
 /**
- *  Enhancement of the JavaScript API
- *  Executes a provided a function once for each array element.
- *  @param callback function to execute for each element
+ * Enhancement of the JavaScript API
+ * Executes a provided a function once for each array element.
+ * @param callback function to execute for each element
  */
 if (typeof NodeList.prototype.forEach !== "function")
     NodeList.prototype.forEach = Array.prototype.forEach;
 
 /**
- *  Enhancement of the JavaScript API
- *  Determines whether an array includes a certain element.
- *  @param element element to search for
- *  @param true or false as appropriate
+ * Enhancement of the JavaScript API
+ * Determines whether an array includes a certain element.
+ * @param element element to search for
+ * @param true or false as appropriate
  */
 if (typeof Array.prototype.contains !== "function")
     Array.prototype.contains = function(element) {
@@ -18,8 +18,8 @@ if (typeof Array.prototype.contains !== "function")
     }
 
 /**
- *  Left padding a string of a number with zeros.
- *  @param size length of the result string
+ * Left padding a string of a number with zeros.
+ * @param size length of the result string
  */
 if (typeof Number.prototype.pad !== "function")
     Number.prototype.pad = function(size) {
@@ -30,9 +30,9 @@ if (typeof Number.prototype.pad !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Determines the CSS selector for the element.
- *  @param the determined CSS selector
+ * Enhancement of the JavaScript API
+ * Determines the CSS selector for the element.
+ * @param the determined CSS selector
  */
 if (typeof Element.prototype.cssSelector !== "function")
     Element.prototype.cssSelector = function() {
@@ -58,8 +58,8 @@ if (typeof Element.prototype.cssSelector !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Showns an element.
+ * Enhancement of the JavaScript API
+ * Showns an element.
  */     
 if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
@@ -67,8 +67,8 @@ if (typeof Element.prototype.show !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Hiddes an element.
+ * Enhancement of the JavaScript API
+ * Hiddes an element.
  */      
 if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
@@ -76,9 +76,9 @@ if (typeof Element.prototype.hide !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Checks whether if an element hidden or shown.
- *  @return true, if an element shown
+ * Enhancement of the JavaScript API
+ * Checks whether if an element hidden or shown.
+ * @return true, if an element shown
  */  
 if (typeof Element.prototype.visible !== "function")
     Element.prototype.visible = function() {
@@ -86,9 +86,9 @@ if (typeof Element.prototype.visible !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Returns the real height of an element.
- *  @return the real height of an element
+ * Enhancement of the JavaScript API
+ * Returns the real height of an element.
+ * @return the real height of an element
  */
 if (typeof window.height !== "function")
     window.height = function() {
@@ -98,13 +98,13 @@ if (typeof window.height !== "function")
     };
 
 /**
- *  Enhancement of the JavaScript API
- *  Returns a literal pattern String for the specified text.
- *  This method produces a String that can be used to create a Pattern that
- *  would match the text as if it were a literal pattern. Metacharacters or
- *  escape sequences in the input sequence will be given no special meaning.
- *  @param  text to be literalized
- *  @return a literal string replacement
+ * Enhancement of the JavaScript API
+ * Returns a literal pattern String for the specified text.
+ * This method produces a String that can be used to create a Pattern that would
+ * match the text as if it were a literal pattern. Metacharacters or escape
+ * sequences in the input sequence will be given no special meaning.
+ * @param  text to be literalized
+ * @return a literal string replacement
  */
 if (typeof RegExp.quote !== "function")
     RegExp.quote = function(text) {
@@ -504,11 +504,11 @@ Sitemap.create = function() {
 };
 
 /**
- *  Determines the metadata for a chapter.
- *  As chapters are supported: chapter numbers, aliases and the directives
- *  :first and :last
- *  @param  chapter
- *  @return determined metadata for a chapter, otherwise null
+ * Determines the metadata for a chapter.
+ * As chapters are supported: chapter numbers, aliases and the directives :first
+ * and :last
+ * @param  chapter
+ * @return determined metadata for a chapter, otherwise null
  */
 Sitemap.lookup = function(chapter) {
     if (!Sitemap.size)
@@ -559,10 +559,10 @@ Sitemap.lookup = function(chapter) {
 };
 
 /**
- *  Navigates to a chapter.
- *  As chapters are supported: chapter numbers, aliases and the directives :toc,
- *  :toc-focus, :first and :last
- *  @param chapter
+ * Navigates to a chapter.
+ * As chapters are supported: chapter numbers, aliases and the directives :toc,
+ * :toc-focus, :first and :last
+ * @param chapter
  */
 Sitemap.navigate = function(chapter) {
     
@@ -607,12 +607,12 @@ Sitemap.navigate = function(chapter) {
 };
 
 /** 
- *  Filters the table of contents with a search expression.
- *  The expression supports: AND (+ or |), NOT (- or !), OR (|), round brackets,
- *  wildcard characters (*), phrases ("..."), escape sequences / escape symbols
- *  (\). In phrases, all special characters are automatically used as escape
- *  sequences. 
- *  @param filter search expression
+ * Filters the table of contents with a search expression.
+ * The expression supports: AND (+ or |), NOT (- or !), OR (|), round brackets,
+ * wildcard characters (*), phrases ("..."), escape sequences / escape symbols
+ * (\). In phrases, all special characters are automatically used as escape
+ * sequences. 
+ * @param filter search expression
  */
 Sitemap.filter = function(filter) {
     if (!Sitemap.meta)
@@ -622,8 +622,8 @@ Sitemap.filter = function(filter) {
 };
 
 /**
- *  Event when loading the page
- *  Transforms PRE tags into output with row numbers.
+ * Event when loading the page
+ * Transforms PRE tags into output with row numbers.
  */    
 window.addEventListener("load", function() {
     var elements = document.querySelectorAll("pre");
@@ -641,8 +641,8 @@ window.addEventListener("load", function() {
 });
 
 /**
- *  Event when loading the page
- *  Transforms the table of architecure.
+ * Event when loading the page
+ * Transforms the table of architecure.
  */    
 window.addEventListener("load", function() {
     var elements = document.querySelector("table.architecture");
@@ -654,8 +654,8 @@ window.addEventListener("load", function() {
 });
 
 /**
- *  Event when loading the page
- *  Activates the articles for the initial display.
+ * Event when loading the page
+ * Activates the articles for the initial display.
  */    
 window.addEventListener("load", function() {
     Sitemap.create();
@@ -669,8 +669,8 @@ window.addEventListener("load", function() {
 });
 
 /**
- *  Event when loading the page
- *  Adds the base UserAgent as style class to the body element.
+ * Event when loading the page
+ * Adds the base UserAgent as style class to the body element.
  */    
 window.addEventListener("load", function() {
     var client = (navigator.userAgent || "").match(/\b(?:chrome|firefox|edge)\b/i);
@@ -679,8 +679,8 @@ window.addEventListener("load", function() {
 });
 
 /**
- *  Event when loading the page
- *  Clears the filter when loading the page.
+ * Event when loading the page
+ * Clears the filter when loading the page.
  */    
 window.addEventListener("load", function() {
     document.querySelector(Sitemap.SELECTOR_TOC_RESET).click();

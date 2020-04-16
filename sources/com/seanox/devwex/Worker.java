@@ -1,23 +1,23 @@
 /**
- *  LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt,
- *  im Folgenden Seanox Software Solutions oder kurz Seanox genannt.
- *  Diese Software unterliegt der Version 2 der GNU General Public License.
+ * LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
+ * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+ * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
- *  Devwex, Advanced Server Development
- *  Copyright (C) 2020 Seanox Software Solutions
+ * Devwex, Advanced Server Development
+ * Copyright (C) 2020 Seanox Software Solutions
  *
- *  This program is free software; you can redistribute it and/or modify it
- *  under the terms of version 2 of the GNU General Public License as published
- *  by the Free Software Foundation.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
  *
- *  This program is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- *  more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 package com.seanox.devwex;
 
@@ -53,21 +53,21 @@ import java.util.TimeZone;
 import javax.net.ssl.SSLSocket;
 
 /**
- *  Worker, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
- *  diese entsprechend der HTTP-Methode und protokolliert den Zugriff.<br>
- *  <br>
- *  Hinweis zum Thema Fehlerbehandlung - Die Verarbeitung der Requests soll so
- *  tolerant wie m&ouml;glich erfolgen. Somit werden interne Fehler, wenn
- *  m&ouml;glich, geschluckt und es erfolgt eine alternative aber sichere
- *  Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
- *  kompletter Abbruch.
- *  <br>
- *  Worker 5.3 20200416<br>
- *  Copyright (C) 2020 Seanox Software Solutions<br>
- *  Alle Rechte vorbehalten.
+ * Worker, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
+ * diese entsprechend der HTTP-Methode und protokolliert den Zugriff.<br>
+ * <br>
+ * Hinweis zum Thema Fehlerbehandlung - Die Verarbeitung der Requests soll so
+ * tolerant wie m&ouml;glich erfolgen. Somit werden interne Fehler, wenn
+ * m&ouml;glich, geschluckt und es erfolgt eine alternative aber sichere
+ * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
+ * kompletter Abbruch.
+ * <br>
+ * Worker 5.3 20200416<br>
+ * Copyright (C) 2020 Seanox Software Solutions<br>
+ * Alle Rechte vorbehalten.
  *
- *  @author  Seanox Software Solutions
- *  @version 5.3 20200416
+ * @author  Seanox Software Solutions
+ * @version 5.3 20200416
  */
 class Worker implements Runnable {
   
@@ -156,10 +156,10 @@ class Worker implements Runnable {
     private volatile long volume;
 
     /**
-     *  Konstruktor, richtet den Worker mit Socket ein.
-     *  @param context    Server Context
-     *  @param socket     Socket mit dem eingegangen Request
-     *  @param initialize Server Konfiguraiton
+     * Konstruktor, richtet den Worker mit Socket ein.
+     * @param context    Server Context
+     * @param socket     Socket mit dem eingegangen Request
+     * @param initialize Server Konfiguraiton
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
         
@@ -171,11 +171,11 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Entfernt aus dem String Parameter und Optionen im Format {@code [...]}.
-     *  Bereinigt werden alle Angaben, ob voll- oder unvollst&auml;ndig, ab dem
-     *  ersten Vorkommen.
-     *  @param  string zu bereinigender String
-     *  @return der String ohne Parameter und Optionen
+     * Entfernt aus dem String Parameter und Optionen im Format {@code [...]}.
+     * Bereinigt werden alle Angaben, ob voll- oder unvollst&auml;ndig, ab dem
+     * ersten Vorkommen.
+     * @param  string zu bereinigender String
+     * @return der String ohne Parameter und Optionen
      */
     private static String cleanOptions(String string) {
         
@@ -189,12 +189,12 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Ersetzt im String {@code search} durch {@code replace}.
-     *  Die Gross- und Kleinschreibung wird dabei ignoriert.
-     *  @param  string  zu durchsuchender String
-     *  @param  search  gesuchter String
-     *  @param  replace zu ersetzender String
-     *  @return der ersetzte String
+     * Ersetzt im String {@code search} durch {@code replace}.
+     * Die Gross- und Kleinschreibung wird dabei ignoriert.
+     * @param  string  zu durchsuchender String
+     * @param  search  gesuchter String
+     * @param  replace zu ersetzender String
+     * @return der ersetzte String
      */
     private static String textReplace(String string, String search, String replace) {
 
@@ -223,11 +223,11 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Erstellt zum String einen hexadezimalen MD5-Hash.
-     *  @param  string zu dem der Hash erstellt werden soll
-     *  @return der erstellte hexadezimale MD5-Hash
-     *  @throws Exception
-     *      Im Fall nicht erwarteter Fehler
+     * Erstellt zum String einen hexadezimalen MD5-Hash.
+     * @param  string zu dem der Hash erstellt werden soll
+     * @return der erstellte hexadezimale MD5-Hash
+     * @throws Exception
+     *     Im Fall nicht erwarteter Fehler
      */
     private static String textHash(String string) throws Exception {
         
@@ -260,16 +260,16 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Maskiert im String die Steuerzeichen: BS, HT, LF, FF, CR, ', ",  \ und
-     *  alle Zeichen ausserhalb vom ASCII-Bereich 0x20-0x7F.
-     *  Die Maskierung erfolgt per Slash:
-     *  <ul>
-     *    <li>Slash + ISO</li>
-     *    <li>Slash + drei Bytes oktal (0x80-0xFF)</li>
-     *    <li>Slash + vier Bytes hexadezimal (0x100-0xFFFF)</li>
-     *  </ul>
-     *  @param  string zu maskierender String
-     *  @return der String mit den ggf. maskierten Zeichen.
+     * Maskiert im String die Steuerzeichen: BS, HT, LF, FF, CR, ', ",  \ und
+     * alle Zeichen ausserhalb vom ASCII-Bereich 0x20-0x7F.
+     * Die Maskierung erfolgt per Slash:
+     * <ul>
+     *   <li>Slash + ISO</li>
+     *   <li>Slash + drei Bytes oktal (0x80-0xFF)</li>
+     *   <li>Slash + vier Bytes hexadezimal (0x100-0xFFFF)</li>
+     * </ul>
+     * @param  string zu maskierender String
+     * @return der String mit den ggf. maskierten Zeichen.
      */
     public static String textEscape(String string) {
         
@@ -320,12 +320,12 @@ class Worker implements Runnable {
     }    
     
     /**
-     *  Dekodiert den String tollerant als URL und UTF-8.
-     *  Tollerant, da fehlerhafte kodierte Zeichenfolgen nicht direkt zum
-     *  Fehler f&uml;hren, sondern erhalten bleiben und die UTF-8 Kodierung
-     *  optional betrachtet wird.
-     *  @param  string zu dekodierender String
-     *  @return der dekodierte String
+     * Dekodiert den String tollerant als URL und UTF-8.
+     * Tollerant, da fehlerhafte kodierte Zeichenfolgen nicht direkt zum Fehler
+     * f&uml;hren, sondern erhalten bleiben und die UTF-8 Kodierung optional
+     * betrachtet wird.
+     * @param  string zu dekodierender String
+     * @return der dekodierte String
      */
     private static String textDecode(String string) {
         
@@ -431,12 +431,12 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Formatiert das Datum im angebenden Format und in der angegebenen Zone.
-     *  R&uuml;ckgabe das formatierte Datum, im Fehlerfall ein leerer String.
-     *  @param  format Formatbeschreibung
-     *  @param  date   zu formatierendes Datum
-     *  @param  zone   Zeitzone, {@code null} Standardzone
-     *  @return das formatierte Datum als String, im Fehlerfall leerer String
+     * Formatiert das Datum im angebenden Format und in der angegebenen Zone.
+     * R&uuml;ckgabe das formatierte Datum, im Fehlerfall ein leerer String.
+     * @param  format Formatbeschreibung
+     * @param  date   zu formatierendes Datum
+     * @param  zone   Zeitzone, {@code null} Standardzone
+     * @return das formatierte Datum als String, im Fehlerfall leerer String
      */
     private static String dateFormat(String format, Date date, String zone) {
 
@@ -453,9 +453,9 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Liest die Datei einer Datei.
-     *  @param  filename Pfad der zu lesenden Datei
-     *  @return die gelesenen Daten, im Fehlerfall ein leeres Byte-Array
+     * Liest die Datei einer Datei.
+     * @param  filename Pfad der zu lesenden Datei
+     * @return die gelesenen Daten, im Fehlerfall ein leeres Byte-Array
      */
     private static byte[] fileRead(File file) {
         
@@ -466,10 +466,10 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Normalisiert den String eines Pfads und l&ouml;sst ggf. existierende
-     *  Pfad-Direktiven auf und &auml;ndert das Backslash in Slash.
-     *  @param  path zu normalisierender Pfad
-     *  @return der normalisierte Pfad
+     * Normalisiert den String eines Pfads und l&ouml;sst ggf. existierende
+     * Pfad-Direktiven auf und &auml;ndert das Backslash in Slash.
+     * @param  path zu normalisierender Pfad
+     * @return der normalisierte Pfad
      */
     private static String fileNormalize(String path) {
         
@@ -515,11 +515,11 @@ class Worker implements Runnable {
     }
 
     /**
-     *  L&ouml;scht die Ressource, handelt es sich um ein Verzeichnis, werden
-     *  alle Unterdateien und Unterverzeichnisse rekursive gel&ouml;scht.
-     *  R&uuml;ckgabe {@code true} im Fehlerfall {@code false}.
-     *  @param  resource zu l&ouml;schende Ressource
-     *  @return {@code true}, im Fehlerfall {@code false}
+     * L&ouml;scht die Ressource, handelt es sich um ein Verzeichnis, werden
+     * alle Unterdateien und Unterverzeichnisse rekursive gel&ouml;scht.
+     * R&uuml;ckgabe {@code true} im Fehlerfall {@code false}.
+     * @param  resource zu l&ouml;schende Ressource
+     * @return {@code true}, im Fehlerfall {@code false}
      */
     private static boolean fileDelete(File resource) {
 
@@ -543,13 +543,13 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Pr&uuml;ft ob die Ressource dem {@code IF-(UN)MODIFIED-SINCE}
-     *  entspricht. R&uuml;ckgabe {@code false} wenn die Ressource in Datum und
-     *  Dateigr&ouml;sse entspricht, sonst {@code true}.
-     *  @param  file   Dateiobjekt
-     *  @param  string Information der Modifikation
-     *  @return {@code true} wenn Unterschiede in Datum oder Dateigr&ouml;sse
-     *          ermittelt wurden
+     * Pr&uuml;ft ob die Ressource dem {@code IF-(UN)MODIFIED-SINCE} entspricht.
+     * R&uuml;ckgabe {@code false} wenn die Ressource in Datum und
+     * Dateigr&ouml;sse entspricht, sonst {@code true}.
+     * @param  file   Dateiobjekt
+     * @param  string Information der Modifikation
+     * @return {@code true} wenn Unterschiede in Datum oder Dateigr&ouml;sse
+     *     ermittelt wurden
      */
     private static boolean fileIsModified(File file, String string) {
 
@@ -601,9 +601,9 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Erstellt zu einem abstrakter File das physische File-Objekt.
-     *  @param  file abstrakter File 
-     *  @return das physische File-Objekt, sonst {@code null}
+     * Erstellt zu einem abstrakter File das physische File-Objekt.
+     * @param  file abstrakter File 
+     * @return das physische File-Objekt, sonst {@code null}
      */
     private static File fileCanonical(File file) {
      
@@ -614,19 +614,19 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Ruft eine Modul-Methode auf.
-     *  Wenn erforderlich wird das Modul zuvor geladen und initialisiert.
-     *  Module werden global geladen und initialisiert. Ist ein Modul beim
-     *  Aufruf der Methode noch nicht geladen, erfolgt dieses ohne Angabe von
-     *  Parametern mit der ersten Anforderung.<br>
-     *  Soll ein Modul mit Parametern initalisiert werden, muss das Modul in
-     *  der Sektion {@code INITIALIZE} deklariert oder &uuml;ber den
-     *  Context-ClassLoader vom Devwex-Module-SDK geladen werden.
-     *  R&uuml;ckgabe {@code true} wenn die Ressource geladen und die Methode
-     *  erfolgreich aufgerufen wurde.
-     *  @param  resource Resource
-     *  @param  invoke   Methode
-     *  @return {@code true}, im Fehlerfall {@code false}
+     * Ruft eine Modul-Methode auf.
+     * Wenn erforderlich wird das Modul zuvor geladen und initialisiert.
+     * Module werden global geladen und initialisiert. Ist ein Modul beim Aufruf
+     * der Methode noch nicht geladen, erfolgt dieses ohne Angabe von Parametern
+     * mit der ersten Anforderung.<br>
+     * Soll ein Modul mit Parametern initalisiert werden, muss das Modul in der
+     * Sektion {@code INITIALIZE} deklariert oder &uuml;ber den
+     * Context-ClassLoader vom Devwex-Module-SDK geladen werden.
+     * R&uuml;ckgabe {@code true} wenn die Ressource geladen und die Methode
+     * erfolgreich aufgerufen wurde.
+     * @param  resource Resource
+     * @param  invoke   Methode
+     * @return {@code true}, im Fehlerfall {@code false}
      */
     private boolean invoke(String resource, String invoke) throws Exception {
 
@@ -656,11 +656,11 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Ermittelt f&uuml;r das angegebene virtuelle Verzeichnis den realen Pfad.
-     *  Wurde der Pfad nicht als virtuelles Verzeichnis eingerichtet, wird ein
-     *  leerer String zur&uuml;ckgegeben.
-     *  @param  path Pfad des virtuellen Verzeichnis
-     *  @return der reale Pfad oder ein leerer String
+     * Ermittelt f&uuml;r das angegebene virtuelle Verzeichnis den realen Pfad.
+     * Wurde der Pfad nicht als virtuelles Verzeichnis eingerichtet, wird ein
+     * leerer String zur&uuml;ckgegeben.
+     * @param  path Pfad des virtuellen Verzeichnis
+     * @return der reale Pfad oder ein leerer String
      */
     private String locate(String path) {
 
@@ -862,11 +862,11 @@ class Worker implements Runnable {
     }
     
     /**
-     *  &Uuml;berpr&uuml;ft die Zugriffbrechtigungen f&uuml;r eine Referenz und
-     *  setzt ggf. den entsprechenden Status.
-     *  @param  reference Referenz
-     *  @throws Exception
-     *      Im Fall nicht erwarteter Fehler
+     * &Uuml;berpr&uuml;ft die Zugriffbrechtigungen f&uuml;r eine Referenz und
+     * setzt ggf. den entsprechenden Status.
+     * @param  reference Referenz
+     * @throws Exception
+     *     Im Fall nicht erwarteter Fehler
      */
     private void authorize(String reference) throws Exception {
         
@@ -981,9 +981,9 @@ class Worker implements Runnable {
     }
 
     /**
-     *  &Uuml;berpr&uuml;ft die Filter und wendet diese bei Bedarf an.
-     *  Filter haben keinen direkten R&uuml;ckgabewert, sie beieinflussen u.a.
-     *  Server-Status und Datenflusskontrolle.
+     * &Uuml;berpr&uuml;ft die Filter und wendet diese bei Bedarf an.
+     * Filter haben keinen direkten R&uuml;ckgabewert, sie beieinflussen u.a.
+     * Server-Status und Datenflusskontrolle.
      */
     private String filter() throws Exception {
         
@@ -1144,10 +1144,10 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Initialisiert die Connection, liest den Request, analysiert diesen und
-     *  richtet die Connection in der Laufzeitumgebung entsprechen ein.
-     *  @throws Exception
-     *      Im Fall nicht erwarteter Fehler
+     * Initialisiert die Connection, liest den Request, analysiert diesen und
+     * richtet die Connection in der Laufzeitumgebung entsprechen ein.
+     * @throws Exception
+     *     Im Fall nicht erwarteter Fehler
      */
     private void initiate() throws Exception {
 
@@ -1704,11 +1704,11 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Erstellt den Basis-Header f&uuml;r einen Response und erweitert diesen
-     *  um die optional &uuml;bergebenen Parameter.
-     *  @param  status HTTP-Status
-     *  @param  header optionale Liste mit Parameter
-     *  @return der erstellte Reponse-Header
+     * Erstellt den Basis-Header f&uuml;r einen Response und erweitert diesen um
+     * die optional &uuml;bergebenen Parameter.
+     * @param  status HTTP-Status
+     * @param  header optionale Liste mit Parameter
+     * @return der erstellte Reponse-Header
      */
     private String header(int status, String[] header) {
         
@@ -1725,9 +1725,9 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Erstellt ein Array mit den Umgebungsvariablen.
-     *  Umgebungsvariablen ohne Wert werden nicht &uuml;bernommen.
-     *  @return die Umgebungsvariablen als Array
+     * Erstellt ein Array mit den Umgebungsvariablen.
+     * Umgebungsvariablen ohne Wert werden nicht &uuml;bernommen.
+     * @return die Umgebungsvariablen als Array
      */
     private String[] getEnvironment() {
         
@@ -2029,11 +2029,11 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
-     *  {@code index.html} eine navigierbare HTML-Seite.
-     *  @param  directory Verzeichnis des Dateisystems
-     *  @param  query     Option der Sortierung
-     *  @return das Verzeichnisse als navigierbares HTML
+     * Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
+     * {@code index.html} eine navigierbare HTML-Seite.
+     * @param  directory Verzeichnis des Dateisystems
+     * @param  query     Option der Sortierung
+     * @return das Verzeichnisse als navigierbares HTML
      */
     private byte[] createDirectoryIndex(File directory, String query) {
         
@@ -2694,9 +2694,9 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Nimmt den Request an und organisiert die Verarbeitung und Beantwortung.
-     *  @throws Exception
-     *      Im Fall nicht erwarteter Fehler 
+     * Nimmt den Request an und organisiert die Verarbeitung und Beantwortung.
+     * @throws Exception
+     *     Im Fall nicht erwarteter Fehler 
      */
     private void service() throws Exception {
 
@@ -2870,10 +2870,10 @@ class Worker implements Runnable {
     }
     
     /**
-     *  Merkt den Worker zum Schliessen vor, wenn diese in der naechsten Zeit
-     *  nicht mehr verwendet wird. Der Zeitpunkt zum Bereinigen betr&auml;gt
-     *  250ms Leerlaufzeit nach der letzen Nutzung. Die Zeit wird &uuml;ber das
-     *  SoTimeout vom ServerSocket definiert.
+     * Merkt den Worker zum Schliessen vor, wenn diese in der naechsten Zeit
+     * nicht mehr verwendet wird. Der Zeitpunkt zum Bereinigen betr&auml;gt
+     * 250ms Leerlaufzeit nach der letzen Nutzung. Die Zeit wird &uuml;ber das
+     * SoTimeout vom ServerSocket definiert.
      */
     void isolate() {
 
@@ -2883,9 +2883,9 @@ class Worker implements Runnable {
     }
 
     /**
-     *  R&uuml;ckgabe {@code true}, wenn der Worker aktiv zur Verf&uuml;gung
-     *  steht und somit weiterhin Requests entgegen nehmen kann.
-     *  @return {@code true}, wenn der Worker aktiv verf&uuml;bar ist
+     * R&uuml;ckgabe {@code true}, wenn der Worker aktiv zur Verf&uuml;gung
+     * steht und somit weiterhin Requests entgegen nehmen kann.
+     * @return {@code true}, wenn der Worker aktiv verf&uuml;bar ist
      */
     boolean available() {
 
@@ -2915,10 +2915,10 @@ class Worker implements Runnable {
     }
 
     /**
-     *  Stellt den Einsprung in den Thread zur Verf&uuml;gung und initialisiert
-     *  den Worker. Um den Serverprozess nicht zu behindern wird die
-     *  eigentliche Initialisierung vom Worker erst mit dem laufenden Thread
-     *  als asynchroner Prozess vorgenommen.
+     * Stellt den Einsprung in den Thread zur Verf&uuml;gung und initialisiert
+     * den Worker. Um den Serverprozess nicht zu behindern wird die eigentliche
+     * Initialisierung vom Worker erst mit dem laufenden Thread als asynchroner
+     * Prozess vorgenommen.
      */
     public void run() {
 

@@ -12,6 +12,7 @@
       so that requests with this status are answered only with a header and without body.
   CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405
       Previously the requests were answered with status 403. 
+  CR: Remote: Optimization / reduction of code    
 
 5.2.0 20190502
   BF: HTTP(S) Correction

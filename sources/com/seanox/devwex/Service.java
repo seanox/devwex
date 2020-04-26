@@ -861,7 +861,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     /**
      * R&uuml;ckgabe vom aktuellen Betriebsstatus.
      * @return der aktuelle Betriebsstatus
-     * @see    {@link #UNKNOWN}, {@link #START}, {@link #RUN}, {@link #RESTART}, {@link #STOP}
+     * @see    {@link #START}, {@link #RUN}, {@link #RESTART}, {@link #STOP},
+     *         {@link #UNKNOWN} 
      */
     public static int status() {
         

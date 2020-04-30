@@ -156,7 +156,10 @@ CR: Project: Automatic update of the version in README.md
 CR: Build: Harmonization when updating the version  
 CR: HTTP(S) - Status: Added option [H] (Header Only)  
 CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405  
+CR: HTTP(S) - CGI: Update of the PHP preparation  
+CR: HTTP(S) - Directory Index: Optimization  
 CR: Remote: Optimization / reduction of code  
+CR: Sources: Update of the comment format  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

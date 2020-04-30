@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3 20200416<br>
+ * Worker 5.3 20200430<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3 20200416
+ * @version 5.3 20200430
  */
 class Worker implements Runnable {
   
@@ -2040,7 +2040,9 @@ class Worker implements Runnable {
         Enumeration     enumeration;
         File            file;
         Generator       generator;
+        Hashtable       data;
         Hashtable       values;
+        List            list;
         List            storage;
         StringTokenizer tokenizer;
         String          entry;
@@ -2050,8 +2052,6 @@ class Worker implements Runnable {
         File[]          files; 
         String[]        entries;
 
-        byte[]          bytes;
-        byte[]          cache;
         int[]           assign;
 
         boolean         control;
@@ -2192,7 +2192,7 @@ class Worker implements Runnable {
         if (reverse)
             Collections.reverse(storage);
         
-        bytes = new byte[0];
+        list = new ArrayList();
         
         //die Dateiinformationen werden zusammengestellt
         for (loop = 0; loop < storage.size(); loop++) {
@@ -2201,6 +2201,9 @@ class Worker implements Runnable {
             tokenizer = new StringTokenizer((String)storage.get(loop), "\00");
             if (tokenizer.countTokens() <= 0)
                 continue;
+            
+            data = new Hashtable(values);
+            list.add(data);
             
             //die Eintraege werden als Array abgelegt um eine einfache und
             //flexible Zuordnung der Sortierreihenfolge zu erreichen
@@ -2212,11 +2215,11 @@ class Worker implements Runnable {
             entries[assign[3]] = tokenizer.nextToken().substring(1);
             entries[assign[4]] = tokenizer.nextToken().substring(1);
             
-            values.put("case", entries[0]);
-            values.put("name", entries[1]);
-            values.put("date", entries[2]);
-            values.put("size", entries[3].substring(1));
-            values.put("type", entries[4]);
+            data.put("case", entries[0]);
+            data.put("name", entries[1]);
+            data.put("date", entries[2]);
+            data.put("size", entries[3].substring(1));
+            data.put("type", entries[4]);
             
             string = entries[4];
             if (!string.equals("-")) {
@@ -2225,19 +2228,15 @@ class Worker implements Runnable {
                     string = this.options.get("mediatype");
             } else string = "";
 
-            values.put("mime", string);
-
-            cache = generator.extract("file", values);
-            bytes = Arrays.copyOf(bytes, bytes.length +cache.length);
-            System.arraycopy(cache, 0, bytes, bytes.length -cache.length, cache.length);
+            data.put("mime", string);
         }
         
         query = query.concat(reverse ? "d" : "a");
-        if (bytes.length <= 0)
+        if (list.isEmpty())
             query = query.concat(" x");
         values.put("sort", query);
 
-        values.put("file", bytes);
+        values.put("file", list);
         generator.set(values);
 
         return generator.extract();

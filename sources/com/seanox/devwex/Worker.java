@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3 20200430<br>
+ * Worker 5.3 20200501<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3 20200430
+ * @version 5.3 20200501
  */
 class Worker implements Runnable {
   
@@ -186,40 +186,6 @@ class Worker implements Runnable {
             string = string.substring(0, cursor).trim();
 
         return string;
-    }
-    
-    /**
-     * Ersetzt im String {@code search} durch {@code replace}.
-     * Die Gross- und Kleinschreibung wird dabei ignoriert.
-     * @param  string  zu durchsuchender String
-     * @param  search  gesuchter String
-     * @param  replace zu ersetzender String
-     * @return der ersetzte String
-     */
-    private static String textReplace(String string, String search, String replace) {
-
-        String result;
-        String buffer;
-
-        int    cursor;
-
-        buffer = string.toLowerCase();
-        search = search.toLowerCase();
-
-        if (search.length() <= 0)
-            return string;
-
-        result = "";
-        while ((cursor = buffer.indexOf(search)) >= 0) {
-            result = result.concat(string.substring(0, cursor)).concat(replace);
-            string = string.substring(cursor +search.length());
-            buffer = buffer.substring(cursor +search.length());
-        }
-
-        if (string.length() > 0)
-            result = result.concat(string);
-
-        return result;
     }
     
     /**
@@ -1025,7 +991,7 @@ class Worker implements Runnable {
             //verlassen. Somit wird das Ende der Schleife nur erreicht, wenn
             //keine der Bedingungen versagt hat und damit alle zutreffen.
             
-            rules = new StringTokenizer(Worker.textReplace(string, "[+]", "\00"), "\00");
+            rules = new StringTokenizer(string, "[+]");
             while (rules.hasMoreTokens()) {
 
                 //die Filterbeschreibung wird ermittelt
@@ -1034,8 +1000,9 @@ class Worker implements Runnable {
                 words = new StringTokenizer(string);
                 
                 //Methode und Bedingung muessen gesetzt sein
+                //mit Tolleranz fuer [+] beim Konkatenieren leerer Bedingungen
                 if (words.countTokens() < 2)
-                    break;
+                    continue;
 
                 //die Methode wird ermittelt
                 string = words.nextToken();
@@ -1811,16 +1778,23 @@ class Worker implements Runnable {
             this.invoke(Worker.cleanOptions(this.gateway), "service");
         
             return;
-        } 
-            
+        }
+        
+        string = this.gateway;
+        
         shadow = this.environment.get("script_filename");
         cursor = shadow.replace('\\', '/').lastIndexOf("/") +1;
-        string = Worker.textReplace(this.gateway, "[P]", shadow.substring(0, cursor));
+        string = string.replace("[d]", "[D]");
+        string = string.replace("[D]", shadow.substring(0, cursor));
+        
+        string = string.replace("[c]", "[C]");
+        string = string.replace("[C]", shadow.replace((File.separator.equals("/")) ? '\\' : '/', File.separatorChar));
 
         shadow = shadow.substring(cursor);
         cursor = shadow.lastIndexOf(".");
-        string = Worker.textReplace(string, "[N]", shadow.substring(0, cursor < 0 ? shadow.length() : cursor));
-        string = Worker.textReplace(string, "[C]", this.environment.get("script_filename").replace((File.separator.equals("/")) ? '\\' : '/', File.separatorChar));
+        string = string.replace("[n]", "[N]");
+        string = string.replace("[N]", shadow.substring(0, cursor < 0 ? shadow.length() : cursor));
+        
         string = Worker.cleanOptions(string);
         
         //die maximale Prozesslaufzeit wird ermittelt

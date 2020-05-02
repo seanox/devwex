@@ -592,7 +592,11 @@ Sitemap.navigate = function(chapter) {
                 element.show();
             else element.hide();
         });
-        document.location.hash = Sitemap.chapter.alias;
+        
+        document.location.hash = "";
+        window.setTimeout(function(hash) {
+            document.location.hash = hash;
+        }, 0, Sitemap.chapter.alias);
     });
     
     //mark the current chapter in the table of content (toc) as active

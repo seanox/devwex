@@ -502,6 +502,7 @@ public class Section implements Cloneable {
      * R&uuml;ckgabe einer Kopie von Section.
      * @return eine Kopie von Section
      */
+    @Override
     public synchronized Object clone() {
 
         Section section;

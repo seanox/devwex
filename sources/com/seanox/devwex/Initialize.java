@@ -428,6 +428,7 @@ public class Initialize implements Cloneable {
      * R&uuml;ckgabe einer Kopie von Initialize.
      * @return eine Kopie von Initialize
      */
+    @Override
     public synchronized Object clone() {
 
         Enumeration enumeration;

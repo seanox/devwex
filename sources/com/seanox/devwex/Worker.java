@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3 20200501<br>
+ * Worker 5.3.0 20200503<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3 20200501
+ * @version 5.3.0 20200503
  */
 class Worker implements Runnable {
   
@@ -1681,7 +1681,7 @@ class Worker implements Runnable {
         
         String string;
         
-        string = String.valueOf(this.status);
+        string = String.valueOf(status);
         string = ("HTTP/1.0 ").concat(string).concat(" ").concat(Worker.cleanOptions(this.statuscodes.get(string))).trim();
         if (this.options.get("identity").toLowerCase().equals("on"))
             string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
@@ -2376,13 +2376,13 @@ class Worker implements Runnable {
             this.isolation = -1;
         
         if (method.equals("get")) {
+
+            //das ByteArray wird mit dem BLOCKSIZE eingerichtet
+            bytes = new byte[this.blocksize];
             
             input = null;
-
+            
             try {
-
-                //das ByteArray wird mit dem BLOCKSIZE eingerichtet
-                bytes = new byte[this.blocksize];
 
                 //der Datenstrom wird eingerichtet
                 input = new FileInputStream(this.resource);
@@ -2464,16 +2464,16 @@ class Worker implements Runnable {
             this.status = 411;
             return;
         }
+
+        //ggf. bestehende Dateien werden entfernt
+        file.delete();
+
+        //das Datenpuffer wird eingerichtet
+        bytes = new byte[this.blocksize];
         
         output = null;
         
         try {
-
-            //ggf. bestehende Dateien werden entfernt
-            file.delete();
-
-            //das Datenpuffer wird eingerichtet
-            bytes = new byte[this.blocksize];
             
             //der Datenstrom wird eingerichtet
             output = new FileOutputStream(this.resource);
@@ -2893,6 +2893,7 @@ class Worker implements Runnable {
      * Initialisierung vom Worker erst mit dem laufenden Thread als asynchroner
      * Prozess vorgenommen.
      */
+    @Override
     public void run() {
 
         ServerSocket socket;

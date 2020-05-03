@@ -128,12 +128,12 @@ import java.util.Map;
  * {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
  * konzentrieren.<br>
  * <br>
- * Generator 5.2 20190422<br>
+ * Generator 5.2.0 20190422<br>
  * Copyright (C) 2019 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.2 20190422
+ * @version 5.2.0 20190422
  */
 public class Generator {
 

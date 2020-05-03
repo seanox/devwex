@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.1 20180218<br>
- * Copyright (C) 2018 Seanox Software Solutions<br>
+ * Service 5.1.1 20200503<br>
+ * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.1 20180218
+ * @version 5.1.1 20200503
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -365,7 +365,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
         double          timing;
         int             loop;
-        int             size;
         
         synchronized (Service.class) {
             
@@ -744,9 +743,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", false);
         Service.print("Advanced Server Development", false);
         Service.print("\r\n", false);
+        
+        if (options == null)
+            options = new String[0];
 
         //das Kommando wird ermittelt
-        string = options != null && options.length > 0 ? options[0].toLowerCase().trim() : "";
+        string = options.length > 0 ? options[0].toLowerCase().trim() : "";
         
         //START - starten der Serverdienste
         if (string.matches("start")) {
@@ -767,7 +769,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             
             //fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
             //oder ein alternatives Programmargument verwendet
-            address = options.length <= 1 ? null : options[1];
+            address = options.length > 0 ? options[1] : null;
             address = address == null ? "" : address.trim();
             
             port = address.replaceAll("^(.*?)(?::(\\d+)){0,1}$", "$2").trim();
@@ -879,6 +881,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * Stellt den Einsprung f&uuml;r den Thread zur Verf&uuml;gung.
      * Der Thread kontrolliert die Server und steuert den Garbage Collector.
      */
+    @Override
     public void run() {
 
         File    file; 
@@ -969,6 +972,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * @param thread    Thread
      * @param throwable Throwable
      */
+    @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
         Service.print(throwable);
     }

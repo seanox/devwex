@@ -40,12 +40,12 @@ import javax.net.ssl.TrustManagerFactory;
  * von Devwex werden alle in der Konfigurationsdatei angegebenen Server
  * gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
  * <br>
- * Server 5.1 20200202<br>
+ * Server 5.1.0 20200202<br>
  * Copyright (C) 2018 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.1 20200202
+ * @version 5.1.0 20200202
  */
 public class Server implements Runnable {
 
@@ -226,6 +226,7 @@ public class Server implements Runnable {
     }
 
     /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
+    @Override
     public void run() {
 
         Worker      worker;

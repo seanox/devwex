@@ -38,12 +38,12 @@ import java.util.zip.ZipFile;
  * Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
  * k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.<br>
  * <br>
- * Loader 5.0 20170302<br>
+ * Loader 5.0.0 20170302<br>
  * Copyright (C) 2017 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.0 20170302
+ * @version 5.0.0 20170302
  */
 public class Loader extends URLClassLoader {
     
@@ -86,6 +86,7 @@ public class Loader extends URLClassLoader {
      * @return der InputStream zur Ressource, sonst {@code null} wenn diese
      *     nicht ermittelt werden kann
      */
+    @Override
     public InputStream getResourceAsStream(String name) {
 
         InputStream input;
@@ -150,6 +151,7 @@ public class Loader extends URLClassLoader {
      * @return die URL zur angeforderten Ressource, sonst {@code null} wenn
      *     diese nicht ermittelt werden kann
      */
+    @Override
     public URL getResource(String name) {
 
         Iterator iterator;
@@ -209,6 +211,7 @@ public class Loader extends URLClassLoader {
      * @throws ClassNotFoundException
      *     Wenn die Klass nicht gefunden werden kann.
      */
+    @Override
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException {
 

@@ -43,8 +43,8 @@ import java.util.Map;
  * <br>
  * Platzhalter lassen sich auch als Segmente verwenden.<br>
  * Segmente sind Teilstrukturen, die bis zu einer Tiefe von 65535 Ebenen
- * verschachtelt werden können. Diese Teilstrukturen lassen sich global oder per
- * Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
+ * verschachtelt werden k&ouml;nnen. Diese Teilstrukturen lassen sich global
+ * oder per Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
  * Die Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
  * sind iterativ wiederverwendbar.<br>
  * Als Werte werden f&uuml;r Segmente die Datentypen {@link Collection} und
@@ -352,6 +352,7 @@ public class Generator {
     private byte[] assemble(String scope, Map values, boolean clean) {
         
         Iterator iterator;
+        Object   object;
         String   label;
         String   fetch;
         
@@ -412,7 +413,7 @@ public class Generator {
                 }
                 
                 //der Patch wird ueber den Schluessel ermittelt
-                Object object = values.get(fetch);
+                object = values.get(fetch);
 
                 //Ist der Schluessel ein Segment und der Wert ist eine Map mit
                 //Werten, wird das Segment rekursive befuellt. Zum Schutz vor

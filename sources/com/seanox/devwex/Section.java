@@ -36,7 +36,7 @@ import java.util.StringTokenizer;
  * Kombination von Initialize mit Section verwendet werden. So basiert die
  * nachfolgende Beschreibung auf der Kombination beider Komponenten.<br>
  * <br>
- * Das für die Konfiguration verwendete INI-Format ist eine kompatible
+ * Das f&uuml;r die Konfiguration verwendete INI-Format ist eine kompatible
  * Erweiterung zum klassischen Format. Es ist ebenfalls zeilenbasiert und
  * verwendet Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim
  * Namen von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung

@@ -774,15 +774,18 @@ class Worker implements Runnable {
             //der Zielpfad wird mit / abgeschlossen um auch Referenzen
             //zwischen /a und /a/ ermitteln zu koennen
             buffer = alias;
-            if (!absolute && !module && !buffer.endsWith("/") && buffer.length() > 0)
+            if (!absolute
+                    && !module
+                    && !buffer.endsWith("/")
+                    && buffer.length() > 0)
                 buffer = buffer.concat("/");
 
             //die ACC-Eintraege zur Authentifizierung werden zusammengesammelt
-            if (string.contains("[ACC:") && locale.startsWith(buffer.toLowerCase())
-                    && buffer.length() > 0 && shadow.length() <= buffer.length()) {
-                
+            if (string.contains("[ACC:")
+                    && locale.startsWith(buffer.toLowerCase())
+                    && buffer.length() > 0
+                    && shadow.length() <= buffer.length()) {
                 shadow = buffer;
-                
                 access = rules.replaceAll("(?i)(\\[(((acc|realm):[^\\[\\]]*?)|d)\\])", "\00$1\01");
                 access = access.replaceAll("[^\01]+(\00|$)", "");
                 access = access.replaceAll("[\00\01]+", " ");

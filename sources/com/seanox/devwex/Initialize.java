@@ -36,7 +36,7 @@ import java.util.StringTokenizer;
  * Kombination von Initialize mit Section verwendet werden. So basiert die
  * nachfolgende Beschreibung auf der Kombination beider Komponenten.<br>
  * <br>
- * Das für die Konfiguration verwendete INI-Format ist eine kompatible
+ * Das f&uuml;r die Konfiguration verwendete INI-Format ist eine kompatible
  * Erweiterung zum klassischen Format. Es ist ebenfalls zeilenbasiert und
  * verwendet Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim
  * Namen von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung
@@ -248,7 +248,6 @@ public class Initialize implements Cloneable {
         while (tokenizer.hasMoreTokens()) {
 
             line = ((String)tokenizer.nextElement()).trim();
-            
             if (line.startsWith("[")) {
                 
                 buffer = new StringBuffer();
@@ -312,7 +311,8 @@ public class Initialize implements Cloneable {
         
         if (key != null)
             key = key.toUpperCase().trim();
-        if (key == null || key.isEmpty())
+        if (key == null
+                || key.isEmpty())
             return false;
         return this.entries.containsKey(key);
     }
@@ -362,9 +362,11 @@ public class Initialize implements Cloneable {
         
         if (key != null)
             key = key.toUpperCase().trim();
-        if (key == null || key.isEmpty())
+        if (key == null
+                || key.isEmpty())
             throw new IllegalArgumentException();
-        if (section == null && !this.smart)
+        if (section == null
+                && !this.smart)
             return (Section)this.entries.remove(key);
         if (section == null)
             section = new Section(this.smart);
@@ -380,7 +382,8 @@ public class Initialize implements Cloneable {
   
         if (key != null)
             key = key.toUpperCase().trim();
-        if (key == null || key.isEmpty())
+        if (key == null
+                || key.isEmpty())
             return null;
         return (Section)this.entries.remove(key);
     }

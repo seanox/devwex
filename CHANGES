@@ -20,6 +20,14 @@
   CR: Worker: Optimization / reduction of code
   CR: Remote: Optimization / reduction of code
   CR: Sources: Update of the comment format
+  CR: XAPI: Integration of cascaded initialization
+          e.g. com.seanox.xapi.Server > example.time.Sever
+      The initialization of the components is not based on inheritance, instead
+      it is based on the concatenation of calls, so that the function should be
+      supported by all components in the cascade.
+      The initialization is quasi delegated.
+      The approach allows to use different constructors and to add additional
+      ClassLoader layers independent of object-level inheritance.
 
 5.2.0 20190502
   BF: HTTP(S) Correction

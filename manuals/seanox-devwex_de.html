@@ -537,8 +537,9 @@
         </pre>
         <p>
           Optional kann &uuml;ber den Schl&uuml;ssel SCOPE das Paket in der sich
-          die Klasse befindet, festgelegt werden. Ohne diese Angabe wird das
-          Standard-Paket com.seanox.devewx verwendet.<br>
+          die Klasse befindet oder auch die vollqualifizierte Klasse, festgelegt
+          werden. Ohne diese Angabe werden das Standard-Paket com.seanox.devewx
+          verwendet und der Klassenname vom Namen der Sektion angeleitet.<br>
           Wird zu einer Sektion die auf INI endet keine Implementierung
           gefunden, wird diese ohne Fehlermeldung ignoriert.
         </p>
@@ -547,14 +548,22 @@
             SCOPE = package.of.class
             ...
 
+          [NAME:INI]
+            SCOPE = package.of.class.Implementation
+            ...
+
           [CLASS:IDENTIFIER:INI]
             SCOPE = package.of.class
             ...
+            
+          [NAME:IDENTIFIER:INI]
+            SCOPE = package.of.class.Implementation
+            ...
         </pre>
         <p>
-          Seanox Devwex enth&auml;lt einen HTTP-Server und eine auf Telnet
-          basierende Fern&uuml;berwachung, deren Konfiguration und Funktion in
-          den folgenden Abschnitten beschrieben werden.
+          In Seanox Devwex sind bereits ein HTTP-Server sowie eine auf Telnet
+          basierende Fern&uuml;berwachung implementiert, deren Konfiguration und
+          Funktion in den folgenden Abschnitten beschrieben werden.
         </p>
         <h3>Fern&uuml;berwachung</h3>
         <p>
@@ -955,9 +964,8 @@
           </tr>
         </table>
         <p>
-          Die Konfiguration und Verwendung der Zertifikate, ausgehend davon,
-          dass sich die Keystore-Datei im Arbeitsverzeichnis
-          <code>./devwex/program</code> befindet.<br>
+          Die Konfiguration der Zertifikate, wenn sich der Keystore im
+          Arbeitsverzeichnis <code>./devwex/program</code>.<br>
           Der Port ist frei w&auml;hlbar; als Standard wird f&uuml;r HTTPS der
           Port 443 verwendet.
         </p>
@@ -3185,6 +3193,23 @@
               }
           }
         </pre>
+        <h2>Kaskadierte Initialisierung</h2>
+        <p>
+          Die Initialisierung der Komponenten basiert dabei nicht auf Vererbung,
+          sondern durch die Verkettung von Aufrufen, womit die Funktion von
+          allen Komponente in der Kaskade unterst&uuml;tzt werden sollte.<br>
+          Die Initialisierung wird quasi delegiert.<br>
+          Der  Ansatz erm&ouml;glicht u.a. unabh&auml;ngig von der Vererbung auf
+          Objekt-Level unterschiedliche Konstruktoren zu verwenden und
+          ClassLoader-Schichten einzuf&uuml;gen.
+        </p>
+        <p>
+          Die Funktion ist f&uuml;r Module (XAPI) sowie Server (SAPI)
+          verf&uuml;gbar und wird direkt mit der Konfiguration der Erweiterung
+          festgelegt, indem die Kaskade getrennt durch das Pfeil-Symbol
+          <code>&gt;</code> beschrieben wird.   
+        </p>
+        <pre>package.Delegate > package.another.Delegate > ... > package.Target</pre>
         <h2>Entwicklungsumgebung (SDK)</h2>
         <p>
           F&uuml;r die Entwicklung und das Experimentieren mit Seanox Devwex

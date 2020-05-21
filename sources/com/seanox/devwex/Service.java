@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.1.1 20200503<br>
+ * Service 5.2.0 20200521<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.1.1 20200503
+ * @version 5.2.0 20200521
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -532,11 +532,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     context = (String)enumeration.nextElement();
                     if (!context.matches("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$"))
                         continue;
-
-                    string = context.replaceAll("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$", "$1").trim();
-                    scope  = service.initialize.get(context).get("scope", "com.seanox.devwex");
-                    string = string.substring(0, 1).toUpperCase().concat(string.substring(1).toLowerCase());
-                    string = scope.concat(".").concat(string);
                     
                     object = null;
 
@@ -545,7 +540,15 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         Service.print(String.format("SERVICE INITIATE %s", new Object[] {context.replaceAll(":[^:]+$", "").trim()}));
                         
                         //die Server Klasse wird geladen
-                        source = loader.loadClass(string);
+                        scope = service.initialize.get(context).get("scope", "com.seanox.devwex");
+                        scope = scope.replaceAll("\\s*>.*$", "");
+                        try {source = loader.loadClass(scope);
+                        } catch (ClassNotFoundException exception) {
+                            string = context.replaceAll("\\s*:.*$", "");
+                            string = string.substring(0, 1).toUpperCase().concat(string.substring(1).toLowerCase());
+                            string = scope.concat(".").concat(string);                        
+                            source = loader.loadClass(string);
+                        }
 
                         //der Server muss Runnable implementieren
                         if (!Runnable.class.isAssignableFrom(source))

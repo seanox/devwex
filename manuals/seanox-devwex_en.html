@@ -510,14 +510,26 @@
         </p>
         <pre>
           [CLASS:INI]
+            SCOPE = package.of.class
+            ...
+
+          [NAME:INI]
+            SCOPE = package.of.class.Implementation
             ...
 
           [CLASS:IDENTIFIER:INI]
+            SCOPE = package.of.class
+            ...
+            
+          [NAME:IDENTIFIER:INI]
+            SCOPE = package.of.class.Implementation
             ...
         </pre>
         <p>
           Optionally, the SCOPE key can be used to specify the package in which
-          the class is located. Without this key com.seanox.devewx is used.<br>
+          the class is located or the fully qualified class. Without this key,
+          the default package com.seanox.devewx is used and the class name is
+          derived from the section name.<br>
           If no implementation is found for a section ending on INI, it will be
           ignored without an error message.
         </p>
@@ -531,9 +543,9 @@
             ...
         </pre>
         <p>
-          Seanox Devwex includes an HTTP server and Telnet-based remote access
-          to control the runtime container, the configuration and function of
-          which is described in the following sections.
+          Seanox Devwex already has an HTTP server and Telnet-based remote
+          control implemented, the configuration and function of which are
+          described in the following sections.
         </p>
         <h3>Remote Control</h3>
         <p>
@@ -921,10 +933,8 @@
           </tr>
         </table>
         <p>
-          The configuration and use of the certificates, assuming that the
-          keystore file is located in the working directory
-          <code>./devwex/program</code>.
-          <br>
+          The configuration of the certificates, if the keystore is located in
+          the working directory <code>./devwex/program</code>.<br>
           The port is freely selectable; by default, HTTPS uses port 443.
         </p>
         <pre>
@@ -3096,6 +3106,21 @@
               }
           }
         </pre>
+        <h2>Cascaded Initialization</h2>
+        <p>
+          The initialization of the components is not based on inheritance,
+          instead it is based on the concatenation of calls, so that the
+          function should be supported by all components in the cascade.<br>
+          The initialization is quasi delegated.<br>
+          The approach allows to use different constructors and to add
+          additional ClassLoader layers independent of object-level inheritance.
+        </p>
+        <p>
+          The function is available for modules (XAPI) and servers (SAPI) and is
+          defined directly with the configuration of the extension.<br>
+          The cascade is described separately by the arrow symbol.   
+        </p>
+        <pre>package.Delegate > package.another.Delegate > ... > package.Target</pre>
         <h2>Development Environment (SDK)</h2>
         <p>
           For development and experimenting with Seanox Devwex, a special

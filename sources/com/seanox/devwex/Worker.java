@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3.0 20200503<br>
+ * Worker 5.3.0 20200525<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200503
+ * @version 5.3.0 20200525
  */
 class Worker implements Runnable {
   
@@ -2141,7 +2141,7 @@ class Worker implements Runnable {
             entries[2] = String.format("%tF %<tT", new Object[] {new Date(file.lastModified())});
 
             //die Groesse wird ermittelt, nicht aber bei Verzeichnissen
-            string = file.isDirectory() ? "-" : String.format(Locale.US, "%,d", new Object[] {Long.valueOf(file.length())});
+            string = file.isDirectory() ? "-" : String.valueOf(file.length());
             
             //die Groesse wird an der ersten Stelle mit dem Character erweitert
             //welches sich aus der Laenge der Groesse ergibt um diese nach
@@ -2165,7 +2165,6 @@ class Worker implements Runnable {
 
         //die Dateiliste wird sortiert
         Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
-
         if (reverse)
             Collections.reverse(storage);
         
@@ -2213,7 +2212,7 @@ class Worker implements Runnable {
             query = query.concat(" x");
         values.put("sort", query);
 
-        values.put("file", list);
+        values.put("files", list);
         generator.set(values);
 
         return generator.extract();

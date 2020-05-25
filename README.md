@@ -160,6 +160,7 @@ CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 4
 CR: HTTP(S) - CGI: Update of the PHP preparation  
 CR: HTTP(S) - CGI: Change of the option [P] to [D]  
 CR: HTTP(S) - Directory Index: Optimization / reduction of code  
+CR: HTTP(S) - Directory Index: Omission of the formatting of the file size  
 CR: Worker: Optimization / reduction of code  
 CR: Remote: Optimization / reduction of code  
 CR: Sources: Update of the comment format  

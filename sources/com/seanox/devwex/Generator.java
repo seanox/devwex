@@ -56,8 +56,8 @@ import java.util.Map;
  * wiederholende rekursive Strukturen.
  *
  * <h3>Beschreibung der Syntax</h3>
- * Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung und ist
- * auf folgende Zeichen begrenzt:
+ * Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung, muss mit
+ * einem Buchstaben beginnen und ist auf folgende Zeichen begrenzt:
  *     <dir>{@code a-z A-Z 0-9 _-}</dir>
  *     
  * <h3>Struktur und Beschreibung der Platzhalter</h3>

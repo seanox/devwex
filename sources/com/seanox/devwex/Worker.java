@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3.0 20200525<br>
+ * Worker 5.3.0 20200609<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200525
+ * @version 5.3.0 20200609
  */
 class Worker implements Runnable {
   
@@ -2212,7 +2212,7 @@ class Worker implements Runnable {
             query = query.concat(" x");
         values.put("sort", query);
 
-        values.put("files", list);
+        values.put("file", list);
         generator.set(values);
 
         return generator.extract();

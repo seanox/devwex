@@ -37,11 +37,11 @@ import java.util.Map;
  * Platzhaltern, wobei die Gross-/Kleinschreibung ignoriert wird, werden die
  * Platzhalter durch die Werte ersetzt.<br>
  * <br>
- * Der Generator arbeitet aus Byte-Level.<br>
+ * Der Generator arbeitet auf Byte-Level.<br>
  * Werte werden daher prim&auml;r als byte-Arrays erwartet. Anderen Datentypen
  * werden mittels {@code String.valueOf(value).getBytes()} konvertiert.<br>
  * <br>
- * Platzhalter lassen sich auch als Segmente verwenden.<br>
+ * Platzhalter lassen sich f&uuml;r Einzelwerte und Segmente verwenden.<br>
  * Segmente sind Teilstrukturen, die bis zu einer Tiefe von 65535 Ebenen
  * verschachtelt werden k&ouml;nnen. Diese Teilstrukturen lassen sich global
  * oder per Segment-Name dediziert/partiell verwenden und bef&uuml;llen.<br>
@@ -161,13 +161,13 @@ public class Generator {
     }
     
     /**
-     * Ermittelt ob an der angegebenen Position in einem Model(Fragmet) ein
-     * gueltiger Platzhalter beginnt. In dem Fall wird die Laenge des kompletten
-     * Platzhalters zurueckgegeben. Kann kein Platzhalter ermittelt werden, wird
-     * die Laenge 0 zurueckgegeben. Liegen im Model keine weiteren Daten zur
+     * Ermittelt ob an der angegebenen Position in einem Model(Segment) ein
+     * g&uuml;ltiger Platzhalter beginnt. In dem Fall wird die L&auml;nge des
+     * Platzhalters zur&uuml;ckgegeben. Kann kein Platzhalter ermittelt werden,
+     * ist der R&uuml;ckgabewert 0. Liegen im Model keine weiteren Daten zur 
      * Analyse vor (Datenende ist erreicht) wird ein negativer Wert
-     * zurueckgegeben.
-     * @param  model  Model(Fragmet)
+     * zur&uuml;ckgegeben.
+     * @param  model  Model(Segment)
      * @param  cursor Position
      * @return die Position des n&auml;chsten Platzhalters oder Segments, sonst
      *     ein negativer Wert
@@ -347,7 +347,7 @@ public class Generator {
      * @param  scope  Scope bzw. Segment
      * @param  values Werte
      * @param  clean  {@code true} zur finalen Bereinigung
-     * @return das bef&uuml;llte Model(Fragment)
+     * @return das bef&uuml;llte Model(Segment)
      */    
     private byte[] assemble(String scope, Map values, boolean clean) {
         

@@ -15,7 +15,7 @@
 # Description
 Seanox Devwex is a minimalist runtime container with a modular architecture for
 (web) servers and applications. The included server instances support HTTP with
-virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory index,
+virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory listing,
 templates and a telnet-based remote access to container control. Additional
 servers and modules/applications can be integrated via the available APIs. The
 runtime container with the servers is a pure Java implementation and can be used
@@ -31,7 +31,7 @@ supports the loading and unloading of servers and modules at the runtime.
 
 ## Hypertext Transfer Protocol
 The HTTP server implementation provides virtual hosting, filters, HTTP modules,
-SSL/TLS, XCGI/CGI1.1, directory index, templates and more.  
+SSL/TLS, XCGI/CGI1.1, directory listing, templates and more.  
 In accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS PUT
 and DELETE are supported by HTTP 1.1 and other methods can be provided via HTTP
 modules, XCGI and CGI. 
@@ -97,7 +97,7 @@ The HTTP server supports virtual hosting and aliasing for virtual paths.
 
 ## Individuality
 HTTP servers and virtual hosts use customizable templates for the error pages
-and list view of the directories (directory index). With support for CGI
+and list view of the directories (directory listing). With support for CGI
 environment variables, the content can be designed dynamically. 
 
 ## Expandability
@@ -159,8 +159,8 @@ CR: HTTP(S) - Status: Added option [H] (Header Only)
 CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405  
 CR: HTTP(S) - CGI: Update of the PHP preparation  
 CR: HTTP(S) - CGI: Change of the option [P] to [D]  
-CR: HTTP(S) - Directory Index: Optimization / reduction of code  
-CR: HTTP(S) - Directory Index: Omission of the formatting of the file size  
+CR: HTTP(S) - Directory Listing: Optimization / reduction of code  
+CR: HTTP(S) - Directory Listing: Omission of the formatting of the file size  
 CR: Worker: Optimization / reduction of code  
 CR: Remote: Optimization / reduction of code  
 CR: Sources: Update of the comment format  

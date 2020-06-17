@@ -17,6 +17,7 @@
   CR: HTTP(S) - CGI: Change of the option [P] to [D]
   CR: HTTP(S) - Directory Index: Optimization / reduction of code
       Generation of the file list in the Generator instead of the Worker.
+  CR: HTTP(S) - Directory Index: Change from placeholder 'files' to 'file'
   CR: HTTP(S) - Directory Index: Omission of the formatting of the file size
       Approach: The directory index should only provide locale independent data.
       The formatting can later be done with CSS.      

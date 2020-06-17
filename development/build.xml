@@ -53,9 +53,7 @@
         match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
         replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
       <replaceregexp file="${workspace}/CHANGES.tmp" match="x+" replace="0000" flags="g" byline="false"/>
-      <loadproperties>
-        <file file="${workspace}/CHANGES.tmp"/>
-      </loadproperties>
+      <loadproperties srcfile="${workspace}/CHANGES.tmp"/>
       <delete file="${workspace}/CHANGES.tmp"/>
     </sequential>
   </macrodef>  
@@ -209,9 +207,7 @@
     
     <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
     <replaceregexp file="${workspace}/CHANGES.tmp" match="(?s)(?:^|^(?:.*?[\r\n]+))(\d(?:\.\d)+) \d+\s.*$" replace="release.version.current=\1" byline="false"/>
-    <loadproperties>
-      <file file="${workspace}/CHANGES.tmp"/>
-    </loadproperties>
+    <loadproperties srcfile="${workspace}/CHANGES.tmp"/>
     <delete file="${workspace}/CHANGES.tmp"/>
     <replaceregexp file="${workspace}/README.md"
       match="(Seanox Devwex )\d+(\.\d+)*" flags="g" byline="false"

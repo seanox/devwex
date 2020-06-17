@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.2.0 20200521<br>
+ * Service 5.3.0 20200617<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20200521
+ * @version 5.3.0 20200617
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -209,12 +209,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
     /** Konfiguration des Services */
     private volatile Initialize initialize;
-    
-    /** Liste der initialisierten Module */
-    private volatile Hashtable modules;
 
     /** Liste der eingerichteten Server */
     private volatile Vector servers;
+    
+    /** Liste der initialisierten Module */
+    private volatile Hashtable modules;
 
     /** Betriebsstatus des Services */
     private volatile int status;
@@ -247,8 +247,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     private Service() {
 
         this.initialize = new Initialize(true);
-        this.modules    = new Hashtable();
         this.servers    = new Vector();
+        this.modules    = new Hashtable();
     }
 
     /**
@@ -298,8 +298,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     || module == null)
                 return null;            
             
-            //Das Modul wird aus der Modulliste ermittelt, ist dieses noch
-            //nicht registriert, wird es neu initialisiert und eingetragen.
+            //Das Modul wird aus der Modulliste ermittelt, ist dieses noch nicht
+            //registriert, wird es neu initialisiert und eingetragen.
             //Wenn Module nicht richtig beendet werden koennen, bleiben diese
             //ebenfall erhalten und benutzen dann noch den alten ClassLoader.
             //Das Verhalten ist gewollt, damit kein Zombies erzeugt werden.
@@ -310,14 +310,20 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             
             Service.print(("SERVICE INITIATE MODULE ").concat(module.getName()));
             
-            //Module muessen ueber diese Methode verfuegen
-            module.getMethod("destroy", new Class[0]);
+            //Die Mindestimplementierung der Modul-API wird per Reflections
+            //geprueft und erwartet einen passenden Konstruktor sowie eine
+            //destroy-Methode.
+            //Ein Interface ist wegen der Groesse nicht verfuegbar.
             
-            //die Instanz vom Modul wird eingerichtet
-            object = module.getConstructor(new Class[] {String.class});
-            object = ((Constructor)object).newInstance(new Object[] {options});
+            try {
+                module.getMethod("destroy", new Class[0]);
+                object = module.getConstructor(new Class[] {String.class});
+            } catch (NoSuchMethodException exception) {
+                throw new NoSuchMethodException("Invalid interface");
+            }
 
-            //das Modul wird registriert
+            //die Instanz vom Modul wird eingerichtet und registriert 
+            object = ((Constructor)object).newInstance(new Object[] {options});
             service.modules.put(module, object);
          
             return object;
@@ -371,12 +377,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             //die Zeitpunkt der Initialisierung wird ermittelt
             timing = System.currentTimeMillis();
 
-            //der Service wird gesetzt wenn keine statische Instanz vorliegt
+            //wenn noch nicht initialisiert, wird der Service als Singleton mit
+            //globalem Exception Handler eingerichtet
             if (Service.service == null) {
-
                 Service.service = new Service();
-                
-                //der globale Exception Handler wird gesetzt
                 Thread.setDefaultUncaughtExceptionHandler(Service.service);
             }
             
@@ -390,29 +394,21 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 Service.print(("SERVICE INITIATE ").concat(mode == Service.RESTART ? "RESTART" : "STOP"));
                 
-                //alle registrierten Server werden ermittelt
+                //alle registrierten Server werden zum Beenden aufgefordert
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
-
-                    //der Server wird angefordert
                     object = ((Object[])enumeration.nextElement())[0];
-
-                    //der Server wird zum Beenden aufgefordert
                     try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
                     } catch (Throwable throwable) {
                         Service.print(throwable);
                     }
                 }
 
-                //alle registrierten Module werden ermittelt
+                //alle registrierten Module werden zum Beenden aufgefordert,
+                //dabei werden alle Modul aus der Modulliste entfernt
                 enumeration = service.modules.keys();
                 while (enumeration.hasMoreElements()) {
-
-                    //das Modul wird aus der Modulliste entfernt
-                    //und dabei die Instanz vom Modul ermittelt
                     object = service.modules.remove(enumeration.nextElement());
-
-                    //der Modul wird zum Beenden aufgefordert                    
                     try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
                     } catch (Throwable throwable) {
                         Service.print(throwable);
@@ -423,13 +419,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     
                     //Alle aktiven Server werden ermittelt und durchsucht.
                     //Bei noch laufenden Servern wird gewartet bis diese enden.
+                    //Inaktive Server werden aus der Serverliste entfernt
                     enumeration = ((Vector)service.servers.clone()).elements();
                     while (enumeration.hasMoreElements()) {
-
-                        //der Server wird angefordert
-                        //inaktive Server werden aus der Serverliste entfernt
                         object = enumeration.nextElement();
-                        if (!((Thread)((Object[])object)[1]).isAlive())
+                        thread = (Thread)((Object[])object)[1];
+                        if (thread == null
+                                || !thread.isAlive())
                             service.servers.remove(object);
                     }
 
@@ -543,32 +539,46 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         scope = service.initialize.get(context).get("scope", "com.seanox.devwex");
                         scope = scope.replaceAll("\\s*>.*$", "");
                         try {source = loader.loadClass(scope);
-                        } catch (ClassNotFoundException exception) {
+                        } catch (ClassNotFoundException exception1) {
                             string = context.replaceAll("\\s*:.*$", "");
                             string = string.substring(0, 1).toUpperCase().concat(string.substring(1).toLowerCase());
                             string = scope.concat(".").concat(string);                        
-                            source = loader.loadClass(string);
+                            try {source = loader.loadClass(string);
+                            } catch (ClassNotFoundException exception2) {
+                                throw new ClassNotFoundException();
+                            }
                         }
-
-                        //der Server muss Runnable implementieren
-                        if (!Runnable.class.isAssignableFrom(source))
-                            throw new NoSuchMethodException(Runnable.class.getName());
                         
-                        //Server muessen ueber diese Methode verfuegen
-                        source.getMethod("destroy", new Class[0]);
+                        //Die Mindestimplementierung der Server-API wird per
+                        //Reflections geprueft und erwartet einen passenden
+                        //Konstruktor sowie eine destroy-Methode.
+                        //Ein Interface ist wegen der Groesse nicht verfuegbar.
 
-                        //der Server wird eingerichtet
-                        object = source.getConstructor(new Class[] {String.class, Object.class});
+                        try {
+                            source.getMethod("destroy", new Class[0]);
+                            object = source.getConstructor(new Class[] {String.class, Object.class});
+                        } catch (NoSuchMethodException exception) {
+                            throw new NoSuchMethodException("Invalid interface");
+                        }
+                        
                         object = ((Constructor)object).newInstance(new Object[] {context, service.initialize.clone()});
-
-                        //der Server Thread wird eingerichtet
-                        thread = new Thread((Runnable)object);
-
-                        //der Server Thread wird als Daemon verwendet
-                        thread.setDaemon(true);
-
-                        //der Server Thread wird gestartet
-                        thread.start();
+                        
+                        //Die Implementierung von Runnable ist optional.
+                        //Server koennen auch durch andere Module initialisiert
+                        //werden, z.B. wenn die Server einen eigenen ClassLoader
+                        //verwenden sollen. Womit hier auch ein Server-Modul
+                        //aufgerufen werden kann. Server-Modul haben den
+                        //gleichen Konstruktor ohne Runnable zu implementieren.
+                        
+                        thread = null;
+                        if (Runnable.class.isAssignableFrom(source)) {
+                            
+                            //Mit Implementierung vom Runnable-Interface wird
+                            //der Thread als Daemon eingerichtet und gestartet. 
+                            thread = new Thread((Runnable)object);
+                            thread.setDaemon(true);
+                            thread.start();
+                        }
 
                         //der Server wird mit Thread registriert
                         service.servers.add(new Object[] {object, thread});

@@ -1219,7 +1219,6 @@ class Worker implements Runnable {
                     if (cursor == 4)
                         break;
 
-
                 } else {
 
                     //der Datenstrom wird auf Ende geprueft

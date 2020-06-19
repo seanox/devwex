@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.3.0 20200617<br>
+ * Service 5.3.0 20200619<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200617
+ * @version 5.3.0 20200619
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -545,7 +545,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                             string = scope.concat(".").concat(string);                        
                             try {source = loader.loadClass(string);
                             } catch (ClassNotFoundException exception2) {
-                                throw new ClassNotFoundException();
+                                throw exception1;
                             }
                         }
                         

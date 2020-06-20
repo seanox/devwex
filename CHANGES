@@ -1,27 +1,27 @@
 5.3.0 202007xx
-  BF: HTTP(S) - AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)
-  BF: HTTP(S) - Content Types: Correction of xml/xsl/xslt to use application/xslt+xml
-  BF: HTTP(S) - Request: Correction of the request validation
+  BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)
+  BF: HTTP(S) Content Types: Correction of xml/xsl/xslt to use application/xslt+xml
+  BF: HTTP(S) Request: Correction of the request validation
       In some cases the request is aborted with status 400 when the network connector is busy,
       because the worker assumed that no data is being sent.
       Statuses 408 and 413 may have been overwritten with status 400.
   BF: Manual: Correction for chrome-based browsers
   CR: Project: Automatic update of the version in README.md
   CR: Build: Harmonization when updating the version
-  CR: HTTP(S) - Status: Added option [H] (Header Only)
+  CR: HTTP(S) Status: Added option [H] (Header Only)
       The option is used in devwex.ini section STATUSCODES and indicates a status,
       so that requests with this status are answered only with a header and without body.
-  CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405
+  CR: HTTP(S) CGI: Not allowed/configured methods are now answered with status 405
       Previously the requests were answered with status 403.
-  CR: HTTP(S) - CGI: Update of the PHP preparation
-  CR: HTTP(S) - CGI: Change of the option [P] to [D]
-  CR: HTTP(S) - Directory Index: Optimization / reduction of code
+  CR: HTTP(S) CGI: Update of the PHP preparation
+  CR: HTTP(S) CGI: Change of the option [P] to [D]
+  CR: HTTP(S) Directory Index: Optimization / reduction of code
       Generation of the file list in the Generator instead of the Worker.
-  CR: HTTP(S) - Directory Index: Change from placeholder 'files' to 'file'
-  CR: HTTP(S) - Directory Index: Omission of the formatting of the file size
+  CR: HTTP(S) Directory Index: Change from placeholder 'files' to 'file'
+  CR: HTTP(S) Directory Index: Omission of the formatting of the file size
       Approach: The directory index should only provide locale independent data.
       The formatting can later be done with CSS.      
-  CR: HTTP(S) - Directory Index: Realignment of the column 'type' 
+  CR: HTTP(S) Directory Index: Realignment of the column 'type' 
   CR: Worker: Optimization / reduction of code
   CR: Remote: Optimization / reduction of code
   CR: Sources: Update of the comment format
@@ -38,7 +38,7 @@
   BF: HTTP(S) Correction
       - Basic Authentication / Digest Access Authentication: rules are used again case-insentive
   BF: Generator: Correction when rendering successive placeholders #[...]#[...]
-  BF: HTTP(S) - Request: Optimization/correction for invalid requests/connections without data streams
+  BF: HTTP(S) Request: Optimization/correction for invalid requests/connections without data streams
   CR: Generator: Optimization / Review
       - Optimization: Handling of segments/scopes/fragements
         Improvement of dedicated and partial use
@@ -49,7 +49,7 @@
       - Change of the parser/renderer:
         The template is initially prepared, the later addition of placeholders and/or
         segments is no longer supported.
-  CR: HTTP(S) - AccessLog: Optimization
+  CR: HTTP(S) AccessLog: Optimization
       - Change to a print formatted syntax
         date/time %t... variables %[...]
       - Change in default structure from filename to: <host>_<date>-access.log    

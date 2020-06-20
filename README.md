@@ -159,8 +159,10 @@ CR: HTTP(S) - Status: Added option [H] (Header Only)
 CR: HTTP(S) - CGI: Not allowed/configured methods are now answered with status 405  
 CR: HTTP(S) - CGI: Update of the PHP preparation  
 CR: HTTP(S) - CGI: Change of the option [P] to [D]  
-CR: HTTP(S) - Directory Listing: Optimization / reduction of code  
-CR: HTTP(S) - Directory Listing: Omission of the formatting of the file size  
+CR: HTTP(S) - Directory Index: Optimization / reduction of code  
+CR: HTTP(S) - Directory Index: Change from placeholder 'files' to 'file'  
+CR: HTTP(S) - Directory Index: Omission of the formatting of the file size  
+CR: HTTP(S) - Directory Index: Realignment of the column 'type'  
 CR: Worker: Optimization / reduction of code  
 CR: Remote: Optimization / reduction of code  
 CR: Sources: Update of the comment format  

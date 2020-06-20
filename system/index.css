@@ -33,7 +33,7 @@ table {
   border-collapse:collapse;
   border-bottom:2px solid #FFAA44;
 }
-table tr td div {
+table tr td:not(:nth-child(2)) div {
   padding-left:48px;
 }
 
@@ -45,7 +45,7 @@ table thead th {
   text-align:right;
   border-bottom:2px solid #FFAA44;
 }
-table thead th:first-child {
+table thead th:nth-child(-n+2) {
   text-align:left;
 }
 table thead h3 {
@@ -56,8 +56,8 @@ table thead a[href='?n']:before,
 table thead a[href='?N']:before {
   content:'Name';
 }
-table thead a[href='?t']:after,
-table thead a[href='?T']:after {
+table thead a[href='?t']:before,
+table thead a[href='?T']:before {
   content:'Type';
 }
 table thead a[href='?s']:after,
@@ -86,8 +86,8 @@ table.da thead a[href='?D'] {
 }
 table thead a[href='?n']:after,
 table thead a[href='?N']:after,
-table thead a[href='?t']:before,
-table thead a[href='?T']:before,
+table thead a[href='?t']:after,
+table thead a[href='?T']:after,
 table thead a[href='?s']:before,
 table thead a[href='?S']:before,
 table thead a[href='?d']:before,
@@ -99,14 +99,14 @@ table thead a[href='?D']:before {
   content:' ';
 }
 table.na thead a[href='?N']:after,
-table.ta thead a[href='?T']:before,
+table.ta thead a[href='?T']:after,
 table.sa thead a[href='?S']:before,
 table.da thead a[href='?D']:before {
   top:0.325em;
   border-top-color:#FFAA44;
 }
 table.nd thead a[href='?n']:after,
-table.td thead a[href='?t']:before,
+table.td thead a[href='?t']:after,
 table.sd thead a[href='?s']:before,
 table.dd thead a[href='?d']:before {
   top:-0.08em;
@@ -153,7 +153,7 @@ table tbody tr td {
   vertical-align:top;
   padding:1em 0em;
 }
-table tbody tr td + td {
+table tbody tr td:nth-child(n+3) {
   text-align:right;
 }
 table tbody tr + tr td {

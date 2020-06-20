@@ -26,7 +26,7 @@
   CR: Remote: Optimization / reduction of code
   CR: Sources: Update of the comment format
   CR: XAPI: Integration of cascaded initialization
-          e.g. com.seanox.xapi.Server > example.time.Sever
+          e.g. com.seanox.xapi.Server > example.time.Server
       The initialization of the components is not based on inheritance, instead
       it is based on the concatenation of calls, so that the function should be
       supported by all components in the cascade.

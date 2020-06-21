@@ -33,9 +33,6 @@ table {
   border-collapse:collapse;
   border-bottom:2px solid #FFAA44;
 }
-table tr td:not(:nth-child(2)) div {
-  padding-left:48px;
-}
 
 
 
@@ -47,6 +44,16 @@ table thead th {
 }
 table thead th:nth-child(-n+2) {
   text-align:left;
+}
+table thead th  {
+  padding-left:0.5em;
+  padding-right:0.5em;
+}
+table thead th:first-child {
+  padding-left:0em;
+}
+table thead th:last-child {
+  padding-right:0em;
 }
 table thead h3 {
   margin-top:0px;
@@ -151,7 +158,15 @@ table.x tbody {
 /** table body */
 table tbody tr td {
   vertical-align:top;
-  padding:1em 0em;
+  padding:1em 0.5em;
+}
+table tbody tr td:first-child {
+  vertical-align:top;
+  padding-left:0em;
+}
+table tbody tr td:last-child {
+  vertical-align:top;
+  padding-right:0em;
 }
 table tbody tr td:nth-child(n+3) {
   text-align:right;
@@ -163,6 +178,9 @@ table tbody tr + tr td {
 
 
 /** column icon */
+table tbody tr td:first-child div {
+  padding-left:48px;
+}
 table tbody tr.directory div + div:before,
 table tbody tr.file div + div:before {
   position:absolute;

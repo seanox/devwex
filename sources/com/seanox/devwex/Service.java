@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.3.0 20200619<br>
+ * Service 5.3.0 20200621<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200619
+ * @version 5.3.0 20200621
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -782,7 +782,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             
             //fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
             //oder ein alternatives Programmargument verwendet
-            address = options.length > 0 ? options[1] : null;
+            address = options.length > 1 ? options[1] : null;
             address = address == null ? "" : address.trim();
             
             port = address.replaceAll("^(.*?)(?::(\\d+)){0,1}$", "$2").trim();

@@ -33,6 +33,7 @@
       The initialization is quasi delegated.
       The approach allows to use different constructors and to add additional
       ClassLoader layers independent of object-level inheritance.
+      Inheritance can still be used, also in combination.
 
 5.2.0 20190502
   BF: HTTP(S) Correction

@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.3.0 20200621<br>
+ * Service 5.3.0 20200623<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200621
+ * @version 5.3.0 20200623
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -316,8 +316,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             //Ein Interface ist wegen der Groesse nicht verfuegbar.
             
             try {
-                module.getMethod("destroy", new Class[0]);
-                object = module.getConstructor(new Class[] {String.class});
+                module.getMethod("destroy");
+                object = module.getConstructor(String.class);
             } catch (NoSuchMethodException exception) {
                 throw new NoSuchMethodException("Invalid interface");
             }
@@ -398,7 +398,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
                     object = ((Object[])enumeration.nextElement())[0];
-                    try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
+                    try {object.getClass().getMethod("destroy").invoke(object);
                     } catch (Throwable throwable) {
                         Service.print(throwable);
                     }
@@ -409,7 +409,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 enumeration = service.modules.keys();
                 while (enumeration.hasMoreElements()) {
                     object = service.modules.remove(enumeration.nextElement());
-                    try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
+                    try {object.getClass().getMethod("destroy").invoke(object);
                     } catch (Throwable throwable) {
                         Service.print(throwable);
                     }
@@ -555,8 +555,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         //Ein Interface ist wegen der Groesse nicht verfuegbar.
 
                         try {
-                            source.getMethod("destroy", new Class[0]);
-                            object = source.getConstructor(new Class[] {String.class, Object.class});
+                            source.getMethod("destroy");
+                            object = source.getConstructor(String.class, Object.class);
                         } catch (NoSuchMethodException exception) {
                             throw new NoSuchMethodException("Invalid interface");
                         }
@@ -590,7 +590,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         //das Beenden des Servers wird angestossen
                         if (object != null
                                 && !(object instanceof Constructor)) {
-                            try {object.getClass().getMethod("destroy", new Class[0]).invoke(object, new Object[0]);
+                            try {object.getClass().getMethod("destroy").invoke(object);
                             } catch (Throwable error) {
                                 Service.print(error);
                             }
@@ -688,7 +688,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     object = enumeration.nextElement();
                     
                     //die Modulkennung wird ueber Caption ermittelt
-                    try {caption = object.getClass().getMethod("explain", new Class[0]).invoke(object, new Object[0]);
+                    try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }
@@ -708,7 +708,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     object = ((Object[])enumeration.nextElement())[0];
 
                     //die Serverkennung wird ueber Caption ermittelt
-                    try {caption = object.getClass().getMethod("explain", new Class[0]).invoke(object, new Object[0]);
+                    try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }

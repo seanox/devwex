@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3.0 20200609<br>
+ * Worker 5.3.0 20200623<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200609
+ * @version 5.3.0 20200623
  */
 class Worker implements Runnable {
   
@@ -613,10 +613,10 @@ class Worker implements Runnable {
             string = null;
         
         //die Methode fuer den Modul-Einsprung wird ermittelt
-        method = object.getClass().getMethod(invoke, new Class[] {Object.class, String.class});
+        method = object.getClass().getMethod(invoke, Object.class, String.class);
         
         //die Methode fuer den Modul-Einsprung wird aufgerufen
-        method.invoke(object, new Object[] {this, string});
+        method.invoke(object, this, string);
         
         return true;
     }

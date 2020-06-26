@@ -64,7 +64,7 @@
           Seanox Devwex is a minimalist runtime container with a modular
           architecture for (web)servers and applications. The included server
           implementation support HTTP with virtual hosting, filters, modules,
-          SSL/TLS, XCGI/CGI1.1, directory index, templates and a Telnet-base
+          SSL/TLS, XCGI/CGI1.1, directory listing, templates and a Telnet-base
           remote access to control the container.<br>
           Additional servers and modules/applications can be integrated via the
           available APIs. The runtime container and the servers are a pure Java
@@ -115,7 +115,7 @@
         <h2>Hypertext Transfer Protocol</h2>
         <p>
           The HTTP server implementation provides virtual hosting, filters,
-          HTTP modules, SSL/TLS, XCGI/CGI1.1, directory index, templates and
+          HTTP modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and
           more.
         </p>
         <h2>Remote Control</h2>
@@ -203,7 +203,7 @@
         <h2>Individuality</h2>
         <p>
           HTTP servers and virtual hosts use customizable templates for the
-          error pages and list view of the directories (directory index). With
+          error pages and list view of the directories (directory listing). With
           support for CGI environment variables, the content can be designed
           dynamically.
         </p>
@@ -775,7 +775,7 @@
               <td>ON|OFF</td>
               <td>
                 Option for displaying directories as a navigable list view
-                (Directory Index).<br>
+                (Directory Listing).<br>
                 With the addition <code>[S]</code> hidden entries of the file
                 system can be suppressed for display.
               </td>
@@ -1255,7 +1255,7 @@
             <td>VARIABLE</td>
             <td>...</td>
             <td>
-              All CGI variables are available to the filter.
+              All environmental variables / CGI variables are available to the filter.
             </td>
           </tr>
           <tr>
@@ -1301,10 +1301,10 @@
           User-Agent: Browser
         </pre>
         <p>
-          The CGI variables and values depend on the request header and the
-          request body is not read out for filters, which means that data and
-          parameters such as those passed in the body for the HTTP method
-          <code>POST</code> are not available.
+          The environmental variables / CGI variables and values depend on the
+          request header and the request body is not read out for filters, which
+          means that data and parameters such as those passed in the body for
+          the HTTP method <code>POST</code> are not available.
         </p>
         <header>
           Overview of available variables (selection):
@@ -1743,6 +1743,117 @@
             but some browsers will ask you again at directory level.
           </p>
         </section>
+        <h3>Directory Listing</h3>
+        <p>
+        
+          The content of directory listings is based on the template file
+          <code>./devwex/system/index.html</code>.<br>
+          Through the configuration of <code>SYSROOT</code>, the directory and
+          thus the template can be individually defined for servers and virtual
+          hosts.<br>
+          The template is pure HTML combined with placeholders for the template
+          generator. The syntax of the placeholders <code>#[...]</code> is
+          case-insensitive, must begin with a letter and is limited to the
+          following characters: <code>a-z A-Z 0-9 _-</code>.<br>
+          Placeholders can be used for single values and segments.<br>
+          Segments are partial structures that can be nested. The placeholders
+          of segments are retained after filling and can be reused
+          iteratively.<br>
+          As values for segments, collections and maps are expected. Both create
+          deep, complex and possibly repetitive recursive structures.
+        </p>
+        <header>
+          Structure and description of the placeholders:
+        </header>
+        <table>
+          <tr>
+            <th>Syntax</th>
+            <th>Description</th>
+          </tr>        
+          <tr>
+            <td nowrap="nowrap">
+              #[value]
+            </td>
+            <td>
+              Inserts the value for <code>value</code> and removes the
+              placeholder.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[segment[[...]]]
+            </td>
+            <td>
+              Defines a segment. The nesting and use of further segments is
+              possible.<br>
+              Because the placeholders of segments are retained, they can be
+              used to generate lists.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[0x0A]<br>
+              #[0x4578616D706C6521]
+            </td>
+            <td>
+              Escaping one or more characters.<br>
+              The conversion only takes place when the template is generated.
+            </td>
+          </tr>
+        </table>
+        <header>
+          The following placeholders are available for the directory listing:
+        </header>
+        <table>
+          <tr>
+            <th>Placeholder</th>
+            <th>Description</th>
+          </tr>        
+          <tr>
+            <td nowrap="nowrap">
+              #[location[[<br>
+              &nbsp;&nbsp;#[path]<br>
+              &nbsp;&nbsp;#[name]<br>
+              ]]]<br>
+            </td>
+            <td>
+              Iteration over the components path and name of the location (URL).
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[sort]
+            </td>
+            <td>
+              Indicator of sorting, which can be used for CSS, among other
+              things.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[file[[<br>
+              &nbsp;&nbsp;#[case]<br>
+              &nbsp;&nbsp;#[mime]<br>
+              &nbsp;&nbsp;#[name]<br>
+              &nbsp;&nbsp;#[type]<br>
+              &nbsp;&nbsp;#[size]<br>
+              &nbsp;&nbsp;#[date]<br>
+              ]]]
+            </td>
+            <td>
+              Iteration over the file list.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[HTTP_...]
+            </td>
+            <td>
+              Placeholder for the environment variables / CGI variables which
+              are available with the request
+            </td>
+          </tr>          
+        </table>                
         <h3>Environmental Variables</h3>
         <p>
           With environment variables, the operating system and runtime
@@ -2901,7 +3012,7 @@
               public void destroy {
                   ...
 
-                  The module is requested to close before being unloaded by the
+                  The server is requested to close before being unloaded by the
                   service and ClassLoader. The resources, data streams and
                   processes initiated or used by the module should be closed or
                   terminated with this call.
@@ -3033,7 +3144,7 @@
                   answers it. If the request is to be answered with a server
                   status only, the filter method can set it and does not have to
                   answer the request itself. In this case, the answer is
-                  provided by the downstream worker implementation.
+                  provided by the initial worker implementation.
               }
 
               public void destroy() {
@@ -3093,7 +3204,7 @@
                   and answers it. If the request is to be answered with a server
                   status only, the service method can set this status and does
                   not have to answer the request itself. In this case, the
-                  answer is provided by the downstream worker implementation.
+                  answer is provided by the initial worker implementation.
               }
 
               public void destroy() {

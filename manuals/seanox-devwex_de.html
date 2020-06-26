@@ -65,7 +65,7 @@
           modularen Architektur f&uuml;r (Web)Server und Anwendungen. Die
           enthaltene Server-Implementierung unterst&uuml;tzt u.a. das HTTP mit
           Virtual Hosting, Filtern, HTTP-Modulen, SSL/TLS, XCGI/CGI1.1,
-          Directory Index, Templates und einem auf Telnet basierenden
+          Directory Listing, Templates und einem auf Telnet basierenden
           Fernzugriff zur Steuerung des Laufzeit-Containers.<br>
           Weitere Server und Module sowie Anwendungen lassen sich &uuml;ber die
           verf&uuml;gbaren APIs einbinden. Der Laufzeit-Container und die
@@ -117,7 +117,7 @@
         <h2>Hypertext Transfer Protocol</h2>
         <p>
           Die enthaltene HTTP-Server-Implementierung unterst&uuml;t u.a. Virtual
-          Hosting, Filter, HTTP-Module, SSL/TLS, XCGI/CGI1.1, Directory Index,
+          Hosting, Filter, HTTP-Module, SSL/TLS, XCGI/CGI1.1, Directory Listing,
           Templates.
         </p>
         <h2>Fern&uuml;berwachung</h2>
@@ -209,7 +209,7 @@
         <h2>Individualit&auml;t</h2>
         <p>
           HTTP-Server und virtuelle Hosts verwenden f&uuml;r die Fehlerseiten
-          und die Listenansicht der Verzeichnisse (Directory Index) Templates,
+          und die Listenansicht der Verzeichnisse (Directory Listing) Templates,
           die sich individuell anpassen lassen. Mit Unterst&uuml;tzung der
           CGI-Umgebungsvariablen kann der Inhalt dynamisch gestaltet werden.
         </p>
@@ -801,7 +801,7 @@
               <td>ON|OFF</td>
               <td>
                 Option f&uuml;r die Ausgabe von Verzeichnissen als navigierbare
-                Listenansicht (Directory Index).<br>
+                Listenansicht (Directory Listing).<br>
                 Mit dem Zusatz <code>[S]</code> k&ouml;nnen versteckte
                 Eintr&auml;ge des Dateisystems f&uuml;r die Anzeige
                 unterdr&uuml;ckt werden.
@@ -1291,7 +1291,8 @@
             <td>...</td>
             <td>
               Zu pr&uuml;fende Variable.<br>
-              Dem Filter stehen alle CGI-Variablen zur Verf&uuml;gung.
+              Dem Filter stehen alle Umgebungsvariablen / CGI-Variablen zur
+              Verf&uuml;gung.
             </td>
           </tr>
           <tr>
@@ -1337,10 +1338,11 @@
           User-Agent: Browser
         </pre>
         <p>
-          Die CGI-Variablen und Werte sind abh&auml;ngig vom Request-Header. Der
-          Request-Body wird f&uuml;r Filtern nicht ausgelesen, womit Daten und
-          Parameter wie sie z.B. bei der HTTP-Methode <code>POST</code>
-          im Body &uuml;bergeben werden, nicht zur Verf&uuml;gung stehen.
+          Die Umgebungsvariablen / CGI-Variablen und Werte sind abh&auml;ngig
+          vom Request-Header. Der Request-Body wird f&uuml;r Filtern nicht
+          ausgelesen, womit Daten und Parameter wie sie z.B. bei der
+          HTTP-Methode <code>POST</code> im Body &uuml;bergeben werden, nicht
+          zur Verf&uuml;gung stehen.
         </p>
         <header>
           &Uuml;bersicht der verf&uuml;gbaren Variablen (Auswahl):
@@ -1796,6 +1798,120 @@
             erneuten Nachfrage auf Verzeichnisebene.
           </p>
         </section>
+        <h3>Directory Listing</h3>
+        <p>
+          Die Anzeige der Inhalte von Verzeichnissen basiert auf der
+          Vorlagendatei <code>./devwex/system/index.html</code>.<br>
+          &Uuml;ber die Konfiguration von <code>SYSROOT</code> kann das
+          Verzeichnis und damit die Vorlage individuell f&uuml;r Server und
+          virtuelle Hosts festgelegt werden.<br>
+          Die Vorlage ist reines HTML kombiniert mit Platzhaltern f&uuml;r den
+          Template-Generator. Die Syntax der Platzhalter <code>#[...]</code>
+          ignoriert die Gross- und Kleinschreibung, muss mit einem Buchstaben
+          beginnen und ist auf folgende Zeichen begrenzt:
+          <code>a-z A-Z 0-9 _-</code>.<br>
+          Platzhalter lassen sich f&uuml;r Einzelwerte und Segmente
+          verwenden.<br>
+          Segmente sind Teilstrukturen die verschachtelt werden k&ouml;nnen. Die
+          Platzhalter von Segmenten bleiben nach dem Bef&uuml;llen erhalten und
+          sind iterativ wiederverwendbar.<br>
+          Als Werte werden f&uuml;r Segmente die Collections und Maps erwartet.
+          Beides erzeugt tiefe, komplexe ggf. sich wiederholende rekursive
+          Strukturen.
+        </p>
+        <header>
+          Struktur und Beschreibung der Platzhalter:
+        </header>
+        <table>
+          <tr>
+            <th>Syntax</th>
+            <th>Beschreibung</th>
+          </tr>        
+          <tr>
+            <td nowrap="nowrap">
+              #[value]
+            </td>
+            <td>
+              Setzt den Wert f&uuml;r <code>value</code> ein und entfernt den
+              Platzhalter.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[segment[[...]]]
+            </td>
+            <td>
+              Definiert ein Segment. Die Verschachtelung und Verwendung weiterer
+              Segmente ist m&ouml;glich.<br>
+              Da die Platzhalter von Segmenten erhalten bleiben, k&ouml;nnen
+              diese zum Aufbau von Listen verwendet werden.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[0x0A]<br>
+              #[0x4578616D706C6521]
+            </td>
+            <td>
+              Maskiert ein oder mehr Zeichen.<br>
+              Die Umwandlung erfolgt erst mit Generierung der Vorlage.
+            </td>
+          </tr>
+        </table>
+        <header>
+          F&uuml;r das Directory Listing stehen folgende Platzhalter zur
+          Verf&uuml;gung:
+        </header>
+        <table>
+          <tr>
+            <th>Platzhalter</th>
+            <th>Beschreibung</th>
+          </tr>        
+          <tr>
+            <td nowrap="nowrap">
+              #[location[[<br>
+              &nbsp;&nbsp;#[path]<br>
+              &nbsp;&nbsp;#[name]<br>
+              ]]]<br>
+            </td>
+            <td>
+              Iteration &uuml;ber die Bestandteile Pfad und Name der Location
+              (URL).
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[sort]
+            </td>
+            <td>
+              Indikator der Sortierung, der u.a. f&uuml;r CSS verwendet wird.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[file[[<br>
+              &nbsp;&nbsp;#[case]<br>
+              &nbsp;&nbsp;#[mime]<br>
+              &nbsp;&nbsp;#[name]<br>
+              &nbsp;&nbsp;#[type]<br>
+              &nbsp;&nbsp;#[size]<br>
+              &nbsp;&nbsp;#[date]<br>
+              ]]]
+            </td>
+            <td>
+              Iteration &uuml;ber die Dateiliste.
+            </td>
+          </tr>
+          <tr>
+            <td nowrap="nowrap">
+              #[HTTP_...]
+            </td>
+            <td>
+              Platzhalter f&uuml;r die mit dem Request verf&uuml;gbaren
+              Umgebungsvariablen / CGI-Variablen.
+            </td>
+          </tr>          
+        </table>        
         <h3>Umgebungsvariablen</h3>
         <p>
           Mit Umgebungsvariablen stellen Betriebssystem und Laufzeitumgebung
@@ -3116,8 +3232,8 @@
                   diesen komplett. Soll die Anfrage ausschliesslich mit einem
                   Server-Status beantwortet werden, kann die Filter-Methode
                   diesen setzen und muss den Request nicht selbst beantworten.
-                  Die Beantwortung &uuml;bernimmt in diesem Fall die
-                  nachgelagerte Worker-Implementierung.
+                  Die Beantwortung &uuml;bernimmt in diesem Fall die initiale
+                  Worker-Implementierung.
               }
 
               public void destroy() {
@@ -3180,7 +3296,7 @@
                   ausschliesslich mit einem Server-Status beantwortet werden,
                   kann die Service-Methode diesen setzen und muss den Request
                   nicht selbst beantworten. Die Beantwortung &uuml;bernimmt in
-                  diesem Fall die nachgelagerte Worker-Implementierung.
+                  diesem Fall die initiale Worker-Implementierung.
               }
 
               public void destroy() {

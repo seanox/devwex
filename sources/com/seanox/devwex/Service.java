@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.3.0 20200623<br>
+ * Service 5.3.0 20200627<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200623
+ * @version 5.3.0 20200627
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -495,10 +495,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     Service.print(throwable);
                 }
                 
+                Service.print("SERVICE INITIATE MODULES");                
+
                 //die Basisoptionen werden ermittelt
                 section = service.initialize.get("initialize");
-
-                Service.print("SERVICE INITIATE MODULES");                
                 
                 //alle Parameter werden ermittelt
                 enumeration = section.elements();

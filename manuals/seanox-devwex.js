@@ -481,6 +481,23 @@ Sitemap.create = function() {
     control.addEventListener("click", function() {
         Sitemap.toc.hide();
     });
+    control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(4)");
+    control.addEventListener("click", function(event) {
+        if (!Sitemap.chapter
+                || !Sitemap.chapter.article
+                || Sitemap.chapter.article <= 1)
+            return;
+        Sitemap.navigate(Sitemap.lookup(Sitemap.chapter.article -1).chapter);
+    });
+    control = document.querySelector(Sitemap.SELECTOR_CONTROL + " button:nth-child(5)");
+    control.addEventListener("click", function() {
+        if (!Sitemap.chapter
+                || !Sitemap.chapter.article
+                || !Sitemap.lookup("::last")
+                || Sitemap.chapter.article >= Sitemap.lookup("::last").article)
+            return;
+        Sitemap.navigate(Sitemap.lookup(Sitemap.chapter.article +1).chapter);
+    });
     
     Sitemap.navigate(document.location.hash); 
     
@@ -505,8 +522,8 @@ Sitemap.create = function() {
 
 /**
  * Determines the metadata for a chapter.
- * As chapters are supported: chapter numbers, aliases and the directives :first
- * and :last
+ *     As chapters are supported:
+ * chapter numbers, aliases and the directives :first, :last, ::first, ::last
  * @param  chapter
  * @return determined metadata for a chapter, otherwise null
  */
@@ -532,6 +549,8 @@ Sitemap.lookup = function(chapter) {
         return chapter;
     } else if (chapter.match(/^:first$/i)) {        
         return Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
+    } else if (chapter.match(/^::first$/i)) {        
+        return Sitemap.lookup(Object.keys(Sitemap.data)[0]);
     } else if (chapter.match(/^:last$/i)) {
         chapter = Sitemap.data[Sitemap.chapter.article + ".0.0.0.0.0"];
         var loop = parseInt(chapter.index.substring(1));
@@ -542,6 +561,8 @@ Sitemap.lookup = function(chapter) {
             loop++;
         }
         return chapter;
+    } else if (chapter.match(/^::last$/i)) {
+        return Sitemap.lookup(Object.keys(Sitemap.data)[Object.keys(Sitemap.data).length -1]);
     }
     if (chapter)
         chapter = chapter.replace(/^#/, '') .trim();

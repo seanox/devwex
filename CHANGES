@@ -6,6 +6,7 @@
       because the worker assumed that no data is being sent.
       Statuses 408 and 413 may have been overwritten with status 400.
   BF: Manual: Correction for chrome-based browsers
+  CR: Manual: Improvement of the navigation
   CR: Project: Automatic update of the version in README.md
   CR: Build: Harmonization when updating the version
   CR: HTTP(S) Status: Added option [H] (Header Only)

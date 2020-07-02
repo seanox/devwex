@@ -3309,15 +3309,13 @@
               }
           }
         </pre>
-        <h2>Kaskadierte Initialisierung</h2>
+        <h2>Kaskadierte Komponenten</h2>
         <p>
-          Die Initialisierung der Komponenten basiert dabei nicht auf Vererbung,
-          sondern durch die Verkettung von Aufrufen, womit die Funktion von
-          allen Komponente in der Kaskade unterst&uuml;tzt werden sollte.<br>
-          Die Initialisierung wird quasi delegiert.<br>
-          Der  Ansatz erm&ouml;glicht u.a. unabh&auml;ngig von der Vererbung auf
-          Objekt-Level unterschiedliche Konstruktoren zu verwenden und
-          ClassLoader-Schichten einzuf&uuml;gen.
+          Komponenten werden durch die Verkettung von Aufrufen anstelle von
+          Vererbung eingebunden. Dies erm&ouml;glicht z.B. die Verwendung
+          unterschiedlicher Konstruktoren und das Einf&uuml;gen
+          zus&auml;tzlicher ClassLoader.<br>
+          Vererbung kann weiterhin verwendet werden, auch in Kombination.
         </p>
         <p>
           Die Funktion ist f&uuml;r Module (XAPI) sowie Server (SAPI)

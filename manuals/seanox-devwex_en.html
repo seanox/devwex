@@ -3217,14 +3217,12 @@
               }
           }
         </pre>
-        <h2>Cascaded Initialization</h2>
+        <h2>Cascaded Components</h2>
         <p>
-          The initialization of the components is not based on inheritance,
-          instead it is based on the concatenation of calls, so that the
-          function should be supported by all components in the cascade.<br>
-          The initialization is quasi delegated.<br>
-          The approach allows to use different constructors and to add
-          additional ClassLoader layers independent of object-level inheritance.
+          The binding of components is based on the concatenation of calls
+          instead of inheritance. This allows e.g. the use of different
+          constructors and the insertion of additional ClassLoader.<br>
+          Inheritance can still be used, even in combination.
         </p>
         <p>
           The function is available for modules (XAPI) and servers (SAPI) and is

@@ -167,7 +167,7 @@ CR: HTTP(S) Directory Index: Realignment of the column 'type'
 CR: Worker: Optimization / reduction of code  
 CR: Remote: Optimization / reduction of code  
 CR: Sources: Update of the comment format  
-CR: XAPI: Integration of cascaded initialization  
+CR: XAPI: Integration of cascaded components  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

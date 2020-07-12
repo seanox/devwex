@@ -128,12 +128,12 @@ import java.util.Map;
  * {@link #extract()} entsprechen, sich dabei aber nur auf ein Segment
  * konzentrieren.<br>
  * <br>
- * Generator 5.2.0 20190422<br>
- * Copyright (C) 2019 Seanox Software Solutions<br>
+ * Generator 5.2.1 20200712<br>
+ * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20190422
+ * @version 5.2.1 20200712
  */
 public class Generator {
 
@@ -300,7 +300,7 @@ public class Generator {
 
             byte[] patch = new byte[0];
             String fetch = new String(model, cursor, offset);
-            if (fetch.matches("^(?si)#\\[[a-z]([\\w\\-]*\\w)*\\[\\[.*\\]\\]\\]$")) {
+            if (fetch.matches("^(?si)#\\[[a-z]([\\w\\-]*\\w){0,1}\\[\\[.*\\]\\]\\]$")) {
                 
                 //der Scope wird ermittelt aus: #[scope[[segment]]]
                 String scope = fetch.substring(2);
@@ -318,7 +318,7 @@ public class Generator {
                 
                 //als neuer Platzhalter wird nur der Scope verwendet
                 patch = ("#[").concat(scope).concat("]").getBytes();
-            } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)*\\]$")) {
+            } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w){0,1}\\]$")) {
                 patch = fetch.toLowerCase().getBytes();
             } else if (fetch.matches("^(?i)#\\[0x([0-9a-f]{2})+\\]$")) {
                 cursor += fetch.length() +1;
@@ -401,7 +401,7 @@ public class Generator {
 
             patch = new byte[0];
             fetch = new String(this.model, cursor, offset);
-            if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)*\\]$")) {
+            if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w){0,1}\\]$")) {
                 fetch = fetch.substring(2, fetch.length() -1);
                 
                 //die Platzhalter nicht uebermittelter Schluessel werden

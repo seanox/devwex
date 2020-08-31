@@ -132,9 +132,9 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox Devwex 5.2.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.2.0.zip)  
-[Seanox Devwex 5.2.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.2.0-src.zip)  
-[Seanox Devwex 5.2.0 Test](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.2.0.zip) 
+[Seanox Devwex 5.3.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.3.0.zip)  
+[Seanox Devwex 5.3.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.3.0-src.zip)  
+[Seanox Devwex 5.3.0 Test](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.3.0.zip) 
 
 
 # Extensions
@@ -148,7 +148,7 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.3.0 202007xx (summary of the next version)  
+## 5.3.0 20200831 (summary of the current version)  
 BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
 BF: HTTP(S) Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
 BF: HTTP(S) Request: Correction of the request validation  

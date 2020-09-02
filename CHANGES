@@ -1,3 +1,6 @@
+5.4.0 2021xxxx
+  BF: HTTP(S) Server Status: Update of class 4xx
+
 5.3.0 20200831
   BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)
   BF: HTTP(S) Content Types: Correction of xml/xsl/xslt to use application/xslt+xml

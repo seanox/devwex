@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3.0 20200623<br>
+ * Worker 5.3.1 20201015<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200623
+ * @version 5.3.1 20201015
  */
 class Worker implements Runnable {
   
@@ -1754,6 +1754,7 @@ class Worker implements Runnable {
     
     private void doGateway() throws Exception {
         
+        InputStream  error;
         InputStream  input;
         OutputStream output;
         Process      process;
@@ -1808,6 +1809,9 @@ class Worker implements Runnable {
         //der zeitliche Verfall des Prozess wird ermittelt
         if (duration > 0)
             duration += System.currentTimeMillis();
+        
+        //der Datenpuffer wird entsprechen der BLOCKSIZE eingerichtet
+        bytes = new byte[this.blocksize];
 
         //initiale Einrichtung der Variablen
         environment = this.getEnvironment();
@@ -1831,9 +1835,6 @@ class Worker implements Runnable {
             } catch (Throwable throwable) {
                 length = 0;
             }
-
-            //das ByteArray wird entsprechen des BLOCKSIZE eingerichtet
-            bytes = new byte[this.blocksize];
             
             while (length > 0) {
 
@@ -1953,9 +1954,9 @@ class Worker implements Runnable {
                         }
                     }
 
-                    //die Daten werden nur in den Output geschrieben, wenn
-                    //die Ausgabekontrolle geetzt wurde und der Response
-                    //nicht mit HTTP/STATUS beginnt
+                    //die Daten werden nur in den Output geschrieben, wenn die
+                    //Ausgabekontrolle gesetzt wurde und der Response nicht mit
+                    //HTTP/STATUS beginnt
                     if (!this.control) {
                         
                         //der Zeitpunkt wird registriert, um auf blockierte
@@ -1983,8 +1984,8 @@ class Worker implements Runnable {
                     break;
                  }
                 
-                //der Datenstrom wird aud vorliegende Daten und der Prozess
-                //wird aus sein Ende geprueft
+                //der Datenstrom wird auf vorliegende Daten
+                //und der Prozess wird auf sein Ende geprueft
                 if (input.available() <= 0
                         && !process.isAlive())
                     break;
@@ -1994,12 +1995,25 @@ class Worker implements Runnable {
             
         } finally {
             
-            //der Prozess wird zwangsweise beendet um auch die Prozesse
-            //abzubrechen deren Verarbeitung fehlerhaft verlief
-            try {process.destroy();
-            } catch (Throwable throwable) {
-
-                //keine Fehlerbehandlung erforderlich
+            try {
+                string = new String();
+                error  = process.getErrorStream();
+                while (error.available() > 0) {
+                    length = error.read(bytes);
+                    string = string.concat(new String(bytes, 0, length));
+                }
+                string = string.trim();
+                if (!string.isEmpty())
+                    Service.print(("GATEWAY ").concat(string));
+                
+            } finally {
+                
+                //der Prozess wird zwangsweise beendet um auch die Prozesse
+                //abzubrechen deren Verarbeitung fehlerhaft verlief
+                try {process.destroy();
+                } catch (Throwable throwable) {
+                    //keine Fehlerbehandlung erforderlich
+                }
             }
         }
     }

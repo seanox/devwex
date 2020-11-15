@@ -1,6 +1,8 @@
 5.4.0 2021xxxx
   BF: HTTP(S) Server Status: Update of class 4xx
+  BF: HTTP(S) CGI: REQUEST_URI without normalization/decoding (unchanged as received from the client)
   CR: HTTP(S) CGI: Output of the error pipe of the CGI process
+  CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)
 
 5.3.0 20200831
   BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)

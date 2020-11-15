@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.3.1 20201015<br>
+ * Worker 5.4.0 20201115<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.1 20201015
+ * @version 5.4.0 20201115
  */
 class Worker implements Runnable {
   
@@ -807,7 +807,7 @@ class Worker implements Runnable {
                 string = path.substring(0, Math.min(path.length(), reference.length()));
 
                 this.environment.set("script_name", string);
-                this.environment.set("path_absolute", string);
+                this.environment.set("path_context", string);
                 this.environment.set("path_info", path.substring(string.length()));
             }
 
@@ -1277,6 +1277,7 @@ class Worker implements Runnable {
         string = string.substring(0, offset < 0 ? string.length() : offset);
 
         this.fields.set("req_query", shadow);
+        this.fields.set("req_uri", string);
 
         //der Pfad wird dekodiert
         shadow = Worker.textDecode(string);
@@ -1403,7 +1404,7 @@ class Worker implements Runnable {
         this.environment.set("script_name", shadow);
         this.environment.set("script_url", shadow);
 
-        this.environment.set("path_absolute", "");
+        this.environment.set("path_context", "");
         this.environment.set("path_info", "");
 
         //REFERRENCE - Zur Ressource werden ggf. der virtuellen Pfad im Unix
@@ -1543,7 +1544,7 @@ class Worker implements Runnable {
 
                 this.resource = this.resource.concat(string);
 
-                shadow = this.environment.get("path_absolute");
+                shadow = this.environment.get("path_context");
                 if (shadow.length() <= 0)
                     shadow = this.environment.get("path_url");
                 if (!shadow.endsWith("/"))
@@ -1567,7 +1568,7 @@ class Worker implements Runnable {
         if (string.length() > 0) string = ("?").concat(string);
 
         //die Request URI wird gesetzt
-        this.environment.set("request_uri", this.environment.get("path_url").concat(string));
+        this.environment.set("request_uri", this.fields.get("req_uri").concat(string));
 
         //die aktuelle HTTP-Methode wird ermittelt
         string = this.environment.get("request_method").toLowerCase();

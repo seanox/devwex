@@ -6,8 +6,8 @@
     <echo>                                                    </echo>
     <echo>   compile   compile and build classes              </echo>
     <echo>                                                    </echo>
-    <echo>   archive   compile, build classes and make        </echo>
-    <echo>             archives for distribution and          </echo> 
+    <echo>   release   compile, build classes and make        </echo>
+    <echo>             releases for distribution and          </echo> 
     <echo>             development                            </echo>
     <echo>                                                    </echo>
     <echo>   keystore  creates a new keystore                 </echo>
@@ -308,7 +308,7 @@
     ]]>
   </scriptdef>  
   
-  <fileset id="fileset.archive.build" dir="${build.project}">
+  <fileset id="fileset.release.build" dir="${build.project}">
     <include name="documents/index.html"/>
     <include name="manuals/seanox-devwex_de.html"/>
     <include name="manuals/seanox-devwex_en.html"/> 
@@ -327,7 +327,7 @@
     <include name="release.txt"/>
   </fileset> 
   
-  <fileset id="fileset.archive.source" dir="${build.project}">
+  <fileset id="fileset.release.source" dir="${build.project}">
     <include name=".settings/org.eclipse.jdt.core.prefs"/> 
     <include name="development/extras/compress.zip"/> 
     <include name="development/mediatypes/* File/* File.*"/>
@@ -369,7 +369,7 @@
     <include name="LICENSE"/>
   </fileset>   
   
-  <target name="archive" depends="compile,keystore,changes">
+  <target name="release" depends="compile,keystore,changes">
     <delete dir="${build}"/>
     <mkdir dir="${build}"/>
     <mkdir dir="${build.project}"/>
@@ -404,7 +404,7 @@
     <compress-markup file="${build.system}/status-5xx.html"/>   
     <release-insert/>
     <clean dir="${build.project}">
-      <fileset refid="fileset.archive.build"/>
+      <fileset refid="fileset.release.build"/>
     </clean>
     <mkdir dir="${build.storage}"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
@@ -448,7 +448,7 @@
     <copy file="${workspace}/LICENSE" todir="${build.project}"/>
     <copy file="${workspace}/CHANGES" todir="${build.project}"/>    
     <clean dir="${build.project}">
-      <fileset refid="fileset.archive.source"/>
+      <fileset refid="fileset.release.source"/>
     </clean>    
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
@@ -458,7 +458,6 @@
         basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
         file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
-
     <delete dir="${build}"/>
   </target>  
 </project>

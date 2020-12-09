@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.4.0 20201115<br>
+ * Worker 5.4.0 20201209<br>
  * Copyright (C) 2020 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.4.0 20201115
+ * @version 5.4.0 20201209
  */
 class Worker implements Runnable {
   
@@ -1402,7 +1402,8 @@ class Worker implements Runnable {
         //die Umgebungsvariabeln werden entsprechend der Ressource gesetzt
         this.environment.set("path_url", shadow);
         this.environment.set("script_name", shadow);
-        this.environment.set("script_url", shadow);
+        
+        this.environment.set("script_url", this.fields.get("req_uri"));
 
         this.environment.set("path_context", "");
         this.environment.set("path_info", "");
@@ -1678,7 +1679,7 @@ class Worker implements Runnable {
      * die optional &uuml;bergebenen Parameter.
      * @param  status HTTP-Status
      * @param  header optionale Liste mit Parameter
-     * @return der erstellte Reponse-Header
+     * @return der erstellte Response-Header
      */
     private String header(int status, String[] header) {
         

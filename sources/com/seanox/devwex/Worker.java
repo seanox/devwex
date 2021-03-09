@@ -1074,7 +1074,6 @@ class Worker implements Runnable {
                 //als Filter- oder Process-Modul ausgefuehrt, die Verarbeitung
                 //endet erst, wenn das Modul die Datenflusskontrolle veraendert
                 if (buffer.toUpperCase().contains("[M]") && string.length() > 0) {
-                
                     control = this.control;
                     status  = this.status;
                     this.environment.set("module_opts", buffer);
@@ -1087,7 +1086,6 @@ class Worker implements Runnable {
                 
                 //bei einer Weiterleitung (Redirect) wird STATUS 302 gesetzt   
                 if (buffer.toUpperCase().contains("[R]") && string.length() > 0) {
-                    
                     this.environment.set("script_uri", string);
                     this.status = 302;
                     return location;
@@ -1096,7 +1094,6 @@ class Worker implements Runnable {
                 //Verweise auf Dateien oder Verzeichnisse werden diese als
                 //Location zurueckgegeben
                 if (string.length() > 0) {
-                    
                     file = Worker.fileCanonical(new File(buffer));
                     if (file != null && file.exists())
                         return file.getPath();
@@ -1505,7 +1502,7 @@ class Worker implements Runnable {
 
         //die URI vom Skript wird komplementiert
         if (this.status != 302)
-            this.environment.set("script_uri", string.concat(this.environment.get("script_url")));
+            this.environment.set("script_uri", string.concat(this.fields.get("req_path")));
 
         //bei abweichendem Path wird die Location als Redirect eingerichtet
         if (this.status == 0 && !this.environment.get("path_url").equals(shadow) && !virtual && !connect) {
@@ -1515,6 +1512,7 @@ class Worker implements Runnable {
 
         //die aktuelle Referenz wird ermittelt
         string = this.environment.get("script_uri");
+        string = Worker.fileNormalize(string);
 
         //bezieht sich die Referenz auf ein Verzeichnis und der URI endet
         //aber nicht auf "/" wird STATUS 302 gesetzt

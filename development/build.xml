@@ -345,6 +345,12 @@
     <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.sh"/>
+    <include name="program/service.cmd"/>
+    <include name="program/service-32.exe"/>
+    <include name="program/service-32.license"/>
+    <include name="program/service-64.exe"/>
+    <include name="program/service-64.license"/>
+    <include name="sources/com/seanox/devwex/Bootstrap.java"/>
     <include name="sources/com/seanox/devwex/Generator.java"/>
     <include name="sources/com/seanox/devwex/Initialize.java"/>
     <include name="sources/com/seanox/devwex/Loader.java"/>

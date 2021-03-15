@@ -312,7 +312,7 @@
     <include name="documents/index.html"/>
     <include name="manuals/seanox-devwex_de.html"/>
     <include name="manuals/seanox-devwex_en.html"/> 
-    <include name="program/devwex.bat"/>
+    <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.jar"/>
     <include name="program/devwex.sh"/>
@@ -342,7 +342,7 @@
     <include name="manuals/seanox-devwex.css"/>  
     <include name="manuals/seanox-devwex.js"/>
     <include name="manuals/seanox-translator.js"/> 
-    <include name="program/devwex.bat"/>
+    <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.sh"/>
     <include name="sources/com/seanox/devwex/Generator.java"/>

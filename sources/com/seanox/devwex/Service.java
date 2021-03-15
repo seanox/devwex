@@ -745,7 +745,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * Haupteinsprung in die Anwendung.
      * @param options Startargumente
      */
-    public static void main(String options[]) {
+    public static void main(String[] options) {
         
         String address;
         String port;        

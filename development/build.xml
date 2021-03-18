@@ -2,7 +2,7 @@
 <project name="devwex" default="usage" basedir="..">
   <target name="usage">
     <echo>                                                    </echo>
-    <echo> the following targets are available ...            </echo>
+    <echo>Following targets are available...                  </echo>
     <echo>                                                    </echo>
     <echo>   compile   compile and build classes              </echo>
     <echo>                                                    </echo>
@@ -11,34 +11,23 @@
     <echo>             development                            </echo>
     <echo>                                                    </echo>
     <echo>   keystore  creates a new keystore                 </echo>
+    <echo>                                                    </echo>
+    <echo>   changes   Synchronizes README.md with CHANGES.   </echo>
   </target>
     
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
-  <property name="workspace.classes" value="${workspace}/program/classes"/>
   <property name="workspace.program" value="${workspace}/program"/>
   <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.extras" value="${workspace.development}/extras"/>
-  <property name="workspace.manuals" value="${workspace}/manuals"/>
-  <property name="workspace.system" value="${workspace}/system"/>
-  <property name="workspace.documents" value="${workspace}/documents"/>
-  <property name="workspace.storage" value="${workspace}/storage"/>
-  <property name="workspace.settings" value="${workspace}/.settings"/>
   <property name="workspace.releases" value="${workspace}/releases"/>
   
   <property name="build" value="${workspace}/build"/>
-  <property name="build.sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
   <property name="build.project" value="${build}/${ant.project.name}"/>
   <property name="build.sources" value="${build.project}/sources"/>
   <property name="build.classes" value="${build.project}/classes"/>
-  <property name="build.manuals" value="${build.project}/manuals"/>
-  <property name="build.system" value="${build.project}/system"/>
-  <property name="build.documents" value="${build.project}/documents"/>
-  <property name="build.storage" value="${build.project}/storage"/>
-  <property name="build.program" value="${build.project}/program"/>
-  <property name="build.development" value="${build.project}/development"/>
-  <property name="build.extras" value="${build.development}/extras"/>
-  <property name="build.settings" value="${build.project}/.settings"/>
+  
+  <property name="sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
   
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
@@ -60,11 +49,11 @@
   
   <macrodef name="release-insert">
     <sequential>
-      <replace dir="${build}" includes="${build.sources.filter}"
+      <replace dir="${build}" includes="${sources.filter}"
           token="#[ant:release-year]" value="${release.year}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
+      <replace dir="${build}" includes="${sources.filter}"
           token="#[ant:release-date]" value="${release.date}"/>
-      <replace dir="${build}" includes="${build.sources.filter}"
+      <replace dir="${build}" includes="${sources.filter}"
           token="#[ant:release-version]" value="${release.version}"/>        
     </sequential>
   </macrodef>
@@ -254,80 +243,15 @@
   <target name="keystore">
     <delete file="${workspace.program}/keystore"/>
     <exec executable="keytool">
-      <arg line="-genkey -alias Server -dname 'CN=127.0.0.1'
-          -keystore '${workspace.program}/keystore' -keypass changeIt -keyalg RSA -keysize 2048 
+      <arg line="-genkey -alias Server -dname 'CN=localhost' -ext 'SAN=DNS:local,IP:127.0.0.1'
+          -keystore '${workspace.program}/keystore' -keypass changeIt -keyalg RSA -keysize 4096 
           -storetype PKCS12 -storepass changeIt
           -validity 365"/>
     </exec>
     <copy file="${workspace.program}/keystore" todir="${workspace.development}" overwrite="true"/>
   </target> 
   
-  <scriptdef name="clean" language="javascript">
-    <attribute name="dir"/>
-    <element name="fileset" classname="org.apache.tools.ant.types.FileSet"/>
-    <![CDATA[
-    var echo = function(text) {
-      var echo = project.createTask("echo");
-      echo.setMessage(text);
-      echo.perform();
-    };
-    var basedir = new java.io.File(attributes.get("dir"));
-    var excludes = new Array(String(basedir));
-    var fileset = elements.get("fileset");
-    fileset.forEach(function(fileset, index, array) {
-      var iterator = fileset.iterator();
-      while (iterator.hasNext()) {
-        var file = iterator.next().getFile();
-        excludes.push(String(file));
-        while (file != null
-            && String(file) != String(basedir)) {
-          if (excludes.indexOf(String(file)) < 0)
-            excludes.push(String(file));
-          file = new java.io.File(file.getParent());
-        }
-      }
-    });
-    var clear = function(file, excludes) {
-      if (file.isFile()) {
-        if (excludes.indexOf(String(file)) < 0) {
-          echo("Deleting: " + file);
-          file.delete();
-        }
-      } else if (file.isDirectory()) {
-        var files = Array.prototype.slice.call(file.listFiles(), 0);
-        files.forEach(function(file, index, array) {
-          clear(file, excludes);
-        });
-        if (excludes.indexOf(String(file)) < 0) {
-          echo("Deleting: " + file);
-          file.delete();
-        }
-      }
-    };
-    clear(basedir, excludes);
-    ]]>
-  </scriptdef>  
-  
-  <fileset id="fileset.release.build" dir="${build.project}">
-    <include name="documents/index.html"/>
-    <include name="manuals/seanox-devwex_de.html"/>
-    <include name="manuals/seanox-devwex_en.html"/> 
-    <include name="program/devwex.cmd"/>
-    <include name="program/devwex.ini"/>
-    <include name="program/devwex.jar"/>
-    <include name="program/devwex.sh"/>
-    <include name="program/keystore"/> 
-    <include name="storage"/>
-    <include name="system/index.html"/>
-    <include name="system/status-2xx.html"/>
-    <include name="system/status-3xx.html"/>
-    <include name="system/status-4xx.html"/>
-    <include name="system/status-5xx.html"/>
-    <include name="license.txt"/>
-    <include name="release.txt"/>
-  </fileset> 
-  
-  <fileset id="fileset.release.source" dir="${build.project}">
+  <fileset id="fileset.sources" dir="${workspace}">
     <include name=".settings/org.eclipse.jdt.core.prefs"/> 
     <include name="development/extras/compress.zip"/> 
     <include name="development/mediatypes/* File/* File.*"/>
@@ -341,7 +265,6 @@
     <include name="manuals/seanox-devwex_en.html"/>
     <include name="manuals/seanox-devwex.css"/>  
     <include name="manuals/seanox-devwex.js"/>
-    <include name="manuals/seanox-translator.js"/> 
     <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.sh"/>
@@ -373,97 +296,91 @@
     <include name=".project"/>
     <include name="CHANGES"/>
     <include name="LICENSE"/>
-  </fileset>   
+  </fileset> 
+  
+  <fileset id="fileset.release" dir="${workspace}">
+    <include name="documents/index.html"/>
+    <include name="manuals/seanox-devwex_de.html"/>
+    <include name="manuals/seanox-devwex_en.html"/> 
+    <include name="program/devwex.cmd"/>
+    <include name="program/devwex.ini"/>
+    <include name="program/devwex.jar"/>
+    <include name="program/devwex.sh"/>
+    <include name="program/keystore"/> 
+    <include name="storage"/>
+    <include name="system/index.html"/>
+    <include name="system/status-2xx.html"/>
+    <include name="system/status-3xx.html"/>
+    <include name="system/status-4xx.html"/>
+    <include name="system/status-5xx.html"/>
+    <include name="CHANGES"/>
+    <include name="LICENSE"/>
+  </fileset>
+  
+  <fileset id="fileset.release.windows" dir="${workspace}">
+    <include name="program/service.cmd"/> 
+    <include name="program/service-32.exe"/> 
+    <include name="program/service-32.license"/> 
+    <include name="program/service-64.exe"/> 
+    <include name="program/service-64.license"/> 
+  </fileset>  
   
   <target name="release" depends="compile,keystore,changes">
     <delete dir="${build}"/>
-    <mkdir dir="${build}"/>
-    <mkdir dir="${build.project}"/>
-    <copy todir="${build.manuals}">
-      <fileset dir="${workspace.manuals}"/>
+    <mkdir dir="${build}/sources"/>
+    <copy todir="${build}/sources">
+      <fileset refid="fileset.sources"/>
     </copy>
-    <copy todir="${build.system}">
-      <fileset dir="${workspace.system}"/>
-    </copy>
-    <copy todir="${build.documents}">
-      <fileset dir="${workspace.documents}"/>
-    </copy>
-    <copy todir="${build.program}">
-      <fileset dir="${workspace.program}"/>
-    </copy>    
-    <copy file="${workspace}/LICENSE" tofile="${build.project}/license.txt"/>
-    <copy file="${workspace}/CHANGES" tofile="${build.project}/release.txt"/>
-    <compress-stylesheet context="documents" file="${build.documents}/index.css"/>
-    <compress-javascript context="manuals" file="${build.manuals}/seanox-devwex.js"/>
-    <compress-stylesheet context="manuals" file="${build.manuals}/seanox-devwex.css"/>  
-    <compress-stylesheet context="system" file="${build.system}/common.css"/>
-    <compress-stylesheet context="system" file="${build.system}/media.css"/>
-    <compress-stylesheet context="system" file="${build.system}/index.css"/>
-    <compress-stylesheet context="system" file="${build.system}/status.css"/>
-    <compress-markup file="${build.documents}/index.html"/>
-    <compress-markup file="${build.manuals}/seanox-devwex_de.html"/>
-    <compress-markup file="${build.manuals}/seanox-devwex_en.html"/>    
-    <compress-markup file="${build.system}/index.html"/>
-    <compress-markup file="${build.system}/status-2xx.html"/>
-    <compress-markup file="${build.system}/status-3xx.html"/>
-    <compress-markup file="${build.system}/status-4xx.html"/>
-    <compress-markup file="${build.system}/status-5xx.html"/>   
-    <release-insert/>
-    <clean dir="${build.project}">
-      <fileset refid="fileset.release.build"/>
-    </clean>
-    <mkdir dir="${build.storage}"/>
-    <touch datetime="${release.date}" pattern="yyyyMMdd">
-      <fileset dir="${build}"/>
-    </touch>  
-    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>
-    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"
-        basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
-    <touch datetime="${release.date}" pattern="yyyyMMdd"
-        file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>
-    
-    <delete dir="${build}"/>
-    <mkdir dir="${build}"/>
-    <mkdir dir="${build.project}"/>
-    <copy todir="${build.settings}">
-      <fileset dir="${workspace.settings}" defaultexcludes="false"/>
-    </copy>     
-    <copy todir="${build.development}">
-      <fileset dir="${workspace.development}" defaultexcludes="false"/>
-    </copy>    
-    <copy todir="${build.manuals}">
-      <fileset dir="${workspace.manuals}" defaultexcludes="false"/>
-    </copy>
-      <copy todir="${build.sources}">
-        <fileset dir="${workspace.sources}" defaultexcludes="false"/>
-      </copy>    
-    <copy todir="${build.system}">
-      <fileset dir="${workspace.system}" defaultexcludes="false"/>
-    </copy>
-    <copy todir="${build.documents}">
-      <fileset dir="${workspace.documents}" defaultexcludes="false"/>
-    </copy>
-    <copy todir="${build.program}">
-      <fileset dir="${workspace.program}" defaultexcludes="false"/>
-    </copy>
-    <copy todir="${build.project}">
-      <fileset dir="${workspace}" defaultexcludes="false">
-        <include name=".*"/>   
-      </fileset>
-    </copy> 
-    <copy file="${workspace}/LICENSE" todir="${build.project}"/>
-    <copy file="${workspace}/CHANGES" todir="${build.project}"/>    
-    <clean dir="${build.project}">
-      <fileset refid="fileset.release.source"/>
-    </clean>    
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>  
     <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
     <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"
-        basedir="${build}" compress="true" filesonly="false" defaultexcludes="false"/> 
+        basedir="${build}/sources" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
         file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+
+    <compress-stylesheet context="documents" file="${build}/sources/documents/index.css"/>
+    <compress-javascript context="manuals" file="${build}/sources/manuals/seanox-devwex.js"/>
+    <compress-stylesheet context="manuals" file="${build}/sources/manuals/seanox-devwex.css"/>  
+    <compress-stylesheet context="system" file="${build}/sources/system/common.css"/>
+    <compress-stylesheet context="system" file="${build}/sources/system/media.css"/>
+    <compress-stylesheet context="system" file="${build}/sources/system/index.css"/>
+    <compress-stylesheet context="system" file="${build}/sources/system/status.css"/>
+    <compress-markup file="${build}/sources/documents/index.html"/>
+    <compress-markup file="${build}/sources/manuals/seanox-devwex_de.html"/>
+    <compress-markup file="${build}/sources/manuals/seanox-devwex_en.html"/>    
+    <compress-markup file="${build}/sources/system/index.html"/>
+    <compress-markup file="${build}/sources/system/status-2xx.html"/>
+    <compress-markup file="${build}/sources/system/status-3xx.html"/>
+    <compress-markup file="${build}/sources/system/status-4xx.html"/>
+    <compress-markup file="${build}/sources/system/status-5xx.html"/>   
+    <release-insert/>
+    <mkdir dir="${build}/release"/>
+    <copy todir="${build}/release">
+      <fileset refid="fileset.release"/>
+    </copy>
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build}"/>
+    </touch>      
+    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>
+    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"
+        basedir="${build}/release" compress="true" filesonly="false" defaultexcludes="false"/> 
+    <touch datetime="${release.date}" pattern="yyyyMMdd"
+        file="${workspace.releases}/seanox-${ant.project.name}-${release.version}.zip"/>      
+    
+    <copy todir="${build}/release">
+      <fileset refid="fileset.release.windows"/>
+    </copy>    
+    <touch datetime="${release.date}" pattern="yyyyMMdd">
+      <fileset dir="${build}"/>
+    </touch>      
+    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"/>
+    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"
+        basedir="${build}/release" compress="true" filesonly="false" defaultexcludes="false"/> 
+    <touch datetime="${release.date}" pattern="yyyyMMdd"
+        file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"/>    
+
     <delete dir="${build}"/>
   </target>  
 </project>

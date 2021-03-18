@@ -240,6 +240,99 @@
           Die enthaltene Verzeichnisstruktur wird an einer beliebigen Stelle im
           Dateisystem abgelegt.
         </p>
+        <h2>Windows Service</h2>
+        <p>
+          Speziell f&uuml;r Windows ist eine Distribution mit <a target="_extern"
+              href="https://commons.apache.org/daemon/procrun.html">Procrun</a>
+          verf&uuml;gbar, mit der Seanox Devwex als Windows Dienst eingerichtet
+          werden kann. Die Distribution basiert auf der reinen Java-Version und
+          enth&auml;lt zudem die Service-Runner <code>service-32.exe</code>
+          f&uuml;r 32 Bit, <code>service-64.exe</code> f&uuml;r 64 Bit sowie die
+          Batch-Datei <code>service.cmd</code> f&uuml;r einen einfachen Umgang
+          mit dem Service.
+        </p>
+        <p>
+          Auch bei der Windows-Distribution wird ebenfalls eine beliebige Stelle
+          im Dateisystem ausgew&auml;hlt, wohin das Archiv entpackt wird.<br>
+          Da der Service mit einem Systemkonto und entsprechenden
+          Zugriffsrechten laufen sollte, wird die Ablage und Installation
+          ausserhalb der Benutzer-Profile empfohlen.
+        </p>
+        <p>
+          Standardm&auml;ssig wird die Batch-Datei den Service mit dem
+          Systemkonto <code>NetworkService</code> einrichten.<br>
+          Die f&uuml;r das Programverzeichnis ben&ouml;tigten Zugriffsrechte
+          werden durch die Batch-Datei gesetzt. Wird ein anderes Systemkonto
+          verwendet, werden die Zugriffsrechte automatisch hinzugef&uuml;gt.
+        </p>
+        <p>
+          Die Parameter zur Konfiguration des einzurichtenden Services wurden in
+          der Batch-Datei geb&uuml;ndelt und sind leicht zug&auml;nglich.
+        </p>        
+        <p>
+          Zur Installation vom Service wird die Batch-Datei
+          <code>service.cmd</code> verwendet.<br>
+          Dazu wird die Konsole (Shell/Eingabeaufforderung) als Administrator
+          ge&ouml;ffnet und in das Programm-Verzeichnis
+          <code>./devwex/program</code> gewechselt und die Batch-Datei mit der
+          gew&uuml;nschten Funktion aufgerufen.
+        </p>
+        <code>
+          usage: service.cmd [command]
+        </code>
+        <header>
+          &Uuml;bersicht der verf&uuml;gbaren Befehle:<br>
+          Die Gross- und Kleinschreibung wird bei den Befehlen ignoriert.
+        </header>
+        <table>
+          <tr>
+            <th>Befehl</th>
+            <th>Beschreibung</th>
+          </tr>
+          <tr>
+            <td>install</td>
+            <td>
+              Installiert den Service.
+            </td>
+          </tr>
+          <tr>
+            <td>update</td>
+            <td>
+              Entfernt den Service und legt diesen mit aktualisierter
+              Konfiguration neu an.
+            </td>
+          </tr>
+          <tr>
+            <td>uninstall</td>
+            <td>
+              Entfernt den Service.
+            </td>
+          </tr>
+          <tr>
+            <td>start</td>
+            <td>
+              Startet den Service.
+            </td>
+          </tr>
+          <tr>
+            <td>status</td>
+            <td>
+              Zeigt den Status zum laufenden Service an.
+            </td>
+          </tr>
+          <tr>
+            <td>restart</td>
+            <td>
+              Beendet den Service und startet diesen neu.
+            </td>
+          </tr>
+          <tr>
+            <td>stop</td>
+            <td>
+              Beendet den Service.
+            </td>
+          </tr>
+        </table>
       </article>
       <article>
         <h1>Konfiguration</h1>

@@ -274,7 +274,7 @@ public class Section implements Cloneable {
                 buffer = null;
 
                 //der Schluessel wird ermittelt, ggf. dekodiert und optimiert 
-                label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.{0,1}\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
+                label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
                 label = Section.decode(label).toUpperCase();
                 
                 //nur gueltige Schluessel werden geladen
@@ -317,7 +317,7 @@ public class Section implements Cloneable {
                 
                 //der Wert wird ermittelt, ggf. dekodiert und optimiert
                 value = line.trim();
-                value = value.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.{0,1}\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
+                value = value.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
                 value = Section.decode(value);
                 
                 buffer = new StringBuffer(value);
@@ -379,8 +379,7 @@ public class Section implements Cloneable {
      * Smart-Modus leere Schl&uuml;ssel automatisch bereinigt werden, wird der
      * erstellte Schl&uuml;ssel mit seinem leeren Standardwert nicht in der
      * Section eingetragen.
-     * @param  key       Name des Sch&uuml;ssels
-     * @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
+     * @param  key Name des Sch&uuml;ssels
      * @return der Wert des Sch&uuml;ssels, sonst {@code null} bzw. den
      *     alternativen Wert oder im Smart-Modus einen leeren
      */

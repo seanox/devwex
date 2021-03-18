@@ -214,7 +214,7 @@ public class Initialize implements Cloneable {
      * mit Sektionen die nicht leer sind. Die Methoden {@link #get(String)}
      * verh&auml;lt sich bei nicht existierenden Schl&uuml;sseln so, als
      * l&auml;gen diese mit einer leeren Sektion vor und liefert so nie
-     * {@code null}. Zudem reagiert im Smart-Modus {@link #set(String, String)}
+     * {@code null}. Zudem reagiert im Smart-Modus {@link #set(String, Section)}
      * bei einem leeren Wert wie die Methode {@link #remove(String)} und
      * entfernt den Schl&uuml;ssel.
      * @param  text  zu parsender String

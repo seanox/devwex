@@ -420,7 +420,7 @@ class Worker implements Runnable {
     
     /**
      * Liest die Datei einer Datei.
-     * @param  filename Pfad der zu lesenden Datei
+     * @param  file zu lesende Datei
      * @return die gelesenen Daten, im Fehlerfall ein leeres Byte-Array
      */
     private static byte[] fileRead(File file) {
@@ -723,8 +723,7 @@ class Worker implements Runnable {
             
             //ggf. wird der Alias um Slash erweitert, damit spaeter DOCROOT
             //und Alias einen plausiblen Pfad ergeben
-            if (alias.length() > 0
-                    && !alias.startsWith("/"))
+            if (!alias.startsWith("/"))
                 alias = ("/").concat(alias);            
             
             //ggf. wird der Alias als Target uebernommen, wenn kein Target
@@ -1388,7 +1387,7 @@ class Worker implements Runnable {
         //die Unique-Id wird aus dem HashCode des Sockets, den Millisekunden
         //sowie der verwendeten Portnummer ermittelt, die Laenge ist variabel
         string = Long.toString(Math.abs(this.socket.hashCode()), 36);
-        string = string.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000l) +this.socket.getPort()), 36));
+        string = string.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.socket.getPort()), 36));
 
         //die eindeutige Request-Id wird gesetzt
         this.environment.set("unique_id", string.toUpperCase());
@@ -2344,8 +2343,7 @@ class Worker implements Runnable {
                         this.status = 416;
                         return;
                     }
-                    if (offset < size
-                            && offset <= limit) {
+                    if (offset <= limit) {
                         this.status = 206;
                         limit++;
                     } else {

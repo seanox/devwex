@@ -300,7 +300,7 @@ public class Generator {
 
             byte[] patch = new byte[0];
             String fetch = new String(model, cursor, offset);
-            if (fetch.matches("^(?si)#\\[[a-z]([\\w\\-]*\\w){0,1}\\[\\[.*\\]\\]\\]$")) {
+            if (fetch.matches("^(?si)#\\[[a-z]([\\w\\-]*\\w)?\\[\\[.*\\]\\]\\]$")) {
                 
                 //der Scope wird ermittelt aus: #[scope[[segment]]]
                 String scope = fetch.substring(2);
@@ -318,7 +318,7 @@ public class Generator {
                 
                 //als neuer Platzhalter wird nur der Scope verwendet
                 patch = ("#[").concat(scope).concat("]").getBytes();
-            } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w){0,1}\\]$")) {
+            } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)?\\]$")) {
                 patch = fetch.toLowerCase().getBytes();
             } else if (fetch.matches("^(?i)#\\[0x([0-9a-f]{2})+\\]$")) {
                 cursor += fetch.length() +1;
@@ -401,7 +401,7 @@ public class Generator {
 
             patch = new byte[0];
             fetch = new String(this.model, cursor, offset);
-            if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w){0,1}\\]$")) {
+            if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)?\\]$")) {
                 fetch = fetch.substring(2, fetch.length() -1);
                 
                 //die Platzhalter nicht uebermittelter Schluessel werden

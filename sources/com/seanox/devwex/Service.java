@@ -111,7 +111,7 @@ import java.util.Vector;
  *     Alle Server werden ermittelt, indem nach Sektionen gesucht wird, die auf
  *     {@code INI} enden und zu denen eine Implementierung im Klassenpfad
  *     gefunden werden kann. Die gefundenen Server werden geladen, registriert
- *     und &uuml;ber den Konstruktor {@codeServer(String name,
+ *     und &uuml;ber den Konstruktor {@code Server(String name,
  *         Object initialize)} initialisiert. Dazu werden jedem Server der Name
  *     entsprechend der ermittelten Sektion sowie eine komplette Kopie der
  *     zentralen Konfiguration als Initialize-Objekt &uuml;bergeben. Nach
@@ -615,22 +615,21 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                             new Object[] {mode == Service.RESTART ? "RE" : "", String.valueOf(timing)}));
 
                 //beim Restart wird Status READY gesetzt und die Methode verlassen
+                //nachfolgend kann mode dann nur noch START sein
                 if (mode == Service.RESTART) {
                     service.status = Service.RUN;
                     return true;
                 }
-                
+
                 //beim Start wird ohne eingerichtete Server, der Service beendet
-                if (mode == Service.START
-                        && service.servers.size() <= 0) {
+                if (service.servers.size() <= 0) {
                     service.status = Service.STOP;
                     Service.service = null;
                     return false;
                 }
-                
+
                 //im Startprozess wird Status und ShutdownHook gesetzt
-                if (mode == Service.START)
-                    Runtime.getRuntime().addShutdownHook(new Thread(new Service()));
+                Runtime.getRuntime().addShutdownHook(new Thread(new Service()));
 
                 //der Thread wird eingerichtet und gestartet,
                 //scheitert diese wird der Service zurueckgesetzt
@@ -746,63 +745,63 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * @param options Startargumente
      */
     public static void main(String[] options) {
+
+        if (options == null
+                || options.length < 1)
+            options = new String[] {"", ""};
+        else if (options.length < 2)
+            options = new String[] {options[0], ""};
         
-        String address;
-        String port;        
-        String string;
+        boolean strict = Service.service != null;
         
         //Ausgabeinformation wird zusammen gestellt und ausgegeben
-        Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", false);
-        Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", false);
-        Service.print("Advanced Server Development", false);
-        Service.print("\r\n", false);
+            Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", strict);
+            Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", strict);
+            Service.print("Advanced Server Development", strict);
+            Service.print("\r\n", strict);
         
-        if (options == null)
-            options = new String[0];
-
         //das Kommando wird ermittelt
-        string = options.length > 0 ? options[0].toLowerCase().trim() : "";
-        
+        String string = "";
+        if (options[0] != null)
+            string = options[0].trim().toLowerCase();
+
+        //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
+        if (!string.matches("^start|restart|status|stop$")) {
+            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", strict);
+            return;
+        }
+
         //START - starten der Serverdienste
         if (string.matches("start")) {
             Service.initiate(Service.START);
             return;
         }
 
-        //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
-        if (!string.matches("start|restart|status|stop")) {
-            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", false);
-            return;
-        }
-        
         //RESTART | STATUS | STOP - die Kommandos werden an den Remote-Server
         //gesendet und der Response als Result ausgegeben
+        //Fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
+        //oder ein alternatives Programmargument verwendet
         
         try {
-            
-            //fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
-            //oder ein alternatives Programmargument verwendet
-            address = options.length > 1 ? options[1] : null;
-            address = address == null ? "" : address.trim();
-            
-            port = address.replaceAll("^(.*?)(?::(\\d+)){0,1}$", "$2").trim();
+            options[1] = options[1] == null ? "" : options[1].trim();
+            if (options[1].length() > 0
+                    && !options[1].matches("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$")) {
+                Service.print("INVALID REMOTE DESTINATION", strict);
+                return;
+            }
+            String address = options[1].replaceAll("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$", "$1");
+            String port = options[1].replaceAll("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$", "$2");
             if (port.length() <= 0)
-                port = "25000";            
-            address = address.replaceAll("^(.*?)(?::(\\d+)){0,1}$", "$1").trim();
-            if (address.length() <= 0)
-                address = "127.0.0.1";
-            
-            //der Remoteausfruf wird ausgefuehrt und ausgegeben
+                port = "25000";
+
             string = new String(Remote.call(address, Integer.parseInt(port), string));
             if (string.length() <= 0)
                 string = "REMOTE ACCESS NOT AVAILABLE";
-            System.out.println(string.trim());
-            
+            Service.print(string.trim(), strict);
         } catch (Throwable throwable) {
-            
-            System.out.println("REMOTE ACCESS FAILED");
-            System.out.println(throwable.getMessage());
-        }        
+            Service.print("REMOTE ACCESS FAILED", strict);
+            Service.print(throwable.getMessage(), strict);
+        }
     }
     
     /**

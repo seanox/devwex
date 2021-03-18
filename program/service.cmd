@@ -1,6 +1,7 @@
   @echo off
+
   rem Seanox Devwex is started from working directory ./devwex/program.
-  rem Here, following variables are used:
+  rem Following variables are used:
   rem
   rem     name  Service name (spaces/special characters are not allowed)
   rem
@@ -18,52 +19,65 @@
   rem
   rem     jdwp  Options for remote debugging (optional)
   rem
-  rem To configure see marked 'parts of configuration' (line 37/109/154).
+  rem Link(s) to used prunsrv.exe (alias service-32.exe/service-64.exe):
+  rem     https://commons.apache.org/daemon/procrun.html
+  rem     https://commons.apache.org/proper/commons-daemon/procrun.html
   rem
-  rem     link to used prunsrv.exe (alias service-32.exe/service-64.exe):
-  rem         http://commons.apache.org/daemon/procrun.html
   rem NOTE - If environment variables "home" and "java" empty or not defined,
   rem this will be resolved automatically. The declaration of both values is
   rem optional.
+
   echo Seanox Devwex Service [Version #[ant:release-version] #[ant:release-date]]
   echo Copyright (C) #[ant:release-year] Seanox Software Solutions
   echo Advanced Server Development
   echo.
+
   cd /D "%~dp0"
+
   SetLocal EnableDelayedExpansion
+
   rem -- CONFIGURATION ---------------------------------------------------------
+
   set name=Devwex
   set text=Seanox Devwex
   set note=Seanox Advanced Server Development
+
   set home=%cd%
   set java=
+
   rem set home=C:\Program Files\Devwex\program
   rem set java=C:\Program Files\Java
   rem set jdwp=dt_socket,server=y,suspend=n,address=8000
   rem set jvms=256
   rem set jvmx=512
+
   set ServiceHome=%home%
   set ServiceName=%name%
   set DisplayName=%text%
   set Description=%note%
   set Startup=auto
   set ServiceAccount=NetworkService
+
   set Jvm=%jvm%
   set Classpath=devwex.jar
+
   set LogPrefix=service
   set LogPath=%home%/../storage
   set StdOutput=%LogPath%/output.log
   set StdError=%LogPath%/error.log
+
   set StartPath=%ServiceHome%
   set StartMode=jvm
   set StartClass=com.seanox.devwex.Service
   set StartMethod=main
   set StartParams=start
+
   set StopPath=%ServiceHome%
   set StopMode=jvm
   set StopClass=com.seanox.devwex.Service
   set StopMethod=main
   set StopParams=stop
+
   rem --------------------------------------------------------------------------
  
   if "%java%" == "" (
@@ -80,6 +94,7 @@
   if not "%java%" == "" (
     for %%i in ("%java%") do set java=%%~fi
   )
+
   if "%1" == "install"   goto install
   if "%1" == "update"    goto install
   if "%1" == "uninstall" goto uninstall
@@ -88,6 +103,7 @@
   if "%1" == "restart" goto restart
   if "%1" == "stop"    goto stop
   if "%1" == "status"  goto status
+
   echo usage: %~nx0 [command]
   echo.
   echo    install
@@ -103,10 +119,15 @@
     echo.
     echo This script must run as Administrator.
   )
-  exit /B 0
+  exit /B 0
+
+
+
 :install
+
   set label=INSTALL
   if "%1" == "update" set label=UPDATE
+
   echo %label%: Detection of Java runtime environment
   set jvm=
   if exist "%java%\bin\client\jvm.dll" set jvm=%java%\bin\client\jvm.dll
@@ -119,6 +140,7 @@
     exit /B 0
   )
   for %%i in ("%jvm%") do echo    %%~fi
+
   echo %label%: Detection of service runner
   set service=service-32.exe
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
@@ -130,30 +152,12 @@
     exit /B 0
   )
   for %%i in ("%home%\%service%") do echo    %%~fi
+
 rem ----------------------------------------------------------------------------
-  set init=--DisplayName        "%DisplayName%"
-  set init=%init% --Description "%Description%"
-  set init=%init% --Startup     "%Startup%"
-  set init=%init% --Install     "%home%\%service%"
-  set init=%init% --Jvm         "%Jvm%"
-  set init=%init% --Classpath   "%Classpath%"
-  set init=%init% --LogPath     "%LogPath%"
-  set init=%init% --LogPrefix   "%LogPrefix%"
-  set init=%init% --StdOutput   "%StdOutput%"
-  set init=%init% --StdError    "%StdError%"
-  set init=%init% --StartPath   "%StartPath%"
-  set init=%init% --StartMode   "%StartMode%"
-  set init=%init% --StartClass  "%StartClass%"
-  set init=%init% --StartMethod "%StartMethod%"
-  set init=%init% --StartParams "%StartParams%"
-  set init=%init% --StopPath    "%StopPath%"
-  set init=%init% --StopMode    "%StopMode%"
-  set init=%init% --StopClass   "%StopClass%"
-  set init=%init% --StopMethod  "%StopMethod%"
-  set init=%init% --StopParams  "%StopParams%"
-rem ----------------------------------------------------------------------------
+
   set lastError=
   set lastError=%errorLevel%
+
   rem Full access for the NetworkService another user to the AppDirectory
   rem Here no directory of a user should be used, because it is not clear
   rem whether the directory is accessible without the login.
@@ -161,23 +165,24 @@ rem ----------------------------------------------------------------------------
   for %%i in ("%home%\..") do echo    %%~fi
   icacls.exe "%home%\.." /grant %service_account%:(OI)(CI)F /T /Q
   if not "%lastError%" == "%errorLevel%" goto error
-  if not "%jvms%" == "" set init=%init% --JvmMs=%jvms%
-  if not "%jvmx%" == "" set init=%init% --JvmMx=%jvmx%
+
   sc query %ServiceName% >nul 2>&1
   if "%errorLevel%" == "%lastError%" (
     echo %label%: Service is still present and will be stopped and removed
     %service% //DS//%ServiceName%
   )
+
   echo %label%: Service will be created
   %service% //IS//%ServiceName% %init%
+
   sc config %ServiceName% obj= "NT Authority\%ServiceAccount%" >%~n0.log 2>&1
   if not "%errorLevel%" == "%lastError%" goto error
-  set classpath=
-  set javapath=
-  set librariespath=
-  set options=
-  set systempath=%path%
-  set registry=
+
+  set ServiceLibrariesPath=
+  set SystemDrive=%SystemDrive%
+  set SystemRoot=%SystemRoot%
+  set SystemPath=%path%
+
   set extensions=false
   echo %label%: Search for runtime extensions
   for %%i in (../runtime/*.bat ../runtime/*.cmd) do (
@@ -186,22 +191,60 @@ rem ----------------------------------------------------------------------------
     call ../runtime/%%i
   )
   if "%extensions%" == "false" echo    nothing found
+
 rem ----------------------------------------------------------------------------
+
+  set init=--DisplayName        "%DisplayName%"
+  set init=%init% --Description "%Description%"
+  set init=%init% --Startup     "%Startup%"
+  set init=%init% --Install     "%home%\%service%"
+
+  set init=%init% --Jvm         "%Jvm%"
+  set init=%init% --Classpath   "%Classpath%"
+
+  set init=%init% --LogPath     "%LogPath%"
+  set init=%init% --LogPrefix   "%LogPrefix%"
+  set init=%init% --StdOutput   "%StdOutput%"
+  set init=%init% --StdError    "%StdError%"
+
+  set init=%init% --StartPath   "%StartPath%"
+  set init=%init% --StartMode   "%StartMode%"
+  set init=%init% --StartClass  "%StartClass%"
+  set init=%init% --StartMethod "%StartMethod%"
+  set init=%init% --StartParams "%StartParams%"
+
+  set init=%init% --StopPath    "%StopPath%"
+  set init=%init% --StopMode    "%StopMode%"
+  set init=%init% --StopClass   "%StopClass%"
+  set init=%init% --StopMethod  "%StopMethod%"
+  set init=%init% --StopParams  "%StopParams%"
+
+  if not "%jvms%" == "" set init=%init% --JvmMs=%jvms%
+  if not "%jvmx%" == "" set init=%init% --JvmMx=%jvmx%
+
   echo %label%: Service will be final configured
-  %service% //US/%ServiceName% ++JvmOptions='-Dpath="%systempath%;"'
-  %service% //US/%ServiceName% ++JvmOptions='-Dsystemdrive=%systemdrive%'
-  %service% //US/%ServiceName% ++JvmOptions='-Dsystemroot=%systemroot%'
-  %service% //US/%ServiceName% ++JvmOptions='-Dlibraries="..\libraries;%librariespath%;"'
+  %service% //US/%ServiceName% ++JvmOptions='-Dpath="%SystemPath%;"'
+  %service% //US/%ServiceName% ++JvmOptions='-Dsystemdrive=%SystemDrive%'
+  %service% //US/%ServiceName% ++JvmOptions='-Dsystemroot=%SystemRoot%'
+  %service% //US/%ServiceName% ++JvmOptions='-Dlibraries="..\libraries;%ServiceLibrariesPath%;"'
+  %service% //US/%ServiceName% ++JvmOptions='-Dlibraries=true
+
   if not "%jdwp%" == "" (
     %service% //US/%ServiceName% ++JvmOptions='-Xdebug'
     %service% //US/%ServiceName% ++JvmOptions='-Xnoagent'
     %service% //US/%ServiceName% ++JvmOptions='-Djava.compiler=NONE'
     %service% //US/%ServiceName% ++JvmOptions='-Xrunjdwp:transport="%jdwp%"'
   )
+
   echo %label%: Successfully completed
-  exit /B 0
+  exit /B 0
+
+
+
 :uninstall
+
   set label=UNINSTALL
+
   echo %label%: Detection of service runner
   set service=service-32.exe
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
@@ -213,25 +256,32 @@ rem ----------------------------------------------------------------------------
     exit /B 0
   )
   for %%i in ("%home%\%service%") do echo    %%~fi
+
   sc query %ServiceName% >nul 2>&1
   if "%errorLevel%" == "0" (
     echo %label%: Service is still present and will be stopped and removed
     %service% //DS//%ServiceName%
   ) else echo %label%: Service has already been removed
+
   echo %label%: Successfully completed
   exit /B 0
  
  
  
 :start
+
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
     exit /B 0
   )
   net start %ServiceName%
-  exit /B 0
+  exit /B 0
+
+
+
 :restart
+
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
@@ -239,7 +289,10 @@ rem ----------------------------------------------------------------------------
   )
   net stop %ServiceName%
   net start %ServiceName%
-  exit /B 0
+  exit /B 0
+
+
+
 :stop
  
   sc query %ServiceName% >nul 2>&1
@@ -250,8 +303,10 @@ rem ----------------------------------------------------------------------------
   net stop %ServiceName%
   exit /B 0
  
- 
+
+
 :status
+
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
@@ -263,13 +318,18 @@ rem ----------------------------------------------------------------------------
     "%java%\bin\java.exe" -cp "%Classpath%" com.seanox.devwex.Service status
   )
   exit /B 0
+
   
   
 :error
+
   echo.
   echo ERROR: An unexpected error occurred.
   echo ERROR: The script was canceled.
+
   if not exist %~n0.log exit /B 0
+
   echo.
   type %~n0.log & del %~n0.log
-  exit /B 0
+
+  exit /B 0

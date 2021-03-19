@@ -233,6 +233,94 @@
           The unpacked directory structure is stored anywhere in the file
           system.
         </p>
+        <h2>Windows Service</h2>
+        <p>
+          For Windows, a distribution of Seanox Devwex with <a target="_extern"
+              href="https://commons.apache.org/daemon/procrun.html">Procrun</a>
+          is available, which installs Seanox Devwex in Windows as a service.
+          The distribution is based on the Java version and contains in
+          additional additionally the service runners for 32 and 64 bit as well
+          the batch file <code>service.cmd</code> for easy usage of the service.
+        </p>
+        <p>
+          Also with the Windows distribution, the archive can be unpacked
+          anywhere file system.<br>
+          Because the service should run with a Windows service account and
+          proper access rights, it is recommended to place and install it
+          outside the user profiles.
+        </p>
+        <p>
+          By default, the service is installed with the Windows service account
+          <code>NetworkService</code>, but other service accounts can also be
+          used. The access rights required for the program directory are set
+          during installation.
+        </p>
+        <p>
+          The parameters to configure the service have been bundled in the batch
+          file and are easily accessible.
+        </p>        
+        <p>
+          To install the service, the batch file <code>service.cmd</code> is
+          used.<br>
+          To do this, open the console (shell/prompt) as administrator and
+          change to the program directory <code>./devwex/program</code> and call
+          the batch file with the desired function.
+        </p>
+        <code>
+          usage: service.cmd [command]
+        </code>
+        <header>
+          Overview of available commands:<br>
+          Upper and lower case letters are ignored in the commands.
+        </header>
+        <table>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>install</td>
+            <td>
+              Installs the service.
+            </td>
+          </tr>
+          <tr>
+            <td>update</td>
+            <td>
+              Removes the service and reinstalls it with updated configuration.
+            </td>
+          </tr>
+          <tr>
+            <td>uninstall</td>
+            <td>
+              Removes the service.
+            </td>
+          </tr>
+          <tr>
+            <td>start</td>
+            <td>
+              Starts the service.
+            </td>
+          </tr>
+          <tr>
+            <td>status</td>
+            <td>
+              Output of the status of the running service.
+            </td>
+          </tr>
+          <tr>
+            <td>restart</td>
+            <td>
+              Stops the service and restarts it.
+            </td>
+          </tr>
+          <tr>
+            <td>stop</td>
+            <td>
+              Stops the service.
+            </td>
+          </tr>
+        </table>
       </article>
       <article>
         <h1>Configuration</h1>

@@ -242,28 +242,26 @@
         </p>
         <h2>Windows Service</h2>
         <p>
-          Speziell f&uuml;r Windows ist eine Distribution mit <a target="_extern"
+          F&uuml;r Windows ist eine Distribution mit <a target="_extern"
               href="https://commons.apache.org/daemon/procrun.html">Procrun</a>
-          verf&uuml;gbar, mit der Seanox Devwex als Windows Dienst eingerichtet
-          werden kann. Die Distribution basiert auf der reinen Java-Version und
-          enth&auml;lt zudem die Service-Runner <code>service-32.exe</code>
-          f&uuml;r 32 Bit, <code>service-64.exe</code> f&uuml;r 64 Bit sowie die
+          verf&uuml;gbar, die Seanox Devwex in Windows als Dienst installiert.
+          Die Distribution basiert auf der Java-Version und enth&auml;lt
+          zus&auml;tzlich die Service-Runner f&uuml;r 32 und 64 Bit sowie die
           Batch-Datei <code>service.cmd</code> f&uuml;r einen einfachen Umgang
           mit dem Service.
         </p>
         <p>
-          Auch bei der Windows-Distribution wird ebenfalls eine beliebige Stelle
-          im Dateisystem ausgew&auml;hlt, wohin das Archiv entpackt wird.<br>
-          Da der Service mit einem Systemkonto und entsprechenden
+          Auch die Windows-Distribution wird an einer beliebigen Stelle im
+          Dateisystem entpackt.<br>
+          Da der Service mit einem Windows-Dienstkonto und entsprechenden
           Zugriffsrechten laufen sollte, wird die Ablage und Installation
           ausserhalb der Benutzer-Profile empfohlen.
         </p>
         <p>
-          Standardm&auml;ssig wird die Batch-Datei den Service mit dem
-          Systemkonto <code>NetworkService</code> einrichten.<br>
-          Die f&uuml;r das Programverzeichnis ben&ouml;tigten Zugriffsrechte
-          werden durch die Batch-Datei gesetzt. Wird ein anderes Systemkonto
-          verwendet, werden die Zugriffsrechte automatisch hinzugef&uuml;gt.
+          Standardm&auml;ssig wird der Service mit dem Windows-Dienstkonto
+          <code>NetworkService</code> eingerichtet, andere Dienstkontos lassen
+          sich ebenfalls nutzen. Die f&uuml;r das Programverzeichnis
+          ben&ouml;tigten Zugriffsrechte werden bei der Einrichtung gesetzt.
         </p>
         <p>
           Die Parameter zur Konfiguration des einzurichtenden Services wurden in

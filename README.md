@@ -152,6 +152,7 @@ Go to the program directory and start the program directly or by script.
 BF: HTTP(S) Server Status: Update of class 4xx  
 BF: HTTP(S) CGI: Correction of REQUEST_URI  
 BF: HTTP(S) CGI: Correction of SCRIPT_URI / SCRIPT_URL  
+BF: Service: Optimization / correction of Service::Print  
 CR: HTTP(S) CGI: Output of the error pipe of the CGI process  
 CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)  
 CR: Build: Target release replaced archive (omitted)  

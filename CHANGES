@@ -9,6 +9,7 @@
   CR: Build: Target release replaced archive (omitted)
   CR: Windows: Integration and merge of Seanox Devwex Service project
       Maintenance, build and release of the Windows service integrated into this project.
+      The implementation of the service has been completely revised.
 
 5.3.0 20200831
   BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)

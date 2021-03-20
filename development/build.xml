@@ -27,7 +27,7 @@
   <property name="build.sources" value="${build.project}/sources"/>
   <property name="build.classes" value="${build.project}/classes"/>
   
-  <property name="sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini"/>
+  <property name="sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini,**/*.bat,**/*.cmd"/>
   
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
@@ -372,14 +372,15 @@
     <copy todir="${build}/release">
       <fileset refid="fileset.release.windows"/>
     </copy>    
+    <release-insert/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>      
-    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"/>
-    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"
+    <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"/>
+    <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"
         basedir="${build}/release" compress="true" filesonly="false" defaultexcludes="false"/> 
     <touch datetime="${release.date}" pattern="yyyyMMdd"
-        file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-windows.zip"/>    
+        file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"/>    
 
     <delete dir="${build}"/>
   </target>  

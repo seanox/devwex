@@ -172,12 +172,6 @@ rem ----------------------------------------------------------------------------
     %service% //DS//%ServiceName%
   )
 
-  echo %label%: Service will be created
-  %service% //IS//%ServiceName% %init%
-
-  sc config %ServiceName% obj= "NT Authority\%ServiceAccount%" >%~n0.log 2>&1
-  if not "%errorLevel%" == "%lastError%" goto error
-
   set ServiceLibrariesPath=
   set SystemDrive=%SystemDrive%
   set SystemRoot=%SystemRoot%
@@ -221,6 +215,12 @@ rem ----------------------------------------------------------------------------
 
   if not "%jvms%" == "" set init=%init% --JvmMs=%jvms%
   if not "%jvmx%" == "" set init=%init% --JvmMx=%jvmx%
+  
+  echo %label%: Service will be created
+  %service% //IS//%ServiceName% %init%
+
+  sc config %ServiceName% obj= "NT Authority\%ServiceAccount%" >%~n0.log 2>&1
+  if not "%errorLevel%" == "%lastError%" goto error
 
   echo %label%: Service will be final configured
   %service% //US/%ServiceName% ++JvmOptions='-Dpath="%SystemPath%;"'

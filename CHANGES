@@ -4,6 +4,7 @@
       Without normalization/decoding (unchanged as received from the client)
   BF: HTTP(S) CGI: Correction of SCRIPT_URI / SCRIPT_URL
       Without normalization/decoding (unchanged as received from the client)
+  BF: Service: Optimization / correction of Service::Print
   CR: HTTP(S) CGI: Output of the error pipe of the CGI process
   CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)
   CR: Build: Target release replaced archive (omitted)

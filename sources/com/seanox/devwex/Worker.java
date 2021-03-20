@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  * Devwex, Advanced Server Development
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of version 2 of the GNU General Public License as published by the
@@ -62,12 +62,12 @@ import javax.net.ssl.SSLSocket;
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
  * <br>
- * Worker 5.4.0 20201209<br>
- * Copyright (C) 2020 Seanox Software Solutions<br>
+ * Worker 5.4.0 20210320<br>
+ * Copyright (C) 2021 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.4.0 20201209
+ * @version 5.4.0 20210320
  */
 class Worker implements Runnable {
   
@@ -1398,9 +1398,7 @@ class Worker implements Runnable {
         //die Umgebungsvariabeln werden entsprechend der Ressource gesetzt
         this.environment.set("path_url", shadow);
         this.environment.set("script_name", shadow);
-        
         this.environment.set("script_url", this.fields.get("req_uri"));
-
         this.environment.set("path_context", "");
         this.environment.set("path_info", "");
 
@@ -2851,7 +2849,7 @@ class Worker implements Runnable {
                 } finally {
                     stream.close();
                 }
-            } else Service.print(format, false);            
+            } else Service.print(format, true);            
         }
     }
     

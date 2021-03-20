@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der GNU General Public License.
  *
  * Devwex, Advanced Server Development
- * Copyright (C) 2020 Seanox Software Solutions
+ * Copyright (C) 2021 Seanox Software Solutions
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of version 2 of the GNU General Public License as published by the
@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.3.0 20200627<br>
- * Copyright (C) 2020 Seanox Software Solutions<br>
+ * Service 5.4.0 20210320<br>
+ * Copyright (C) 2021 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.3.0 20200627
+ * @version 5.4.0 20210320
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -752,13 +752,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         else if (options.length < 2)
             options = new String[] {options[0], ""};
         
-        boolean strict = Service.service != null;
+        boolean plain = Service.service == null;
         
         //Ausgabeinformation wird zusammen gestellt und ausgegeben
-            Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", strict);
-            Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", strict);
-            Service.print("Advanced Server Development", strict);
-            Service.print("\r\n", strict);
+        Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", plain);
+        Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", plain);
+        Service.print("Advanced Server Development", plain);
+        Service.print("", plain);
         
         //das Kommando wird ermittelt
         String string = "";
@@ -767,7 +767,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
         //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
         if (!string.matches("^start|restart|status|stop$")) {
-            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", strict);
+            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", plain);
             return;
         }
 
@@ -786,7 +786,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             options[1] = options[1] == null ? "" : options[1].trim();
             if (options[1].length() > 0
                     && !options[1].matches("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$")) {
-                Service.print("INVALID REMOTE DESTINATION", strict);
+                Service.print("INVALID REMOTE DESTINATION", plain);
                 return;
             }
             String address = options[1].replaceAll("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$", "$1");
@@ -797,78 +797,61 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             string = new String(Remote.call(address, Integer.parseInt(port), string));
             if (string.length() <= 0)
                 string = "REMOTE ACCESS NOT AVAILABLE";
-            Service.print(string.trim(), strict);
+            String[] lines = string.trim().split("[\r\n]+");
+            for (int loop = 0; loop < lines.length; loop++)
+                Service.print(lines[loop], plain);
         } catch (Throwable throwable) {
-            Service.print("REMOTE ACCESS FAILED", strict);
-            Service.print(throwable.getMessage(), strict);
+            Service.print("REMOTE ACCESS FAILED", plain);
+            Service.print(throwable.getMessage(), plain);
         }
     }
     
     /**
      * Protokolliert das &uuml;bergebene Objekt zeilenweise und mit
-     * vorangestelltem Zeitstempel in den Standard IO. Zur Ermittlung des
-     * Protokolltexts wird {@code Object.toString()} vom &uuml;bergebenen Objekt
-     * verwendet. Bei der &uuml;bergabe von Fehlerobjekten wird der StackTrace
-     * protokolliert.
-     * @param object Objekt mit dem Protokolleintrag
+     * vorangestelltem Zeitstempel in den Standard IO. Der Inhalt der Ausgabe
+     * wird per {@code Object.toString()} ermittelt. Bei der &Uuml;bergabe von
+     * Fehlerobjekten wird der StackTrace protokolliert. Zeilenumbr&uuml;che in
+     * Inhalten werden zusammengefasst und werden einger&uuml;ckt ausgegeben.
+     * @param object Objekt f&uuml;r dem Protokolleintrag
      */
     public static void print(Object object) {
-        Service.print(object, true);
+        Service.print(object, false);
     }
     
     /**
      * Protokolliert das &uuml;bergebene Objekt zeilenweise und mit
-     * vorangestelltem Zeitstempel in den Standard IO. Zur Ermittlung des
-     * Protokolltexts wird {@code Object.toString()} vom &uuml;bergebenen Objekt
-     * verwendet. Bei der &uuml;bergabe von Fehlerobjekten wird der StackTrace
-     * protokolliert.
-     * Leere Informationen werden ignoriert.
-     * Die automatische Einr&uuml;ckung wird bei Exceptions ausgesetzt.
-     * @param object Objekt mit dem Protokolleintrag
-     * @param strict {@code false} Unterdr&uuuml;cht das Voranstellen vom
-     *     Zeitstempel und es kann mit {@code \r\n} (Anzahl und Zeichenfolge
-     *     wird ignoriert) eine Leerzeilen ausgegeben werden   
+     * vorangestelltem Zeitstempel in den Standard IO. Der Inhalt der Ausgabe
+     * wird per {@code Object.toString()} ermittelt. Bei der &Uuml;bergabe von
+     * Fehlerobjekten wird der StackTrace protokolliert. Zeilenumbr&uuml;che in
+     * Inhalten werden zusammengefasst und werden einger&uuml;ckt ausgegeben.
+     * @param object Objekt f&uuml;r dem Protokolleintrag
+     * @param plain {@code false} Unterdr&uuuml;cht die Ausgabe vom Zeitstempel
+     *     sowie die Optimierung.
      */
-    public static void print(Object object, boolean strict) {
+    public static void print(Object object, boolean plain) {
         
-        String    string;
-        Throwable throwable;
-        
-        throwable = null;
-        
+        Throwable throwable = null;
         if (object instanceof Throwable) {
-
             throwable = ((Throwable)object);
             while (throwable instanceof InvocationTargetException
                     && (object = ((InvocationTargetException)throwable).getTargetException()) != null)
                 throwable = ((Throwable)object);
-
             object = new StringWriter();
             throwable.printStackTrace(new PrintWriter((StringWriter)object));
         }
         
-        string = String.valueOf(object);
-
+        String string = String.valueOf(object).trim();
         synchronized (System.out) {
-
-            if (strict || !string.matches("[\r\n]+")) {
-
-                string = string.trim();
-                if (object == null
-                        || string.length() <= 0)
-                    return;
-
+            if (!plain) {
                 //der Zeitstempel wird ermittelt
                 //ggf. wird eine Einrueckung fuer die Folgezeilen eingefuegt
-                string = strict ? String.format("%tF %<tT %s", new Object[] {new Date(), string}) : string;
+                string = String.format("%tF %<tT %s", new Object[] {new Date(), string});
                 if (throwable == null
                         && string.matches("(?s).*[\r\n][^\\s].*"))
                     string = string.replaceAll("([\r\n]+)", "$1\t");
-
-                //der Inhalt wird ausgegeben
-                System.out.println(string.trim());
-
-            } else System.out.println();
+            }
+            //der Inhalt wird ausgegeben
+            System.out.println(string.trim());
         }        
     }
     
@@ -880,9 +863,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public static int status() {
         
-        Service service;
-        
-        service = Service.service;
+        Service service = Service.service;
 
         //die Abfrage des Betriebsstatus ist asynchron moeglich womit nicht
         //sichergestellt werden kann, das der Service verfuegbar ist

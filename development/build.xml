@@ -298,7 +298,7 @@
     <include name="LICENSE"/>
   </fileset> 
   
-  <fileset id="fileset.release" dir="${workspace}">
+  <fileset id="fileset.release" dir="${build}/sources">
     <include name="documents/index.html"/>
     <include name="manuals/seanox-devwex_de.html"/>
     <include name="manuals/seanox-devwex_en.html"/> 
@@ -317,7 +317,7 @@
     <include name="LICENSE"/>
   </fileset>
   
-  <fileset id="fileset.release.windows" dir="${workspace}">
+  <fileset id="fileset.release.windows" dir="${build}/sources">
     <include name="program/service.cmd"/> 
     <include name="program/service-32.exe"/> 
     <include name="program/service-32.license"/> 

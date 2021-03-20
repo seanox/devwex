@@ -112,7 +112,7 @@ Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der GNU General Public License.
 
-Copyright (C) 2020 Seanox Software Solutions
+Copyright (C) 2021 Seanox Software Solutions
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of version 2 of the GNU General Public License as published by the
@@ -148,27 +148,14 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.3.0 20200831 (summary of the current version)  
-BF: HTTP(S) AccessLog: Correction in the file name of the log file (use http_host instead of remote_host)  
-BF: HTTP(S) Content Types: Correction of xml/xsl/xslt to use application/xslt+xml  
-BF: HTTP(S) Request: Correction of the request validation  
-BF: Generator: Correction of expensive/hungry RegExp  
-BF: Manual: Correction for chrome-based browsers  
-CR: Manual: Improvement of the navigation  
-CR: Project: Automatic update of the version in README.md  
-CR: Build: Harmonization when updating the version  
-CR: HTTP(S) Status: Added option [H] (Header Only)  
-CR: HTTP(S) CGI: Not allowed/configured methods are now answered with status 405  
-CR: HTTP(S) CGI: Update of the PHP preparation  
-CR: HTTP(S) CGI: Change of the option [P] to [D]  
-CR: HTTP(S) Directory Index: Optimization / reduction of code  
-CR: HTTP(S) Directory Index: Change from placeholder 'files' to 'file'  
-CR: HTTP(S) Directory Index: Omission of the formatting of the file size  
-CR: HTTP(S) Directory Index: Realignment of the column 'type'  
-CR: Worker: Optimization / reduction of code  
-CR: Remote: Optimization / reduction of code  
-CR: Sources: Update of the comment format  
-CR: XAPI: Integration of cascaded components  
+## 5.4.0 2021xxxx (summary of the next version)  
+BF: HTTP(S) Server Status: Update of class 4xx  
+BF: HTTP(S) CGI: Correction of REQUEST_URI  
+BF: HTTP(S) CGI: Correction of SCRIPT_URI / SCRIPT_URL  
+CR: HTTP(S) CGI: Output of the error pipe of the CGI process  
+CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)  
+CR: Build: Target release replaced archive (omitted)  
+CR: Windows: Integration and merge of Seanox Devwex Service project  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

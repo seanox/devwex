@@ -271,7 +271,8 @@
         </code>
         <header>
           Overview of available commands:<br>
-          Upper and lower case letters are ignored in the commands.
+          The letter case (upper and lower case) is to be respected for the
+          commands.
         </header>
         <table>
           <tr>
@@ -321,6 +322,19 @@
             </td>
           </tr>
         </table>
+        <section>
+          <b>Hint</b>
+          <p>
+            The distribution does not contain a JRE.
+          </p>
+          <p>
+            If an already installed or in the system available one should be
+            used, the Java home can be specified in <code>service.cmd</code>
+            with the variable <code>java</code>. Alternatively, the JRE can also
+            be placed in <code>./runtime/java</code>. In this case the batch
+            script will find the JRE automatically.
+          </p>
+        </section>
       </article>
       <article>
         <h1>Configuration</h1>

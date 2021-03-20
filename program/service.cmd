@@ -163,7 +163,7 @@ rem ----------------------------------------------------------------------------
   rem whether the directory is accessible without the login.
   echo %label%: Grant all privileges for %ServiceAccount% to the app AppDirectory
   for %%i in ("%home%\..") do echo    %%~fi
-  icacls.exe "%home%\.." /grant %service_account%:(OI)(CI)F /T /Q
+  icacls.exe "%home%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q
   if not "%lastError%" == "%errorLevel%" goto error
 
   sc query %ServiceName% >nul 2>&1

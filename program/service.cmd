@@ -119,7 +119,7 @@
     echo.
     echo This script must run as Administrator.
   )
-  exit /B 0
+  goto exit
 
 
 
@@ -137,7 +137,7 @@
   if not exist "%jvm%" (
     echo.
     echo ERROR: Java Runtime Environment not found
-    exit /B 0
+    goto exit
   )
   for %%i in ("%jvm%") do echo    %%~fi
 
@@ -149,7 +149,7 @@
   if not exist "%home%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
-    exit /B 0
+    goto exit
   )
   for %%i in ("%home%\%service%") do echo    %%~fi
 
@@ -237,7 +237,7 @@ rem ----------------------------------------------------------------------------
   )
 
   echo %label%: Successfully completed
-  exit /B 0
+  goto exit
 
 
 
@@ -253,7 +253,7 @@ rem ----------------------------------------------------------------------------
   if not exist "%home%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
-    exit /B 0
+    goto exit
   )
   for %%i in ("%home%\%service%") do echo    %%~fi
 
@@ -264,7 +264,7 @@ rem ----------------------------------------------------------------------------
   ) else echo %label%: Service has already been removed
 
   echo %label%: Successfully completed
-  exit /B 0
+  goto exit
  
  
  
@@ -273,10 +273,10 @@ rem ----------------------------------------------------------------------------
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
-    exit /B 0
+    goto exit
   )
   net start %ServiceName%
-  exit /B 0
+  goto exit
 
 
 
@@ -285,11 +285,11 @@ rem ----------------------------------------------------------------------------
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
-    exit /B 0
+    goto exit
   )
   net stop %ServiceName%
   net start %ServiceName%
-  exit /B 0
+  goto exit
 
 
 
@@ -298,10 +298,10 @@ rem ----------------------------------------------------------------------------
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
-    exit /B 0
+    goto exit
   )
   net stop %ServiceName%
-  exit /B 0
+  goto exit
  
 
 
@@ -310,14 +310,14 @@ rem ----------------------------------------------------------------------------
   sc query %ServiceName% >nul 2>&1
   if not "%errorLevel%" == "0" (
     echo ERROR: Service is not present
-    exit /B 0
+    goto exit
   )
   if not exist "%java%\bin\java.exe" (
     echo ERROR: Java Runtime Environment not found
   ) else (
     "%java%\bin\java.exe" -cp "%Classpath%" com.seanox.devwex.Service status
   )
-  exit /B 0
+  goto exit
 
   
   
@@ -327,9 +327,15 @@ rem ----------------------------------------------------------------------------
   echo ERROR: An unexpected error occurred.
   echo ERROR: The script was canceled.
 
-  if not exist %~n0.log exit /B 0
+  if not exist %~n0.log goto exit
 
   echo.
-  type %~n0.log & del %~n0.log
+  type %~n0.log
+  goto exit
 
+
+
+:exit
+
+  if exist %~n0.log del %~n0.log
   exit /B 0

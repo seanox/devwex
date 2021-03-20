@@ -228,8 +228,9 @@
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build.classes}"/>
     </touch>
+    <delete file="${workspace.program}/${ant.project.name}.jar"/>
     <zip destfile="${workspace.program}/${ant.project.name}.jar"
-        basedir="${build.classes}" compress="true" filesonly="true"/>    
+        basedir="${build.classes}" compress="true" level="9" filesonly="true"/>
     <condition property="windows" value="true">
       <os family="windows"/>
     </condition>
@@ -360,6 +361,8 @@
     <copy todir="${build}/release">
       <fileset refid="fileset.release"/>
     </copy>
+    <copy file="${workspace}/program/${ant.project.name}.jar" todir="${build}/release/program"/>
+    <copy file="${workspace}/program/keystore" todir="${build}/release/program"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>      
@@ -378,7 +381,7 @@
     </touch>      
     <delete file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"/>
     <zip destfile="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"
-        basedir="${build}/release" compress="true" filesonly="false" defaultexcludes="false"/> 
+        basedir="${build}/release" compress="true" level="9" filesonly="false" defaultexcludes="false"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd"
         file="${workspace.releases}/seanox-${ant.project.name}-${release.version}-win.zip"/>    
 

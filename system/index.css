@@ -1,79 +1,79 @@
 /** general styles */
 a {
-  text-decoration:none;
+  text-decoration: none;
 }
 a {
-  color:#CCCCCC;
+  color: #CCCCCC;
 }
 a:hover {
-  color:#FFFFFF;
+  color: #FFFFFF;
 }
 
 
 
 /** path: breadcrumb navigation */
 main > h1 + h2 a:before {
-  display:inline-block;
-  margin:0em 0.5em;
-  border:0.4em solid transparent;
-  border-left-color:#FFAA44;
-  border-right:none;
-  content:'';
+  display: inline-block;
+  margin: 0em 0.5em;
+  border: 0.4em solid transparent;
+  border-left-color: #FFAA44;
+  border-right: none;
+  content: '';
 }
 main > h1 + h2 a:first-child:before {
-  margin-left:0em;
+  margin-left: 0em;
 }
 
 
 
 /** table */
 table {
-  width:100%;
-  border-spacing:0px;
-  border-collapse:collapse;
-  border-bottom:2px solid #FFAA44;
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  border-bottom: 2px solid #FFAA44;
 }
 
 
 
 /** table header: sorting */
 table thead th {
-  position:relative;
-  text-align:right;
-  border-bottom:2px solid #FFAA44;
+  position: relative;
+  text-align: right;
+  border-bottom: 2px solid #FFAA44;
 }
 table thead th:nth-child(-n+2) {
-  text-align:left;
+  text-align: left;
 }
 table thead th  {
-  padding-left:0.5em;
-  padding-right:0.5em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 table thead th:first-child {
-  padding-left:0em;
+  padding-left: 0em;
 }
 table thead th:last-child {
-  padding-right:0em;
+  padding-right: 0em;
 }
 table thead h3 {
-  margin-top:0px;
-  padding-top:0px;
+  margin-top: 0px;
+  padding-top: 0px;
 }
 table thead a[href='?n']:before,
 table thead a[href='?N']:before {
-  content:'Name';
+  content: 'Name';
 }
 table thead a[href='?t']:before,
 table thead a[href='?T']:before {
-  content:'Type';
+  content: 'Type';
 }
 table thead a[href='?s']:after,
 table thead a[href='?S']:after {
-  content:'Size';
+  content: 'Size';
 }
 table thead a[href='?d']:after,
 table thead a[href='?D']:after {
-  content:'Modified';
+  content: 'Modified';
 }
 table thead a[href='?N'],
 table thead a[href='?T'],
@@ -83,13 +83,13 @@ table.na thead a[href='?n'],
 table.ta thead a[href='?t'],
 table.sa thead a[href='?s'],
 table.da thead a[href='?d'] {
-  display:none;
+  display: none;
 }
 table.na thead a[href='?N'],
 table.ta thead a[href='?T'],
 table.sa thead a[href='?S'],
 table.da thead a[href='?D'] {
-  display:inline;
+  display: inline;
 }
 table thead a[href='?n']:after,
 table thead a[href='?N']:after,
@@ -99,25 +99,25 @@ table thead a[href='?s']:before,
 table thead a[href='?S']:before,
 table thead a[href='?d']:before,
 table thead a[href='?D']:before {
-  position:relative;
-  display:inline-block;
-  margin:0em 0.5em;
-  border:0.4em solid transparent;
-  content:' ';
+  position: relative;
+  display: inline-block;
+  margin: 0em 0.5em;
+  border: 0.4em solid transparent;
+  content: ' ';
 }
 table.na thead a[href='?N']:after,
 table.ta thead a[href='?T']:after,
 table.sa thead a[href='?S']:before,
 table.da thead a[href='?D']:before {
-  top:0.325em;
-  border-top-color:#FFAA44;
+  top: 0.325em;
+  border-top-color: #FFAA44;
 }
 table.nd thead a[href='?n']:after,
 table.td thead a[href='?t']:after,
 table.sd thead a[href='?s']:before,
 table.dd thead a[href='?d']:before {
-  top:-0.08em;
-  border-bottom-color:#FFAA44;
+  top: -0.08em;
+  border-bottom-color: #FFAA44;
 }
 table.na tbody tr td:nth-child(1),
 table.nd tbody tr td:nth-child(1),
@@ -127,69 +127,69 @@ table.sa tbody tr td:nth-child(3),
 table.sd tbody tr td:nth-child(3),
 table.da tbody tr td:nth-child(4),
 table.dd tbody tr td:nth-child(4) {
-  background:#4F4C4A;
+  background: #4F4C4A;
 }
 
 
 
 /** table: is empty message */
 table thead + thead {
-  display:none;
-  color:#999999;
+  display: none;
+  color: #999999;
 }
 table.x {
-  border-bottom:none;
+  border-bottom: none;
 }
 table.x thead {
-  display:none;
+  display: none;
 }
 table.x thead th {
-  border-bottom:none;
+  border-bottom: none;
 }
 table.x thead + thead {
-  display:table-header-group;
+  display: table-header-group;
 }
 table.x tbody {
-  display:none;
+  display: none;
 }
 
 
 
 /** table body */
 table tbody tr td {
-  vertical-align:top;
-  padding:1em 0.5em;
+  vertical-align: top;
+  padding: 1em 0.5em;
 }
 table tbody tr td:first-child {
-  vertical-align:top;
-  padding-left:0em;
+  vertical-align: top;
+  padding-left: 0em;
 }
 table tbody tr td:last-child {
-  vertical-align:top;
-  padding-right:0em;
+  vertical-align: top;
+  padding-right: 0em;
 }
 table tbody tr td:nth-child(n+3) {
-  text-align:right;
+  text-align: right;
 }
 table tbody tr + tr td {
-  border-top:1px solid;
+  border-top: 1px solid;
 }
 
 
 
 /** column icon */
 table tbody tr td:first-child div {
-  padding-left:48px;
+  padding-left: 48px;
 }
 table tbody tr.directory div + div:before,
 table tbody tr.file div + div:before {
-  position:absolute;
-  height:35px;
-  width:35px;
-  margin-left:-48px;
-  margin-top:3px;
-  display:inline-block;
-  content:'';
+  position: absolute;
+  height: 35px;
+  width: 35px;
+  margin-left: -48px;
+  margin-top: 3px;
+  display: inline-block;
+  content: '';
 }
 table tbody tr.directory td div + div:before {
   background:
@@ -364,34 +364,37 @@ table tbody tr.file[mime^='text/'] div + div:before {
 
 
 /** column name: additional entry description */
+table tbody tr td:first-child div:after {
+  margin-top: 0.25 rem;
+}
 table tbody tr td + td div:after {
-  content:attr(text);
+  content: attr(text);
 }
 table tbody tr td + td span:after{
-  content:attr(type)' File';
+  content: attr(type)' File';
 }
 table tbody tr td div + div:after {
-  display:block;
-  color:#999999;
+  display: block;
+  color: #999999;
 }
 table tbody tr.directory td div + div:after {
-  content:'Directory';
+  content: 'Directory';
 }
 table tbody tr.file td div + div:after {
-  content:'File';
+  content: 'File';
 }
 table tbody tr.file[mime^='application/'] div + div:after {
-  content:'Application File';
+  content: 'Application File';
 }
 table tbody tr.file[mime='application/octet-stream'] td div + div:after {
-  content:'Binary File';
+  content: 'Binary File';
 }
 table tbody tr.file.bin td div + div:after,
 table tbody tr.file.com td div + div:after,
 table tbody tr.file.cpl td div + div:after,
 table tbody tr.file.exe td div + div:after,
 table tbody tr.file.scr td div + div:after {
-  content:'Application Executable File';
+  content: 'Application Executable File';
 }
 table tbody tr.file.dll td div + div:after,
 table tbody tr.file.drv td div + div:after,
@@ -399,7 +402,7 @@ table tbody tr.file.inf td div + div:after,
 table tbody tr.file.lib td div + div:after,
 table tbody tr.file.so td div + div:after,
 table tbody tr.file.sys td div + div:after {
-  content:'Application Extension File';
+  content: 'Application Extension File';
 }
 table tbody tr.file.azw td div + div:after,
 table tbody tr.file.tr2 td div + div:after,
@@ -425,42 +428,42 @@ table tbody tr.file.prc td div + div:after,
 table tbody tr.file.rtf td div + div:after,
 table tbody tr.file.smil td div + div:after,
 table tbody tr.file.xps td div + div:after {
-  content:'Document File';
+  content: 'Document File';
 }
 table tbody tr.file.bat td div + div:after,
 table tbody tr.file.cmd td div + div:after,
 table tbody tr.file.hta td div + div:after,
 table tbody tr.file.ps1 td div + div:after,
 table tbody tr.file.sh td div + div:after {
-  content:'Executable Script File';
+  content: 'Executable Script File';
 }
 table tbody tr.file.atom td div + div:after,
 table tbody tr.file.rss td div + div:after {
-  content:'Feed File';
+  content: 'Feed File';
 }
 table tbody tr.file[mime^='font/'] div + div:after,
 table tbody tr.file[mime*='font'] div + div:after {
-  content:'Font File';
+  content: 'Font File';
 }
 table tbody tr.file[mime^='image/'] div + div:after {
-  content:'Graphic File';
+  content: 'Graphic File';
 }
 table tbody tr.file.htm td div + div:after,
 table tbody tr.file.sgm td div + div:after,
 table tbody tr.file[mime^='application/'][mime$='tex'] div + div:after,
 table tbody tr.file[mime^='application/'][mime$='xml']:not([class$='smil']):not([class$='atom']) div + div:after,
 table tbody tr.file[mime^='text/'][mime$='ml'] div + div:after {
-  content:'Markup Language File';
+  content: 'Markup Language File';
 }
 table tbody tr.file[mime^='message/'] div + div:after {
-  content:'Message File';
+  content: 'Message File';
 }
 table tbody tr.file[mime^='audio/'] div + div:after,
 table tbody tr.file[mime^='video/'] div + div:after {
-  content:'Multimedia File';
+  content: 'Multimedia File';
 }
 table tbody tr.file[mime^='application/vnd']:not([mime*='font']):not([mime*='help']) td div + div:after {
-  content:'Office Document File';
+  content: 'Office Document File';
 }
 table tbody tr.file.bcpio td div + div:after,
 table tbody tr.file.boz td div + div:after,
@@ -496,28 +499,28 @@ table tbody tr.file.ustar td div + div:after,
 table tbody tr.file.xpi td div + div:after,
 table tbody tr.file.zip td div + div:after,
 table tbody tr.file[mime='application/x-7z'] td div + div:after {
-  content:'Packed Container File';
+  content: 'Packed Container File';
 }
 table tbody tr.file.css td div + div:after,
 table tbody tr.file.xsl td div + div:after,
 table tbody tr.file.xslt td div + div:after {
-  content:'Style Sheet File';
+  content: 'Style Sheet File';
 }
 table tbody tr.file[mime='application/x-trash'] td div + div:after {
-  content:'Temporary File';
+  content: 'Temporary File';
 }
 table tbody tr.file[mime^='text/'] div + div:after {
-  content:'Text File';
+  content: 'Text File';
 }
 table tbody tr.directory td:first-child + td div:after {
-  content:'Directory';
+  content: 'Directory';
 }
 table tbody tr.file td:first-child + td div:after {
-  text-transform:uppercase;
-  content:attr(text);
+  text-transform: uppercase;
+  content: attr(text);
 }
 table tbody tr.directory td:first-child + td + td div:after {
-  content:'-';
+  content: '-';
 }
 
 
@@ -525,5 +528,5 @@ table tbody tr.directory td:first-child + td + td div:after {
 /** column: modified */
 table tbody tr td:nth-child(4),
 table tbody tr td:nth-child(4) * {
-  white-space:nowrap;
+  white-space: nowrap;
 }

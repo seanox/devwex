@@ -1,37 +1,37 @@
 @media screen and (min-width:1400px) {
   
   body {
-    overflow:hidden;
+    overflow: hidden;
   }
   body > * {
-    position:absolute;
-    height:100%;
-    overflow:auto;
+    position: absolute;
+    height: 100%;
+    overflow: auto;
   }
   main {
-    left:25%;
-    width:75%;
-    background:linear-gradient(to right, #393733 0px, #494744 3px);
-    border-left:1px solid #393733;
+    left: 25%;
+    width: 75%;
+    background: linear-gradient(to right, #393733 0px, #494744 3px);
+    border-left: 1px solid #393733;
   }
   main:after {
-    display:block;
-    height:7.5em;
-    content:''; 
+    display: block;
+    height: 7.5em;
+    content: ''; 
   } 
 
 
 
   footer {
-    left:0%;
-    width:25%;
-    background:#595755;
-    border-right:1px solid #696766;
+    left: 0%;
+    width: 25%;
+    background: #595755;
+    border-right: 1px solid #696766;
   }
   footer > section {
-    position:absolute;
-    bottom:0px;
-    left:0px;
-    margin:3em 3em;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    margin: 3em 3em;
   }  
 }

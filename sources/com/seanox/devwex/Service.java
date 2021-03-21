@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.4.0 20210320<br>
+ * Service 5.4.0 20210321<br>
  * Copyright (C) 2021 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.4.0 20210320
+ * @version 5.4.0 20210321
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -839,9 +839,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             object = new StringWriter();
             throwable.printStackTrace(new PrintWriter((StringWriter)object));
         }
-        
-        String string = String.valueOf(object).trim();
+
+        String string = String.valueOf(object);
         synchronized (System.out) {
+            if (object == null
+                    || (string.matches("\\s*")
+                            && !string.matches("\\s*[\\r\\n]\\s*")))
+                return;
+            string = string.trim();
             if (!plain) {
                 //der Zeitstempel wird ermittelt
                 //ggf. wird eine Einrueckung fuer die Folgezeilen eingefuegt
@@ -851,7 +856,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     string = string.replaceAll("([\r\n]+)", "$1\t");
             }
             //der Inhalt wird ausgegeben
-            System.out.println(string.trim());
+            System.out.println(string);
         }        
     }
     

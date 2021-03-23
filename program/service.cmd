@@ -110,9 +110,9 @@
   echo    update
   echo    uninstall
   echo.
-  echo.   start
-  echo.   restart
-  echo.   stop
+  echo    start
+  echo    restart
+  echo    stop
   
   net session >nul 2>&1
   if not %errorLevel% == 0 (
@@ -163,7 +163,7 @@ rem ----------------------------------------------------------------------------
   rem whether the directory is accessible without the login.
   echo %label%: Grant all privileges for %ServiceAccount% to the app AppDirectory
   for %%i in ("%home%\..") do echo    %%~fi
-  icacls.exe "%home%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q
+  icacls.exe "%home%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q >%~n0.log 2>&1
   if not "%lastError%" == "%errorLevel%" goto error
 
   sc query %ServiceName% >nul 2>&1

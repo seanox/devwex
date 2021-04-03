@@ -195,12 +195,12 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.4.0 20210321<br>
+ * Service 5.4.0 20210403<br>
  * Copyright (C) 2021 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.4.0 20210321
+ * @version 5.4.0 20210403
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -741,7 +741,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     }
 
     /**
-     * Haupteinsprung in die Anwendung.
+     * Haupteinsprung in die Anwendung.<br>
+     * Nach dem Start, sind nur RESTART | STATUS | STOP lokal verf&uuml;gbar.<br>
+     * Vergleichbar: {@link #restart()}, {@link #details()}, {@link #destroy()}
      * @param options Startargumente
      */
     public static void main(String[] options) {
@@ -758,11 +760,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             string = options[0].trim().toLowerCase();
         
         if (Service.service != null) {
-            if (string.equals("status"))
-                Service.print("SERVICE STATUS\r\n" + Service.details());
-            if (string.equals("restart"))
+            if (string.matches("status"))
+                Service.print(("SERVICE STATUS\r\n").concat(Service.details()));
+            if (string.matches("restart"))
                 Service.restart();
-            if (string.equals("stop"))
+            if (string.matches("stop"))
                 Service.destroy();
             return;
         }

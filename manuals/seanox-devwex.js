@@ -59,7 +59,7 @@ if (typeof Element.prototype.cssSelector !== "function")
 
 /**
  * Enhancement of the JavaScript API
- * Showns an element.
+ * Shows an element.
  */     
 if (typeof Element.prototype.show !== "function")
     Element.prototype.show = function() {
@@ -68,7 +68,7 @@ if (typeof Element.prototype.show !== "function")
 
 /**
  * Enhancement of the JavaScript API
- * Hiddes an element.
+ * Hides an element.
  */      
 if (typeof Element.prototype.hide !== "function")
     Element.prototype.hide = function() {
@@ -167,7 +167,7 @@ Sitemap.meta;
 /** toc as meta object */
 Sitemap.toc;
 
-/** Creates the Sitemap, indexes all chapters and builds the tabel of content. */
+/** Creates the Sitemap, indexes all chapters and builds the table of content. */
 Sitemap.create = function() {
     
     if (Sitemap.data)
@@ -667,7 +667,7 @@ window.addEventListener("load", function() {
 
 /**
  * Event when loading the page
- * Transforms the table of architecure.
+ * Transforms the table of architecture.
  */    
 window.addEventListener("load", function() {
     var elements = document.querySelector("table.architecture");

@@ -1087,8 +1087,8 @@
           Keytool, the generated certificate is stored as <code>.keystore</code>
           file in the user directory. depending on the operating system,
           different user directories are used, e. g. with Windows this can be
-          <code>C:\Users\&lt;Benutzer&gt;\.keystore</code> or with Unix-based
-          system <code>/home/&lt;benutzer&gt;/.keystore</code>.<br>
+          <code>C:\Users\&lt;User&gt;\.keystore</code> or with Unix-based
+          system <code>/home/&lt;user&gt;/.keystore</code>.<br>
           The created keystore file can be renamed arbitrarily and moved in the
           file system.
         </p>
@@ -1279,12 +1279,12 @@
             <td>freely selectable</td>
           </tr>
           <tr>
-            <td>METHODE</td>
+            <td>METHOD</td>
             <td>GET|POST|PUT|ALL|...</td>
             <td>HTTP method to be reacted to</td>
           </tr>
           <tr>
-            <td>BEDINGUNG</td>
+            <td>CONDITION</td>
             <td>IS|NOT|ALWAYS</td>
             <td>stipulation</td>
           </tr>
@@ -1310,7 +1310,7 @@
             </td>
           </tr>
           <tr>
-            <td>FUNKTION</td>
+            <td>FUNCTION</td>
             <td>STARTS|EQUALS|CONTAINS|ENDS|EMPTY</td>
             <td>Type of comparison</td>
           </tr>
@@ -2456,7 +2456,7 @@
             <code>[SERVER:INI] METHODS</code>.
           </p>
         </section>
-        <h2>Statuscodes</h2>
+        <h2>Status Codes</h2>
         <p>
           The server answers all HTTP requests with a status code and informs
           the client about the processing of the requests.Primary the server
@@ -2497,9 +2497,9 @@
             </td>
           </tr>
         </table>
-        <h2>Mediatypes</h2>
+        <h2>Media Types</h2>
         <p>
-          The Mediatype, also known as Internet Media Type, Content Type and
+          The media type, also known as Internet Media Type, Content Type and
           Multipurpose Internet Mail Extensions (MIME Type), classifies the data
           transmitted with the server response by assigning media types and
           subtypes.<br>
@@ -2514,7 +2514,7 @@
           MediaType = file extension file extension ...
         </code>
         <header>
-          Example of Mediatype assignment:
+          Example of MediaType assignment:
         </header>
         <code>
           text/html = html htm shtml
@@ -2626,7 +2626,7 @@
           </p>
         </section>
         <p>
-          The argument <code>libraies</code> is a fixed part of the argument,
+          The argument <code>libraries</code> is a fixed part of the argument,
           which can be used to pass additional resources, libraries and classes
           whose paths are separated by the path separator defined for the
           operating system.<br>
@@ -2819,7 +2819,7 @@
                   <td>Server Management</td>
                 </tr>
                 <tr>
-                  <td colspan="2">Class Loader</td>
+                  <td colspan="2">ClassLoader</td>
                 </tr>
               </table>
               <table class="composite section">
@@ -2873,7 +2873,7 @@
                         <td class="float">
                           <table class="composite list">
                             <tr>
-                              <td>HTTP-Protocol</td>
+                              <td>HTTP Protocol</td>
                             </tr>
                             <tr>
                               <td>Virtual Hosting</td>
@@ -2926,7 +2926,7 @@
                       </tr>
                       <tr>
                         <td>
-                          <div class="composite">Remote-Protocol</div>
+                          <div class="composite">Remote Protocol</div>
                         </td>
                       </tr>
                     </table>
@@ -3101,14 +3101,14 @@
                   This method is optional and returns general information about
                   the server in the following format:
                   &lt;PROTOCOL HOST-NAME:PORT&gt; or
-                  &lt;PROTOCOL HOST-ADRESSE:PORT&gt;, which should be set
+                  &lt;PROTOCOL HOST-ADDRESS:PORT&gt;, which should be set
                   statically or with initialization.
               }
 
               public void run() {
                   ...
 
-                  Der Server wird als (Daemon)Thread gestartet.
+                  The server will be started as a (daemon) thread.
               }
 
               public void destroy {

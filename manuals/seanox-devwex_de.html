@@ -548,7 +548,7 @@
           <tr>
             <td>[STATUSCODES]</td>
             <td>
-              Statuscodes der HTTP-Server
+              Status-Codes der HTTP-Server
             </td>
           </tr>
           <tr>
@@ -919,7 +919,7 @@
                 Unterbrechung f&uuml;r Systemprozesse in Millisekunden.<br>
                 Diese Einstellung minimiert die CPU-Auslastung bei
                 arbeitsintensiven Prozessen, in dem diese auf einen Teil ihrer
-                Ausf&uuml;hrungszeit verzichten und damit Zeitschlitze/Time-Slices
+                Ausf&uuml;hrungszeit verzichten und damit Teile Zeitscheibe
                 anderen Prozessen &uuml;berl&auml;sst.
               </td>
             </tr>
@@ -927,8 +927,8 @@
               <td>MEDIATYPE</td>
               <td>application/octet-stream</td>
               <td>
-                Standard-Mediatype der verwendet wird, wenn der geforderte
-                Mediatype nicht in der Liste der Mediatypes (Sektion
+                Standard-Media-Type der verwendet wird, wenn der geforderte
+                Media-Type nicht in der Liste der Media-Types (Sektion
                 <code>[MEDIATYPES]</code>) enthalten ist.
               </td>
             </tr>
@@ -1502,7 +1502,7 @@
             <td>Accept</td>
             <td>HTTP_ACCEPT</td>
             <td>*/*</td>
-            <td>Liste der vom Client unterst&uuml;tzten Mediatypen</td>
+            <td>Liste der vom Client unterst&uuml;tzten Media-Typen</td>
           </tr>
           <tr>
             <td>User-Agent</td>
@@ -2272,7 +2272,7 @@
           <tr>
             <td>CONTENT_TYPE</td>
             <td>text/plain</td>
-            <td>Mediatype der mit dem Request &uuml;bertragenen Daten</td>
+            <td>Media-Type der mit dem Request &uuml;bertragenen Daten</td>
           </tr>
           <tr>
             <td>DOCUMENT_ROOT</td>
@@ -2287,7 +2287,7 @@
           <tr>
             <td>HTTP_ACCEPT</td>
             <td>*/*</td>
-            <td>Liste der vom Client unterst&uuml;tzten Mediatypen</td>
+            <td>Liste der vom Client unterst&uuml;tzten Media-Typen</td>
           </tr>
           <tr>
             <td>HTTP_ACCEPT_ENCODING</td>
@@ -2459,7 +2459,7 @@
             Das Arbeitsverzeichnis der CGI-Anwendungen ist das Verzeichnis von
             dem aus Seanox Devwex gestartet wurde, was ggf. bei der
             Konfiguration der CGI-Anwendungen ber&uuml;cksichtigt werden muss,
-            wenn z.B. Pfad f&uumk;r Ressourcen und Konfigurationsdateien, wie
+            wenn z.B. Pfad f&uuml;r Ressourcen und Konfigurationsdateien, wie
             bei PHP zur <code>php.ini</code>, festgelegt werden m&uml;ssen.
           </p>
         </section>
@@ -2526,23 +2526,23 @@
             nicht die Einschr&auml;nkung von <code>[SERVER:INI] METHODS</code>.
           </p>
         </section>
-        <h2>Statuscodes</h2>
+        <h2>Status-Codes</h2>
         <p>
-          Der Server quittiert alle HTTP-Anfragen mit einem Statuscode und
+          Der Server quittiert alle HTTP-Anfragen mit einem Status-Ccode und
           informiert so den Client &uuml;ber die Verarbeitung der Anfragen.
           Prim&auml;r ist der Serverstatus ein numerischer Wert mit einer
           optionalen Nachricht (Message).<br>
-          Statuscodes sind global und werden von allen Servern und virtuellen
+          Status-Codes sind global und werden von allen Servern und virtuellen
           Hosts verwendet.
         </p>
         <header>
-          Schema zur Formulierung eines Statuscodes:
+          Schema zur Formulierung eines Status-Ccodes:
         </header>
         <code>
           CODE = TEXT [OPTION]
         </code>
         <header>
-          Beispiele f&uuml;r Statuscodes:
+          Beispiele f&uuml;r Status-Ccode:
         </header>
         <code>
           404 = Document Not Found
@@ -2569,30 +2569,30 @@
             </td>
           </tr>
         </table>
-        <h2>Mediatypes</h2>
+        <h2>Media Types</h2>
         <p>
-          Der Mediatype, auch Internet-Media-Type, Content-Type und MIME-Type
+          Der Media-Type, auch Internet-Media-Type, Content-Type und MIME-Type
           (Multipurpose Internet Mail Extensions) genannt, klassifiziert die mit
           der Serverantwort (Response) &uuml;bermittelten Daten durch Zuordnung
           von Medientypen und Subtypen.<br>
-          In der Konfiguration wird den Mediatypen eine durch Leerzeichen
+          In der Konfiguration wird den Media-Typen eine durch Leerzeichen
           getrennte Liste von Dateierweiterungen zugewiesen. Die Zuweisung ist
           global und wird von allen Servern und virtuellen Hosts verwendet.
         </p>
         <header>
-          Schema zur Formulierung eines Mediatypes:
+          Schema zur Formulierung eines Media-Types:
         </header>
         <code>
           MediaType = Dateierweiterung Dateierweiterung ...
         </code>
         <header>
-          Beispiel f&uuml;r die Mediatype-Zuweisung:
+          Beispiel f&uuml;r die MediaType-Zuweisung:
         </header>
         <code>
           text/html = html htm shtml
         </code>
         <p>
-          Der Mediatype <code>text/html</code> wird den Dateierweiterung
+          Der Media-Type <code>text/html</code> wird den Dateierweiterung
           <code>*.html</code>, <code>*.htm</code> sowie <code>*.shtml</code> 
           zugewiesen.
         </p>
@@ -2703,10 +2703,11 @@
           </p>
         </section>
         <p>
-          Einen festen Bestandteil bildet das VM-Argument <code>libraies</code>.
-          Mit diesem k&ouml;nnen weitere Ressourcen, Bibliotheken und Klassen
-          &uuml;bergeben werden, deren Pfade durch den f&uuml;r das
-          Betriebssystem festgelegten Path-Separator getrennt werden.<br>
+          Einen festen Bestandteil bildet das VM-Argument
+          <code>libraries</code>. Mit diesem k&ouml;nnen weitere Ressourcen,
+          Bibliotheken und Klassen &uuml;bergeben werden, deren Pfade durch den
+          f&uuml;r das Betriebssystem festgelegten Path-Separator getrennt
+          werden.<br>
           Beim Start erweitert Seanox Devwex automatisch seinen Klassenpfad
           (ClassPath) um alle so angegebenen Dateien sowie um die Dateien der
           so angegebenen Verzeichnisse.
@@ -2901,7 +2902,7 @@
                   <td>Server Management</td>
                 </tr>
                 <tr>
-                  <td colspan="2">Class Loader</td>
+                  <td colspan="2">ClassLoader</td>
                 </tr>
               </table>
               <table class="composite section">
@@ -2925,7 +2926,7 @@
               </table>
               <table class="composite">
                 <tr>
-                  <td class="interface">Server API (SAPI)</td>
+                  <td class="interface">Server-API (SAPI)</td>
                 </tr>
               </table>
             </td>

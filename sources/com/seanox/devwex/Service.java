@@ -751,23 +751,31 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             options = new String[] {"", ""};
         else if (options.length < 2)
             options = new String[] {options[0], ""};
-        
-        boolean plain = Service.service == null;
-        
-        //Ausgabeinformation wird zusammen gestellt und ausgegeben
-        Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", plain);
-        Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", plain);
-        Service.print("Advanced Server Development", plain);
-        Service.print("", plain);
-        
+
         //das Kommando wird ermittelt
         String string = "";
         if (options[0] != null)
             string = options[0].trim().toLowerCase();
-
+        
+        if (Service.service != null) {
+            if (string.equals("status"))
+                Service.print("SERVICE STATUS\r\n" + Service.details());
+            if (string.equals("restart"))
+                Service.restart();
+            if (string.equals("stop"))
+                Service.destroy();
+            return;
+        }
+        
+        //Ausgabeinformation wird zusammen gestellt und ausgegeben
+        Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", true);
+        Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", true);
+        Service.print("Advanced Server Development", true);
+        Service.print("\r\n", true);
+        
         //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
         if (!string.matches("^start|restart|status|stop$")) {
-            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", plain);
+            Service.print("Usage: devwex [start|restart|status|stop] [address:port]", true);
             return;
         }
 
@@ -786,7 +794,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             options[1] = options[1] == null ? "" : options[1].trim();
             if (options[1].length() > 0
                     && !options[1].matches("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$")) {
-                Service.print("INVALID REMOTE DESTINATION", plain);
+                Service.print("INVALID REMOTE DESTINATION", true);
                 return;
             }
             String address = options[1].replaceAll("^(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?$", "$1");
@@ -799,10 +807,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 string = "REMOTE ACCESS NOT AVAILABLE";
             String[] lines = string.trim().split("[\r\n]+");
             for (int loop = 0; loop < lines.length; loop++)
-                Service.print(lines[loop], plain);
+                Service.print(lines[loop], true);
         } catch (Throwable throwable) {
-            Service.print("REMOTE ACCESS FAILED", plain);
-            Service.print(throwable.getMessage(), plain);
+            Service.print("REMOTE ACCESS FAILED", true);
+            Service.print(throwable.getMessage(), true);
         }
     }
     

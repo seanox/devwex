@@ -132,14 +132,9 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox Devwex 5.3.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.3.0.zip)  
-[Seanox Devwex 5.3.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.3.0-src.zip)  
-[Seanox Devwex 5.3.0 Test](https://github.com/seanox/devwex-test/raw/master/releases/seanox-devwex-test-5.3.0.zip) 
-
-
-# Extensions
-[Seanox Devwex Service 1.2.2.0](https://github.com/seanox/devwex-service/raw/master/releases/seanox-devwex-service-1.2.2.0.zip)
-Runs Seanox Devwex as a service in Windows.
+[Seanox Devwex 5.4.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0.zip)  
+[Seanox Devwex 5.4.0 Windows](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0-win.zip)  
+[Seanox Devwex 5.4.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0-src.zip)  
 
 
 # Installation
@@ -148,11 +143,12 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes (Change Log)
-## 5.4.0 2021xxxx (summary of the next version)  
+## 5.4.0 20210411 (summary of the current version)  
 BF: HTTP(S) Server Status: Update of class 4xx  
 BF: HTTP(S) CGI: Correction of REQUEST_URI  
 BF: HTTP(S) CGI: Correction of SCRIPT_URI / SCRIPT_URL  
 BF: Service: Optimization / correction of Service::Print  
+BF: Documentation: Update / corrections  
 CR: HTTP(S) CGI: Output of the error pipe of the CGI process  
 CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)  
 CR: Build: Target release replaced archive (omitted)  

@@ -1,3 +1,6 @@
+5.4.1 2022xxxx
+  BF: Review: Correction/optimization
+
 5.4.0 20210411
   BF: HTTP(S) Server Status: Update of class 4xx
   BF: HTTP(S) CGI: Correction of REQUEST_URI
@@ -940,7 +943,7 @@
   BF: Service: Korrektur der OutOfMemoryException bei zu vielen Services-Threads
   BF: HTTP Request: Decodierung wurde ausgebaut und flexibler gestaltet
       Die Filterfunktionen komplett mit einbezogen wurden.
-  BF: HTTP Request: Korrektur in der Verarbeitung vom ß
+  BF: HTTP Request: Korrektur in der Verarbeitung vom ï¿½
   BF: HTTP Redirection: Korrektur im Umgang mit einer Query
   BF: HTTP CGI: Korrektur in der Verarbeitung/Ueberwachung vom Timeout
   BF: HTTP DCGI/CGI: Korrektur bei der Erstellung der swap-Files

@@ -365,7 +365,7 @@ table tbody tr.file[mime^='text/'] div + div:before {
 
 /** column name: additional entry description */
 table tbody tr td:first-child div:after {
-  margin-top: 0.25 rem;
+  margin-top: 0.25rem;
 }
 table tbody tr td + td div:after {
   content: attr(text);

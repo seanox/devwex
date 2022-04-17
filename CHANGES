@@ -1,5 +1,6 @@
 5.4.1 2022xxxx
   BF: Review: Correction/optimization
+  CR: Build: Releases are now only available on the release page
 
 5.4.0 20210411
   BF: HTTP(S) Server Status: Update of class 4xx

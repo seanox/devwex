@@ -149,6 +149,7 @@ CR: Windows: Integration and merge of Seanox Devwex Service project
 # Thanks!
 <img src="https://raw.githubusercontent.com/seanox/seanox/master/sources/resources/images/thanks.png">
 
+[cantaa GmbH](https://cantaa.de/)  
 [JetBrains](https://www.jetbrains.com/?from=seanox)  
 Sven Lorenz  
 Andreas Mitterhofer  

@@ -24,86 +24,69 @@ on many operating systems due to the corresponding runtime environments.
 
 # Features
 
-## Architecture
-Seanox Devwex is a multithreaded runtime container for (server)modules, which
-are integrated via the provided Server and Module API. The own ClassLoader
-supports the loading and unloading of servers and modules at the runtime. 
-
-## Hypertext Transfer Protocol
-The HTTP server implementation provides virtual hosting, filters, HTTP modules,
-SSL/TLS, XCGI/CGI1.1, directory listing, templates and more.  
-In accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS PUT
-and DELETE are supported by HTTP 1.1 and other methods can be provided via HTTP
-modules, XCGI and CGI. 
-
-## Remote Control
-The included remote access supports a telnet-based control of the runtime
-container (restart and stop) and queries about the operating status of running
-servers and modules.  
-In addition to the server implementation, a client implementation is also
-included. 
-
-## Configuration
-The configuration uses a central file in an advanced INI format, divided into
-sections with keys and values, which supports multiple inheritance in the
-sections, dynamic values, and access to system and environment variables. 
-
-## Server API (SAPI)
-The Server API integrates implementations that provide physical access to the
-network for a protocol at one address and one port, allowing existing server and
-network functionalities to be changed or new ones to be deployed. 
-
-## Module API (XAPI)
-The module API integrates implementations that act in the background and do not
-provide direct external functions. 
-
-## HTTP Module API (XAPI+)
-The HTTP Module API is an extension of the Module API for the HTTP server to
-implement filter and service functions that run in the context of the server. 
-
-## (Fast)CGI
-For data exchange as well as for connecting external runtime environments and
-applications, the specification 1.1 of the Common Gateway Interface and thus
-PHP, Perl, Python and others are supported. FastCGI is also available as an
-option. 
-
-## XCGI
-The XCGI is an interface based on the CGI and has the same basic principle to
-communicate via the standard I/O, but also transmits server-relevant information
-and environment variables in this way, so that applications can also be used
-which do not have an exclusive environment or do not have access to the
-environment variables of the operating system. 
-
-## Telnet
-The included remote access supports a telnet-based control of the container
-(restart and stop) and queries about the operating status of running servers and
-modules.  
-In addition to the server implementation, a client implementation is also
-included. 
-
-## Security
-Transport Layer Security (TLS) and Secure Socket Layer (SSL) with server and
-client certificates are supported for secure data transfer, allowing
-certificates to be assigned to each physical host individually, by inheritance
-in groups or globally.
-
-Access to directories and files can be provided with basic as well as digest
-access authentication, which supports groups and can be controlled by filters
-that support freely definable rules, individual error pages, automatic
-redirections and modules. 
-
-## Virtualization
-The HTTP server supports virtual hosting and aliasing for virtual paths. 
-
-## Individuality
-HTTP servers and virtual hosts use customizable templates for the error pages
-and list view of the directories (directory listing). With support for CGI
-environment variables, the content can be designed dynamically. 
-
-## Expandability
-The modular architecture and many interfaces allow the modification, extension
-and addition of functionalities. 
-
+- __Architecture__  
+  Seanox Devwex is a multithreaded runtime container for (server)modules, which
+  are integrated via the provided Server and Module API. The own ClassLoader
+  supports the loading and unloading of servers and modules at the runtime. 
+- __Hypertext Transfer Protocol__  
+  The HTTP server implementation provides virtual hosting, filters, HTTP
+  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more.  
+  In accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS
+  PUT and DELETE are supported by HTTP 1.1 and other methods can be provided
+  via HTTP modules, XCGI and CGI. 
+- __Remote Control__  
+  The included remote access supports a telnet-based control of the runtime
+  container (restart and stop) and queries about the operating status of
+  running servers and modules. In addition to the server implementation, a
+  client implementation is also included. 
+- __Configuration__  
+  The configuration uses a central file in an advanced INI format, divided into
+  sections with keys and values, which supports multiple inheritance in the
+  sections, dynamic values, and access to system and environment variables.
+- __Server API (SAPI)__  
+  The Server API integrates implementations that provide physical access to the
+  network for a protocol at one address and one port, allowing existing server
+  and network functionalities to be changed or new ones to be deployed. 
+- __Module API (XAPI)__  
+  The module API integrates implementations that act in the background and do
+  not provide direct external functions. 
+- __HTTP Module API (XAPI+)__  
+  The HTTP Module API is an extension of the Module API for the HTTP server to
+  implement filter and service functions that run in the context of the server. 
+- __(Fast)CGI__  
+  For data exchange as well as for connecting external runtime environments and
+  applications, the specification 1.1 of the Common Gateway Interface and thus
+  PHP, Perl, Python and others are supported. FastCGI is also available as an
+  option. 
+- __XCGI__  
+  The XCGI is an interface based on the CGI and has the same basic principle to
+  communicate via the standard I/O, but also transmits server-relevant
+  information and environment variables in this way, so that applications can
+  also be used which do not have an exclusive environment or do not have access
+  to the environment variables of the operating system. 
+- __Telnet__  
+  The included remote access supports a telnet-based control of the container
+  (restart and stop) and queries about the operating status of running servers
+  and modules. In addition to the server implementation, a client
+  implementation is also included. 
+- __Security__  
+  Transport Layer Security (TLS) and Secure Socket Layer (SSL) with server and
+  client certificates are supported for secure data transfer, allowing
+  certificates to be assigned to each physical host individually, by
+  inheritance in groups or globally.  
+  Access to directories and files can be provided with basic as well as digest
+  access authentication, which supports groups and can be controlled by filters
+  that support freely definable rules, individual error pages, automatic
+  redirections and modules. 
+- __Virtualization__  
+  The HTTP server supports virtual hosting and aliasing for virtual paths. 
+- __Individuality__  
+  HTTP servers and virtual hosts use customizable templates for the error pages
+  and list view of the directories (directory listing). With support for CGI
+  environment variables, the content can be designed dynamically. 
+- __Expandability__  
+  The modular architecture and many interfaces allow the modification, extension
+  and addition of functionalities. 
 
 
 # Licence Agreement

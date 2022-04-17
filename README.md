@@ -115,9 +115,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 
 # Downloads
-[Seanox Devwex 5.4.0](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0.zip)  
-[Seanox Devwex 5.4.0 Windows](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0-win.zip)  
-[Seanox Devwex 5.4.0 Sources](https://github.com/seanox/devwex/raw/master/releases/seanox-devwex-5.4.0-src.zip)  
+[Seanox Devwex 5.4.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.4.0.zip)  
+[Seanox Devwex 5.4.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.4.0-win.zip)  
 
 
 # Installation

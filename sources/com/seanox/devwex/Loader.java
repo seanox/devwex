@@ -117,10 +117,10 @@ public class Loader extends URLClassLoader {
                 
                 if (entry != null) {
 
-                    //der Datenpuffer wird eingerichtet
+                    // der Datenpuffer wird eingerichtet
                     bytes = new byte[(int)entry.getSize()];
 
-                    //der Datenstrom wird ausgelesen
+                    // der Datenstrom wird ausgelesen
                     new DataInputStream(store.getInputStream(entry)).readFully(bytes);
 
                     return new ByteArrayInputStream(bytes);
@@ -128,14 +128,14 @@ public class Loader extends URLClassLoader {
 
             } catch (Throwable throwable) {
 
-                //keine Fehlerbehandlung vorgesehen
+                // keine Fehlerbehandlung vorgesehen
 
             } finally {
 
                 try {store.close();
                 } catch (Throwable throwable) {
 
-                    //keine Fehlerbehandlung vorgesehen
+                    // keine Fehlerbehandlung vorgesehen
                 }
             }
         }
@@ -182,14 +182,14 @@ public class Loader extends URLClassLoader {
 
             } catch (Throwable throwable) {
 
-                //keine Fehlerbehandlung vorgesehen
+                // keine Fehlerbehandlung vorgesehen
 
             } finally {
 
                 try {store.close();
                 } catch (Throwable throwable) {
 
-                    //keine Fehlerbehandlung vorgesehen
+                    // keine Fehlerbehandlung vorgesehen
                 }
             }
         }
@@ -231,19 +231,19 @@ public class Loader extends URLClassLoader {
 
         try {
 
-            //das Paket wird ermittelt
+            // das Paket wird ermittelt
             packet = name.substring(0, Math.max(0, name.lastIndexOf('.')));
             
-            //die Berechtigung zur Definition der Klasse wird geprueft, wenn
-            //ein entsprechender SecurityManager vorliegt, ohne ist Definition
-            //aller Klassen zulaessig
+            // die Berechtigung zur Definition der Klasse wird geprueft, wenn
+            // ein entsprechender SecurityManager vorliegt, ohne ist Definition
+            // aller Klassen zulaessig
             security = System.getSecurityManager();
 
-            //prueft die Berechtigung zum Laden der Klasse/Paket, liegt diese
-            //Berechtigung nicht vor, fuehrt dies zur SecurityException
+            // prueft die Berechtigung zum Laden der Klasse/Paket, liegt diese
+            // Berechtigung nicht vor, fuehrt dies zur SecurityException
             if (security != null) security.checkPackageDefinition(packet);
 
-            //das Package wird registriert
+            // das Package wird registriert
             if (super.getPackage(packet) == null)
                 super.definePackage(packet, null, null, null, null, null, null, null);
 
@@ -255,7 +255,7 @@ public class Loader extends URLClassLoader {
 
         try {
 
-            //ein Versuch die Klasse vom uebergeordneten ClassLoader zu laden 
+            // ein Versuch die Klasse vom uebergeordneten ClassLoader zu laden 
             if (this.loader != null) {
                 source = this.loader.loadClass(name);
                 if (resolve)
@@ -269,29 +269,29 @@ public class Loader extends URLClassLoader {
             
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung vorgesehen
+            // keine Fehlerbehandlung vorgesehen
         }
         
         try {
             
-            //der Klassenname wird vereinheitlicht
-            //und der Datenstrom zur Resource etabliert
+            // der Klassenname wird vereinheitlicht
+            // und der Datenstrom zur Resource etabliert
             input = this.getResourceAsStream(name.replace('.', '/').concat(".class"));
             if (input instanceof ByteArrayInputStream) {
                 
-                //der Datenpuffer wird eingerichtet
+                // der Datenpuffer wird eingerichtet
                 bytes = new byte[((ByteArrayInputStream)input).available()];
                 
-                //der Datenpuffer wird komplett gelesen
+                // der Datenpuffer wird komplett gelesen
                 input.read(bytes);
 
-                //die Klasse wird ueber den ClassLoader definiert
+                // die Klasse wird ueber den ClassLoader definiert
                 source = super.defineClass(name, bytes, 0, bytes.length);
 
-                //die Klasse wird als geladen registriert
+                // die Klasse wird als geladen registriert
                 this.classes.put(name, source);
 
-                //gegebenfalls werden die Abhaengigkeitem aufgeloest
+                // gegebenfalls werden die Abhaengigkeitem aufgeloest
                 if (resolve) super.resolveClass(source);
 
                 return source;
@@ -303,7 +303,7 @@ public class Loader extends URLClassLoader {
             
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung vorgesehen
+            // keine Fehlerbehandlung vorgesehen
         }
 
         throw new ClassNotFoundException(name);

@@ -65,29 +65,29 @@ public class Remote implements Runnable {
 
         int         port;
 
-        //der Servername wird uebernommen
+        // der Servername wird uebernommen
         server = server == null ? "" : server.trim();
         
-        //die Konfiguration wird ermittelt
+        // die Konfiguration wird ermittelt
         options = ((Initialize)data).get(server);
                 
-        //der Port des Servers wird ermittelt
+        // der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));
         } catch (Throwable throwable) {
             port = 0;
         }
 
-        //die Hostadresse des Servers wird ermittelt
+        // die Hostadresse des Servers wird ermittelt
         server  = options.get("address", "auto").toLowerCase();
         address = server.equals("auto") ? null : InetAddress.getByName(server);
 
-        //der ServerSocket wird eingerichtet
+        // der ServerSocket wird eingerichtet
         this.socket = new ServerSocket(port, 0, address);
 
-        //das Timeout fuer den Socket wird gesetzt
+        // das Timeout fuer den Socket wird gesetzt
         this.socket.setSoTimeout(1000);
 
-        //die Serverkennung wird zusammengestellt
+        // die Serverkennung wird zusammengestellt
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
     }
     
@@ -119,25 +119,25 @@ public class Remote implements Runnable {
 
         int                   length;
 
-        //der Request wird vorbereitet
+        // der Request wird vorbereitet
         request = request == null ? "" : request.trim();
 
-        //die Datenpuffer werden eingerichtet
+        // die Datenpuffer werden eingerichtet
         buffer = new ByteArrayOutputStream();
         bytes  = new byte[65535];
         
-        //der Remotesocket wird eingerichtet
+        // der Remotesocket wird eingerichtet
         socket = new Socket(address, port);
        
         try {
 
-            //der Datenstrom wird eingerichtet
+            // der Datenstrom wird eingerichtet
             input = socket.getInputStream();
             
-            //der Request wird ausgegeben
+            // der Request wird ausgegeben
             socket.getOutputStream().write(request.concat("\r\n").getBytes());
 
-            //der Response wird gelesen
+            // der Response wird gelesen
             while ((length = input.read(bytes)) >= 0) {
                 buffer.write(bytes, 0, length);
                 Thread.sleep(25);
@@ -145,11 +145,11 @@ public class Remote implements Runnable {
 
         } finally {
 
-            //der Socket wird geschlossen
+            // der Socket wird geschlossen
             try {socket.close();
             } catch (Throwable throwable) {
 
-                //keine Fehlerbehandlung erforderlich
+                // keine Fehlerbehandlung erforderlich
             }
         }
 
@@ -169,73 +169,73 @@ public class Remote implements Runnable {
 
         int                   value;
 
-        //der Datenbuffer wird eingerichtet
+        // der Datenbuffer wird eingerichtet
         buffer = new ByteArrayOutputStream();
 
         try {
 
-            //das SO Timeout wird fuer den Serversocket gesetzt
+            // das SO Timeout wird fuer den Serversocket gesetzt
             socket.setSoTimeout(10000);
 
-            //der Request wird gelesen und ausgewertet
-            //die Datenstroeme werden eingerichtet
+            // der Request wird gelesen und ausgewertet
+            // die Datenstroeme werden eingerichtet
             input = socket.getInputStream();
 
-            //die Daten werden aus dem Datenstrom gelesen
+            // die Daten werden aus dem Datenstrom gelesen
             while ((value = input.read()) >= 0) {
 
-                //die Daten werden gespeichert
+                // die Daten werden gespeichert
                 buffer.write(value);
 
-                //ist der Request komplett oder wurde die maximal Laenge von
-                //65535 Bytes erreicht wird das Lesen beendet
+                // ist der Request komplett oder wurde die maximal Laenge von
+                // 65535 Bytes erreicht wird das Lesen beendet
                 if (value == 10 || value == 13 || buffer.size() >= 65535) break;
             }
 
-            //der Request wird ausgewertet
+            // der Request wird ausgewertet
             string = buffer.toString().toLowerCase().trim();    
             
-            //STATUS - die Serverliste wird zusammengestellt
+            // STATUS - die Serverliste wird zusammengestellt
             if (string.equals("status")) {
 
                 string = Service.details();
 
-            //RESTART - starte die Server neu
+            // RESTART - starte die Server neu
             } else if (string.equals("restart")) {
 
                 string = ("SERVICE RESTART").concat(!Service.restart() ? " FAILED" : "ED");
 
-            //STOP - Ausgabe der Information
+            // STOP - Ausgabe der Information
             } else if (string.equals("stop")) {
 
                 string = ("SERVICE STOP").concat(!Service.destroy() ? " FAILED" : "PED");
                 
             } else string = "UNKNOWN COMMAND";
 
-            //der Response wird ausgegeben
+            // der Response wird ausgegeben
             socket.getOutputStream().write(string.concat("\r\n").getBytes());
 
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung erforderlich
+            // keine Fehlerbehandlung erforderlich
         }
 
-        //der Socket wird geschlossen
+        // der Socket wird geschlossen
         try {socket.close();
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung erforderlich
+            // keine Fehlerbehandlung erforderlich
         }
     }
 
     /** Beendet den Server als Thread */
     public void destroy() {
 
-        //der Socket wird geschlossen
+        // der Socket wird geschlossen
         try {this.socket.close();
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung erforderlich
+            // keine Fehlerbehandlung erforderlich
         }
     }
 
@@ -245,11 +245,11 @@ public class Remote implements Runnable {
 
         Thread thread;
 
-        //Hinweis - damit auch der Restart vom Remote moeglich ist, muss die
-        //Verarbeitung in einem seperaten Thread ausgelagert werden
+        // Hinweis - damit auch der Restart vom Remote moeglich ist, muss die
+        // Verarbeitung in einem seperaten Thread ausgelagert werden
         if (this.accept != null) {Remote.service(this.accept); return;}
 
-        //Initialisierung wird als Information ausgegeben
+        // Initialisierung wird als Information ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
         for (thread = null; !this.socket.isClosed();) {
@@ -258,14 +258,14 @@ public class Remote implements Runnable {
 
                 if (thread == null || !thread.isAlive()) {
 
-                    //der Socket wird fuer den Worker eingerichtet
+                    // der Socket wird fuer den Worker eingerichtet
                     this.accept = this.socket.accept();
 
-                    //der Thread fuer den Worker wird eingerichet, ueber den
-                    //Service wird dieser automatisch als Daemon verwendet
+                    // der Thread fuer den Worker wird eingerichet, ueber den
+                    // Service wird dieser automatisch als Daemon verwendet
                     thread = new Thread(this);
 
-                    //der Worker wird als Thread gestartet
+                    // der Worker wird als Thread gestartet
                     thread.start();
                 }
 
@@ -286,7 +286,7 @@ public class Remote implements Runnable {
 
                 Service.print(throwable);
 
-                //der Socket wird gegebenfalls geschlossen
+                // der Socket wird gegebenfalls geschlossen
                 try {this.accept.close();
                 } catch (Throwable exception) {
                     this.destroy();
@@ -294,7 +294,7 @@ public class Remote implements Runnable {
             }
         }
 
-        //die Terminierung wird ausgegeben
+        // die Terminierung wird ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" STOPPED"));
     }
 }

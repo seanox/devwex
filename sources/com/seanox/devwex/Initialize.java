@@ -251,23 +251,23 @@ public class Initialize implements Cloneable {
                 
                 buffer = new StringBuffer();
                 
-                //die Zeile wird wie folgt verarbeitet:
-                //  - der eindeutige/gueltige Name der Sektion wird ermittelt
-                //  - der Kommentarteil wird entfernt
-                //  - nachfolgende Sektionen sind nicht zulaessig und werden entfernt
-                //  - ggf. existierende Ableitungen werden
+                // die Zeile wird wie folgt verarbeitet:
+                //   - der eindeutige/gueltige Name der Sektion wird ermittelt
+                //   - der Kommentarteil wird entfernt
+                //   - unzulaessige nachfolgende Sektionen werden entfernt
+                //   - ggf. existierende Ableitungen werden
                 strings = line.replaceAll("^(?i)(?:\\[\\s*([^\\[\\]\\;]+)\\s*\\]\\s*(?:extends\\s+([^\\[\\]\\;]+))*)*.*$", "$1 \00 $2").split("\00");
                 
-                //die Sektion wird ggf. dekodiert und optimiert 
+                // die Sektion wird ggf. dekodiert und optimiert 
                 section = Initialize.decode(strings[0]);
                 
-                //nur gueltige Sektionen werden geladen
+                // nur gueltige Sektionen werden geladen
                 if (section.isEmpty())
                     continue;
                 
                 entries.put(section, buffer);
                 
-                //ggf. existierende Ableitungen werden registriert und geladen
+                // ggf. existierende Ableitungen werden registriert und geladen
                 strings = strings[1].split("\\s+");
                 for (index = 0; index < strings.length; index++) {
                     section = Initialize.decode(strings[index]);
@@ -277,7 +277,7 @@ public class Initialize implements Cloneable {
                 
             } else if (buffer != null) {
 
-                //Inhalt wird nur mit gueltiger Sektion verarbeitet
+                // Inhalt wird nur mit gueltiger Sektion verarbeitet
                 buffer.append("\r\n").append(line);
             }
         }
@@ -402,7 +402,7 @@ public class Initialize implements Cloneable {
         if (initialize == null)
             return this;
 
-        //die Sektionen werden zusammengefasst oder ggf. neu angelegt
+        // die Sektionen werden zusammengefasst oder ggf. neu angelegt
         enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
             entry   = (String)enumeration.nextElement();
@@ -437,10 +437,10 @@ public class Initialize implements Cloneable {
         Initialize  initialize;
         String      entry;
 
-        //Initialize wird eingerichtet
+        // Initialize wird eingerichtet
         initialize = new Initialize(this.smart);
 
-        //die Sektionen werden kopiert
+        // die Sektionen werden kopiert
         enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
             entry = (String)enumeration.nextElement();

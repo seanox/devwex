@@ -297,11 +297,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     || module == null)
                 return null;            
             
-            //Das Modul wird aus der Modulliste ermittelt, ist dieses noch nicht
-            //registriert, wird es neu initialisiert und eingetragen.
-            //Wenn Module nicht richtig beendet werden koennen, bleiben diese
-            //ebenfall erhalten und benutzen dann noch den alten ClassLoader.
-            //Das Verhalten ist gewollt, damit kein Zombies erzeugt werden.
+            // Das Modul wird aus der Modulliste ermittelt, ist dieses noch
+            // nicht registriert, wird es neu initialisiert und eingetragen.
+            // Wenn Module nicht richtig beendet werden koennen, bleiben diese
+            // ebenfall erhalten und benutzen dann noch den alten ClassLoader.
+            // Das Verhalten ist gewollt, damit kein Zombies erzeugt werden.
             
             object = service.modules.get(module);
             if (object != null)
@@ -309,10 +309,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             
             Service.print(("SERVICE INITIATE MODULE ").concat(module.getName()));
             
-            //Die Mindestimplementierung der Modul-API wird per Reflections
-            //geprueft und erwartet einen passenden Konstruktor sowie eine
-            //destroy-Methode.
-            //Ein Interface ist wegen der Groesse nicht verfuegbar.
+            // Die Mindestimplementierung der Modul-API wird per Reflections
+            // geprueft und erwartet einen passenden Konstruktor sowie eine
+            // destroy-Methode.
+            // Ein Interface ist wegen der Groesse nicht verfuegbar.
             
             try {
                 module.getMethod("destroy");
@@ -321,7 +321,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 throw new NoSuchMethodException("Invalid interface");
             }
 
-            //die Instanz vom Modul wird eingerichtet und registriert 
+            // die Instanz vom Modul wird eingerichtet und registriert 
             object = ((Constructor)object).newInstance(new Object[] {options});
             service.modules.put(module, object);
          
@@ -373,11 +373,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         synchronized (Service.class) {
             
-            //die Zeitpunkt der Initialisierung wird ermittelt
+            // die Zeitpunkt der Initialisierung wird ermittelt
             timing = System.currentTimeMillis();
 
-            //wenn noch nicht initialisiert, wird der Service als Singleton mit
-            //globalem Exception Handler eingerichtet
+            // wenn noch nicht initialisiert, wird der Service als Singleton mit
+            // globalem Exception Handler eingerichtet
             if (Service.service == null) {
                 Service.service = new Service();
                 Thread.setDefaultUncaughtExceptionHandler(Service.service);
@@ -393,7 +393,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 Service.print(("SERVICE INITIATE ").concat(mode == Service.RESTART ? "RESTART" : "STOP"));
                 
-                //alle registrierten Server werden zum Beenden aufgefordert
+                // alle registrierten Server werden zum Beenden aufgefordert
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
                     object = ((Object[])enumeration.nextElement())[0];
@@ -403,8 +403,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
                 }
 
-                //alle registrierten Module werden zum Beenden aufgefordert,
-                //dabei werden alle Modul aus der Modulliste entfernt
+                // alle registrierten Module werden zum Beenden aufgefordert,
+                // dabei werden alle Modul aus der Modulliste entfernt
                 enumeration = service.modules.keys();
                 while (enumeration.hasMoreElements()) {
                     object = service.modules.remove(enumeration.nextElement());
@@ -416,9 +416,9 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 while (service.servers.size() > 0) {
                     
-                    //Alle aktiven Server werden ermittelt und durchsucht.
-                    //Bei noch laufenden Servern wird gewartet bis diese enden.
-                    //Inaktive Server werden aus der Serverliste entfernt
+                    // Alle aktiven Server werden ermittelt und durchsucht.
+                    // Bei noch laufenden Servern wird gewartet bis diese enden.
+                    // Inaktive Server werden aus der Serverliste entfernt
                     enumeration = ((Vector)service.servers.clone()).elements();
                     while (enumeration.hasMoreElements()) {
                         object = enumeration.nextElement();
@@ -450,18 +450,18 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
                 string = "SERVICE INITIATE RESOURCES";
                 
-                //die Liste der Bibliotheken wird eingerichtet
+                // die Liste der Bibliotheken wird eingerichtet
                 libraries = new Vector();
 
-                //die Pfade des Klassenpfads werden ermittelt
+                // die Pfade des Klassenpfads werden ermittelt
                 tokenizer = new StringTokenizer(Section.parse("libraries [?]", true).get("libraries"), File.pathSeparator);
                 while (tokenizer.hasMoreTokens()) {
 
-                    //In der ersten Ebene werden Dateien und Verzeichnisse
-                    //beruecksichtigt. Verzeichnisse werden dabei als
-                    //Dateiliste verarbeitet. In der zweiten Ebene werden nur
-                    //noch Dateien beruecksichtigt, weitere Unterverzeichnisse
-                    //werden ignoriert.
+                    // In der ersten Ebene werden Dateien und Verzeichnisse
+                    // beruecksichtigt. Verzeichnisse werden dabei als
+                    // Dateiliste verarbeitet. In der zweiten Ebene werden nur
+                    // noch Dateien beruecksichtigt, weitere Unterverzeichnisse
+                    // werden ignoriert.
 
                     files = new File[] {new File(tokenizer.nextToken())};
                     if (files[0].isDirectory())
@@ -481,13 +481,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 Service.print(string);
                 
-                //der ClassLoader wird ermittelt
+                // der ClassLoader wird ermittelt
                 loader = Service.class.getClassLoader();
 
-                //der ClassLoader wird (neu) eingerichtet
+                // der ClassLoader wird (neu) eingerichtet
                 loader = service.loader = new Loader(loader, libraries);
                 
-                //die aktuelle Konfiguration wird geladen
+                // die aktuelle Konfiguration wird geladen
                 try {service.initialize = Initialize.parse(new String(Files.readAllBytes(new File("devwex.ini").toPath())), true);
                 } catch (Throwable throwable) {
                     Service.print("SERVICE CONFIGURATION FAILED");
@@ -496,20 +496,20 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 
                 Service.print("SERVICE INITIATE MODULES");                
 
-                //die Basisoptionen werden ermittelt
+                // die Basisoptionen werden ermittelt
                 section = service.initialize.get("initialize");
                 
-                //alle Parameter werden ermittelt
+                // alle Parameter werden ermittelt
                 enumeration = section.elements();
                 while (enumeration.hasMoreElements()) {
 
-                    //die Ressource wird ggf. mit Parametern/Optionen ermittelt
+                    // die Ressource wird ggf. mit Parametern/Optionen ermittelt
                     context = (String)enumeration.nextElement();
                     scope   = section.get(context);
                     string  = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$2");
                     scope   = scope.replaceAll("^([^\\s\\[]*)\\s*(.*)$", "$1");
                     
-                    //das Modul wird geladen und initial eingerichtet
+                    // das Modul wird geladen und initial eingerichtet
                     try {Service.load(loader.loadClass(scope), string);
                     } catch (Throwable throwable) {
                         if (throwable instanceof ClassNotFoundException
@@ -519,11 +519,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
                 }
                 
-                //die Server werden aus der Konfiguration ermittelt
+                // die Server werden aus der Konfiguration ermittelt
                 enumeration = service.initialize.elements();
                 while (enumeration.hasMoreElements()) {
 
-                    //der Server(Scope) wird aus der Basiskonfiguration ermittelt
+                    // der Server-Scope wird aus der Konfiguration ermittelt
                     context = (String)enumeration.nextElement();
                     if (!context.matches("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$"))
                         continue;
@@ -534,7 +534,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
                         Service.print(String.format("SERVICE INITIATE %s", new Object[] {context.replaceAll(":[^:]+$", "").trim()}));
                         
-                        //die Server Klasse wird geladen
+                        // die Server Klasse wird geladen
                         scope = service.initialize.get(context).get("scope", "com.seanox.devwex");
                         scope = scope.replaceAll("\\s*>.*$", "");
                         try {source = loader.loadClass(scope);
@@ -548,10 +548,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                             }
                         }
                         
-                        //Die Mindestimplementierung der Server-API wird per
-                        //Reflections geprueft und erwartet einen passenden
-                        //Konstruktor sowie eine destroy-Methode.
-                        //Ein Interface ist wegen der Groesse nicht verfuegbar.
+                        // Die Mindestimplementierung der Server-API wird per
+                        // Reflections geprueft und erwartet einen passenden
+                        // Konstruktor sowie eine destroy-Methode.
+                        // Ein Interface ist wegen der Groesse nicht verfuegbar.
 
                         try {
                             source.getMethod("destroy");
@@ -562,31 +562,31 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         
                         object = ((Constructor)object).newInstance(new Object[] {context, service.initialize.clone()});
                         
-                        //Die Implementierung von Runnable ist optional.
-                        //Server koennen auch durch andere Module initialisiert
-                        //werden, z.B. wenn die Server einen eigenen ClassLoader
-                        //verwenden sollen. Womit hier auch ein Server-Modul
-                        //aufgerufen werden kann. Server-Modul haben den
-                        //gleichen Konstruktor ohne Runnable zu implementieren.
+                        // Die Implementierung von Runnable ist optional.
+                        // Server koennen auch durch andere Module initialisiert
+                        // werden, z.B. wenn die Server eigene ClassLoader
+                        // verwenden sollen. Womit hier auch ein Server-Modul
+                        // aufgerufen werden kann. Server-Modul haben den
+                        // gleichen Konstruktor ohne Runnable zu implementieren.
                         
                         thread = null;
                         if (Runnable.class.isAssignableFrom(source)) {
                             
-                            //Mit Implementierung vom Runnable-Interface wird
-                            //der Thread als Daemon eingerichtet und gestartet. 
+                            // Mit Implementierung von Runnable wird der Thread
+                            // als Daemon eingerichtet und gestartet.
                             thread = new Thread((Runnable)object);
                             thread.setDaemon(true);
                             thread.start();
                         }
 
-                        //der Server wird mit Thread registriert
+                        // der Server wird mit Thread registriert
                         service.servers.add(new Object[] {object, thread});
 
                     } catch (Throwable throwable) {
 
                         Service.print(throwable);
 
-                        //das Beenden des Servers wird angestossen
+                        // das Beenden des Servers wird angestossen
                         if (object != null
                                 && !(object instanceof Constructor)) {
                             try {object.getClass().getMethod("destroy").invoke(object);
@@ -602,36 +602,36 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     }
                 }
                 
-                //wurde kein Server gefunden, wird eine Information ausgegeben
+                // wurde kein Server gefunden, wird eine Information ausgegeben
                 if (service.servers.size() <= 0)
                     Service.print("SERVICE NOT AVAILABLE");
 
-                //die Dauer des Startvorgangs wird ermittelt
+                // die Dauer des Startvorgangs wird ermittelt
                 timing = (System.currentTimeMillis() -timing) /1000;
 
                 if (service.servers.size() > 0)
                     Service.print(String.format("SERVICE %SSTARTED (%S SEC)",
                             new Object[] {mode == Service.RESTART ? "RE" : "", String.valueOf(timing)}));
 
-                //beim Restart wird Status READY gesetzt und die Methode verlassen
-                //nachfolgend kann mode dann nur noch START sein
+                // beim Restart wird Status READY gesetzt und die Methode
+                // verlassen, nachfolgend kann mode dann nur noch START sein
                 if (mode == Service.RESTART) {
                     service.status = Service.RUN;
                     return true;
                 }
 
-                //beim Start wird ohne eingerichtete Server, der Service beendet
+                // beim Start ohne eingerichtete Server, endet der Service
                 if (service.servers.size() <= 0) {
                     service.status = Service.STOP;
                     Service.service = null;
                     return false;
                 }
 
-                //im Startprozess wird Status und ShutdownHook gesetzt
+                // im Startprozess wird Status und ShutdownHook gesetzt
                 Runtime.getRuntime().addShutdownHook(new Thread(new Service()));
 
-                //der Thread wird eingerichtet und gestartet,
-                //scheitert diese wird der Service zurueckgesetzt
+                // der Thread wird eingerichtet und gestartet,
+                // scheitert diese wird der Service zurueckgesetzt
                 try {new Thread(service).start();
                 } catch (Throwable throwable) {
 
@@ -640,7 +640,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     
                     Service.initiate(Service.STOP);
                     
-                    //Standardinformation wird ausgegeben
+                    // Standardinformation wird ausgegeben
                     Service.print("SERVICE STOPPED");
                     
                     Service.service = null;
@@ -678,14 +678,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
                 result = result.concat(String.format("TIUP: %tF %<tT\r\n", new Object[] {new Date(service.timing)}));
                 
-                //alle registrierten Module werden ermittelt
+                // alle registrierten Module werden ermittelt
                 enumeration = service.modules.elements();
                 while (enumeration.hasMoreElements()) {
                     
-                    //die Modul-Instanzen werden einzeln ermittelt
+                    // die Modul-Instanzen werden einzeln ermittelt
                     object = enumeration.nextElement();
                     
-                    //die Modulkennung wird ueber Caption ermittelt
+                    // die Modulkennung wird ueber Caption ermittelt
                     try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
@@ -694,18 +694,18 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     if (caption == null)
                         caption = object.getClass().getName();
 
-                    //die Ausgabe wird zusammengesetzt
+                    // die Ausgabe wird zusammengesetzt
                     result = result.concat(String.format("XAPI: %s\r\n", new Object[] {caption}));
                 }
                 
-                //alle registrierten Server werden ermittelt
+                // alle registrierten Server werden ermittelt
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
 
-                    //die Server-Instanzen werden einzeln ermittelt
+                    // die Server-Instanzen werden einzeln ermittelt
                     object = ((Object[])enumeration.nextElement())[0];
 
-                    //die Serverkennung wird ueber Caption ermittelt
+                    // die Serverkennung wird ueber Caption ermittelt
                     try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
@@ -714,7 +714,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     if (caption == null)
                         caption = object.getClass().getName();                      
 
-                    //die Ausgabe wird zusammengesetzt
+                    // die Ausgabe wird zusammengesetzt
                     result = result.concat(String.format("SAPI: %s\r\n", new Object[] {caption}));
                 }
             }
@@ -741,7 +741,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
     /**
      * Haupteinsprung in die Anwendung.<br>
-     * Nach dem Start, sind nur RESTART | STATUS | STOP lokal verf&uuml;gbar.<br>
+     * Nach dem Start sind nur RESTART | STATUS | STOP lokal verf&uuml;gbar.<br>
      * Vergleichbar: {@link #restart()}, {@link #details()}, {@link #destroy()}
      * @param options Startargumente
      */
@@ -753,7 +753,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         else if (options.length < 2)
             options = new String[] {options[0], ""};
 
-        //das Kommando wird ermittelt
+        // das Kommando wird ermittelt
         String string = "";
         if (options[0] != null)
             string = options[0].trim().toLowerCase();
@@ -768,28 +768,28 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             return;
         }
         
-        //Ausgabeinformation wird zusammen gestellt und ausgegeben
+        // Ausgabeinformation wird zusammen gestellt und ausgegeben
         Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", true);
         Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", true);
         Service.print("Advanced Server Development", true);
         Service.print("\r\n", true);
         
-        //bei unbekannten Kommandos wird die Kommandoliste ausgegeben
+        // bei unbekannten Kommandos wird die Kommandoliste ausgegeben
         if (!string.matches("^start|restart|status|stop$")) {
             Service.print("Usage: devwex [start|restart|status|stop] [address:port]", true);
             return;
         }
 
-        //START - starten der Serverdienste
+        // START - starten der Serverdienste
         if (string.matches("start")) {
             Service.initiate(Service.START);
             return;
         }
 
-        //RESTART | STATUS | STOP - die Kommandos werden an den Remote-Server
-        //gesendet und der Response als Result ausgegeben
-        //Fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
-        //oder ein alternatives Programmargument verwendet
+        // RESTART | STATUS | STOP - die Kommandos werden an den Remote-Server
+        // gesendet und der Response als Result ausgegeben
+        // Fuer die Konfiguration wird der Standardwert (127.0.0.1:25000)
+        // oder ein alternatives Programmargument verwendet
         
         try {
             options[1] = options[1] == null ? "" : options[1].trim();
@@ -857,14 +857,14 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 return;
             string = string.trim();
             if (!plain) {
-                //der Zeitstempel wird ermittelt
-                //ggf. wird eine Einrueckung fuer die Folgezeilen eingefuegt
+                // der Zeitstempel wird ermittelt
+                // ggf. wird eine Einrueckung fuer die Folgezeilen eingefuegt
                 string = String.format("%tF %<tT %s", new Object[] {new Date(), string});
                 if (throwable == null
                         && string.matches("(?s).*[\r\n][^\\s].*"))
                     string = string.replaceAll("([\r\n]+)", "$1\t");
             }
-            //der Inhalt wird ausgegeben
+            // der Inhalt wird ausgegeben
             System.out.println(string);
         }        
     }
@@ -879,8 +879,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         Service service = Service.service;
 
-        //die Abfrage des Betriebsstatus ist asynchron moeglich womit nicht
-        //sichergestellt werden kann, das der Service verfuegbar ist
+        // die Abfrage des Betriebsstatus ist asynchron moeglich womit nicht
+        // sichergestellt werden kann, das der Service verfuegbar ist
         return service != null ? service.status : Service.UNKNOWN; 
     }
 
@@ -900,7 +900,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         long    modified;
         
-        //beim Einsprung per ShutdownHook wird das Beenden eingeleitet
+        // beim Einsprung per ShutdownHook wird das Beenden eingeleitet
         if (!this.equals(Service.service)) {
             
             if (Service.service != null)
@@ -915,13 +915,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             return;
         }
         
-        //die Startzeit des Services wird gesetzt
+        // die Startzeit des Services wird gesetzt
         this.timing = System.currentTimeMillis();
 
-        //der Betriebsstatus wird gesetzt
+        // der Betriebsstatus wird gesetzt
         this.status = Service.RUN;
         
-        //die Konfigurationsdatei wird ermittelt
+        // die Konfigurationsdatei wird ermittelt
         file = new File("devwex.ini");
 
         modified = file.lastModified();
@@ -932,10 +932,10 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         while (this.status < Service.STOP) {
 
-            //die Konfiguration wird ermittelt
+            // die Konfiguration wird ermittelt
             section = this.initialize.get("common");
             
-            //die Option CLEANUP wird ermittelt
+            // die Option CLEANUP wird ermittelt
             if (section.get("cleanup").toLowerCase().equals("on"))
                 count = Thread.activeCount();
             
@@ -952,13 +952,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             delta = delta & 0xFF;
             total = count;
 
-            //die Option RELOAD wird ermittelt
+            // die Option RELOAD wird ermittelt
             if (section.get("reload").toLowerCase().equals("on")
                     && modified != file.lastModified()) {
 
                 modified = file.lastModified();
 
-                //der Server wird durchgestartet
+                // der Server wird durchgestartet
                 Service.restart();
             }
 
@@ -968,7 +968,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             }
         }
         
-        //Standardinformation wird ausgegeben
+        // Standardinformation wird ausgegeben
         Service.print("SERVICE STOPPED");
         
         Service.service = null;

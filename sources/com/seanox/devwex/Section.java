@@ -255,7 +255,7 @@ public class Section implements Cloneable {
         tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
             
-            //die naechste Zeile wird ermittelt
+            // die naechste Zeile wird ermittelt
             line = tokenizer.nextToken().trim();
             
             if (!line.startsWith("+")) {
@@ -266,27 +266,27 @@ public class Section implements Cloneable {
                 if (line.matches("^[^;=]+\\[\\s*\\?\\s*\\].*$"))
                     option |= 2;
                 
-                //der Kommentarteil wird ggf. entfernt
+                // der Kommentarteil wird ggf. entfernt
                 if ((option & 1) == 0 && line.contains(";"))
                     line = line.substring(0, line.indexOf(';')).trim();
                 
                 buffer = null;
 
-                //der Schluessel wird ermittelt, ggf. dekodiert und optimiert 
+                // der Schluessel wird ermittelt, ggf. dekodiert und optimiert 
                 label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
                 label = Section.decode(label).toUpperCase();
                 
-                //nur gueltige Schluessel werden geladen
+                // nur gueltige Schluessel werden geladen
                 if (label.isEmpty())
                     continue;
                 
                 if ((option & 2) != 0) {
                     
-                    //der Wert wird direkt in Systemproperties gesucht
+                    // der Wert wird direkt in Systemproperties gesucht
                     value = System.getProperty(label);
                     
-                    //die System-Properties werden unabhaengig von der
-                    //Gross- / Kleinschreibung nach dem Schuessel durchsucht
+                    // die System-Properties werden unabhaengig von der
+                    // Gross- / Kleinschreibung nach dem Schuessel durchsucht
                     enumeration = Collections.enumeration(System.getProperties().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
                         entry = (String)enumeration.nextElement();
@@ -296,8 +296,8 @@ public class Section implements Cloneable {
                         break;
                     }
                     
-                    //die System-Umgebungsvariablen werden unabhaengig von der
-                    //Gross- / Kleinschreibung nach dem Schuessel durchsucht
+                    // die System-Umgebungsvariablen werden unabhaengig von der
+                    // Gross- / Kleinschreibung nach dem Schuessel durchsucht
                     enumeration = Collections.enumeration(System.getenv().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
                         entry = (String)enumeration.nextElement();
@@ -314,7 +314,7 @@ public class Section implements Cloneable {
                     }
                 }
                 
-                //der Wert wird ermittelt, ggf. dekodiert und optimiert
+                // der Wert wird ermittelt, ggf. dekodiert und optimiert
                 value = line.trim();
                 value = value.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
                 value = Section.decode(value);
@@ -324,9 +324,9 @@ public class Section implements Cloneable {
                 
             } else if (buffer != null) {
                 
-                //Inhalt wird nur mit gueltigem Schluessel verarbeitet
+                // Inhalt wird nur mit gueltigem Schluessel verarbeitet
 
-                //der Kommentarteil wird ggf. entfernt
+                // der Kommentarteil wird ggf. entfernt
                 if ((option & 1) == 0 && line.contains(";"))
                     line = line.substring(0, Math.max(0, line.indexOf(';'))).trim();
 
@@ -471,7 +471,7 @@ public class Section implements Cloneable {
          if (section == null)
              return this;
          
-         //die Sektionen werden zusammengefasst oder ggf. neu angelegt
+         // die Sektionen werden zusammengefasst oder ggf. neu angelegt
          enumeration = Collections.enumeration(section.entries.keySet());
          while (enumeration.hasMoreElements()) {
              entry = (String)enumeration.nextElement();
@@ -505,10 +505,10 @@ public class Section implements Cloneable {
 
         Section section;
 
-        //Section wird eingerichtet
+        // Section wird eingerichtet
         section = new Section(this.smart);
 
-        //die Schuessel werden als Kopie uebernommen
+        // die Schuessel werden als Kopie uebernommen
         section.entries = (LinkedHashMap)this.entries.clone();
 
         return section;

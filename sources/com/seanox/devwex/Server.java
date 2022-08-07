@@ -89,19 +89,19 @@ public class Server implements Runnable {
         int                 port;
         int                 isolation;
         
-        //der Servername wird uebernommen
+        // der Servername wird uebernommen
         this.context = context == null ? "" : context.trim();
 
-        //die Konfiguration wird eingerichtet
+        // die Konfiguration wird eingerichtet
         this.initialize = (Initialize)((Initialize)data).clone();
 
-        //Die Mediatypes werden fuer einen schnelleren Zugriff umgeschrieben.
-        //Dazu bilden die Dateiendungen den Schluessel und der Mediatype den
-        //Wert. Zur Konfiguration ist der Mediatype als Schluessel einfacher.
+        // Die Mediatypes werden fuer einen schnelleren Zugriff umgeschrieben.
+        // Dazu bilden die Dateiendungen den Schluessel und der Mediatype den
+        // Wert. Zur Konfiguration ist der Mediatype als Schluessel einfacher.
         
-        //die Mediatypes werden eingerichtet
-        //die Mediatypes werden entsprechend den Dateiendungen aufgebaut
-        //unvollstaendige Eintraege werden nicht beruecksichtig
+        // die Mediatypes werden eingerichtet
+        // die Mediatypes werden entsprechend den Dateiendungen aufgebaut
+        // unvollstaendige Eintraege werden nicht beruecksichtig
         section = new Section(true);
         options = this.initialize.get("mediatypes");
         if (options != null) {
@@ -119,26 +119,26 @@ public class Server implements Runnable {
             options.merge(section);
         }
         
-        //die Serverkonfiguration wird ermittelt
+        // die Serverkonfiguration wird ermittelt
         options = this.initialize.get(this.context);
 
-        //die Hostadresse des Servers wird ermittelt
+        // die Hostadresse des Servers wird ermittelt
         context = options.get("address").toLowerCase();
         address = context.equals("auto") ? null : InetAddress.getByName(context);
 
-        //der Port des Servers wird ermittelt
+        // der Port des Servers wird ermittelt
         try {port = Integer.parseInt(options.get("port"));
         } catch (Throwable throwable) {
             port = 0;
         }
 
-        //die maximale Leerlaufzeit fuer den Verbindungsaufbau
+        // die maximale Leerlaufzeit fuer den Verbindungsaufbau
         try {isolation = Integer.parseInt(options.get("isolation"));
         } catch (Throwable throwable) {
             isolation = 0;
         }
         
-        //die Anzahl zurueckzustellender Verbindungen wird ermittelt
+        // die Anzahl zurueckzustellender Verbindungen wird ermittelt
         try {volume = Integer.parseInt(options.get("backlog"));
         } catch (Throwable throwable) {
             volume = 0;
@@ -146,47 +146,47 @@ public class Server implements Runnable {
         
         context = this.context.replaceAll("(?i):[a-z]+$", ":ssl");
 
-        //entsprechend dem Serverschema wird der ServerSocket eingerichtet
+        // entsprechend dem Serverschema wird der ServerSocket eingerichtet
         if (this.initialize.contains(context)) {
 
-            //die SSL Konfiguration wird ermittelt
+            // die SSL Konfiguration wird ermittelt
             options = this.initialize.get(context);
 
-            //der Typ des KeyStores wird ermittelt, Standard ist JKS
+            // der Typ des KeyStores wird ermittelt, Standard ist JKS
             keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
             
-            //das Passwort des KeyStores wird ermittelt
+            // das Passwort des KeyStores wird ermittelt
             string = options.get("password");
 
-            //der KeyStore wird geladen
+            // der KeyStore wird geladen
             input = new FileInputStream(options.get("keystore"));
             try {keystore.load(input, string.toCharArray());
             } finally {
                 input.close();
             }
             
-            //der KeyManager wird eingerichtet, Standard ist SunX509
+            // der KeyManager wird eingerichtet, Standard ist SunX509
             keymanager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));            
             
-            //der KeyManager wird initialisiert
+            // der KeyManager wird initialisiert
             keymanager.init(keystore, string.toCharArray());
             
-            //der TrustManager wird eingerichtet, Standard ist SunX509
+            // der TrustManager wird eingerichtet, Standard ist SunX509
             trustmanager = TrustManagerFactory.getInstance(options.get("algorithm", TrustManagerFactory.getDefaultAlgorithm()));
             
-            //der TrustManager wird initialisiert
+            // der TrustManager wird initialisiert
             trustmanager.init(keystore);
 
-            //das SSL Protokoll wird ermittelt, Standard ist TLS
+            // das SSL Protokoll wird ermittelt, Standard ist TLS
             secure = SSLContext.getInstance(options.get("protocol", "TLS"));
 
-            //der SecureContext wird mit Key- und TrustManager(n) initialisiert
+            // der SecureContext wird mit Key- und TrustManager(n) initialisiert
             secure.init(keymanager.getKeyManagers(), trustmanager.getTrustManagers(), null);
 
-            //der Socket wird mit Adresse bzw. automatisch eingerichtet
+            // der Socket wird mit Adresse bzw. automatisch eingerichtet
             this.socket = secure.getServerSocketFactory().createServerSocket(port, volume, address);
             
-            //WICHTIG - Need und Want muessen unabhaenig gesetzt werden
+            // WICHTIG - Need und Want muessen unabhaenig gesetzt werden
             if (options.get("clientauth").toLowerCase().equals("on"))
                 ((SSLServerSocket)this.socket).setNeedClientAuth(true);
             if (options.get("clientauth").toLowerCase().equals("auto"))
@@ -194,14 +194,14 @@ public class Server implements Runnable {
             
         } else {
 
-            //der Socket wird mit Adresse bzw. automatisch eingerichtet
+            // der Socket wird mit Adresse bzw. automatisch eingerichtet
             this.socket = new ServerSocket(port, volume, address);
         }
 
-        //das Timeout fuer den Socket wird gesetzt
+        // das Timeout fuer den Socket wird gesetzt
         this.socket.setSoTimeout(isolation <= 0 ? 250 : isolation);
 
-        //die Serverkennung wird zusammengestellt
+        // die Serverkennung wird zusammengestellt
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
     }
 
@@ -216,11 +216,11 @@ public class Server implements Runnable {
     /** Beendet den Server als Thread */
     public void destroy() {
 
-        //der Socket wird geschlossen
+        // der Socket wird geschlossen
         try {this.socket.close();
         } catch (Throwable throwable) {
 
-            //keine Fehlerbehandlung erforderlich
+            // keine Fehlerbehandlung erforderlich
         }
     }
 
@@ -241,22 +241,22 @@ public class Server implements Runnable {
         int         loop;
         int         volume;
 
-        //die Worker werden eingerichtet
+        // die Worker werden eingerichtet
         this.worker = new Vector(256, 256);
 
-        //Initialisierung wird als Information ausgegeben
+        // Initialisierung wird als Information ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
-        //die Serverkonfiguration wird ermittelt
+        // die Serverkonfiguration wird ermittelt
         options = this.initialize.get(this.context);
 
-        //MAXACCESS - die Anzahl max. gleichzeitiger Verbindungen wird ermittelt
+        // MAXACCESS - die max. Anzahl gleichzeitiger Verbindungen wird ermittelt
         try {volume = Integer.parseInt(options.get("maxaccess"));
         } catch (Throwable throwable) {
             volume = 0;
         }
 
-        //die initiale Anzahl zusaetzlicher Worker wird angelegt
+        // die initiale Anzahl zusaetzlicher Worker wird angelegt
         count = 0;
 
         try {
@@ -270,48 +270,48 @@ public class Server implements Runnable {
 
                     objects = (Object[])enumeration.nextElement();
 
-                    //der Thread wird ermittelt
+                    // der Thread wird ermittelt
                     thread = (Thread)objects[1];
 
-                    //ausgelaufene Worker werden entfernt
+                    // ausgelaufene Worker werden entfernt
                     if (control && !thread.isAlive())
                         this.worker.remove(objects);
 
-                    //der Worker wird ermittelt
+                    // der Worker wird ermittelt
                     worker = (Worker)objects[0];
 
-                    //ueberzaehlige Worker werden beendet
+                    // ueberzaehlige Worker werden beendet
                     if (control && worker.available())
                         worker.isolate();
 
-                    //laeuft der Thread nicht, wird der Worker entfernt
+                    // laeuft der Thread nicht, wird der Worker entfernt
                     if (worker.available() && thread.isAlive())
                         control = true;
                 }
 
-                //die Anzahl der nachtraeglich einzurichtenden Worker wird auf
-                //Basis der letzten Anzahl ermittelt
+                // die Anzahl der nachtraeglich einzurichtenden Worker wird auf
+                // Basis der letzten Anzahl ermittelt
                 count = control ? 0 : volume <= 0 ? 1 : count +count +1;
 
-                //liegt kein freier Worker vor, werden neue eingerichtet, die
-                //Anzahl ist durch die Angabe vom MAXACCESS begrenzt, weitere
-                //Anfragen werden sonst im Backlog geparkt
+                // liegt kein freier Worker vor, werden neue eingerichtet, die
+                // Anzahl ist durch die Angabe vom MAXACCESS begrenzt, weitere
+                // Anfragen werden sonst im Backlog geparkt
                 for (loop = count; !this.socket.isClosed() && loop > 0; loop--) {
                     
                     if (this.worker.size() >= volume && volume > 0)
                         break;
 
-                    //der Worker wird eingerichtet
+                    // der Worker wird eingerichtet
                     worker = new Worker(this.context, this.socket, (Initialize)this.initialize.clone());
 
-                    //der Thread der Worker wird eingerichet, ueber den
-                    //Service wird dieser automatisch als Daemon verwendet
+                    // der Thread der Worker wird eingerichet, ueber den
+                    // Service wird dieser automatisch als Daemon verwendet
                     thread = new Thread(worker);
 
-                    //der Worker wird mit Thread registriert
+                    // der Worker wird mit Thread registriert
                     this.worker.add(new Object[] {worker, thread});
                     
-                    //der Worker wird als Thread gestartet
+                    // der Worker wird als Thread gestartet
                     thread.start();
                 }
 
@@ -325,15 +325,15 @@ public class Server implements Runnable {
             Service.print(throwable);
         }
         
-        //das Beenden vom Server wird eingeleitet
+        // das Beenden vom Server wird eingeleitet
         this.destroy();
         
-        //alle Worker werden zwangsweise beendet
+        // alle Worker werden zwangsweise beendet
         enumeration = this.worker.elements();
         while (enumeration.hasMoreElements())
             ((Worker)((Object[])enumeration.nextElement())[0]).destroy();
 
-        //die Terminierung wird ausgegeben
+        // die Terminierung wird ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" STOPPED"));
     }
 }

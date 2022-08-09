@@ -33,7 +33,7 @@ import java.util.Map;
  * Generator bef&uuml;llt Platzhalter in einer Vorlage (Template/Model) mit den
  * Werten von Schl&uuml;ssel-Werte-Paaren aus einem Verzeichnis ({@link Map}),
  * wenn die Schl&uuml;ssel der Platzhalter-Kennung (Identifier) entsprechen,
- * wobei die Gross-/Kleinschreibung der Schlüssel ignoriert wird.<br>
+ * wobei die Gross-/Kleinschreibung der Schl&uuml;ssel ignoriert wird.<br>
  * <br>
  * Bef&uuml;llt wird auf Byte-Level, das Werte als byte-Arrays nutzt. Andere
  * Datentypen werden automatisch per {@code String.valueOf(value).getBytes()}

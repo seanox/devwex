@@ -1,5 +1,7 @@
 5.4.1 2022xxxx
   BF: Review: Optimization and corrections (without functional impact)
+  BF: Generator: Correction when parsing structures
+      Structures deeper 65535 levels no longer cause an exception.
   CR: Build: Releases are now only available on the release page
   CR: License: Changed to Apache License Version 2.0
 

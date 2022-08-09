@@ -49,13 +49,12 @@ import java.util.Map;
  * Strukturen nach dem Bef&uuml;llen erhalten bleiben, lassen sich diese
  * iterativ wiederverwenden.<br>
  * <br>
- * Als Werte werden f&uuml;r Strukturen die Datentypen {@link Collection} und
- * {@link Map} erwartet. Eine {@link Map} enth&auml;lt dann die Werte f&uuml;r
- * die Platzhalter innerhalb der Struktur. Eine {@link Collection} f&uuml;hrt
- * zur Iteration &uuml;ber eine Menge von {@link Map}-Objekten, was vergleichbar
- * mit dem iterativen Aufruf der Methode {@link #set(String, Map)} ist.<br>
- * {@link Map} und {@link Collection} erzeugen tiefe, komplexe ggf. sich 
- * wiederholende rekursive Strukturen.
+ * Strukturen verwenden als Werte {@link Collection} und {@link Map}. Eine
+ * {@link Map} enth&auml;lt dann die Werte f&uuml;r die Platzhalter innerhalb
+ * der Struktur. Eine {@link Collection} f&uuml;hrt zur Iteration &uuml;ber
+ * eine Menge von {@link Map}-Objekten, was vergleichbar mit dem iterativen
+ * Aufruf der Methode {@link #set(String, Map)} ist. {@link Map} und
+ * {@link Collection} erzeugen tiefe, komplexe und rekursive Strukturen.
  *
  * <h3>Beschreibung der Syntax</h3>
  * Die Syntax der Platzhalter ignoriert die Gross- und Kleinschreibung, muss mit
@@ -159,41 +158,41 @@ public class Generator {
     }
 
     /**
-     * Ermittelt ob im &uuml;bergebenen Model an der angegebenen Position ein
-     * g&uuml;ltiger Platzhalter beginnt. In dem Fall wirde dessen L&auml;ge
+     * Ermittelt, ob im &uuml;bergebenen Model an der angegebenen Position ein
+     * g&uuml;ltiger Platzhalter beginnt. In dem Fall wird dessen L&auml;ge
      * ermittelt. Ist kein Platzhalter erkennbar, wird der R&uuml;ckgabewert 0
      * sein. Liegen im Model keine weiteren Daten zur Analyse vor (Datenende ist
      * erreicht) wird ein negativer Wert zur&uuml;ckgegeben.
      * @param  model  Model
-     * @param  cursor Position
+     * @param  offset Position
      * @return die L&auml;ge eines ermittelten Platzhalters, sonst 0 oder ein
      *     negativer Wert, wenn das Datenende erreicht wurde
      */
-    private static int scan(byte[] model, int cursor) {
+    private static int scan(byte[] model, int offset) {
         
         if (model == null
-                || cursor >= model.length)
+                || offset >= model.length)
             return -1;        
 
         // Phase 0: Identifizierung eines Platzhalters
         //   - die unterstuetzen Formate: #[...], #[...[[...]]]
         //   - Hauptmerkmal sind die ersten zwei Zeichen
         //   - alle Platzhalter beginnen mit #[...
-        if (cursor +1 >= model.length
-                || model[cursor] != '#'
-                || model[cursor +1] != '[')
+        if (offset +1 >= model.length
+                || model[offset] != '#'
+                || model[offset +1] != '[')
             return 0;
             
-        int offset = cursor;
+        int cursor = offset;
         int deep   = 0;
 
         int[] stack = new int[65535];
-        while (cursor < model.length) {
+        while (offset < model.length) {
 
             // Der aktuelle Level wird ermittelt.
-            int level = 0;
+            int mode = 0;
             if (deep > 0)
-                level = stack[deep];
+                mode = stack[deep];
 
             // Phase 1-1: Erkennung vom Start eines Platzhalters
             //   - die unterstuetzen Formate: #[...], #[...[[...]]]
@@ -203,12 +202,13 @@ public class Generator {
             // kein Platzhalter existiert oder wenn zuvor ein
             // Struktur-Platzhalter ermittelt wurde. In beiden Faellen ist das
             // Level ungleich 1 und es startet ein weiterer Stack mit Level 1.
-            if (cursor +1 < model.length
-                    && model[cursor] == '#'
-                    && model[cursor +1] == '['
-                    && level != 1) {
-                stack[++deep] = 1;
-                cursor += 2;
+            if (offset +1 < model.length
+                    && model[offset] == '#'
+                    && model[offset +1] == '['
+                    && mode != 1) {
+                if (deep < 65535)
+                    stack[++deep] = 1;
+                offset += 2;
                 continue;
             }
             
@@ -216,12 +216,12 @@ public class Generator {
             //   - es wird der aktive Level 1 erwartet
             //   - es wird die Zeichenfolge [[ gefunden
             // Der aktuelle Stack wird auf Level 2 gesetzt.
-            if (cursor +1 < model.length
-                    && model[cursor] == '['
-                    && model[cursor +1] == '['
-                    && level == 1) {
+            if (offset +1 < model.length
+                    && model[offset] == '['
+                    && model[offset +1] == '['
+                    && mode == 1) {
                 stack[deep] = 2;
-                cursor += 2;
+                offset += 2;
                 continue;
             }
 
@@ -229,11 +229,11 @@ public class Generator {
             // Der Level muss 1 sein und Zeichen ] gefunden werden.
             // Dann wird der aktulle Stack entfernt, da die Suche hier
             // abgeschlossen ist.
-            if (model[cursor] == ']'
-                    && level == 1) {
+            if (model[offset] == ']'
+                    && mode == 1) {
                 if (--deep  <= 0)
                     break;
-                cursor += 1;
+                offset += 1;
                 continue;
             }
 
@@ -241,19 +241,19 @@ public class Generator {
             // Der Level muss 2 sein und die Zeichenfolge ]]] gefunden werden.
             // Dann wird der aktulle Stack entfernt, da die Suche hier
             // abgeschlossen ist.
-            if (cursor +2 < model.length
-                    && model[cursor +0] == ']'
-                    && model[cursor +1] == ']'
-                    && model[cursor +2] == ']'
-                    && level == 2) {
-                cursor += 2;
+            if (offset +2 < model.length
+                    && model[offset +0] == ']'
+                    && model[offset +1] == ']'
+                    && model[offset +2] == ']'
+                    && mode == 2) {
+                offset += 2;
                 if (--deep <= 0)
                     break;
-                cursor += 1;
+                offset += 1;
                 continue;
             }
             
-            cursor++;
+            offset++;
         }
         
         // Fall 1: Der Stack ist nicht leer
@@ -261,12 +261,12 @@ public class Generator {
         // Der Scan ist hungrig und geht von einem unvollstaendigen Platzhalter
         // aus. Daher ist der Offset von Start-Position bis zum Ende vom Model.
         if (deep > 0)
-            return model.length -offset;
+            return model.length -cursor;
         
         // Fall 2: Der Stack ist leer
         // Der Platzhalter wurde komplett ermittelt und der Offset entspricht
         // der PositionLaenge des kompletten Platzhalter mit ggf. enthaltenen Strukturen.
-        return cursor -offset +1;
+        return offset -cursor +1;
     }
 
     /**

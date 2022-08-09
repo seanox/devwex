@@ -45,7 +45,7 @@ import java.util.Map;
  * Zudem bilden Strukturen Geltungsbereiche (Scopes), diese sind vergleichbar
  * mit Teilvorlagen, die an beliebiger Stelle durch einfache Platzhalter
  * einf&uuml;gen lassen und k&ouml;nnen auf Basis der Struktur-Kennung dediziert
- * bzw partiell bef&uuml;llen und extrahieren werden. Da die Platzhalter von
+ * bzw. partiell bef&uuml;llen und extrahieren werden. Da die Platzhalter von
  * Strukturen nach dem Bef&uuml;llen erhalten bleiben, lassen sich diese
  * iterativ wiederverwenden.<br>
  * <br>

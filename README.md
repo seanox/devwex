@@ -21,11 +21,10 @@ servers and modules/applications can be integrated via the available APIs. The
 runtime container with the servers is a pure Java implementation and can be used
 on many operating systems due to the corresponding runtime environments. 
 
-__The sporting challenge: The size of the binary from Devwex is limited to a
-maximum of 30kB. There is no technical reason, it is rather the more than 20
-years old quirk and question: Why are web servers so big?  
-This should make some unconventional decisions in the project easier to
-understand :-)__
+__The size of the Devwex binary is limited to a maximum of 30kB. There is no
+technical reason for this, it is rather the more than 20 years old quirk and
+question -- Why are web servers so big? This should make some unconventional
+decisions in the project easier to understand :-)__
 
 
 # Features
@@ -35,10 +34,10 @@ understand :-)__
   supports the loading and unloading of servers and modules at the runtime. 
 - __Hypertext Transfer Protocol__  
   The HTTP server implementation provides virtual hosting, filters, HTTP
-  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more.  
-  In accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS
-  PUT and DELETE are supported by HTTP 1.1 and other methods can be provided
-  via HTTP modules, XCGI and CGI. 
+  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more. In  
+  accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS, PUT
+  and DELETE are supported by HTTP 1.1 and other methods can be provided via
+  HTTP modules, XCGI and CGI. 
 - __Remote Control__  
   The included remote access supports a telnet-based control of the runtime
   container (restart and stop) and queries about the operating status of

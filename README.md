@@ -21,9 +21,11 @@ servers and modules/applications can be integrated via the available APIs. The
 runtime container with the servers is a pure Java implementation and can be used
 on many operating systems due to the corresponding runtime environments. 
 
-__The sporting challenge: The size of Devwex's binary is limited to a maximum of
-30kB. There is no technical reason, it is rather the more than 20 years old
-quirk and question: Why are web servers so big?__
+__The sporting challenge: The size of the binary from Devwex is limited to a
+maximum of 30kB. There is no technical reason, it is rather the more than 20
+years old quirk and question: Why are web servers so big?  
+This should make some whimsical and unconventional decisions in the project
+easier to understand :-)__
 
 
 # Features

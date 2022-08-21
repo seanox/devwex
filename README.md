@@ -34,7 +34,7 @@ decisions in the project easier to understand :-)__
   supports the loading and unloading of servers and modules at the runtime. 
 - __Hypertext Transfer Protocol__  
   The HTTP server implementation provides virtual hosting, filters, HTTP
-  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more. In  
+  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more. In
   accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS, PUT
   and DELETE are supported by HTTP 1.1 and other methods can be provided via
   HTTP modules, XCGI and CGI. 

@@ -1,4 +1,6 @@
 /.idea/
-/.settings/
+/program/classes/
 /releases/
 /storage/
+/*/keystore
+/*/*.jar

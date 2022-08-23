@@ -37,11 +37,7 @@ import javax.net.ssl.TrustManagerFactory;
  * Server stellt als physischer Host, den Zugriff im Netzwerk f&uuml;r eine
  * spezielle Adresse an einem speziellen Port zur Verf&uuml;gung. Mit dem Start
  * von Devwex werden alle in der Konfigurationsdatei angegebenen Server
- * gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.<br>
- * <br>
- * Server 5.1.0 20200202<br>
- * Copyright (C) 2018 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
+ * gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.
  *
  * @author  Seanox Software Solutions
  * @version 5.1.0 20200202

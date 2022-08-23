@@ -194,9 +194,6 @@ import java.util.Vector;
  *     ClassLoader entladen.
  *   </li>
  * </ul>
- * Service 5.4.0 20210403<br>
- * Copyright (C) 2021 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
  * @version 5.4.0 20210403

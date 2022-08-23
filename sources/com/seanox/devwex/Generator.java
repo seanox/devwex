@@ -123,11 +123,7 @@ import java.util.Map;
  * Die Methoden {@link #extract(String)} und {@link #extract(String, Map)}
  * dienen der exklusiven Nutzung von Strukturen (Teilvorlagen), die partiell
  * bef&uuml;llt werden. Das Ergebniss beider Methoden entspricht dem Aufruf von
- * {@link #set(Map)} in Kombination mit {@link #extract()}.<br>
- * <br>
- * Generator 5.2.2 20220731<br>
- * Copyright (C) 2022 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
+ * {@link #set(Map)} in Kombination mit {@link #extract()}.
  *
  * @author  Seanox Software Solutions
  * @version 5.2.2 20220731

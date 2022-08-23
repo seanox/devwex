@@ -60,10 +60,6 @@ import javax.net.ssl.SSLSocket;
  * m&ouml;glich, geschluckt und es erfolgt eine alternative aber sichere
  * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
  * kompletter Abbruch.
- * <br>
- * Worker 5.4.0 20210320<br>
- * Copyright (C) 2021 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
  * @version 5.4.0 20210320

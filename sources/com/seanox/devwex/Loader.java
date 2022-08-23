@@ -35,14 +35,10 @@ import java.util.zip.ZipFile;
 /**
  * Loader, stellt Funktionen zum Laden von Bibliotheken zur Verf&uuml;gung.
  * Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
- * k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.<br>
- * <br>
- * Loader 5.0.0 20170302<br>
- * Copyright (C) 2017 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
+ * k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.0 20170302
+ * @version 5.0.1 20220823
  */
 public class Loader extends URLClassLoader {
     
@@ -88,28 +84,22 @@ public class Loader extends URLClassLoader {
     @Override
     public InputStream getResourceAsStream(String name) {
 
-        InputStream input;
-        Iterator    iterator;
-        ZipEntry    entry;
-        ZipFile     store;
-
-        byte[]      bytes;
-        
         name = (name == null) ? "" : name.trim();
         if (name.length() <= 0)
             return null;
 
         if (this.loader != null) {
-            input = this.loader.getResourceAsStream(name);
+            InputStream input = this.loader.getResourceAsStream(name);
             if (input != null)
                 return input;
         }
         
-        iterator = this.libraries.iterator();
+        Iterator iterator = this.libraries.iterator();
         while (iterator.hasNext()) {
 
-            store = null;
-
+            ZipFile  store = null;
+            ZipEntry entry = null;
+            
             try {
 
                 store = new ZipFile((File)iterator.next());
@@ -118,7 +108,7 @@ public class Loader extends URLClassLoader {
                 if (entry != null) {
 
                     // der Datenpuffer wird eingerichtet
-                    bytes = new byte[(int)entry.getSize()];
+                    byte[] bytes = new byte[(int)entry.getSize()];
 
                     // der Datenstrom wird ausgelesen
                     new DataInputStream(store.getInputStream(entry)).readFully(bytes);
@@ -127,14 +117,10 @@ public class Loader extends URLClassLoader {
                 }
 
             } catch (Throwable throwable) {
-
                 // keine Fehlerbehandlung vorgesehen
-
             } finally {
-
                 try {store.close();
                 } catch (Throwable throwable) {
-
                     // keine Fehlerbehandlung vorgesehen
                 }
             }
@@ -153,42 +139,31 @@ public class Loader extends URLClassLoader {
     @Override
     public URL getResource(String name) {
 
-        Iterator iterator;
-        String   source;
-        URL      url;
-        ZipFile  store;
-
         name = (name == null) ? "" : name.trim();
         if (name.length() <= 0)
             return null;
 
         if (this.loader != null) {
-            url = this.loader.getResource(name);
+            URL url = this.loader.getResource(name);
             if (url != null)
                 return url;
         }
 
-        iterator = this.libraries.iterator();
+        Iterator iterator = this.libraries.iterator();
         while (iterator.hasNext()) {
 
-            source = ((File)iterator.next()).getAbsolutePath();
-            store  = null;
+            String  source = ((File)iterator.next()).getAbsolutePath();
+            ZipFile store  = null;
             
             try {
-
                 store = new ZipFile(source);
                 if (store.getEntry(name) != null)
                     return new URL(("jar:file:").concat(source).concat("!/").concat(name));
-
             } catch (Throwable throwable) {
-
                 // keine Fehlerbehandlung vorgesehen
-
             } finally {
-
                 try {store.close();
                 } catch (Throwable throwable) {
-
                     // keine Fehlerbehandlung vorgesehen
                 }
             }
@@ -214,30 +189,23 @@ public class Loader extends URLClassLoader {
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException {
 
-        String          packet;
-        SecurityManager security;
-        Class           source;
-        InputStream     input;
-
-        byte[]          bytes;
-
         name = (name == null) ? "" : name.trim();
         if (name.length() <= 0)
             return null;
 
-        source = (Class)this.classes.get(name);
+        Class source = (Class)this.classes.get(name);
         if (source != null)
             return source;
 
         try {
 
             // das Paket wird ermittelt
-            packet = name.substring(0, Math.max(0, name.lastIndexOf('.')));
+            String packet = name.substring(0, Math.max(0, name.lastIndexOf('.')));
             
             // die Berechtigung zur Definition der Klasse wird geprueft, wenn
             // ein entsprechender SecurityManager vorliegt, ohne ist Definition
             // aller Klassen zulaessig
-            security = System.getSecurityManager();
+            SecurityManager security = System.getSecurityManager();
 
             // prueft die Berechtigung zum Laden der Klasse/Paket, liegt diese
             // Berechtigung nicht vor, fuehrt dies zur SecurityException
@@ -248,7 +216,6 @@ public class Loader extends URLClassLoader {
                 super.definePackage(packet, null, null, null, null, null, null, null);
 
         } catch (SecurityException exception) {
-
             if (this.loader == null)
                 throw exception;
         }
@@ -264,11 +231,8 @@ public class Loader extends URLClassLoader {
             }
             
         } catch (SecurityException exception) {
-
             throw exception;
-            
         } catch (Throwable throwable) {
-
             // keine Fehlerbehandlung vorgesehen
         }
         
@@ -276,11 +240,11 @@ public class Loader extends URLClassLoader {
             
             // der Klassenname wird vereinheitlicht
             // und der Datenstrom zur Resource etabliert
-            input = this.getResourceAsStream(name.replace('.', '/').concat(".class"));
+            InputStream input = this.getResourceAsStream(name.replace('.', '/').concat(".class"));
             if (input instanceof ByteArrayInputStream) {
                 
                 // der Datenpuffer wird eingerichtet
-                bytes = new byte[((ByteArrayInputStream)input).available()];
+                byte[] bytes = new byte[((ByteArrayInputStream)input).available()];
                 
                 // der Datenpuffer wird komplett gelesen
                 input.read(bytes);
@@ -298,11 +262,8 @@ public class Loader extends URLClassLoader {
             }
 
         } catch (SecurityException exception) {
-
             throw exception;
-            
         } catch (Throwable throwable) {
-
             // keine Fehlerbehandlung vorgesehen
         }
 

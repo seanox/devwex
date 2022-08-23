@@ -1,5 +1,6 @@
 5.4.1 2022xxxx
   BF: Review: Optimization and corrections (without functional impact)
+      The binary is getting a little smaller again. I did not expect that :-)
   BF: Generator: Correction when parsing structures
       Structures deeper 65535 levels no longer cause an exception.
   CR: Build: Releases are now only available on the release page

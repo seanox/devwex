@@ -148,11 +148,7 @@ import java.util.StringTokenizer;
  *
  * <h4>Zeile 8 - 15</h4>
  * Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen, Schl&uuml;ssel
- * und Werte die hexadezimale Schreibweise verwendet.<br>
- * <br>
- * Initialize 5.0.2 20220823<br>
- * Copyright (C) 2022 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
+ * und Werte die hexadezimale Schreibweise verwendet.
  *
  * @author  Seanox Software Solutions
  * @version 5.0.2 20220823

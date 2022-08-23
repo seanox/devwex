@@ -27,8 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 /**
- * Initialize, verarbeitet Initialisierungsdaten im INI-Format und stellt diese
- * als Sektionen zur Verf&uuml;gung.
+ * Initialize, verarbeitet Konfigurationsdaten im INI-Format und stellt diese
+ * in Sektionen zur Verf&uuml;gung.
  * 
  * <h3>Hinweis</h3>
  * F&uuml;r eine optimale Verarbeitung von INI-Dateien sollte immer die
@@ -150,12 +150,12 @@ import java.util.StringTokenizer;
  * Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen, Schl&uuml;ssel
  * und Werte die hexadezimale Schreibweise verwendet.<br>
  * <br>
- * Initialize 5.0.1 20180109<br>
- * Copyright (C) 2018 Seanox Software Solutions<br>
+ * Initialize 5.0.2 20220823<br>
+ * Copyright (C) 2022 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.1 20180109
+ * @version 5.0.2 20220823
  */
 public class Initialize implements Cloneable {
 
@@ -175,7 +175,6 @@ public class Initialize implements Cloneable {
      * @param smart aktiviert den smarten Modus
      */
     public Initialize(boolean smart) {
-        
         this.entries = new LinkedHashMap();
         this.smart   = smart;
     }
@@ -186,8 +185,9 @@ public class Initialize implements Cloneable {
      * @return der dekodierte und getrimmte String
      */                   
     private static String decode(String string) {
-
-        string = string == null ? "" : string.toUpperCase().trim();
+        if (string == null)
+            string = "";
+        string = string.toUpperCase().trim();
         if (string.matches("^(?i)0x([0-9a-f]{2})+$"))
             return new String(new BigInteger(string.substring(2), 16).toByteArray()).toUpperCase().trim();
         return string;
@@ -222,31 +222,18 @@ public class Initialize implements Cloneable {
      */
     public static Initialize parse(String text, boolean smart) {
 
-        Enumeration     enumeration;
-        Initialize      initialize;
-        LinkedHashMap   entries;
-        String          line;
-        String          section;
-        String          value;
-        StringBuffer    buffer;
-        StringTokenizer tokenizer;
-        
-        String[]        strings;
-        
-        int             index;
-        
-        initialize = new Initialize(smart);
+        Initialize initialize = new Initialize(smart);
 
         if (text == null)
             return initialize;
 
-        entries = new LinkedHashMap();
-        buffer  = null;
+        LinkedHashMap entries = new LinkedHashMap();
+        StringBuffer  buffer  = null;
 
-        tokenizer = new StringTokenizer(text, "\r\n");
+        StringTokenizer tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
 
-            line = ((String)tokenizer.nextElement()).trim();
+            String line = ((String)tokenizer.nextElement()).trim();
             if (line.startsWith("[")) {
                 
                 buffer = new StringBuffer();
@@ -256,10 +243,10 @@ public class Initialize implements Cloneable {
                 //   - der Kommentarteil wird entfernt
                 //   - unzulaessige nachfolgende Sektionen werden entfernt
                 //   - ggf. existierende Ableitungen werden
-                strings = line.replaceAll("^(?i)(?:\\[\\s*([^\\[\\]\\;]+)\\s*\\]\\s*(?:extends\\s+([^\\[\\]\\;]+))*)*.*$", "$1 \00 $2").split("\00");
+                String[] strings = line.replaceAll("^(?i)(?:\\[\\s*([^\\[\\]\\;]+)\\s*\\]\\s*(?:extends\\s+([^\\[\\]\\;]+))*)*.*$", "$1 \00 $2").split("\00");
                 
                 // die Sektion wird ggf. dekodiert und optimiert 
-                section = Initialize.decode(strings[0]);
+                String section = Initialize.decode(strings[0]);
                 
                 // nur gueltige Sektionen werden geladen
                 if (section.isEmpty())
@@ -269,7 +256,7 @@ public class Initialize implements Cloneable {
                 
                 // ggf. existierende Ableitungen werden registriert und geladen
                 strings = strings[1].split("\\s+");
-                for (index = 0; index < strings.length; index++) {
+                for (int index = 0; index < strings.length; index++) {
                     section = Initialize.decode(strings[index]);
                     if (entries.containsKey(section))
                         buffer.append("\r\n").append(entries.get(section));
@@ -282,10 +269,10 @@ public class Initialize implements Cloneable {
             }
         }
         
-        enumeration = Collections.enumeration(entries.keySet());
+        Enumeration enumeration = Collections.enumeration(entries.keySet());
         while (enumeration.hasMoreElements()) {
-            section = (String)enumeration.nextElement();
-            value   = ((StringBuffer)entries.get(section)).toString().trim();
+            String section = (String)enumeration.nextElement();
+            String value   = ((StringBuffer)entries.get(section)).toString().trim();
             if (!smart || !value.isEmpty())
                 initialize.entries.put(section, Section.parse(value, smart));
         }
@@ -307,7 +294,6 @@ public class Initialize implements Cloneable {
      * @return {@code true} wenn die Sektion enthalten ist
      */
     public synchronized boolean contains(String key) {
-        
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
@@ -328,16 +314,14 @@ public class Initialize implements Cloneable {
      *     eine leere Sektion
      */
     public synchronized Section get(String key) {
-        
-        Section section;
-        
+
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
                 || key.isEmpty())
             return this.smart ? new Section(true) : null;
         
-        section = (Section)this.entries.get(key);
+        Section section = (Section)this.entries.get(key);
         if (section == null
                 && this.smart) {
             section = new Section(true);
@@ -358,12 +342,13 @@ public class Initialize implements Cloneable {
      * @return ggf. zuvor zugeordnete Sektion, sonst {@code null}
      */
     public synchronized Section set(String key, Section section) {
-        
+
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
                 || key.isEmpty())
             throw new IllegalArgumentException();
+        
         if (section == null
                 && !this.smart)
             return (Section)this.entries.remove(key);
@@ -395,18 +380,14 @@ public class Initialize implements Cloneable {
      */
     public synchronized Initialize merge(Initialize initialize) {
         
-        Enumeration enumeration;
-        Section     section;
-        String      entry;
-        
         if (initialize == null)
             return this;
 
         // die Sektionen werden zusammengefasst oder ggf. neu angelegt
-        enumeration = Collections.enumeration(this.entries.keySet());
+        Enumeration enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
-            entry   = (String)enumeration.nextElement();
-            section = initialize.get(entry);
+            String  entry   = (String)enumeration.nextElement();
+            Section section = initialize.get(entry);
             this.set(entry, section.merge(this.get(entry)));
         }
         
@@ -433,17 +414,13 @@ public class Initialize implements Cloneable {
     @Override
     public synchronized Object clone() {
 
-        Enumeration enumeration;
-        Initialize  initialize;
-        String      entry;
-
         // Initialize wird eingerichtet
-        initialize = new Initialize(this.smart);
+        Initialize initialize = new Initialize(this.smart);
 
         // die Sektionen werden kopiert
-        enumeration = Collections.enumeration(this.entries.keySet());
+        Enumeration enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
-            entry = (String)enumeration.nextElement();
+            String entry = (String)enumeration.nextElement();
             initialize.entries.put(entry, ((Section)this.entries.get(entry)).clone());
         }
         

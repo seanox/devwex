@@ -150,12 +150,12 @@ import java.util.StringTokenizer;
  * Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen, Schl&uuml;ssel
  * und Werte die hexadezimale Schreibweise verwendet.<br>
  * <br>
- * Section 5.0.1 20180109<br>
- * Copyright (C) 2018 Seanox Software Solutions<br>
+ * Section 5.0.2 20220823<br>
+ * Copyright (C) 2022 Seanox Software Solutions<br>
  * Alle Rechte vorbehalten.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.1 20180109
+ * @version 5.0.2 20220823
  */
 public class Section implements Cloneable {
 
@@ -185,7 +185,6 @@ public class Section implements Cloneable {
      * @param smart aktiviert den smarten Modus
      */
     public Section(boolean smart) {
-        
         this.entries = new LinkedHashMap();
         this.smart   = smart;
     }
@@ -196,7 +195,6 @@ public class Section implements Cloneable {
      * @return der dekodierte und getrimmte String
      */                    
     private static String decode(String string) {
-
         string = string == null ? "" : string.trim();
         if (string.matches("^(?i)0x([0-9a-f]{2})+$"))
             return new String(new BigInteger(string.substring(2), 16).toByteArray()).trim();
@@ -231,35 +229,24 @@ public class Section implements Cloneable {
      */
     public static Section parse(String text, boolean smart) {
         
-        Enumeration     enumeration;
-        LinkedHashMap   entries;
-        Section         section;
-        StringBuffer    buffer;
-        StringTokenizer tokenizer;
-        String          line;
-        String          entry;
-        String          label;
-        String          value;
-        
-        int             option;
-
-        section = new Section(smart);
+        Section section = new Section(smart);
 
         if (text == null)
             return section;
         
-        entries = new LinkedHashMap();
-        buffer  = null;
-        option  = 0;
+        LinkedHashMap entries = new LinkedHashMap();
+        StringBuffer  buffer  = null;
 
-        tokenizer = new StringTokenizer(text, "\r\n");
+        int option  = 0;
+
+        StringTokenizer tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
             
             // die naechste Zeile wird ermittelt
-            line = tokenizer.nextToken().trim();
+            String line = tokenizer.nextToken().trim();
             
             if (!line.startsWith("+")) {
-                
+
                 option = 0;
                 if (line.matches("^[^;=]+\\[\\s*\\+\\s*\\].*$"))
                     option |= 1;
@@ -271,6 +258,9 @@ public class Section implements Cloneable {
                     line = line.substring(0, line.indexOf(';')).trim();
                 
                 buffer = null;
+
+                String value;
+                String label;
 
                 // der Schluessel wird ermittelt, ggf. dekodiert und optimiert 
                 label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
@@ -287,9 +277,9 @@ public class Section implements Cloneable {
                     
                     // die System-Properties werden unabhaengig von der
                     // Gross- / Kleinschreibung nach dem Schuessel durchsucht
-                    enumeration = Collections.enumeration(System.getProperties().keySet());
+                    Enumeration enumeration = Collections.enumeration(System.getProperties().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
-                        entry = (String)enumeration.nextElement();
+                        String entry = (String)enumeration.nextElement();
                         if (!label.equalsIgnoreCase(entry.trim()))
                             continue;
                         value = System.getProperty(entry, "").trim();
@@ -300,7 +290,7 @@ public class Section implements Cloneable {
                     // Gross- / Kleinschreibung nach dem Schuessel durchsucht
                     enumeration = Collections.enumeration(System.getenv().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
-                        entry = (String)enumeration.nextElement();
+                        String entry = (String)enumeration.nextElement();
                         if (!label.equalsIgnoreCase(entry.trim()))
                             continue;
                         value = System.getenv(entry);
@@ -338,10 +328,10 @@ public class Section implements Cloneable {
             }
         }
         
-        enumeration = Collections.enumeration(entries.keySet());
+        Enumeration enumeration = Collections.enumeration(entries.keySet());
         while (enumeration.hasMoreElements()) {
-            entry = (String)enumeration.nextElement();
-            value = ((StringBuffer)entries.get(entry)).toString().trim();
+            String entry = (String)enumeration.nextElement();
+            String value = ((StringBuffer)entries.get(entry)).toString().trim();
             if (!smart || !value.isEmpty())
                 section.entries.put(entry, value);
         }
@@ -464,18 +454,14 @@ public class Section implements Cloneable {
       */
      public synchronized Section merge(Section section) {
          
-         Enumeration enumeration;
-         String      entry;
-         String      value;
-         
          if (section == null)
              return this;
          
          // die Sektionen werden zusammengefasst oder ggf. neu angelegt
-         enumeration = Collections.enumeration(section.entries.keySet());
+         Enumeration enumeration = Collections.enumeration(section.entries.keySet());
          while (enumeration.hasMoreElements()) {
-             entry = (String)enumeration.nextElement();
-             value = section.get(entry);
+             String entry = (String)enumeration.nextElement();
+             String value = section.get(entry);
              if (!this.smart || !value.isEmpty())             
                  this.set(entry, value);
          }
@@ -503,10 +489,8 @@ public class Section implements Cloneable {
     @Override
     public synchronized Object clone() {
 
-        Section section;
-
         // Section wird eingerichtet
-        section = new Section(this.smart);
+        Section section = new Section(this.smart);
 
         // die Schuessel werden als Kopie uebernommen
         section.entries = (LinkedHashMap)this.entries.clone();

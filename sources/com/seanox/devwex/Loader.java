@@ -33,36 +33,35 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Loader, stellt Funktionen zum Laden von Bibliotheken zur Verf&uuml;gung.
- * Die Dateien der geladene Bibliotheken werden dabei nicht gesperrt und
- * k&ouml;nnen somit zur Laufzeit ge&auml;ndert werden.
+ * Loader, provides functions for loading libraries and classes. The files of
+ * the loaded libraries are not locked and can be changed at runtime.
  *
  * @author  Seanox Software Solutions
  * @version 5.0.1 20220823
  */
 public class Loader extends URLClassLoader {
     
-    /** Zwischenspeicher geladener Klassen (Name, Klasse) */
+    /** Registration of loaded classes (name, class) */
     private volatile Hashtable classes;
 
-    /** &uuml;bergeordneter ClassLoader */
+    /** Parent ClassLoader */
     private volatile ClassLoader loader;
     
-    /** Verzeichnis der nach Klassen zu durchsuchenden Bibliotheken. */
+    /** List of libraries to be searched. */
     private volatile List libraries;
 
     /**
-     * Konstruktor, richtet den Loader ein.
-     * @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
+     * Constructor, creates the loader.
+     * @param libraries List of libraries to be searched
      */
     public Loader(List libraries) {
         this(Loader.class.getClassLoader(), libraries);
     }
 
     /**
-     * Konstruktor, richtet den Loader ein.
-     * @param loader    &uuml;bergeordneter ClassLoader
-     * @param libraries Liste der nach Klassen zu durchsuchenden Bibliotheken
+     * Constructor, creates the loader.
+     * @param loader    Parent ClassLoader
+     * @param libraries List of libraries to be searched
      */
     public Loader(ClassLoader loader, List libraries) {
 
@@ -73,18 +72,12 @@ public class Loader extends URLClassLoader {
         this.libraries = libraries;
     }
 
-    /**
-     * Liefert einen InputStream, mit dem die durch name bezeichnete Ressource
-     * ausgelesen werden kann. Falls die Ressource nicht gefunden werden konnte,
-     * wird {@code null} zur&uuml;ckgegeben.
-     * @param  name Name der Ressource
-     * @return der InputStream zur Ressource, sonst {@code null} wenn diese
-     *     nicht ermittelt werden kann
-     */
     @Override
     public InputStream getResourceAsStream(String name) {
 
-        name = (name == null) ? "" : name.trim();
+        if (name == null)
+            return null;
+        name = name.trim();
         if (name.length() <= 0)
             return null;
 
@@ -106,22 +99,15 @@ public class Loader extends URLClassLoader {
                 entry = store.getEntry(name);
                 
                 if (entry != null) {
-
-                    // der Datenpuffer wird eingerichtet
                     byte[] bytes = new byte[(int)entry.getSize()];
-
-                    // der Datenstrom wird ausgelesen
                     new DataInputStream(store.getInputStream(entry)).readFully(bytes);
-
                     return new ByteArrayInputStream(bytes);
                 }
 
             } catch (Throwable throwable) {
-                // keine Fehlerbehandlung vorgesehen
             } finally {
                 try {store.close();
                 } catch (Throwable throwable) {
-                    // keine Fehlerbehandlung vorgesehen
                 }
             }
         }
@@ -129,17 +115,12 @@ public class Loader extends URLClassLoader {
         return null;
     }
     
-    /**
-     * R&uuml;ckgabe der per Namen angeforderten Ressource als URL. Kann diese
-     * nicht ermittelt werden, wird {@code null} zur&uuml;ckgegeben.
-     * @param  name Name der Ressource, to be used as is.
-     * @return die URL zur angeforderten Ressource, sonst {@code null} wenn
-     *     diese nicht ermittelt werden kann
-     */
     @Override
     public URL getResource(String name) {
 
-        name = (name == null) ? "" : name.trim();
+        if (name == null)
+            return null;
+        name = name.trim();
         if (name.length() <= 0)
             return null;
 
@@ -160,11 +141,9 @@ public class Loader extends URLClassLoader {
                 if (store.getEntry(name) != null)
                     return new URL(("jar:file:").concat(source).concat("!/").concat(name));
             } catch (Throwable throwable) {
-                // keine Fehlerbehandlung vorgesehen
             } finally {
                 try {store.close();
                 } catch (Throwable throwable) {
-                    // keine Fehlerbehandlung vorgesehen
                 }
             }
         }
@@ -172,24 +151,13 @@ public class Loader extends URLClassLoader {
         return null;
     }
     
-    /**
-     * L&auml;dt die per Name angegebene Klasse. sse. Im Namen kann entweder der
-     * Punkt oder der Schr&auml;gstrich als Paket-Trennzeichen benutzt werden.
-     * Mit der Option {@code resolve} kann entschieden werden, ob die
-     * Aufl&ouml;sung von Abh&auml;ngigkeiten n&ouml;tig ist. Bei {@code true}
-     * werden auch die von dieser Klasse ben&ouml;tigten Klassen geladen.
-     * @param  name    Name der Klasse
-     * @param  resolve Option {@code true} um Abh&auml;ngigkeitem zu laden
-     * @return die geladene Klasse, ist diese nicht ermittelbar, f&uuml;hrt der
-     *     Aufruf zur Ausnahme {@code ClassNotFoundException}
-     * @throws ClassNotFoundException
-     *     Wenn die Klass nicht gefunden werden kann.
-     */
     @Override
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException {
 
-        name = (name == null) ? "" : name.trim();
+        if (name == null)
+            return null;
+        name = name.trim();
         if (name.length() <= 0)
             return null;
 
@@ -199,19 +167,20 @@ public class Loader extends URLClassLoader {
 
         try {
 
-            // das Paket wird ermittelt
+            // determination from the package
             String packet = name.substring(0, Math.max(0, name.lastIndexOf('.')));
             
-            // die Berechtigung zur Definition der Klasse wird geprueft, wenn
-            // ein entsprechender SecurityManager vorliegt, ohne ist Definition
-            // aller Klassen zulaessig
+            // the permission to define the class is checked if there is a
+            // corresponding SecurityManager, without it the definition of all
+            // classes is allowed
             SecurityManager security = System.getSecurityManager();
 
-            // prueft die Berechtigung zum Laden der Klasse/Paket, liegt diese
-            // Berechtigung nicht vor, fuehrt dies zur SecurityException
-            if (security != null) security.checkPackageDefinition(packet);
+            // checks the permission to load the class/package, if this
+            // permission is not present, this causes the SecurityException
+            if (security != null)
+                security.checkPackageDefinition(packet);
 
-            // das Package wird registriert
+            // registration of the package
             if (super.getPackage(packet) == null)
                 super.definePackage(packet, null, null, null, null, null, null, null);
 
@@ -220,51 +189,39 @@ public class Loader extends URLClassLoader {
                 throw exception;
         }
 
-        try {
+        // Attempts to load the class from the parent ClassLoader.
 
-            // ein Versuch die Klasse vom uebergeordneten ClassLoader zu laden 
+        try {
             if (this.loader != null) {
                 source = this.loader.loadClass(name);
                 if (resolve)
                     super.resolveClass(source);
                 return source;
             }
-            
         } catch (SecurityException exception) {
             throw exception;
         } catch (Throwable throwable) {
-            // keine Fehlerbehandlung vorgesehen
         }
-        
+
+        // The class name is normalized (dot to slash).
+        // Then the class can be loaded as a resource and defined as a class.
+        // The class is then registered as loaded.
+        // If needed, the class can be linked if it has been loaded and linked.
+
         try {
-            
-            // der Klassenname wird vereinheitlicht
-            // und der Datenstrom zur Resource etabliert
             InputStream input = this.getResourceAsStream(name.replace('.', '/').concat(".class"));
             if (input instanceof ByteArrayInputStream) {
-                
-                // der Datenpuffer wird eingerichtet
                 byte[] bytes = new byte[((ByteArrayInputStream)input).available()];
-                
-                // der Datenpuffer wird komplett gelesen
                 input.read(bytes);
-
-                // die Klasse wird ueber den ClassLoader definiert
                 source = super.defineClass(name, bytes, 0, bytes.length);
-
-                // die Klasse wird als geladen registriert
                 this.classes.put(name, source);
-
-                // gegebenfalls werden die Abhaengigkeitem aufgeloest
-                if (resolve) super.resolveClass(source);
-
+                if (resolve)
+                    super.resolveClass(source);
                 return source;
             }
-
         } catch (SecurityException exception) {
             throw exception;
         } catch (Throwable throwable) {
-            // keine Fehlerbehandlung vorgesehen
         }
 
         throw new ClassNotFoundException(name);

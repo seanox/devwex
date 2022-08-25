@@ -285,9 +285,9 @@ public class Generator {
         
         if (model == null)
             return new byte[0];
-        
-        int cursor = 0;
-        while (true) {
+
+        for (int cursor = 0; true;) {
+
             int offset = Generator.scan(model, cursor++);
             if (offset < 0)
                 break;
@@ -385,8 +385,7 @@ public class Generator {
             values.put(scope, patch);
         }
         
-        int cursor = 0;
-        while (true) {
+        for (int cursor = 0; true;) {
             int offset = Generator.scan(this.model, cursor++);
             if (offset < 0)
                 break;
@@ -448,8 +447,7 @@ public class Generator {
 
                     // if necessary the # characters are encoded to protect the
                     // placeholders and structure in the model
-                    int index = 0;
-                    while (index < patch.length) {
+                    for (int index = 0; index < patch.length;) {
                         if (patch[index++] != '#')
                             continue;
                         cache = new byte[patch.length +6];

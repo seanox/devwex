@@ -34,155 +34,129 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
- * Server stellt als physischer Host, den Zugriff im Netzwerk f&uuml;r eine
- * spezielle Adresse an einem speziellen Port zur Verf&uuml;gung. Mit dem Start
- * von Devwex werden alle in der Konfigurationsdatei angegebenen Server
- * gestartet. Auf die gestarteten Server wird immer direkt zugegriffen.
+ * Server provides as a physical host the access in the network for a special
+ * address at a special port. With the start of {@link Service} all servers
+ * which are defined in the configuration file will be started and their socket
+ * will be accessed directly.
  *
  * @author  Seanox Software Solutions
- * @version 5.1.0 20200202
+ * @version 5.2.0 20220824
  */
 public class Server implements Runnable {
 
-    /** Konfiguration des Servers */
+    /** Configuration of the server */
     private volatile Initialize initialize;
     
-    /** Socket des Servers */
+    /** Socket of the server */
     private volatile ServerSocket socket;
     
-    /** Context/Name des Servers */
+    /** Context/name of the server */
     private volatile String context;
 
-    /** Kennung und Bezeichnung des Servers */
+    /** Short description of the server */
     private volatile String caption;
 
-    /** Worker der eingerichteten Verbindungen */
+    /** Register of Workers */
     private volatile Vector worker;
 
     /**
-     * Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     * @param  context Name des Servers
-     * @param  data    Konfigurationsdaten des Servers
+     * Constructor, creates the server corresponding to the configuration.
+     * @param  context    Server name
+     * @param  initialize Configuration of the server
      * @throws Throwable
-     *     Bei fehlerhafter Einrichtung des Servers.
+     *     In case of incorrect server configuration/setup.
      */
-    public Server(String context, Object data) throws Throwable {
+    public Server(String context, Initialize initialize) throws Throwable {
 
-        TrustManagerFactory trustmanager;
-        SSLContext          secure;
-        String              buffer;
-        String              string;
-        StringTokenizer     tokenizer;
-        Section             options;
-        Section             section;
-        KeyStore            keystore;
-        KeyManagerFactory   keymanager;
-        FileInputStream     input;
-        InetAddress         address;
-        Enumeration         enumeration;
+        if (context == null)
+            context = "";
+        this.context = context.trim();
 
-        int                 volume;
-        int                 port;
-        int                 isolation;
-        
-        // der Servername wird uebernommen
-        this.context = context == null ? "" : context.trim();
+        this.initialize = (Initialize)initialize.clone();
 
-        // die Konfiguration wird eingerichtet
-        this.initialize = (Initialize)((Initialize)data).clone();
+        // MEDIATYPES - The media types are rewritten for faster access. For
+        // configuration it is easier to use the media type as the key, but at
+        // runtime it is easier and faster if the file extension is the key.
 
-        // Die Mediatypes werden fuer einen schnelleren Zugriff umgeschrieben.
-        // Dazu bilden die Dateiendungen den Schluessel und der Mediatype den
-        // Wert. Zur Konfiguration ist der Mediatype als Schluessel einfacher.
-        
-        // die Mediatypes werden eingerichtet
-        // die Mediatypes werden entsprechend den Dateiendungen aufgebaut
-        // unvollstaendige Eintraege werden nicht beruecksichtig
-        section = new Section(true);
-        options = this.initialize.get("mediatypes");
-        if (options != null) {
-            enumeration = options.elements();
+        // Mapping in a Dictionary, incomplete entries are ignored.
+        Section section = new Section(true);
+        Section mediatypes = this.initialize.get("mediatypes");
+        if (mediatypes != null) {
+            Enumeration enumeration = mediatypes.elements();
             while (enumeration.hasMoreElements()) {
-                string = (String)enumeration.nextElement();
-                tokenizer = new StringTokenizer(options.get(string));
+                String string = (String)enumeration.nextElement();
+                StringTokenizer tokenizer = new StringTokenizer(mediatypes.get(string));
                 while (tokenizer.hasMoreTokens()) {
-                    buffer = tokenizer.nextToken().trim();
+                    String buffer = tokenizer.nextToken().trim();
                     if (buffer.length() > 0)
                         section.set(buffer, string.toLowerCase());
                 }
             }
-            options.clear();
-            options.merge(section);
+            mediatypes.clear();
+            mediatypes.merge(section);
         }
-        
-        // die Serverkonfiguration wird ermittelt
-        options = this.initialize.get(this.context);
 
-        // die Hostadresse des Servers wird ermittelt
-        context = options.get("address").toLowerCase();
-        address = context.equals("auto") ? null : InetAddress.getByName(context);
+        // SERVER:INI - Loading the server configuration
+        Section options = this.initialize.get(this.context);
 
-        // der Port des Servers wird ermittelt
+        // SERVER:INI:ADDRESS - Host address of the server socket
+        InetAddress address = null;
+        String string = options.get("address").toLowerCase();
+        if (!string.equals("auto"))
+            address = InetAddress.getByName(string);
+
+        // SERVER:INI:PORT - Port of the server socket
+        int port = 0;
         try {port = Integer.parseInt(options.get("port"));
         } catch (Throwable throwable) {
-            port = 0;
         }
 
-        // die maximale Leerlaufzeit fuer den Verbindungsaufbau
+        // SERVER:INI:BACKLOG - Size of the backlog for pending connections
+        int backlog = 0;
+        try {backlog = Integer.parseInt(options.get("backlog"));
+        } catch (Throwable throwable) {
+        }
+
+        // SERVER:INI:ISOLATION - Idle time and timeout of the server sockets
+        int isolation = 0;
         try {isolation = Integer.parseInt(options.get("isolation"));
         } catch (Throwable throwable) {
-            isolation = 0;
         }
-        
-        // die Anzahl zurueckzustellender Verbindungen wird ermittelt
-        try {volume = Integer.parseInt(options.get("backlog"));
-        } catch (Throwable throwable) {
-            volume = 0;
-        }
-        
-        context = this.context.replaceAll("(?i):[a-z]+$", ":ssl");
 
-        // entsprechend dem Serverschema wird der ServerSocket eingerichtet
+        // SERVER:SSL - If the SSL section is present, a secure socket is used.
+        context = this.context.replaceAll("(?i):[a-z]+$", ":ssl");
         if (this.initialize.contains(context)) {
 
-            // die SSL Konfiguration wird ermittelt
+            // SERVER:SSL - Loading SSL configuration
             options = this.initialize.get(context);
 
-            // der Typ des KeyStores wird ermittelt, Standard ist JKS
-            keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
-            
-            // das Passwort des KeyStores wird ermittelt
-            string = options.get("password");
+            // SERVER:SSL:PASSWORD - Keystore and truststore are the same and
+            // so only one password is used.
+            String password = options.get("password");
 
-            // der KeyStore wird geladen
-            input = new FileInputStream(options.get("keystore"));
-            try {keystore.load(input, string.toCharArray());
+            // SERVER:SSL:KEYSTORE / SERVER:SSL:TYPE (default: JKS)
+            KeyStore keystore = KeyStore.getInstance(options.get("type", KeyStore.getDefaultType()));
+            FileInputStream input = new FileInputStream(options.get("keystore"));
+            try {keystore.load(input, password.toCharArray());
             } finally {
                 input.close();
             }
-            
-            // der KeyManager wird eingerichtet, Standard ist SunX509
-            keymanager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));            
-            
-            // der KeyManager wird initialisiert
-            keymanager.init(keystore, string.toCharArray());
-            
-            // der TrustManager wird eingerichtet, Standard ist SunX509
-            trustmanager = TrustManagerFactory.getInstance(options.get("algorithm", TrustManagerFactory.getDefaultAlgorithm()));
-            
-            // der TrustManager wird initialisiert
+
+            // SERVER:SSL:ALGORITHM - KeyManager (default: SunX509)
+            KeyManagerFactory keymanager = KeyManagerFactory.getInstance(options.get("algorithm", KeyManagerFactory.getDefaultAlgorithm()));
+            keymanager.init(keystore, password.toCharArray());
+
+            // SERVER:SSL:ALGORITHM - TrustManager (default: SunX509)
+            TrustManagerFactory trustmanager = TrustManagerFactory.getInstance(options.get("algorithm", TrustManagerFactory.getDefaultAlgorithm()));
             trustmanager.init(keystore);
 
-            // das SSL Protokoll wird ermittelt, Standard ist TLS
-            secure = SSLContext.getInstance(options.get("protocol", "TLS"));
-
-            // der SecureContext wird mit Key- und TrustManager(n) initialisiert
+            // SERVER:SSL:PROTOCOL - SSL Context (default: TLS)
+            SSLContext secure = SSLContext.getInstance(options.get("protocol", "TLS"));
             secure.init(keymanager.getKeyManagers(), trustmanager.getTrustManagers(), null);
 
-            // der Socket wird mit Adresse bzw. automatisch eingerichtet
-            this.socket = secure.getServerSocketFactory().createServerSocket(port, volume, address);
-            
-            // WICHTIG - Need und Want muessen unabhaenig gesetzt werden
+            // Establishment of secure socket (SSL/TLS)
+            // IMPORTANT - Need and Want must be set independently
+            this.socket = secure.getServerSocketFactory().createServerSocket(port, backlog, address);
             if (options.get("clientauth").toLowerCase().equals("on"))
                 ((SSLServerSocket)this.socket).setNeedClientAuth(true);
             if (options.get("clientauth").toLowerCase().equals("auto"))
@@ -190,124 +164,98 @@ public class Server implements Runnable {
             
         } else {
 
-            // der Socket wird mit Adresse bzw. automatisch eingerichtet
-            this.socket = new ServerSocket(port, volume, address);
+            // Establishment of non-secure socket
+            this.socket = new ServerSocket(port, backlog, address);
         }
 
-        // das Timeout fuer den Socket wird gesetzt
+        // SERVER:INI:ISOLATION - Setting the timeout for the socket
         this.socket.setSoTimeout(isolation <= 0 ? 250 : isolation);
 
-        // die Serverkennung wird zusammengestellt
-        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
+        // server short description is composed
+        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress())
+                .concat(":").concat(String.valueOf(port));
     }
 
     /**
-     * R&uuml;ckgabe der Serverkennung.
-     * @return die Serverkennung
+     * Returns the server short description.
+     * @return server short description
      */
     public String explain() {
         return this.caption;
     }
 
-    /** Beendet den Server als Thread */
+    /** Terminates the server as thread. */
     public void destroy() {
-
-        // der Socket wird geschlossen
         try {this.socket.close();
         } catch (Throwable throwable) {
-
-            // keine Fehlerbehandlung erforderlich
         }
     }
 
-    /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
     @Override
     public void run() {
 
-        Worker      worker;
-        Section     options;
-        Thread      thread;
-        Enumeration enumeration;
-
-        Object[]    objects;
-
-        boolean     control;
-
-        int         count;
-        int         loop;
-        int         volume;
-
-        // die Worker werden eingerichtet
+        // The register of workers is established.
         this.worker = new Vector(256, 256);
 
-        // Initialisierung wird als Information ausgegeben
+        // The server short description is output with the initialization.
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
-        // die Serverkonfiguration wird ermittelt
-        options = this.initialize.get(this.context);
+        // The server configuration is loaded.
+        Section options = this.initialize.get(this.context);
 
-        // MAXACCESS - die max. Anzahl gleichzeitiger Verbindungen wird ermittelt
-        try {volume = Integer.parseInt(options.get("maxaccess"));
+        // SERVER:INI:MAXACCESS - max. number of concurrent connections
+        int maxaccess = 0;
+        try {maxaccess = Integer.parseInt(options.get("maxaccess"));
         } catch (Throwable throwable) {
-            volume = 0;
         }
-
-        // die initiale Anzahl zusaetzlicher Worker wird angelegt
-        count = 0;
 
         try {
 
-            while (!this.socket.isClosed()) {
+            // The number of additional workers is permanently recalculated.
+            for (int count = 0; !this.socket.isClosed();) {
 
-                control = false;
-                
-                enumeration = ((Vector)this.worker.clone()).elements();
-                while (enumeration.hasMoreElements() && !this.socket.isClosed()) {
+                boolean control = false;
 
-                    objects = (Object[])enumeration.nextElement();
+                // Registered workers are monitored
+                // - expired workers are removed
+                // - unused / excess workers are isolated and then terminated
+                // - workers without running thread are removed
 
-                    // der Thread wird ermittelt
-                    thread = (Thread)objects[1];
-
-                    // ausgelaufene Worker werden entfernt
-                    if (control && !thread.isAlive())
+                Enumeration enumeration = ((Vector)this.worker.clone()).elements();
+                while (enumeration.hasMoreElements()
+                        && !this.socket.isClosed()) {
+                    Object[] objects = (Object[])enumeration.nextElement();
+                    Thread thread = (Thread)objects[1];
+                    if (!thread.isAlive()
+                            && control)
                         this.worker.remove(objects);
-
-                    // der Worker wird ermittelt
-                    worker = (Worker)objects[0];
-
-                    // ueberzaehlige Worker werden beendet
-                    if (control && worker.available())
+                    Worker worker = (Worker)objects[0];
+                    if (worker.available()
+                            && control)
                         worker.isolate();
-
-                    // laeuft der Thread nicht, wird der Worker entfernt
-                    if (worker.available() && thread.isAlive())
+                    if (worker.available()
+                            && thread.isAlive())
                         control = true;
                 }
 
-                // die Anzahl der nachtraeglich einzurichtenden Worker wird auf
-                // Basis der letzten Anzahl ermittelt
-                count = control ? 0 : volume <= 0 ? 1 : count +count +1;
+                // The number of workers to be established subsequently is
+                // based on the last number.
+                count = control ? 0 : maxaccess <= 0 ? 1 : count +count +1;
 
-                // liegt kein freier Worker vor, werden neue eingerichtet, die
-                // Anzahl ist durch die Angabe vom MAXACCESS begrenzt, weitere
-                // Anfragen werden sonst im Backlog geparkt
-                for (loop = count; !this.socket.isClosed() && loop > 0; loop--) {
-                    
-                    if (this.worker.size() >= volume && volume > 0)
+                // If there is no worker, new ones are created, the number is
+                // limited by MAXACCESS, further requests parked in the backlog.
+                for (int loop = count; !this.socket.isClosed() && loop > 0; loop--) {
+
+                    if (this.worker.size() >= maxaccess
+                            && maxaccess > 0)
                         break;
 
-                    // der Worker wird eingerichtet
-                    worker = new Worker(this.context, this.socket, (Initialize)this.initialize.clone());
+                    // The worker is established, registered
+                    // and started as a daemon thread.
 
-                    // der Thread der Worker wird eingerichet, ueber den
-                    // Service wird dieser automatisch als Daemon verwendet
-                    thread = new Thread(worker);
-
-                    // der Worker wird mit Thread registriert
+                    Worker worker = new Worker(this.context, this.socket, (Initialize)this.initialize.clone());
+                    Thread thread = new Thread(worker);
                     this.worker.add(new Object[] {worker, thread});
-                    
-                    // der Worker wird als Thread gestartet
                     thread.start();
                 }
 
@@ -316,20 +264,18 @@ public class Server implements Runnable {
                     this.destroy();
                 }
             }
-
         } catch (Throwable throwable) {
             Service.print(throwable);
         }
-        
-        // das Beenden vom Server wird eingeleitet
+
+        // Termination from the server is initiated,
+        // all workers are forcibly terminated
+        // and the termination is output.
+
         this.destroy();
-        
-        // alle Worker werden zwangsweise beendet
-        enumeration = this.worker.elements();
+        Enumeration enumeration = this.worker.elements();
         while (enumeration.hasMoreElements())
             ((Worker)((Object[])enumeration.nextElement())[0]).destroy();
-
-        // die Terminierung wird ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" STOPPED"));
     }
 }

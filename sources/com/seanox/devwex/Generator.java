@@ -319,8 +319,9 @@ public class Generator {
             } else if (fetch.matches("^(?i)#\\[[a-z]([\\w-]*\\w)?\\]$")) {
 
                 patch = fetch.toLowerCase().getBytes();
-
+            
             } else if (fetch.matches("^(?i)#\\[0x([0-9A-F]{2})+\\]$")) {
+            
                 cursor += fetch.length() +1;
                 continue;
             }

@@ -443,7 +443,7 @@ class Worker implements Runnable {
         string = path.replace('\\', '/').trim();
 
         // mehrfache Slashs werden zusammengefasst
-        while ((cursor = string.indexOf("// ")) >= 0)
+        while ((cursor = string.indexOf("//")) >= 0)
             string = string.substring(0, cursor).concat(string.substring(cursor +1));
 
         // der Path wird ggf. ausgeglichen /abc/./def/../ghi -> /abc/ghi
@@ -469,7 +469,7 @@ class Worker implements Runnable {
         }
 
         // mehrfache Slashs werden zusammengefasst
-        while ((cursor = string.indexOf("// ")) >= 0)
+        while ((cursor = string.indexOf("//")) >= 0)
             string = string.substring(0, cursor).concat(string.substring(cursor +1));
         
         return string;
@@ -1490,7 +1490,7 @@ class Worker implements Runnable {
         // die Location wird zusammengestellt
         string = this.environment.get("server_port");
         string = (!string.equals("80") && !secure || !string.equals("443") && secure) && string.length() > 0 ? (":").concat(string) : "";
-        string = (secure ? "https" : "http").concat(":// ").concat(entry).concat(string);
+        string = (secure ? "https" : "http").concat("://").concat(entry).concat(string);
 
         // die URI vom Skript wird komplementiert
         if (this.status != 302)
@@ -2893,12 +2893,6 @@ class Worker implements Runnable {
         }
     }
 
-    /**
-     * Stellt den Einsprung in den Thread zur Verf&uuml;gung und initialisiert
-     * den Worker. Um den Serverprozess nicht zu behindern wird die eigentliche
-     * Initialisierung vom Worker erst mit dem laufenden Thread als asynchroner
-     * Prozess vorgenommen.
-     */
     @Override
     public void run() {
 

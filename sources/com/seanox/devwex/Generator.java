@@ -131,7 +131,7 @@ import java.util.Map;
  * combination with {@link #extract()}, but focus on only one structure.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.2 20220824
+ * @version 5.2.2 20220907
  */
 public class Generator {
 
@@ -364,7 +364,7 @@ public class Generator {
             values = new HashMap();
         values = new HashMap(values);
 
-        Iterator iterator = values.keySet().iterator();
+        Iterator iterator = new HashMap(values).keySet().iterator();
         while (iterator.hasNext()) {
             String label = (String)iterator.next();
             values.put(label.toLowerCase().trim(), values.get(label));

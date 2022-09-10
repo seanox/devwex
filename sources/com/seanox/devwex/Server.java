@@ -40,33 +40,34 @@ import javax.net.ssl.TrustManagerFactory;
  * will be accessed directly.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220824
+ * @version 5.2.0 20220910
  */
 public class Server implements Runnable {
 
     /** Configuration of the server */
-    private volatile Initialize initialize;
+    private final Initialize initialize;
     
     /** Socket of the server */
-    private volatile ServerSocket socket;
+    private final ServerSocket socket;
     
     /** Context/name of the server */
-    private volatile String context;
+    private final String context;
 
     /** Short description of the server */
-    private volatile String caption;
+    private final String caption;
 
     /** Register of Workers */
-    private volatile Vector worker;
+    private final Vector worker;
 
     /**
-     * Constructor, creates the server corresponding to the configuration.
+     * Constructor, establishes the server corresponding to the configuration.
      * @param  context    Server name
      * @param  initialize Configuration of the server
      * @throws Throwable
      *     In case of incorrect server configuration/setup.
      */
-    public Server(String context, Initialize initialize) throws Throwable {
+    public Server(String context, Initialize initialize)
+            throws Throwable {
 
         if (context == null)
             context = "";
@@ -75,7 +76,7 @@ public class Server implements Runnable {
         this.initialize = (Initialize)initialize.clone();
 
         // MEDIATYPES - The media types are rewritten for faster access. For
-        // configuration it is easier to use the media type as the key, but at
+        // configuration, it is easier to use the media type as the key, but at
         // runtime it is easier and faster if the file extension is the key.
 
         // Mapping in a Dictionary, incomplete entries are ignored.
@@ -171,9 +172,12 @@ public class Server implements Runnable {
         // SERVER:INI:ISOLATION - Setting the timeout for the socket
         this.socket.setSoTimeout(isolation <= 0 ? 250 : isolation);
 
-        // server short description is composed
+        // Server short description is composed
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress())
                 .concat(":").concat(String.valueOf(port));
+
+        // The register of workers is established.
+        this.worker = new Vector(256, 256);
     }
 
     /**
@@ -193,9 +197,10 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-
-        // The register of workers is established.
-        this.worker = new Vector(256, 256);
+        
+        // NOTICE - The server uses a simple dynamic pool mechanism. 
+        // A contingent of workers is provided to accept requests. Depending on
+        // the current workload, the contingent is reduced or increased. 
 
         // The server short description is output with the initialization.
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));

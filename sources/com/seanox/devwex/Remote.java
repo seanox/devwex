@@ -29,264 +29,183 @@ import java.net.Socket;
 import java.net.SocketException;
 
 /**
- * Remote, stellt Client- und Server- Funktionalit&auml;ten f&uuml;r die auf
- * Telnet basierenden Fern&uuml;berwachung vom Service (Container) f&uuml;r
- * Statusabfragen, Restart und Stop, zur Verf&uuml;gung.<br>
- * <br>
- * Remote 5.1.1 20200416<br>
- * Copyright (C) 2020 Seanox Software Solutions<br>
- * Alle Rechte vorbehalten.
+ * Remote, provides Telnet based client and server functionality for remote
+ * control of the service for status requests, restart and stop.
  *
  * @author  Seanox Software Solutions
- * @version 5.1.1 20200416
+ * @version 5.2.0 20220910
  */
 public class Remote implements Runnable {
 
-    /** Socket des Servers */
-    private volatile ServerSocket socket;
+    /** Socket of the server */
+    private final ServerSocket socket;
 
-    /** Socket des Servers */
+    /** Short description of the server */
+    private final String caption;
+
+    /** Connection listener */
     private volatile Socket accept;
-
-    /** Kennung und Bezeichnung des Servers */
-    private volatile String caption;
-
+    
     /**
-     * Konstruktor, richtet den Server entsprechenden der Konfiguration ein.
-     * @param  server Name des Servers
-     * @param  data   Konfigurationsdaten des Servers
+     * Constructor, establishes the server corresponding to the configuration.
+     * @param  context    Server name
+     * @param  initialize Configuration of the server
      * @throws Throwable
-     *     Bei fehlerhafter Einrichtung des Servers.
+     *     In case of incorrect server configuration/setup.
      */
-    public Remote(String server, Object data) throws Throwable {
+    public Remote(String context, Initialize initialize)
+            throws Throwable {
 
-        InetAddress address;
-        Section     options;
-
-        int         port;
-
-        // der Servername wird uebernommen
-        server = server == null ? "" : server.trim();
+        if (context == null)
+            context = "";
+        context = context.trim();
         
-        // die Konfiguration wird ermittelt
-        options = ((Initialize)data).get(server);
-                
-        // der Port des Servers wird ermittelt
+        // REMOTE:INI - Loading the server configuration
+        Section options = initialize.get(context);
+        
+        // REMOTE:INI:ADDRESS - Host address of the server socket
+        InetAddress address = null;
+        String string = options.get("address").toLowerCase();
+        if (!string.equals("auto"))
+            address = InetAddress.getByName(string);
+
+        // REMOTE:INI:PORT - Port of the server socket
+        int port = 0;
         try {port = Integer.parseInt(options.get("port"));
         } catch (Throwable throwable) {
-            port = 0;
         }
-
-        // die Hostadresse des Servers wird ermittelt
-        server  = options.get("address", "auto").toLowerCase();
-        address = server.equals("auto") ? null : InetAddress.getByName(server);
-
-        // der ServerSocket wird eingerichtet
+        
+        // Establishment of socket
         this.socket = new ServerSocket(port, 0, address);
 
-        // das Timeout fuer den Socket wird gesetzt
+        // Setting the timeout for the socket
         this.socket.setSoTimeout(1000);
 
-        // die Serverkennung wird zusammengestellt
-        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress()).concat(":").concat(String.valueOf(port));
+        // Server short description is composed
+        this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress())
+                .concat(":").concat(String.valueOf(port));
     }
     
     /**
-     * R&uuml;ckgabe der Serverkennung.
-     * @return die Serverkennung
+     * Returns the server short description.
+     * @return server short description
      */
     public String explain() {
         return this.caption;
     }
 
     /**
-     * Sendet den Befehl per Telnet an den Server. R&uuml;ckgabe die Antwort des
-     * Servers als ByteArray, im Fehlerfall ein leeres ByteArray.
-     * @param  address Servername oder IP Adresse
-     * @param  port    Serverport
-     * @param  request Remoterequest
-     * @return der Response als ByteArray
+     * Sends the command to the server via telnet. Returns the server response
+     * as ByteArray, in case of error it is empty.
+     * @param  address Server name or IP address
+     * @param  port    Server port
+     * @param  request Remote request
+     * @return the response as ByteArray
      * @throws Exception
-     *     Bei fehlerhaftem Datenzugriff.
+     *     In case of incorrect data access.
      */
-    public static byte[] call(String address, int port, String request) throws Exception {
-
-        ByteArrayOutputStream buffer;
-        Socket                socket;
-        InputStream           input;
-
-        byte[]                bytes;
-
-        int                   length;
-
-        // der Request wird vorbereitet
-        request = request == null ? "" : request.trim();
-
-        // die Datenpuffer werden eingerichtet
-        buffer = new ByteArrayOutputStream();
-        bytes  = new byte[65535];
-        
-        // der Remotesocket wird eingerichtet
-        socket = new Socket(address, port);
-       
+    public static byte[] call(String address, int port, String request)
+            throws Exception {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        Socket socket = new Socket(address, port);
         try {
-
-            // der Datenstrom wird eingerichtet
-            input = socket.getInputStream();
-            
-            // der Request wird ausgegeben
+            request = request == null ? "" : request.trim();
             socket.getOutputStream().write(request.concat("\r\n").getBytes());
-
-            // der Response wird gelesen
-            while ((length = input.read(bytes)) >= 0) {
-                buffer.write(bytes, 0, length);
+            byte[] bytes = new byte[65535];
+            InputStream input = socket.getInputStream();
+            for (int size; (size = input.read(bytes)) >= 0;) {
+                buffer.write(bytes, 0, size);
                 Thread.sleep(25);
             }
-
         } finally {
-
-            // der Socket wird geschlossen
             try {socket.close();
             } catch (Throwable throwable) {
-
-                // keine Fehlerbehandlung erforderlich
             }
         }
-
         return buffer.toByteArray();
     }
 
     /**
-     * Liest den eingehenden Request, f&uuml;hrt das entsprechende Kommando aus
-     * und gibt den resultierenden Response zur&uuml;ck.
-     * @param socket eingerichteter Socket mit dem Request
+     * Reads the incoming request, executes the corresponding command and
+     * returns the resulting response.
+     * @param socket established socket with the request
      */
     private static void service(Socket socket) {
 
-        ByteArrayOutputStream buffer;
-        InputStream           input;
-        String                string;
-
-        int                   value;
-
-        // der Datenbuffer wird eingerichtet
-        buffer = new ByteArrayOutputStream();
-
         try {
 
-            // das SO Timeout wird fuer den Serversocket gesetzt
+            // SO timeout is set for the server socket
             socket.setSoTimeout(10000);
 
-            // der Request wird gelesen und ausgewertet
-            // die Datenstroeme werden eingerichtet
-            input = socket.getInputStream();
-
-            // die Daten werden aus dem Datenstrom gelesen
-            while ((value = input.read()) >= 0) {
-
-                // die Daten werden gespeichert
+            // The request is limited by line break or by max. 65535 bytes.
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            InputStream input = socket.getInputStream();
+            for (int value; (value = input.read()) >= 0;) {
                 buffer.write(value);
-
-                // ist der Request komplett oder wurde die maximal Laenge von
-                // 65535 Bytes erreicht wird das Lesen beendet
-                if (value == 10 || value == 13 || buffer.size() >= 65535) break;
+                if (buffer.size() >= 65535
+                        || value == 10
+                        || value == 13)
+                    break;
             }
 
-            // der Request wird ausgewertet
-            string = buffer.toString().toLowerCase().trim();    
-            
-            // STATUS - die Serverliste wird zusammengestellt
-            if (string.equals("status")) {
-
+            String string = buffer.toString().toLowerCase().trim();
+            if (("status").equals(string))
                 string = Service.details();
-
-            // RESTART - starte die Server neu
-            } else if (string.equals("restart")) {
-
+            else if (("restart").equals(string))
                 string = ("SERVICE RESTART").concat(!Service.restart() ? " FAILED" : "ED");
-
-            // STOP - Ausgabe der Information
-            } else if (string.equals("stop")) {
-
+            else if (("stop").equals(string))
                 string = ("SERVICE STOP").concat(!Service.destroy() ? " FAILED" : "PED");
-                
-            } else string = "UNKNOWN COMMAND";
+            else string = "UNKNOWN COMMAND";
 
-            // der Response wird ausgegeben
             socket.getOutputStream().write(string.concat("\r\n").getBytes());
 
         } catch (Throwable throwable) {
-
-            // keine Fehlerbehandlung erforderlich
         }
 
-        // der Socket wird geschlossen
         try {socket.close();
         } catch (Throwable throwable) {
-
-            // keine Fehlerbehandlung erforderlich
         }
     }
 
-    /** Beendet den Server als Thread */
+    /** Terminates the server as thread. */
     public void destroy() {
-
-        // der Socket wird geschlossen
         try {this.socket.close();
         } catch (Throwable throwable) {
-
-            // keine Fehlerbehandlung erforderlich
         }
     }
 
-    /** Stellt den Einsprung in den Thread zur Verf&uuml;gung. */
     @Override
     public void run() {
 
-        Thread thread;
+        // NOTICE - To provide a restart at runtime, the request accept is
+        // implemented as concurrent/non-blocking as thread.
 
-        // Hinweis - damit auch der Restart vom Remote moeglich ist, muss die
-        // Verarbeitung in einem seperaten Thread ausgelagert werden
-        if (this.accept != null) {Remote.service(this.accept); return;}
+        if (this.accept != null) {
+            Remote.service(this.accept);
+            return;
+        }
 
-        // Initialisierung wird als Information ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
-        for (thread = null; !this.socket.isClosed();) {
-
+        Thread thread = null;
+        while (!this.socket.isClosed()) {
             try {
-
-                if (thread == null || !thread.isAlive()) {
-
-                    // der Socket wird fuer den Worker eingerichtet
+                if (thread == null
+                        || !thread.isAlive()) {
                     this.accept = this.socket.accept();
-
-                    // der Thread fuer den Worker wird eingerichet, ueber den
-                    // Service wird dieser automatisch als Daemon verwendet
                     thread = new Thread(this);
-
-                    // der Worker wird als Thread gestartet
                     thread.start();
                 }
-
                 try {Thread.sleep(250);
                 } catch (Throwable throwable) {
                     this.destroy();
                 }                
-
             } catch (SocketException exception) {
-
                 this.destroy();
-
             } catch (InterruptedIOException exception) {
-
                 continue;
-
             } catch (Throwable throwable) {
-
                 Service.print(throwable);
-
-                // der Socket wird gegebenfalls geschlossen
                 try {this.accept.close();
                 } catch (Throwable exception) {
                     this.destroy();
@@ -294,7 +213,6 @@ public class Remote implements Runnable {
             }
         }
 
-        // die Terminierung wird ausgegeben
         Service.print(("SERVER ").concat(this.caption).concat(" STOPPED"));
     }
 }

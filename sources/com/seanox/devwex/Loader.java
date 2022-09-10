@@ -37,18 +37,18 @@ import java.util.zip.ZipFile;
  * the loaded libraries are not locked and can be changed at runtime.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.1 20220823
+ * @version 5.0.1 20220910
  */
 public class Loader extends URLClassLoader {
     
     /** Registration of loaded classes (name, class) */
-    private volatile Hashtable classes;
+    private final Hashtable classes;
 
     /** Parent ClassLoader */
-    private volatile ClassLoader loader;
+    private final ClassLoader loader;
     
     /** List of libraries to be searched. */
-    private volatile List libraries;
+    private final List libraries;
 
     /**
      * Constructor, creates the loader.

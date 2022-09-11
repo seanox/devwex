@@ -263,6 +263,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      */
     public static Class load(String name)
             throws ClassNotFoundException {
+        Service service = Service.service;
         if (service == null
                 || name == null
                 || name.trim().length() <= 0)
@@ -370,6 +371,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * und die Server neu initialisiert. In diesem Fall wird der Betriebzustand
      * auf READY gesetzt und DESTROY verworfen.
      * @param  mode Betriebsmodus
+     * @param  file optional configuration file
      * @return {@code true} bei erfolgreicher Ausf&uuml;hrung
      */
     public static boolean initiate(int mode, String file) {
@@ -648,17 +650,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 // scheitert diese wird der Service zurueckgesetzt
                 try {new Thread(service).start();
                 } catch (Throwable throwable) {
-
                     Service.print("SERVICE START FAILED");                               
                     Service.print(throwable);
-                    
                     Service.initiate(Service.STOP);
-                    
-                    // Standardinformation wird ausgegeben
                     Service.print("SERVICE STOPPED");
-                    
                     Service.service = null;
-                    
                     return false;
                 }                
 
@@ -688,42 +684,30 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 result = result.concat(String.format("TIUP: %tF %<tT\r\n", new Date(service.timing)));
                 
                 // alle registrierten Module werden ermittelt
+                // die Modulkennung wird ueber Caption ermittelt
                 Enumeration enumeration = service.modules.elements();
                 while (enumeration.hasMoreElements()) {
-                    
-                    // die Modul-Instanzen werden einzeln ermittelt
                     Object object = enumeration.nextElement();
-                    
-                    // die Modulkennung wird ueber Caption ermittelt
                     try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }
-                    
                     if (caption == null)
                         caption = object.getClass().getName();
-
-                    // die Ausgabe wird zusammengesetzt
                     result = result.concat(String.format("XAPI: %s\r\n", caption));
                 }
                 
                 // alle registrierten Server werden ermittelt
+                // die Serverkennung wird ueber Caption ermittelt
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
-
-                    // die Server-Instanzen werden einzeln ermittelt
                     Object object = ((Object[])enumeration.nextElement())[0];
-
-                    // die Serverkennung wird ueber Caption ermittelt
                     try {caption = object.getClass().getMethod("explain").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }
-
                     if (caption == null)
                         caption = object.getClass().getName();                      
-
-                    // die Ausgabe wird zusammengesetzt
                     result = result.concat(String.format("SAPI: %s\r\n", caption));
                 }
             }
@@ -804,7 +788,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             String address = null;
             String port = "25000";
             if (options[1] != null) {
-                String pattern = "^\\s*(\\w(?:[\\w\\.\\:\\-]*?\\w)?)(?::(\\d{1,5}))?\\s*$";
+                String pattern = "^\\s*(\\w(?:[\\w.:-]*?\\w)?)(?::(\\d{1,5}))?\\s*$";
                 if (!options[1].matches(pattern)) {
                     Service.print("INVALID REMOTE DESTINATION", true);
                     return;
@@ -864,7 +848,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         synchronized (System.out) {
             if (object == null
                     || (string.matches("\\s*")
-                            && !string.matches("\\s*[\\r\\n]\\s*")))
+                            && !string.matches("\\s*\\R\\s*")))
                 return;
             string = string.trim();
             if (!plain) {
@@ -881,15 +865,15 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     }
     
     /**
-     * R&uuml;ckgabe vom aktuellen Betriebsstatus.
-     * @return der aktuelle Betriebsstatus
+     * Returns the current operating status.
+     * @return the current operating status
      * @see    {@link #START}, {@link #RUN}, {@link #RESTART}, {@link #STOP},
      *         {@link #UNKNOWN} 
      */
     public static int status() {
 
-        // Die Abfrage des Betriebsstatus ist asynchron moeglich womit nicht
-        // sichergestellt werden kann, das der Service verfuegbar ist.
+        // The query of the operating status is asynchronous, which does not
+        // ensure that the service is available or running.
         Service service = Service.service;
         if (service != null)
             return service.status;
@@ -899,25 +883,22 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     @Override
     public void run() {
 
-        // beim Einsprung per ShutdownHook wird das Beenden eingeleitet
+        // When called via ShutdownHook, the shutdown is initiated
         if (!this.equals(Service.service)) {
-            
             if (Service.service != null)
                 Service.destroy();
-            
             while (Service.service != null)
                 try {Thread.sleep(250);
                 } catch (Throwable throwable) {
                     break;
                 }
-
             return;
         }
         
-        // die Startzeit des Services wird gesetzt
+        // Start time of the service is set
         this.timing = System.currentTimeMillis();
 
-        // der Betriebsstatus wird gesetzt
+        // Operating status is set
         this.status = Service.RUN;
         
         long modified = this.configuration.lastModified();
@@ -958,7 +939,6 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         }
         
         Service.print("SERVICE STOPPED");
-        
         Service.service = null;
     }
     

@@ -130,7 +130,7 @@ import java.util.StringTokenizer;
  * for sections, keys and values.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.2 20220911
+ * @version 5.1.0 20220911
  */
 public class Initialize implements Cloneable {
 
@@ -147,6 +147,8 @@ public class Initialize implements Cloneable {
     
     /** 
      * Constructor, creates Initialize.
+     * Optionally, smart behavior can be enabled, which changes the behavior of
+     * some methods.
      * @param smart activates smart mode
      */
     public Initialize(boolean smart) {
@@ -173,7 +175,7 @@ public class Initialize implements Cloneable {
      * Parsing ignores invalid sections, keys and values and returns the
      * determined sections as Initialize.
      * @param  text String to parse
-     * @return the determined sections as initialize
+     * @return the determined sections as Initialize
      */
     public static Initialize parse(String text) {
         return Initialize.parse(text, false);
@@ -184,8 +186,8 @@ public class Initialize implements Cloneable {
      * Parsing ignores invalid sections, keys and values and returns the
      * determined sections as Initialize.
      * 
-     * Optionally, intelligent behavior can be enabled, which changes the
-     * behavior of some methods.
+     * Optionally, smart behavior can be enabled, which changes the behavior of
+     * some methods.
      *     
      *     <dir>{@link #parse(String, boolean)}</dir>
      * Only sections that are not empty are applied.
@@ -275,7 +277,7 @@ public class Initialize implements Cloneable {
 
     /**
      * Returns {@code true} if the key to a section is contained.
-     * @param  key Name der Sektion
+     * @param  key Section name
      * @return {@code true} if the key to a section is contained
      */
     public synchronized boolean contains(String key) {

@@ -130,7 +130,7 @@ import java.util.StringTokenizer;
  * for sections, keys and values.
  *
  * @author  Seanox Software Solutions
- * @version 5.1.0 20220823
+ * @version 5.1.0 20220911
  */
 public class Section implements Cloneable {
 

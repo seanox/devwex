@@ -245,7 +245,7 @@ public class Section implements Cloneable {
                 label = Section.decode(label).toUpperCase();
                 
                 // Only valid keys are applied
-                if (label.isEmpty())
+                if (label.length() <= 0)
                     continue;
                 
                 if ((option & 2) != 0) {
@@ -299,9 +299,9 @@ public class Section implements Cloneable {
                     line = line.substring(0, Math.max(0, line.indexOf(';'))).trim();
 
                 line = line.substring(1).trim();
-                if (!line.isEmpty())
+                if (line.length() > 0)
                     line = Section.decode(line);
-                if (!line.isEmpty())
+                if (line.length() > 0)
                     buffer.append(" ").append(Section.decode(line));                
             }
         }
@@ -310,7 +310,7 @@ public class Section implements Cloneable {
         while (enumeration.hasMoreElements()) {
             String entry = (String)enumeration.nextElement();
             String value = ((StringBuffer)entries.get(entry)).toString().trim();
-            if (!value.isEmpty()
+            if (value.length() > 0
                     || !smart)
                 section.entries.put(entry, value);
         }
@@ -335,7 +335,7 @@ public class Section implements Cloneable {
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
-                || key.isEmpty())
+                || key.length() <= 0)
             return false;
         return this.entries.containsKey(key);
     }
@@ -368,7 +368,7 @@ public class Section implements Cloneable {
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
-                || key.isEmpty())
+                || key.length() <= 0)
             value = null;
         else value = (String)this.entries.get(key);
         
@@ -394,11 +394,11 @@ public class Section implements Cloneable {
          if (key == null)
              return null;
          key = key.toUpperCase().trim();
-         if (key.isEmpty())
+         if (key.length() <= 0)
              return null;
 
          value = value == null ? "" : value.trim();
-         if (value.isEmpty()
+         if (value.length() <= 0
                  && this.smart)
              return (String)this.entries.remove(key);
          return (String)this.entries.put(key, value);
@@ -413,7 +413,7 @@ public class Section implements Cloneable {
          if (key != null)
              key = key.toUpperCase().trim();
          if (key == null
-                 || key.isEmpty())
+                 || key.length() <= 0)
              return null;
          return (String)this.entries.remove(key);
      }
@@ -436,7 +436,7 @@ public class Section implements Cloneable {
          while (enumeration.hasMoreElements()) {
              String entry = (String)enumeration.nextElement();
              String value = section.get(entry);
-             if (!value.isEmpty()
+             if (value.length() > 0
                      || !this.smart)             
                  this.set(entry, value);
          }

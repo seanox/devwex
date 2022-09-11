@@ -236,7 +236,7 @@ public class Initialize implements Cloneable {
                 // The section will be decoded and optimized if necessary but
                 // only valid sections will be loaded
                 String section = Initialize.decode(strings[0]);
-                if (section.isEmpty())
+                if (section.length() <= 0)
                     continue;
                 entries.put(section, buffer);
                 
@@ -259,7 +259,7 @@ public class Initialize implements Cloneable {
         while (enumeration.hasMoreElements()) {
             String section = (String)enumeration.nextElement();
             String value   = ((StringBuffer)entries.get(section)).toString().trim();
-            if (!value.isEmpty()
+            if (value.length() > 0
                     || !smart)
                 initialize.entries.put(section, Section.parse(value, smart));
         }
@@ -284,7 +284,7 @@ public class Initialize implements Cloneable {
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
-                || key.isEmpty())
+                || key.length() <= 0)
             return false;
         return this.entries.containsKey(key);
     }
@@ -302,7 +302,7 @@ public class Initialize implements Cloneable {
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
-                || key.isEmpty())
+                || key.length() <= 0)
             return null;
         
         Section section = (Section)this.entries.get(key);
@@ -328,7 +328,7 @@ public class Initialize implements Cloneable {
         if (key == null)
             return null;
         key = key.toUpperCase().trim();
-        if (key.isEmpty())
+        if (key.length() <= 0)
             return null;
         
         if (section == null
@@ -348,7 +348,7 @@ public class Initialize implements Cloneable {
         if (key != null)
             key = key.toUpperCase().trim();
         if (key == null
-                || key.isEmpty())
+                || key.length() <= 0)
             return null;
         return (Section)this.entries.remove(key);
     }

@@ -27,158 +27,127 @@ import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 /**
- * Section stellt eine Schnittstelle zu den in den Sektionen von Initialize
- * enthaltenen Werten zur Verf&uuml;gung.
+ * Section is a dictionary of keys and values used by {@link Initialize}, which
+ * processes configuration data in INI format.<br>
+ * <br>
+ * The INI format used for configuration is a compatible. extension to the
+ * classic format. It is also line-based and uses sections in which keys with
+ * values are stored. Section and key names are case-insensitive. Declarations
+ * with the same name cause sections and keys to be overwritten.<br>
+ * <br>
+ * Sections support multiple inheritance with the keyword {@code EXTENDS}. For
+ * this purpose, after the keyword the names of the referenced sections are
+ * specified from which the keys and values are to be applied. Thereby keys of
+ * the same name of following sections overwrite already existing values.<br>
+ * <br>
+ * Assigning values to keys in a section is done with the equal sign. In
+ * difference to the original format, the assignment can be continued in the
+ * next line if the line starts with the plus sign.<br>
+ * <br>
+ * Values can be assigned final, variable and optional. The option {@code [?]}
+ * at the end of a key is used to search for a key with the same name in the
+ * system properties of the Java runtime environment. If none can be determined,
+ * the optionally specified value is used. Without a value, such a key is not
+ * specified and is ignored.<br>
+ * <br>
+ * Comments start with a semicolon, are optional, and can be used anywhere on a
+ * line so that the following characters are not part of the section, key, or
+ * value. The option {@code [+]} at the end of a key can be used to disable the
+ * use of comments for that key and use the semicolon in the value.<br>
+ * <br>
+ * Sections, keys and values also support a hexadecimal notation, starting with
+ * {@code 0x...} followed by the hexadecimal string, which can be used only
+ * applied to the whole element.
  * 
- * <h3>Hinweis</h3>
- * F&uuml;r eine optimale Verarbeitung von INI-Dateien sollte immer die
- * Kombination von Initialize mit Section verwendet werden. So basiert die
- * nachfolgende Beschreibung auf der Kombination beider Komponenten.<br>
- * <br>
- * Das f&uuml;r die Konfiguration verwendete INI-Format ist eine kompatible
- * Erweiterung zum klassischen Format. Es ist ebenfalls zeilenbasiert und
- * verwendet Sektionen in denen Schl&uuml;ssel mit Werten abgelegt sind. Beim
- * Namen von Sektion und Schl&uuml;ssel wird die Gross- und Kleinschreibung
- * ignoriert. Gleichnamige Deklarationen f&uuml;hren zum &Uuml;berschreiben von
- * Sektionen und Schl&uuml;sseln.<br>
- * <br>
- * In der Erweiterung lassen sich u.a. Sektionen vererben. Dazu folgt einer
- * Sektion das Sch&uuml;sselwort {@code EXTENDS} und gefolgt von den Namen
- * referenzierter Sektionen. Damit &uuml;bernimmt die Sektion alle
- * Schl&uuml;ssel und Werte der referenzierten Sektionen und kann diese
- * erweitern oder &uuml;berschreiben.<br>
- * <br>
- * Das Zuweisen von Werten zu Schl&uuml;sseln in einer Sektion erfolgt mit dem
- * Gleichheitszeichen. Abweichend vom Orginalformat, kann die Zuweisung in der
- * Folgezeile ohne erneute Angabe des Schl&uuml;ssels durch die Verwendung vom
- * Pluszeichen fortgesetzt werden. Werte lassen sich zudem fest, variabel und
- * optional zuweisen.<br>
- * Durch die Option {@code [?]} am Ende eines Schl&uuml;ssels, wird nach einem
- * gleichnamigen Schl&uuml;ssel in den System-Properties der
- * Java-Laufzeitumgebung gesucht. Kann keiner ermittelt werden, wird der
- * optional angegebene Wert verwendet. Ohne Wert gilt ein solcher
- * Schl&uuml;ssel als nicht angegeben und wird ignoriert.<br>
- * <br>
- * Kommentare beginnen mit einem Semikolon, sind optional und lassen sich an
- * jeder beliebigen Stelle in einer Zeile verwenden. Die nachfolgenden Zeichen
- * sind somit kein Bestandteil von Sektion, Schl&uuml;ssel oder Wert.<br>
- * Mit der Option {@code [+]} am Ende eines Schl&uuml;ssels, kann die
- * Verwendung von Kommentaren f&uuml;r diesen Schl&uuml;ssel deaktiviert und das
- * Semikolon im Wert verwendet werden.<br>
- * <br>
- * Sektionen, Schl&uuml;ssel und Werte unterst&uuml;tzen auch eine hexadezimale
- * Schreibweise. Diese beginnt mit {@code 0x...}, gefolgt von der hexadezimalen
- * Zeichenfolge. Diese Schreibweise kann immer nur auf das komplette Element
- * angewandt werden. Die Kombination oder Unterbrechung ist nicht m&ouml;glich.
- * 
- * <h3>Beispiel</h3>
+ * <h3>Example</h3>
  * <pre>
- *   001 [SECTION] EXTENDS SECTION-A SECTION-B      ;Kommentar
- *   002   PARAM-A                 = WERT-1         ;Kommentar
- *   003   PARAM-B             [+] = WERT-2; WERT-3
- *   004                           + WERT-4; WERT-5
- *   005   PARAM-C          [?][+] = WERT-6; WERT-7
- *   006   PARAM-E          [?]                     ;Kommentar
+ *   001 [SECTION] EXTENDS SECTION-A SECTION-B      ;comment
+ *   002   PARAM-A                 = VALUE-1        ;comment
+ *   003   PARAM-B             [+] = VALUE-2; VALUE-3
+ *   004                           + VALUE-4; VALUE-5
+ *   005   PARAM-C          [?][+] = VALUE-6; VALUE-7
+ *   006   PARAM-E          [?]                     ;comment
  *   007
  *   008 [0x53454354494F4E2D41]
- *   009   PARAM-A                 = 0x574552542D31 ;Kommentar
- *   010   0x504152414D2D42        = WERT-2         ;Kommentar 
+ *   009   PARAM-A                 = 0x574552542D31 ;comment
+ *   010   0x504152414D2D42        = VALUE-2        ;comment 
  *   011   0x504152414D2D43    [+] = 0x574552542D33
  *   012   PARAM-D                 = 0x574552542D34
  *   013                           + 0x574552542D35
  *   014   PARAM-E          [?][+] = 0x574552542D363B20574552542D37
- *   015   0x504152414D2D45 [?]                     ;Kommentar
+ *   015   0x504152414D2D45 [?]                     ;comment
  * </pre>
  * 
- * <h4>Zeile 1</h4>
- * Die Sektion mit dem Namen {@code SECTION} wird definiert. Das
- * Schl&uuml;sselwort {@code EXTENDS} verweist auf die Ableitung von den
- * Sektionen {@code SECTION-A} und {@code SECTION-B}. Somit basiert
- * {@code SECTION} auf den Schl&uuml;sseln und Werten der Sektionen
- * {@code SECTION-A} und {@code SECTION-B}. Ab dem Semikolon werden die
- * nachfolgenden Zeichen als Kommentar interpretiert.
+ * <h4>Line 1</h4>
+ * The section with the name {@code SECTION} is defined, the keyword
+ * {@code EXTENDS} refers to the derivation from the sections {@code SECTION-A}
+ * and {@code SECTION-B}. Thus, {@code SECTION} is based on the keys and values
+ * of the sections {@code SECTION-A} and {@code SECTION-B}. From the semicolon
+ * onwards, the following characters are interpreted as comments.
  * 
- * <h4>Zeile 2</h4>
- * Dem Schl&uuml;ssel {@code PARAM-A} wird der Wert {@code WERT-1} zugewiesen.
- * Die nachfolgenden Zeichen werden ab dem Semikolon als Kommentar
- * interpretiert.
+ * <h4>Line 2</h4>
+ * The value {@code VALUE-1} is assigned to the key {@code PARAM-A}. The
+ * following characters are interpreted as comments from the semicolon onwards.
  * 
- * <h4>Zeile 3</h4>
- * Dem Schl&uuml;ssel {@code PARAM-B} wird {@code WERT-2; WERT-3} als Wert
- * zugewiesen. Durch die Option {@code [+]} am Ende vom Schl&uuml;ssel, wird der
- * Zeilenkommentar abgeschaltet und alle Zeichen f&uuml;r die Wertzuweisung
- * verwendet. Die Angabe eines Kommentars ist in dieser Zeile nicht
- * m&ouml;glich.
+ * <h4>Line 3</h4>
+ * The key {@code PARAM-B} is assigned {@code VALUE-2; VALUE-3} as a value, with
+ * the option {@code [+]} at the end of the key disables the line comment and
+ * uses all characters for the value assignment, but it is not possible to
+ * specify a comment in this line.
  * 
- * <h4>Zeile 4</h4>
- * Die Wertzuweisung von Zeile 3 wird fortgesetzt und der Wert
- * {@code WERT-4; WERT-5} dem bestehenden Wert vom Schl&uuml;ssel
- * {@code PARAM-B} hinzugef&uuml;gt. Die Option {@code [+]} aus Zeile 3 wird
- * ebenfalls in Zeile 4 &uuml;bernommen, womit auch hier der Zeilenkommentar
- * abgeschaltet ist und alle Zeichen als Wertzuweisung verwendet werden. Die
- * Eingabe eines Kommentars ist in dieser Zeile nicht m&ouml;glich. Weitere
- * vorangestellte Optionen sind nicht m&ouml;glich.
- *
- * <h4>Zeile 5</h4>
- * Die Wertzuweisung f&uuml;r den Schl&uuml;ssel {@code PARAM-C} ist dynamisch.
- * In den System-Properties der Java-Laufzeitumgebung wird dazu nach dem
- * gleichnamigen Schl&uuml;ssel {@code PARAM-C} gesucht, wobei die Gross- und
- * Kleinschreibung ignoriert wird. Der Schl&uuml;ssel muss dazu Bestandteile der
- * Laufzeitumgebung sein oder kann beim Programmstart in der Form
- * {@code -Dschluessel=wert} gesetzt werden.<br>
- * Enthalten die System-Properties der Java-Laufzeitumgebung keinen
- * entsprechenden Schl&uuml;ssel, wird alternativ {@code WERT-6; WERT-7} als
- * Wert verwendet.<br>
- * Durch die Kombination mit der Option {@code [+]} am Ende vom Schl&uuml;ssel,
- * wird der Zeilenkommentar abgeschaltet und alle Zeichen f&uuml;r die
- * Wertzuweisung verwendet. Die Angabe eines Kommentars ist in dieser Zeile
- * nicht m&ouml;glich.
- *
- * <h4>Zeile 6</h4>
- * Die Wertzuweisung f&uuml;r den Schl&uuml;ssel {@code PARAM-E} ist dynamisch.
- * In den System-Properties der Java-Laufzeitumgebung wird dazu nach dem
- * gleichnamigen Schl&uuml;ssel gesucht, wobei die Gross- und Kleinschreibung
- * ignoriert wird. Der Schl&uuml;ssel muss dazu Bestandteil der Laufzeitumgebung
- * sein oder kann beim Programmstart in der Form {@code -Dschluessel=wert}
- * gesetzt werden.<br>
- * Enthalten die System-Properties der Java-Laufzeitumgebung keinen
- * entsprechenden Schl&uuml;ssel, wird dieser Schl&uuml;ssel ignoriert, da auch
- * kein alternativer Wert angegeben wurde.<br>
- * Kommentare werden in dieser Zeile unterst&uuml;tzt.
- *
- * <h4>Zeile 8 - 15</h4>
- * Analog den Beispielen aus Zeile 1 - 6 wird f&uuml;r Sektionen, Schl&uuml;ssel
- * und Werte die hexadezimale Schreibweise verwendet.
+ * <h4>Line 4</h4>
+ * The value assignment of <i>line 3</i> is continued and the value {@code
+ * VALUE-4; VALUE-5} is added to the existing value of the key {@code PARAM-B}.
+ * The option {@code [+]} from <i>line 3</i> is also taken from <i>line 4</i>,
+ * which also disables the line comment and uses all characters as value
+ * assignment. It is not possible to enter a comment in this line. Further
+ * options are not possible.
+ * 
+ * <h4>Line 5</h4>
+ * The assignment for the key {@code PARAM-C} is dynamic, and the system
+ * properties (VM arguments) of the Java runtime environment are searched for
+ * key {@code PARAM-C} of the same name, case-insensitive. The key must be part
+ * of the runtime environment or can be set as VM argument (property) at the
+ * program start in the form {@code -Dkey=value}. If the system properties of
+ * the Java runtime environment do not contain a corresponding key, {@code
+ * VALUE-6; VALUE-7} is used as the value. By combining it with the option
+ * {@code [+]} at the end of the key, the line comment is disabled and all
+ * characters are used for the value assignment. It is not possible to enter a
+ * comment in this line.
+ * 
+ * <h4>Line 6</h4>
+ * The value assignment for the key {@code PARAM-E} is dynamic, and the system
+ * properties (VM arguments) of the Java runtime environment are searched for
+ * the key of the same name, case-insensitive. The key must be part of the
+ * runtime environment or can be set as VM argument (property) at the program
+ * start in the form {@code -Dkey=value}. If the system properties of the Java
+ * runtime environment do not contain a corresponding key, this key is ignored
+ * because no alternative value has been specified. Comments are supported in
+ * this line.
+ * 
+ * <h4>Line 8 - 15</h4>
+ * Like the examples from <i>lines 1 - 6</i>, the hexadecimal notation is used
+ * for sections, keys and values.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.2 20220823
+ * @version 5.1.0 20220823
  */
 public class Section implements Cloneable {
 
-    /** Map mit den Sch&uuml;sseln */
-    private volatile LinkedHashMap entries;
-    
-    /** Option zur Aktivierung vom Smart-Modus */
-    private volatile boolean smart;
+    /** Map of keys */
+    private LinkedHashMap entries;
 
-    /** Konstruktor, richtet Section ein. */
+    /** Option to activate smart mode */
+    private final boolean smart;
+
+    /** Constructor, creates Section. */
     public Section() {
         this(false);
     }
-    
-    /** 
-     * Konstruktor, richtet Section ein.
-     * Mit der Option {@code smart} kann ein smartes Verhalten aktiviert werden.
-     * Dadurch verhalten sich die Methoden {@link #get(String)} und
-     * {@link #get(String, String)} bei nicht existierenden Schl&uuml;sseln so,
-     * als l&auml;gen diese mit einem leeren Wert vor und liefert so nie
-     * {@code null}. Die Methoden {@link #parse(String, boolean)} und
-     * {@link #merge(Section)} &uml;bernehmen im Smart-Modus nur Schl&uuml;ssel
-     * mit Wert die nicht leer sind. Andere Schl&uuml;ssel werden ignoriert. Die
-     * Methode {@link #set(String, String)} reagiert im Smart-Modus zudem bei
-     * einem leeren Werten wie {@link #remove(String)} und entfernt den
-     * Schl&uuml;ssel.
-     * @param smart aktiviert den smarten Modus
+
+    /**
+     * Constructor, creates Section.
+     * @param smart activates smart mode
      */
     public Section(boolean smart) {
         this.entries = new LinkedHashMap();
@@ -186,42 +155,56 @@ public class Section implements Cloneable {
     }
 
     /**
-     * Dekodiert ggf. hexadezimale Werte in einen String.
-     * @param  string zu dekodierender String
-     * @return der dekodierte und getrimmte String
-     */                    
+     * Decodes hexadecimal values into a string if necessary.
+     * @param  string String to decode
+     * @return the decoded and trimmed string
+     */
     private static String decode(String string) {
-        string = string == null ? "" : string.trim();
-        if (string.matches("^(?i)0x([0-9a-f]{2})+$"))
+        if (string == null)
+            string = "";
+        string = string.trim();
+        if (string.matches("^(?i)0x([0-9A-F]{2})+$"))
             return new String(new BigInteger(string.substring(2), 16).toByteArray()).trim();
         return string;
     }
-    
+
     /**
-     * Erstellt ein Section-Objekt aus dem &uuml;bergebenen String.
-     * Das Parsen ignoriert ung&uuml;ltige Schl&uuml;ssel und Werte.
-     * @param  text zu parsende Section
-     * @return das erstellte Section-Objekt
+     * Determines the contained keys and values from the string.
+     * Parsing ignores invalid keys and values and returns the determined keys
+     * and values as Section.
+     * @param  text String to parse
+     * @return the determined keys and values as Section
      */
     public static Section parse(String text) {
         return Section.parse(text, false);
     }
 
     /**
-     * Erstellt ein Section-Objekt aus dem &uuml;bergebenen Text.
-     * Das Parsen ignoriert ung&uuml;ltige Schl&uuml;ssel und Werte.
-     * Mit der Option {@code smart} kann ein smartes Verhalten aktiviert werden.
-     * Dadurch &uml;bernehmen {@link #parse(String, boolean)} und
-     * {@link #merge(Section)} nur Schl&uuml;ssel mit Werten die nicht leer
-     * sind. Schl&uuml;ssel mit leeren Werten werden ignoriert. Die Methoden 
-     * {@link #get(String)} und {@link #get(String, String)} reagieren bei nicht
-     * existierenden Schl&uuml;sseln so, als l&auml;gen diese mit einem leeren
-     * Wert vor und liefert so nie {@code null}. Die Methode
-     * {@link #set(String, String)} reagiert im Smart-Modus zudem bei leeren
-     * Werten wie {@link #remove(String)} und entfernt den Schl&uuml;ssel.
-     * @param  text  zu parsende Sektion
-     * @param  smart aktiviert den smarten Modus
-     * @return das erstellte Section-Objekt
+     * Determines the contained keys and values from the string.
+     * Parsing ignores invalid keys and values and returns the determined
+     * keys and values as Section.
+     *
+     * Optionally, smart behavior can be enabled, which changes the behavior of
+     * some methods.
+     *
+     *     <dir>{@link #parse(String, boolean)}</dir>
+     * Only keys that are not empty are applied.
+     *
+     *     <dir>{@link #get(String)}</dir>
+     * Never returns {@code null} for valid keys. If an unknown key is
+     * requested, it will be recreated.
+     *
+     *     <dir>{@link #set(String, String)}</dir>
+     * If {@code null} is passed as the value of a key, the method behaves like
+     * {@link #remove(String)} and deletes the key.
+     *
+     *     <dir>{@link #merge(Section)}</dir>
+     * Only keys that do not have empty values are applied. If a key has
+     * {@code null} as value, the method behaves like {@link #remove(String)}.
+     *
+     * @param  text  String to parse
+     * @param  smart Activates smart mode
+     * @return the determined sections as initialize
      */
     public static Section parse(String text, boolean smart) {
         
@@ -238,9 +221,8 @@ public class Section implements Cloneable {
         StringTokenizer tokenizer = new StringTokenizer(text, "\r\n");
         while (tokenizer.hasMoreTokens()) {
             
-            // die naechste Zeile wird ermittelt
+            // Next line is read
             String line = tokenizer.nextToken().trim();
-            
             if (!line.startsWith("+")) {
 
                 option = 0;
@@ -249,7 +231,7 @@ public class Section implements Cloneable {
                 if (line.matches("^[^;=]+\\[\\s*\\?\\s*\\].*$"))
                     option |= 2;
                 
-                // der Kommentarteil wird ggf. entfernt
+                // Comment part will be removed if necessary
                 if ((option & 1) == 0 && line.contains(";"))
                     line = line.substring(0, line.indexOf(';')).trim();
                 
@@ -258,21 +240,21 @@ public class Section implements Cloneable {
                 String value;
                 String label;
 
-                // der Schluessel wird ermittelt, ggf. dekodiert und optimiert 
+                // Key is determined, decoded if necessary and optimized
                 label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
                 label = Section.decode(label).toUpperCase();
                 
-                // nur gueltige Schluessel werden geladen
+                // Only valid keys are applied
                 if (label.isEmpty())
                     continue;
                 
                 if ((option & 2) != 0) {
                     
-                    // der Wert wird direkt in Systemproperties gesucht
+                    // Value is searched directly in system properties
                     value = System.getProperty(label);
                     
-                    // die System-Properties werden unabhaengig von der
-                    // Gross- / Kleinschreibung nach dem Schuessel durchsucht
+                    // System properties are searched for the key regardless of
+                    // upper/lower case
                     Enumeration enumeration = Collections.enumeration(System.getProperties().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
                         String entry = (String)enumeration.nextElement();
@@ -281,9 +263,9 @@ public class Section implements Cloneable {
                         value = System.getProperty(entry, "").trim();
                         break;
                     }
-                    
-                    // die System-Umgebungsvariablen werden unabhaengig von der
-                    // Gross- / Kleinschreibung nach dem Schuessel durchsucht
+
+                    // System properties are searched for the key regardless of
+                    // upper/lower case
                     enumeration = Collections.enumeration(System.getenv().keySet());
                     while (value == null && enumeration.hasMoreElements()) {
                         String entry = (String)enumeration.nextElement();
@@ -300,7 +282,7 @@ public class Section implements Cloneable {
                     }
                 }
                 
-                // der Wert wird ermittelt, ggf. dekodiert und optimiert
+                // Value is determined, decoded if necessary and optimized
                 value = line.trim();
                 value = value.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
                 value = Section.decode(value);
@@ -310,9 +292,9 @@ public class Section implements Cloneable {
                 
             } else if (buffer != null) {
                 
-                // Inhalt wird nur mit gueltigem Schluessel verarbeitet
+                // Content is processed only with valid key
 
-                // der Kommentarteil wird ggf. entfernt
+                // Comment part will be removed if necessary
                 if ((option & 1) == 0 && line.contains(";"))
                     line = line.substring(0, Math.max(0, line.indexOf(';'))).trim();
 
@@ -328,7 +310,8 @@ public class Section implements Cloneable {
         while (enumeration.hasMoreElements()) {
             String entry = (String)enumeration.nextElement();
             String value = ((StringBuffer)entries.get(entry)).toString().trim();
-            if (!smart || !value.isEmpty())
+            if (!value.isEmpty()
+                    || !smart)
                 section.entries.put(entry, value);
         }
         
@@ -336,53 +319,47 @@ public class Section implements Cloneable {
     }
 
     /**
-     * R&uuml;ckgabe aller Sch&uuml;ssel als Enumeration.
-     * @return alle Sch&uuml;ssel als Enumeration
+     * Returns an enumeration of the keys of all sections.
+     * @return the keys of all keys as enumeration
      */
     public synchronized Enumeration elements() {
         return Collections.enumeration(this.entries.keySet());
     }
     
     /**
-     * R&uuml;ckgabe {@code true} wenn der Sch&uuml;ssel ist.
-     * @param  key Name des Sch&uuml;ssels
-     * @return {@code true} wenn der Sch&uuml;ssel enthalten ist
+     * Returns {@code true} if the key to a value is contained.
+     * @param  key Name of the key
+     * @return {@code true} if the key to a value is contained
      */
     public synchronized boolean contains(String key) {
-
         if (key != null)
             key = key.toUpperCase().trim();
-        if (key == null || key.isEmpty())
+        if (key == null
+                || key.isEmpty())
             return false;
         return this.entries.containsKey(key);
     }
 
     /**
-     * R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
-     * bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
-     * Wert, sonst {@code null}, bzw. im Smart-Modus einen leeren Wert. Da im
-     * Smart-Modus leere Schl&uuml;ssel automatisch bereinigt werden, wird der
-     * erstellte Schl&uuml;ssel mit seinem leeren Standardwert nicht in der
-     * Section eingetragen.
-     * @param  key Name des Sch&uuml;ssels
-     * @return der Wert des Sch&uuml;ssels, sonst {@code null} bzw. den
-     *     alternativen Wert oder im Smart-Modus einen leeren
+     * Returns the value to a corresponding key. In the smart mode will always
+     * return a non-null value in form of an empty string.
+     * @param  key Name of the key
+     * @return the value of the key, otherwise {@code null} or in smart mode an
+     *     empty string
      */
     public synchronized String get(String key) {
         return this.get(key, null);
     }
 
     /**
-     * R&uuml;ckgabe vom Wert des Sch&uuml;ssels. Ist dieser nicht enthalten
-     * bzw. kann nicht ermittelt werden, liefert die Methode den alternativen
-     * Wert, sonst {@code null}, bzw. im Smart-Modus einen leeren Wert. Da im
-     * Smart-Modus leere Schl&uuml;ssel automatisch bereinigt werden, wird der
-     * erstellte Schl&uuml;ssel mit seinem leeren Standardwert nicht in der
-     * Section eingetragen.
-     * @param  key       Name des Sch&uuml;ssels
-     * @param  alternate alternativer Wert, bei unbekanntem Sch&uuml;ssel
-     * @return der Wert des Sch&uuml;ssels, sonst {@code null} bzw. den
-     *     alternativen Wert oder im Smart-Modus einen leeren
+     * Returns the value to a corresponding key. If the key is not contained,
+     * an alternative value can be passed, which will then be returned.
+     * In the smart mode will always return a non-null value in form of an
+     * empty string.
+     * @param  key       Name of the key
+     * @param  alternate Alternative value, with unknown key
+     * @return the value of the key, otherwise {@code null} or the alternative
+     *     value or in smart mode an empty string
      */
     public synchronized String get(String key, String alternate) {
 
@@ -400,97 +377,90 @@ public class Section implements Cloneable {
         if (value == null
                 && this.smart)
             value = "";
-        
         return value;
     }
 
     /**
-     * Setzt den Sch&uuml;ssel mit dem entsprechenden Wert. Sch&uuml;ssel und
-     * Werte werden dabei gel&auml;ttet. Leere Sch&uuml;ssel sind nicht
-     * zul&auml;ssig und f&uuml;hren zur {@link IllegalArgumentException}. Die
-     * Methode reagiert im Smart-Modus zudem bei einem leeren Werten wie
-     * {@link #remove(String)} und entfernt den Schl&uuml;ssel.
-     * @param  key   Name des Sch&uuml;ssels
-     * @param  value Wert des Sch&uuml;ssels
-     * @return ggf. zuvor zugeordneter Wert, sonst {@code null}
+     * Sets the value of the corresponding key. Existing keys are replaced.
+     * Empty keys and {@code null} are ignored and return {@code null}. In
+     * smart mode keys with value {@code null} are removed. The behavior is the
+     * same as for {@link #remove(String)}.
+     * @param  key   Name of the key
+     * @param  value Value
+     * @return previously assigned value, otherwise {@code null}
      */
      public synchronized String set(String key, String value) {
-         
-         if (key != null)
-             key = key.toUpperCase().trim();
-         if (key == null || key.isEmpty())
-             throw new IllegalArgumentException();
+
+         if (key == null)
+             return null;
+         key = key.toUpperCase().trim();
+         if (key.isEmpty())
+             return null;
+
          value = value == null ? "" : value.trim();
-         if (this.smart && value.isEmpty())
+         if (value.isEmpty()
+                 && this.smart)
              return (String)this.entries.remove(key);
          return (String)this.entries.put(key, value);
     }
 
-     /**
-      * Entfernt den angegebenen Sch&uuml;ssel.
-      * @param  key Name des zu entfernenden Sch&uuml;ssels
-      * @return ggf. zuvor zugeordneter Wert, sonst {@code null}
-      */
+    /**
+     * Removes the specified key from Section.
+     * @param  key Name of the key to be removed
+     * @return previously assigned value, otherwise {@code null}
+     */
      public synchronized String remove(String key) {
-
          if (key != null)
              key = key.toUpperCase().trim();
-         if (key == null || key.isEmpty())
+         if (key == null
+                 || key.isEmpty())
              return null;
          return (String)this.entries.remove(key);
      }
-     
-     /**
-      * F&uuml;hrt die Sch&uuml;ssel dieser und der &uuml;bergebenen Sektion
-      * zusammen. Bereits vorhandene Eintr&auml;ge werden &uuml;berschrieben,
-      * neue werden hinzugef&uuml;gt. Leere Sch&uuml;ssel sind dabei nicht
-      * zul&auml;ssig und f&uuml;hren zur {@link IllegalArgumentException}.
-      * @param  section zu &uuml;bernehmende Sektion
-      * @return die aktuelle Instanz mit den zusammgef&uuml;hrten Sektionen
-      */
+
+    /**
+     * Merges the passed keys and values. Existing keys are updated and new
+     * keys are created. In smart mode, only keys that are not empty are
+     * applied. If a value is {@code null}, the method behaves like
+     * {@link #remove(String)}.
+     * @param  section Key and values to be applied
+     * @return the current instance with the merged keys and values
+     */
      public synchronized Section merge(Section section) {
          
          if (section == null)
              return this;
          
-         // die Sektionen werden zusammengefasst oder ggf. neu angelegt
+         // Keys and values are combined or, if necessary, newly created
          Enumeration enumeration = Collections.enumeration(section.entries.keySet());
          while (enumeration.hasMoreElements()) {
              String entry = (String)enumeration.nextElement();
              String value = section.get(entry);
-             if (!this.smart || !value.isEmpty())             
+             if (!value.isEmpty()
+                     || !this.smart)             
                  this.set(entry, value);
          }
          
          return this;
     }
-     
+
     /**
-     * R&uuml;ckgabe der Anzahl von Eintr&auml;gen.
-     * @return die Anzahl der Eintr&auml;ge
+     * Returns the number of keys.
+     * @return number of keys
      */
     public synchronized int size() {
         return this.entries.size();
     }
 
-    /** Setzt Section komplett zur&uuml;ck. */
+    /** Resets Section completely and discards all keys. */
     public synchronized void clear() {
         this.entries.clear();
     }
 
-    /**
-     * R&uuml;ckgabe einer Kopie von Section.
-     * @return eine Kopie von Section
-     */
     @Override
     public synchronized Object clone() {
-
-        // Section wird eingerichtet
         Section section = new Section(this.smart);
-
-        // die Schuessel werden als Kopie uebernommen
         section.entries = (LinkedHashMap)this.entries.clone();
-
         return section;
     }
 }

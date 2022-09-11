@@ -71,10 +71,10 @@ class Worker implements Runnable {
     private volatile String context;
 
     /** Socket vom Worker */
-    private volatile Socket socket;
+    private volatile Socket accept;
 
     /** Socket des Servers */
-    private volatile ServerSocket mount;
+    private volatile ServerSocket socket;
     
     /** Server Konfiguration */
     private volatile Initialize initialize;
@@ -162,7 +162,7 @@ class Worker implements Runnable {
         context = context.replaceAll("(?i):[a-z]+$", "");
 
         this.context    = context;
-        this.mount      = socket;
+        this.socket     = socket;
         this.initialize = initialize;
     }
 
@@ -189,11 +189,16 @@ class Worker implements Runnable {
      */
     private static String textHash(String string)
             throws Exception {
+        
         if (string == null)
             string = "";
+
         MessageDigest digest = MessageDigest.getInstance("md5");
         byte[] bytes  = digest.digest(string.getBytes());
-        return new BigInteger(1, bytes).toString(16);
+        string = new BigInteger(1, bytes).toString(16);
+        while (string.length() < 32)
+            string = ("0").concat(string);
+        return string;
     }
     
     /**
@@ -1114,19 +1119,19 @@ class Worker implements Runnable {
         // der Datenpuffer wird zum Auslesen vom Header eingerichtet
         buffer = new ByteArrayOutputStream(65535);
         
-        if ((this.socket instanceof SSLSocket))
-            try {this.fields.set("auth_cert", ((SSLSocket)this.socket).getSession().getPeerPrincipal().getName());
+        if ((this.accept instanceof SSLSocket))
+            try {this.fields.set("auth_cert", ((SSLSocket)this.accept).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
             }
         
         try {
 
             // das SO-Timeout wird fuer den ServerSocket gesetzt
-            this.socket.setSoTimeout((int)this.timeout);
+            this.accept.setSoTimeout((int)this.timeout);
 
             // die Datenstroeme werden eingerichtet
-            this.output = this.socket.getOutputStream();
-            this.input  = this.socket.getInputStream();
+            this.output = this.accept.getOutputStream();
+            this.input  = this.accept.getInputStream();
 
             // der Inputstream wird gepuffert
             this.input = new BufferedInputStream(this.input, this.blocksize);
@@ -1276,7 +1281,7 @@ class Worker implements Runnable {
 
         // ist kein Host im Request, wird die aktuelle Adresse verwendet
         if (string.length() <= 0)
-            string = this.socket.getLocalAddress().getHostAddress();
+            string = this.accept.getLocalAddress().getHostAddress();
 
         this.fields.set("http_host", string);
 
@@ -1342,7 +1347,7 @@ class Worker implements Runnable {
             this.docroot = string;
 
         // die serverseitig festen Umgebungsvariablen werden gesetzt
-        this.environment.set("server_port", String.valueOf(this.socket.getLocalPort()));
+        this.environment.set("server_port", String.valueOf(this.accept.getLocalPort()));
         this.environment.set("server_protocol", "HTTP/1.0");
         this.environment.set("server_software", "Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
 
@@ -1354,13 +1359,13 @@ class Worker implements Runnable {
         this.environment.set("query_string", this.fields.get("req_query"));
         this.environment.set("request", this.fields.get("req_line"));
         this.environment.set("request_method", this.fields.get("req_method"));
-        this.environment.set("remote_addr", this.socket.getInetAddress().getHostAddress());
-        this.environment.set("remote_port", String.valueOf(this.socket.getPort()));
+        this.environment.set("remote_addr", this.accept.getInetAddress().getHostAddress());
+        this.environment.set("remote_port", String.valueOf(this.accept.getPort()));
 
         // die Unique-Id wird aus dem HashCode des Sockets, den Millisekunden
         // sowie der verwendeten Portnummer ermittelt, die Laenge ist variabel
-        string = Long.toString(Math.abs(this.socket.hashCode()), 36);
-        string = string.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.socket.getPort()), 36));
+        string = Long.toString(Math.abs(this.accept.hashCode()), 36);
+        string = string.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
 
         // die eindeutige Request-Id wird gesetzt
         this.environment.set("unique_id", string.toUpperCase());
@@ -1456,14 +1461,14 @@ class Worker implements Runnable {
         // der HOST oder VIRTUAL HOST wird ermittelt
         entry = this.fields.get("http_host");
         if (entry.length() <= 0)
-            entry = this.socket.getLocalAddress().getHostAddress();
+            entry = this.accept.getLocalAddress().getHostAddress();
 
         // die OPTION IDENTITY wird geprueft
         if (this.options.get("identity").toLowerCase().equals("on"))
             this.environment.set("server_name", entry);
 
         // aus dem Schema wird die Verwendung vom Secure-Layer ermittelt
-        secure = this.mount instanceof javax.net.ssl.SSLServerSocket;
+        secure = this.socket instanceof javax.net.ssl.SSLServerSocket;
         
         // die Location wird zusammengestellt
         string = this.environment.get("server_port");
@@ -1852,7 +1857,7 @@ class Worker implements Runnable {
             while (true) {
                 
                 // das Beenden der Connection wird geprueft
-                try {this.socket.getSoTimeout();
+                try {this.accept.getSoTimeout();
                 } catch (Throwable throwable) {
                     this.status = 503;
                     break;
@@ -2835,9 +2840,9 @@ class Worker implements Runnable {
      */
     void isolate() {
 
-        if (this.socket == null
-                && this.mount != null)
-            this.mount = null;
+        if (this.accept == null
+                && this.socket != null)
+            this.socket = null;
     }
 
     /**
@@ -2848,25 +2853,25 @@ class Worker implements Runnable {
     boolean available() {
 
         // der Socket wird auf Blockaden geprueft und ggf. geschlossen
-        if (this.mount != null
+        if (this.socket != null
                 && this.isolation > 0
                 && this.isolation < System.currentTimeMillis() -this.timeout)
             this.destroy();
 
-        return this.mount != null && this.socket == null;
+        return this.socket != null && this.accept == null;
     }
 
     /** Beendet den Worker durch das Schliessen der Datenstr&ouml;me. */
     void destroy() {
 
         // der ServerSocket wird zurueckgesetzt
-        this.mount = null;
+        this.socket = null;
 
         if (this.isolation != 0)
             this.isolation = -1;
 
         // der Socket wird geschlossen
-        try {this.socket.close();
+        try {this.accept.close();
         } catch (Throwable throwable) {
         }
     }
@@ -2878,9 +2883,9 @@ class Worker implements Runnable {
         String       string;
 
         // der ServerSocket wird vorgehalten
-        socket = this.mount;
+        socket = this.socket;
 
-        while (this.mount != null) {
+        while (this.socket != null) {
 
             // initiale Einrichtung der Variablen
             this.status = 0;
@@ -2939,7 +2944,7 @@ class Worker implements Runnable {
             if (this.interrupt < 0)
                 this.interrupt = 10;
 
-            try {this.socket = socket.accept();
+            try {this.accept = socket.accept();
             } catch (InterruptedIOException exception) {
                 continue;
             } catch (IOException exception) {
@@ -2968,15 +2973,15 @@ class Worker implements Runnable {
             }
 
             // der Socket wird alternativ geschlossen
-            try {this.socket.close();
+            try {this.accept.close();
             } catch (Throwable throwable) {
             }
 
             // durch das Zuruecksetzen wird die Connection ggf. reaktivert
-            this.mount = socket;
+            this.socket = socket;
 
             // der Socket wird verworfen
-            this.socket = null;
+            this.accept = null;
         }
     }
 }

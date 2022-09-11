@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -62,7 +63,7 @@ import javax.net.ssl.SSLSocket;
  * kompletter Abbruch.
  *
  * @author  Seanox Software Solutions
- * @version 5.4.0 20210320
+ * @version 5.5.0 20220911
  */
 class Worker implements Runnable {
   
@@ -173,16 +174,12 @@ class Worker implements Runnable {
      * @return der String ohne Parameter und Optionen
      */
     private static String cleanOptions(String string) {
-        
-        int cursor;
-
-        cursor = string.indexOf('[');
+        int cursor = string.indexOf('[');
         if (cursor >= 0)
             string = string.substring(0, cursor).trim();
-
         return string;
     }
-    
+
     /**
      * Erstellt zum String einen hexadezimalen MD5-Hash.
      * @param  string zu dem der Hash erstellt werden soll
@@ -190,34 +187,13 @@ class Worker implements Runnable {
      * @throws Exception
      *     Im Fall nicht erwarteter Fehler
      */
-    private static String textHash(String string) throws Exception {
-        
-        MessageDigest digest;
-        
-        byte[]        bytes;
-        byte[]        cache;
-        byte[]        codec;
-        
-        int           count;
-        int           length;
-        int           loop;
-        
+    private static String textHash(String string)
+            throws Exception {
         if (string == null)
             string = "";
-
-        digest = MessageDigest.getInstance("md5");
-        bytes  = digest.digest(string.getBytes());
-        length = bytes.length;
-        
-        codec = ("0123456789abcdef").getBytes();
-        
-        cache = new byte[length *2];
-        for (loop = 0, count = 0; loop < length; loop++) {
-            cache[count++] = codec[(bytes[loop] >> 4) & 0xF];
-            cache[count++] = codec[(bytes[loop] & 0xF)];
-        }
-        
-        return new String(cache, 0, count);
+        MessageDigest digest = MessageDigest.getInstance("md5");
+        byte[] bytes  = digest.digest(string.getBytes());
+        return new BigInteger(1, bytes).toString(16);
     }
     
     /**
@@ -281,8 +257,8 @@ class Worker implements Runnable {
     }    
     
     /**
-     * Dekodiert den String tollerant als URL und UTF-8.
-     * Tollerant, da fehlerhafte kodierte Zeichenfolgen nicht direkt zum Fehler
+     * Dekodiert den String tolerant als URL und UTF-8.
+     * Tolerant, da fehlerhafte kodierte Zeichenfolgen nicht direkt zum Fehler
      * f&uml;hren, sondern erhalten bleiben und die UTF-8 Kodierung optional
      * betrachtet wird.
      * @param  string zu dekodierender String
@@ -589,7 +565,8 @@ class Worker implements Runnable {
      * @param  invoke   Methode
      * @return {@code true}, im Fehlerfall {@code false}
      */
-    private boolean invoke(String resource, String invoke) throws Exception {
+    private boolean invoke(String resource, String invoke)
+            throws Exception {
 
         Object object;
         Method method;
@@ -831,7 +808,8 @@ class Worker implements Runnable {
      * @throws Exception
      *     Im Fall nicht erwarteter Fehler
      */
-    private void authorize(String reference) throws Exception {
+    private void authorize(String reference)
+            throws Exception {
         
         Section         section;
         String          access;
@@ -948,7 +926,8 @@ class Worker implements Runnable {
      * Filter haben keinen direkten R&uuml;ckgabewert, sie beieinflussen u.a.
      * Server-Status und Datenflusskontrolle.
      */
-    private String filter() throws Exception {
+    private String filter()
+            throws Exception {
         
         Enumeration     enumeration;
         File            file;
@@ -997,7 +976,7 @@ class Worker implements Runnable {
                 words = new StringTokenizer(string);
                 
                 // Methode und Bedingung muessen gesetzt sein
-                // mit Tolleranz fuer [+] beim Konkatenieren leerer Bedingungen
+                // mit Toleranz fuer [+] beim Konkatenieren leerer Bedingungen
                 if (words.countTokens() < 2)
                     continue;
 
@@ -1110,7 +1089,8 @@ class Worker implements Runnable {
      * @throws Exception
      *     Im Fall nicht erwarteter Fehler
      */
-    private void initiate() throws Exception {
+    private void initiate()
+            throws Exception {
 
         ByteArrayOutputStream buffer;
         Enumeration           enumeration;
@@ -1137,8 +1117,6 @@ class Worker implements Runnable {
         if ((this.socket instanceof SSLSocket))
             try {this.fields.set("auth_cert", ((SSLSocket)this.socket).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
-
-                // keine Fehlerbehandlung erforderlich
             }
         
         try {
@@ -1744,7 +1722,8 @@ class Worker implements Runnable {
         return (String[])list.toArray(new String[0]);
     }
     
-    private void doGateway() throws Exception {
+    private void doGateway()
+            throws Exception {
         
         InputStream  error;
         InputStream  input;
@@ -1917,16 +1896,15 @@ class Worker implements Runnable {
                                 if (shadow.matches("^HTTP/STATUS(\\s.*)*$"))
                                     header = null;
                                     
-                                try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$2")));
+                                try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$2")));
                                 } catch (Throwable throwable) {
-                                    // keine Fehlerbehandlung erforderlich
-                                } 
+                                }
 
                                 // ggf. werden die Statuscodes mit eigenen bzw.
                                 // unbekannten Codes und Text temporaer
                                 // angereichert, mit dem Ende der Connection wird
                                 // die Liste verworfen
-                                string = string.replaceAll("^([^\\s]+)\\s*([^\\s]+)*\\s*(.*?)\\s*$", "$3");
+                                string = string.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$3");
                                 if (string.length() > 0
                                         && !this.statuscodes.contains(String.valueOf(this.status)))
                                     this.statuscodes.set(String.valueOf(this.status), string);
@@ -1995,7 +1973,7 @@ class Worker implements Runnable {
                     string = string.concat(new String(bytes, 0, length));
                 }
                 string = string.trim();
-                if (!string.isEmpty())
+                if (string.length() > 0)
                     Service.print(("GATEWAY ").concat(string));
                 
             } finally {
@@ -2004,7 +1982,6 @@ class Worker implements Runnable {
                 // abzubrechen deren Verarbeitung fehlerhaft verlief
                 try {process.destroy();
                 } catch (Throwable throwable) {
-                    // keine Fehlerbehandlung erforderlich
                 }
             }
         }
@@ -2143,7 +2120,7 @@ class Worker implements Runnable {
             entries[1] = file.getName();
             
             // der Zeitpunkt der letzten Aenderung wird ermittelt
-            entries[2] = String.format("%tF %<tT", new Object[] {new Date(file.lastModified())});
+            entries[2] = String.format("%tF %<tT", new Date(file.lastModified()));
 
             // die Groesse wird ermittelt, nicht aber bei Verzeichnissen
             string = file.isDirectory() ? "-" : String.valueOf(file.length());
@@ -2213,7 +2190,7 @@ class Worker implements Runnable {
         }
         
         query = query.concat(reverse ? "d" : "a");
-        if (list.isEmpty())
+        if (list.size() <= 0)
             query = query.concat(" x");
         values.put("sort", query);
 
@@ -2223,7 +2200,8 @@ class Worker implements Runnable {
         return generator.extract();
     }
 
-    private void doGet() throws Exception {
+    private void doGet()
+            throws Exception {
         
         File            file;
         InputStream     input;
@@ -2421,13 +2399,13 @@ class Worker implements Runnable {
                 // der Datenstrom wird geschlossen
                 try {input.close();
                 } catch (Throwable throwable) {
-                    // keine Fehlerbehandlung erforderlich
                 }
             }
         }
     }
 
-    private void doPut() throws Exception {
+    private void doPut()
+            throws Exception {
         
         File         file;
         OutputStream output;
@@ -2513,7 +2491,6 @@ class Worker implements Runnable {
             // der Datenstrom wird geschlossen
             try {output.close();
             } catch (Throwable throwable) {
-                // keine Fehlerbehandlung erforderlich
             }
         }
         
@@ -2535,7 +2512,8 @@ class Worker implements Runnable {
         this.status = 424;
     }
 
-    private void doStatus() throws Exception {
+    private void doStatus()
+            throws Exception {
         
         Enumeration enumeration;
         Generator   generator;
@@ -2677,7 +2655,8 @@ class Worker implements Runnable {
      * @throws Exception
      *     Im Fall nicht erwarteter Fehler 
      */
-    private void service() throws Exception {
+    private void service()
+            throws Exception {
 
         File   file;
         String method;
@@ -2771,7 +2750,8 @@ class Worker implements Runnable {
     }
    
     /** Protokollierte den Zugriff im Protokollmedium. */
-    private void register() throws Exception {
+    private void register()
+            throws Exception {
 
         Enumeration  source;
         Generator    generator;
@@ -2785,7 +2765,6 @@ class Worker implements Runnable {
         string = this.environment.get("remote_addr");
         try {string = InetAddress.getByName(string).getHostName();
         } catch (Throwable throwable) {
-            // keine Fehlerbehandlung erforderlich
         }
         this.environment.set("remote_host", string);
         this.environment.set("response_length", String.valueOf(this.volume));
@@ -2803,7 +2782,7 @@ class Worker implements Runnable {
             format = format.replaceAll("%t", "%1\\$t");
  
             // die Zeitsymbole werden aufgeloest
-            format = String.format(Locale.US, format, new Object[] {new Date()});
+            format = String.format(Locale.US, format, new Date());
 
             // Format und Pfad werden am Zeichen > getrennt
             if (format.contains(">")) {
@@ -2889,7 +2868,6 @@ class Worker implements Runnable {
         // der Socket wird geschlossen
         try {this.socket.close();
         } catch (Throwable throwable) {
-            // keine Fehlerbehandlung erforderlich
         }
     }
 
@@ -2977,7 +2955,6 @@ class Worker implements Runnable {
             // die Connection wird beendet
             try {this.destroy();
             } catch (Throwable throwable) {
-                // keine Fehlerbehandlung erforderlich
             }
 
             // HINWEIS - Beim Schliessen wird der ServerSocket verworfen, um
@@ -2993,7 +2970,6 @@ class Worker implements Runnable {
             // der Socket wird alternativ geschlossen
             try {this.socket.close();
             } catch (Throwable throwable) {
-                // keine Fehlerbehandlung erforderlich
             }
 
             // durch das Zuruecksetzen wird die Connection ggf. reaktivert

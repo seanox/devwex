@@ -6,6 +6,7 @@
   CR: Build: Releases are now only available on the release page
   CR: License: Changed to Apache License Version 2.0
   CR: Service: Added configuration file as optional program argument for startup
+      Usage: devwex [start] [ini file]
   CR: SAPI: Constructors for servers support alternative signature(s)
       Server(String context, Object initialize)
       Server(String context, Initialize initialize)

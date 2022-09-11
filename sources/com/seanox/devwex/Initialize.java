@@ -130,7 +130,7 @@ import java.util.StringTokenizer;
  * for sections, keys and values.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.2 20220823
+ * @version 5.0.2 20220911
  */
 public class Initialize implements Cloneable {
 
@@ -356,7 +356,7 @@ public class Initialize implements Cloneable {
      * sections are created. In smart mode, only sections that are not empty are
      * applied. If a section contain value {@code null}, the method behaves like
      * {@link #remove(String)}.
-     * @param  initialize Sections to be taken over
+     * @param  initialize Sections to be applied
      * @return the current instance with the merged sections
      */
     public synchronized Initialize merge(Initialize initialize) {

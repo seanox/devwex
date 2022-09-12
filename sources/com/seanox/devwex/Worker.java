@@ -53,14 +53,13 @@ import java.util.TimeZone;
 import javax.net.ssl.SSLSocket;
 
 /**
- * Worker, wartet auf eingehende HTTP-Anfrage, wertet diese aus, beantwortet
- * diese entsprechend der HTTP-Methode und protokolliert den Zugriff.<br>
+ * Worker, waits for incoming HTTP request, evaluates it, responds to it
+ * according to the HTTP method and logs the access.<br>
  * <br>
- * Hinweis zum Thema Fehlerbehandlung - Die Verarbeitung der Requests soll so
- * tolerant wie m&ouml;glich erfolgen. Somit werden interne Fehler, wenn
- * m&ouml;glich, geschluckt und es erfolgt eine alternative aber sichere
- * Beantwortung. Kann der Request nicht mehr kontrolliert werden, erfolgt ein
- * kompletter Abbruch.
+ * Note on error handling - The processing of requests should be as tolerant as
+ * possible. Thus, internal errors are swallowed if possible and the request is
+ * safely responded with an error status. If the request can no longer be
+ * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
  * @version 5.5.0 20220912
@@ -68,94 +67,94 @@ import javax.net.ssl.SSLSocket;
 class Worker implements Runnable {
   
     /** Server Context */
-    private volatile String context;
+    private final String context;
 
-    /** Socket vom Worker */
+    /** Server configuration */
+    private final Initialize initialize;
+    
+    /** Accepted socket of the worker */
     private volatile Socket accept;
 
-    /** Socket des Servers */
+    /** Socket of the server */
     private volatile ServerSocket socket;
     
-    /** Server Konfiguration */
-    private volatile Initialize initialize;
-
-    /** Dateneingangsstrom */
+    /** Data input stream of the accepted socket */
     private volatile InputStream input;
 
-    /** Datenausgangsstrom */
+    /** Data output stream of the accepted socket */
     private volatile OutputStream output;
 
-    /** Zugriffsrechte des Servers */
+    /** Access rights of the server */
     private volatile Section access;
 
-    /** Umgebungsvariablen des Servers */
+    /** Environment variables of the server */
     private volatile Section environment;
 
-    /** Felder des Request-Headers */
+    /** Fields of the request header */
     private volatile Section fields;
 
-    /** Filter des Servers */
+    /** Filters of the server */
     private volatile Section filters;
 
-    /** Common Gateway Interfaces des Servers */
+    /** Common Gateway Interfaces of the server */
     private volatile Section interfaces;
 
-    /** Konfiguration des Servers */
+    /** Section with the connection configuration from the server */
     private volatile Section options;
 
-    /** virtuelle Verzeichnisse des Servers */
+    /** Section with the configuration of references from the server */
     private volatile Section references;
     
-    /** Mediatypes des Servers */
+    /** Section with the mediatypes configuration from the server */
     private volatile Section mediatypes;
 
-    /** Statuscodes des Servers */
+    /** Section with the status codes configuration from the server */
     private volatile Section statuscodes;
 
-    /** Dokumentenverzeichnis des Servers */
+    /** Document directory of the server */
     private volatile String docroot;
 
-    /** Header des Requests */
+    /** Header of the request */
     private volatile String header;
 
-    /** Mediatype des Requests */
+    /** Mediatype of the request */
     private volatile String mediatype;
 
-    /** Resource des Requests */
+    /** Resource of the request */
     private volatile String resource;
 
-    /** Gateway Interface */
+    /** Gateway interface of the request */
     private volatile String gateway;
     
-    /** Systemverzeichnis des Servers */
+    /** System directory of the server */
     private volatile String sysroot;
 
-    /** Datenflusskontrolle */
+    /** Data flow control */
     private volatile boolean control;
 
-    /** Blockgr&ouml;sse f&uuml;r Datenzugriffe */
+    /** Block size for data access */
     private volatile int blocksize;
 
-    /** Statuscode des Response */
+    /** Status code of the response */
     private volatile int status;
 
-    /** Interrupt f&uuml;r Systemprozesse im Millisekunden */
+    /** Interrupt for system processes in milliseconds */
     private volatile long interrupt;
 
-    /** Timeout beim ausgehenden Datentransfer in Millisekunden */
+    /** Timeout during outgoing data transfer in milliseconds */
     private volatile long isolation;
 
-    /** Timeout bei Datenleerlauf in Millisekunden */
+    /** Timeout on data idle in milliseconds */
     private volatile long timeout;
 
-    /** Menge der &uuml;bertragenen Daten */
+    /** Amount of transmitted data */
     private volatile long volume;
 
     /**
-     * Konstruktor, richtet den Worker mit Socket ein.
-     * @param context    Server Context
-     * @param socket     Socket mit dem eingegangen Request
-     * @param initialize Server Konfiguraiton
+     * Constructor, establishes the worker with socket and configuration.
+     * @param context    Server context
+     * @param socket     Socket with the accepted request
+     * @param initialize Server configuraiton
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
         this.context    = context.replaceAll("(?i):[a-z]+$", "");
@@ -355,6 +354,7 @@ class Worker implements Runnable {
     }
     
     /**
+     * TODO:
      * Formatiert das Datum im angebenden Format und in der angegebenen Zone.
      * R&uuml;ckgabe das formatierte Datum, im Fehlerfall ein leerer String.
      * @param  format Formatbeschreibung
@@ -545,6 +545,7 @@ class Worker implements Runnable {
     }
 
     /**
+     * TODO:
      * Ermittelt f&uuml;r das angegebene virtuelle Verzeichnis den realen Pfad.
      * Wurde der Pfad nicht als virtuelles Verzeichnis eingerichtet, wird ein
      * leerer String zur&uuml;ckgegeben.
@@ -753,6 +754,7 @@ class Worker implements Runnable {
     }
     
     /**
+     * TODO:
      * &Uuml;berpr&uuml;ft die Zugriffbrechtigungen f&uuml;r eine Referenz und
      * setzt ggf. den entsprechenden Status.
      * @param  reference Referenz
@@ -873,6 +875,7 @@ class Worker implements Runnable {
     }
 
     /**
+     * TODO:
      * &Uuml;berpr&uuml;ft die Filter und wendet diese bei Bedarf an.
      * Filter haben keinen direkten R&uuml;ckgabewert, sie beieinflussen u.a.
      * Server-Status und Datenflusskontrolle.
@@ -1035,6 +1038,7 @@ class Worker implements Runnable {
     }
     
     /**
+     * TODO:
      * Initialisiert die Connection, liest den Request, analysiert diesen und
      * richtet die Connection in der Laufzeitumgebung entsprechen ein.
      * @throws Exception
@@ -1661,6 +1665,7 @@ class Worker implements Runnable {
         return (String[])list.toArray(new String[0]);
     }
     
+    // TODO:
     private void doGateway()
             throws Exception {
         
@@ -1927,6 +1932,7 @@ class Worker implements Runnable {
     }
     
     /**
+     * TODO:
      * Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
      * {@code index.html} eine navigierbare HTML-Seite.
      * @param  directory Verzeichnis des Dateisystems
@@ -2139,6 +2145,7 @@ class Worker implements Runnable {
         return generator.extract();
     }
 
+    // TODO:
     private void doGet()
             throws Exception {
         
@@ -2343,6 +2350,7 @@ class Worker implements Runnable {
         }
     }
 
+    // TODO:
     private void doPut()
             throws Exception {
         
@@ -2451,6 +2459,7 @@ class Worker implements Runnable {
         this.status = 424;
     }
 
+    // TODO:
     private void doStatus()
             throws Exception {
         
@@ -2687,7 +2696,7 @@ class Worker implements Runnable {
         }
     }
    
-    /** Protokollierte den Zugriff im Protokollmedium. */
+    /** TODO: Protokollierte den Zugriff im Protokollmedium. */
     private void register()
             throws Exception {
 
@@ -2765,11 +2774,7 @@ class Worker implements Runnable {
         }
     }
     
-    /**
-     * Marks the worker for closing if it will not be used in the next time.
-     * Workers are closed and disposed of after approximately TODO: 250ms of idle
-     * time. The idle time is defined by the SoTimeout of the ServerSocket.
-     */
+    /** Marks the worker for abandonment in case of inactivity. */
     void isolate() {
         if (this.accept == null
                 && this.socket != null)
@@ -2810,10 +2815,12 @@ class Worker implements Runnable {
         }
     }
 
+    // TODO:
     @Override
     public void run() {
 
-        // der ServerSocket wird vorgehalten
+        // ServerSocket is kept, so that later the worker, if it has been
+        // isolated in the meantime, can be reactivated under load
         ServerSocket socket = this.socket;
 
         while (this.socket != null) {
@@ -2853,7 +2860,6 @@ class Worker implements Runnable {
                 this.blocksize = 65535;
 
             String string = this.options.get("timeout");
-
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 
             // das Timeout der Connecton wird ermittelt

@@ -354,13 +354,11 @@ class Worker implements Runnable {
     }
     
     /**
-     * TODO:
-     * Formatiert das Datum im angebenden Format und in der angegebenen Zone.
-     * R&uuml;ckgabe das formatierte Datum, im Fehlerfall ein leerer String.
-     * @param  format Formatbeschreibung
-     * @param  date   zu formatierendes Datum
-     * @param  zone   Zeitzone, {@code null} Standardzone
-     * @return das formatierte Datum als String, im Fehlerfall leerer String
+     * Formats the date in the specified format and zone.
+     * @param  format Format description
+     * @param  date   Date to be formatted
+     * @param  zone   Time zone, {@code null} default zone
+     * @return the formatted date as string, in case of error empty string
      */
     private static String dateFormat(String format, Date date, String zone) {
         SimpleDateFormat pattern = new SimpleDateFormat(format, Locale.US);
@@ -2696,20 +2694,12 @@ class Worker implements Runnable {
         }
     }
    
-    /** TODO: Protokollierte den Zugriff im Protokollmedium. */
+    /** Logs the access in the logging medium. */
     private void register()
             throws Exception {
 
-        Enumeration  source;
-        Generator    generator;
-        Hashtable    values;
-        OutputStream stream;
-        String       format;
-        String       output;
-        String       string;
-        
-        // der Client wird ermittelt
-        string = this.environment.get("remote_addr");
+        // client is determined
+        String string = this.environment.get("remote_addr");
         try {string = InetAddress.getByName(string).getHostName();
         } catch (Throwable throwable) {
         }
@@ -2719,35 +2709,39 @@ class Worker implements Runnable {
 
         synchronized (Worker.class) {
             
-            // das Format vom ACCESSLOG wird ermittelt
-            format = this.options.get("accesslog");
+            // format of the ACCESSLOG is determined
+            String format = this.options.get("accesslog");
             
-            // Konvertierung der String-Formater-Syntax in Generator-Syntax
+            // converting string formatter syntax to generator syntax
             format = format.replaceAll("#", "#[0x23]");
             format = format.replaceAll("%%", "#[0x25]");
             format = format.replaceAll("%\\[", "#[");
             format = format.replaceAll("%t", "%1\\$t");
  
-            // die Zeitsymbole werden aufgeloest
+            // time symbols are resolved
             format = String.format(Locale.US, format, new Date());
+            
+            String output;
 
-            // Format und Pfad werden am Zeichen > getrennt
+            // format and path are separated by the > character
             if (format.contains(">")) {
                 output = format.split(">")[1].trim();
                 format = format.split(">")[0].trim();
             } else output = "";
             
-            // ohne Format und/oder mit OFF wird kein Access-Log erstellt
+            // without format and/or with OFF no access log is created
             if (format.length() <= 0
                     || format.toLowerCase().equals("off"))
                 return;
 
-            values = new Hashtable();
-            source = this.environment.elements();
-            while (source.hasMoreElements()) {
-                string = (String)source.nextElement();
+            Hashtable values = new Hashtable();
+            Enumeration environment = this.environment.elements();
+            while (environment.hasMoreElements()) {
+                string = (String)environment.nextElement();
                 values.put(string, Worker.textEscape(this.environment.get(string)));
             }            
+            
+            Generator generator;
             
             generator = Generator.parse(format.getBytes());
             generator.set(values);
@@ -2762,10 +2756,10 @@ class Worker implements Runnable {
             output = output.replaceAll("(?<=\\s)(''|\"\")((?=\\s)|$)", "-");
             output = output.replaceAll("(\\s)((?=\\s)|$)", "$1-").trim(); 
             
-            // wurde kein ACCESSLOG definiert wird in den StdIO,
-            // sonst in die entsprechende Datei geschrieben
+            // If no ACCESSLOG is defined, it is written to the StdIO,
+            // otherwise to the corresponding file.
             if (output.length() > 0) {
-                stream = new FileOutputStream(output, true);
+                OutputStream stream = new FileOutputStream(output, true);
                 try {stream.write(format.getBytes());
                 } finally {
                     stream.close();

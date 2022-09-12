@@ -367,16 +367,9 @@ class Worker implements Runnable {
      * @return das formatierte Datum als String, im Fehlerfall leerer String
      */
     private static String dateFormat(String format, Date date, String zone) {
-
-        SimpleDateFormat pattern;
-
-        // die Formatierung wird eingerichtet
-        pattern = new SimpleDateFormat(format, Locale.US);
-        
-        // die Zeitzone wird gegebenenfalls fuer die Formatierung gesetzt
-        if (zone != null) pattern.setTimeZone(TimeZone.getTimeZone(zone));
-
-        // die Zeitangabe wird formatiert
+        SimpleDateFormat pattern = new SimpleDateFormat(format, Locale.US);
+        if (zone != null)
+            pattern.setTimeZone(TimeZone.getTimeZone(zone));
         return pattern.format(date);
     }
     
@@ -394,8 +387,7 @@ class Worker implements Runnable {
     }
     
     /**
-     * Normalizes the string of a path and resolves existing path directives if
-     * necessary and changes the backslash to slash.
+     * Normalizes a path, resolves path statements, and changes to slashes.
      * @param  path Path to be normalized
      * @return the normalized path
      */
@@ -408,15 +400,16 @@ class Worker implements Runnable {
         for (int cursor; (cursor = string.indexOf("//")) >= 0;)
             string = string.substring(0, cursor).concat(string.substring(cursor +1));
 
-        // the path is compensated if necessary /abc/./def/../ghi -> /abc/ghi
-        // in the path /. is compensated
+        // compensates in the path /.
+        // e.g. /abc/./def/../ghi -> /abc/def/../ghi
         if (string.endsWith("/."))
             string = string.concat("/");
 
         for (int cursor; (cursor = string.indexOf("/./")) >= 0;)
             string = string.substring(0, cursor).concat(string.substring(cursor +2));
 
-        // in the path /.. is compensated
+        // compensates in the path /..
+        // e.g. /abc/./def/../ghi -> /abc/./ghi
         if (string.endsWith("/.."))
             string = string.concat("/");
 
@@ -440,81 +433,63 @@ class Worker implements Runnable {
     }
 
     /**
-     * L&ouml;scht die Ressource, handelt es sich um ein Verzeichnis, werden
-     * alle Unterdateien und Unterverzeichnisse rekursive gel&ouml;scht.
-     * R&uuml;ckgabe {@code true} im Fehlerfall {@code false}.
+     * Deletes the resource.
+     * Directories, all files and subdirectories will be deleted recursively.
      * @param  resource zu l&ouml;schende Ressource
-     * @return {@code true}, im Fehlerfall {@code false}
+     * @return if successful {@code true}, otherwise {@code false}
      */
     private static boolean fileDelete(File resource) {
 
-        File[] files;
-
-        int    loop;
-        
-        // bei Verzeichnissen wird die Dateiliste ermittelt rekursive geloescht
+        // Directories are deleted recursively via the file list
         if (resource.isDirectory()) {
-            files = resource.listFiles();
+            File[] files = resource.listFiles();
             if (files == null)
                 return true;
-            for (loop = 0; loop < files.length; loop++)
+            for (int loop = 0; loop < files.length; loop++)
                 if (!Worker.fileDelete(files[loop]))
                     return false;
         }
 
-        // der File oder das leere Verzeichnis wird geloescht, ist dies nicht
-        // moeglich wird false zurueckgegeben
+        // file or the empty directory will be finally deleted,
+        // if this is not possible false will be returned
         return resource.delete();
     }
 
     /**
-     * Pr&uuml;ft ob die Ressource dem {@code IF-(UN)MODIFIED-SINCE} entspricht.
-     * R&uuml;ckgabe {@code false} wenn die Ressource in Datum und
-     * Dateigr&ouml;sse entspricht, sonst {@code true}.
-     * @param  file   Dateiobjekt
-     * @param  string Information der Modifikation
-     * @return {@code true} wenn Unterschiede in Datum oder Dateigr&ouml;sse
-     *     ermittelt wurden
+     * Checks if the resource corresponds to the {@code IF-(UN)MODIFIED-SINCE}.
+     * Returns {@code false} if the resource matches in date and file size,
+     * otherwise {@code true}.
+     * @param  file   File object
+     * @param  string If-(Un)Modified-Since} phrase
+     * @return {@code true} if differences in date or file size were detected
      */
     private static boolean fileIsModified(File file, String string) {
-
-        SimpleDateFormat pattern;
-        StringTokenizer  tokenizer;
-
-        int              cursor;
-        long             timing;
 
         if (string.length() <= 0)
             return true;
 
-        // If-(Un)Modified-Since wird geprueft
-        tokenizer = new StringTokenizer(string, ";");
-
         try {
 
             // die Formatierung wird eingerichtet
-            pattern = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
-
             // die Zeitzone wird gegebenenfalls fuer die Formatierung gesetzt
+            SimpleDateFormat pattern = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
             pattern.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-            timing = pattern.parse(tokenizer.nextToken()).getTime() /1000L;
-
-            // IF-(UN)MODIFIED-SINCE:TIMEDATE wird ueberprueft
+            // If-(Un)Modified-Since wird geprueft
+            // If-(Un)Modified-Since:Timedate wird geprueft
+            StringTokenizer tokenizer = new StringTokenizer(string, ";");
+            long timing = pattern.parse(tokenizer.nextToken()).getTime() /1000L;
             if (timing != file.lastModified() /1000L)
                 return true;
 
+            // If-(Un)Modified-Since:Length wird geprueft
             while (tokenizer.hasMoreTokens()) {
-
                 string = tokenizer.nextToken().trim();
                 if (!string.toLowerCase().startsWith("length"))
                     continue;
-
-                cursor = string.indexOf("=");
+                int cursor = string.indexOf("=");
                 if (cursor < 0)
                     continue;
-                
-                // IF-(UN)MODIFIED-SINCE:LENGTH wird ueberprueft
                 return file.length() != Long.parseLong(string.substring(cursor +1).trim());
             }
 
@@ -526,12 +501,11 @@ class Worker implements Runnable {
     }
     
     /**
-     * Erstellt zu einem abstrakter File das physische File-Objekt.
-     * @param  file abstrakter File 
-     * @return das physische File-Objekt, sonst {@code null}
+     * Creates for an abstract file the physical file object.
+     * @param  file abstract file 
+     * @return the physical file object, otherwise {@code null}
      */
     private static File fileCanonical(File file) {
-     
         try {return file.getCanonicalFile();
         } catch (Throwable throwable) {
             return null;

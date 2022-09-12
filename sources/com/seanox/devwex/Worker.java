@@ -158,20 +158,16 @@ class Worker implements Runnable {
      * @param initialize Server Konfiguraiton
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
-        
-        context = context.replaceAll("(?i):[a-z]+$", "");
-
-        this.context    = context;
+        this.context    = context.replaceAll("(?i):[a-z]+$", "");
         this.socket     = socket;
         this.initialize = initialize;
     }
 
     /**
-     * Entfernt aus dem String Parameter und Optionen im Format {@code [...]}.
-     * Bereinigt werden alle Angaben, ob voll- oder unvollst&auml;ndig, ab dem
-     * ersten Vorkommen.
-     * @param  string zu bereinigender String
-     * @return der String ohne Parameter und Optionen
+     * Removes parameters and options in the string in the format {@code [...]}.
+     * All patterns, even incomplete ones, are cleaned from the first occurrence.
+     * @param  string string to be cleaned
+     * @return the string without parameters and options
      */
     private static String cleanOptions(String string) {
         int cursor = string.indexOf('[');
@@ -311,8 +307,8 @@ class Worker implements Runnable {
             if (code >= 0xC0 && code <= 0xC3)
                 control = true;
 
-            // Decoding of the bytes as UTF-8.
-            // The pattern 10xxxxxx is extended by the 6Bits
+            // decoding of the bytes as UTF-8.
+            // pattern 10xxxxxx is extended by the 6Bits
             if ((code & 0xC0) == 0x80) {
 
                 digit = (digit << 0x06) | (code & 0x3F);
@@ -513,45 +509,38 @@ class Worker implements Runnable {
     }
 
     /**
-     * Ruft eine Modul-Methode auf.
-     * Wenn erforderlich wird das Modul zuvor geladen und initialisiert.
-     * Module werden global geladen und initialisiert. Ist ein Modul beim Aufruf
-     * der Methode noch nicht geladen, erfolgt dieses ohne Angabe von Parametern
-     * mit der ersten Anforderung.<br>
-     * Soll ein Modul mit Parametern initalisiert werden, muss das Modul in der
-     * Sektion {@code INITIALIZE} deklariert oder &uuml;ber den
-     * Context-ClassLoader vom Devwex-Module-SDK geladen werden.
-     * R&uuml;ckgabe {@code true} wenn die Ressource geladen und die Methode
-     * erfolgreich aufgerufen wurde.
-     * @param  resource Resource
-     * @param  invoke   Methode
-     * @return {@code true}, im Fehlerfall {@code false}
+     * Calls a module method.<br>
+     * If necessary, the module is loaded and initialized beforehand. Modules
+     * are loaded and initialized globally. If a module is not yet loaded when
+     * the method is called, this is done without specifying parameters with the
+     * first request.<br>
+     * If a module is to be initialized with parameters, the module must be
+     * declared in section {@code INITIALIZE} or loaded via the MAPI-ClassLoader
+     * from the Devwex-Module-SDK.
+     * @param  module Modul
+     * @param  invoke Method to be invoked
+     * @return {@code true} if successfully loaded the module and called the
+     *     method,otherwise {@code false}
      */
-    private boolean invoke(String resource, String invoke)
+    private boolean invoke(String module, String invoke)
             throws Exception {
-
-        Object object;
-        Method method;
-        String string;
 
         if (invoke == null
                 || invoke.trim().length() <= 0)
             return false;
         
-        object = Service.load(Service.load(resource), null);
+        Object object = Service.load(Service.load(module), null);
         if (object == null)
             return false;
 
-        string = this.environment.get("module_opts");
+        String string = this.environment.get("module_opts");
         if (string.length() <= 0)
             string = null;
         
-        // die Methode fuer den Modul-Einsprung wird ermittelt
-        method = object.getClass().getMethod(invoke, Object.class, String.class);
-        
-        // die Methode fuer den Modul-Einsprung wird aufgerufen
+        // method for the module entry is determined and called
+        Method method = object.getClass().getMethod(invoke, Object.class, String.class);
         method.invoke(object, this, string);
-        
+
         return true;
     }
 
@@ -1605,11 +1594,10 @@ class Worker implements Runnable {
     }
     
     /**
-     * Erstellt den Basis-Header f&uuml;r einen Response und erweitert diesen um
-     * die optional &uuml;bergebenen Parameter.
+     * Creates the base header for a response and adds passed parameters.
      * @param  status HTTP-Status
-     * @param  header optionale Liste mit Parameter
-     * @return der erstellte Response-Header
+     * @param  header optional list with parameters
+     * @return the created response header
      */
     private String header(int status, String[] header) {
         
@@ -1626,28 +1614,19 @@ class Worker implements Runnable {
     }
     
     /**
-     * Erstellt ein Array mit den Umgebungsvariablen.
-     * Umgebungsvariablen ohne Wert werden nicht &uuml;bernommen.
-     * @return die Umgebungsvariablen als Array
+     * Creates an array with the environment variables.
+     * Environment variables without value are ignored.
+     * @return the environment variables as array
      */
     private String[] getEnvironment() {
         
-        Enumeration     enumeration;
-        List            list;
-        StringTokenizer tokenizer;
-        String          label;
-        String          value;
-
-        int             index;
+        List list = new ArrayList();
         
-        list = new ArrayList();
-        
-        // die Umgebungsvariablen werden ermittelt und uebernommen
-        enumeration = this.environment.elements();
+        // environment variables are determined and applied
+        Enumeration enumeration = this.environment.elements();
         while (enumeration.hasMoreElements()) {
-            
-            label = (String)enumeration.nextElement();
-            value = this.environment.get(label);
+            String label = (String)enumeration.nextElement();
+            String value = this.environment.get(label);
             if (value.length() <= 0)
                 continue;
             value = label.concat("=").concat(value);
@@ -1656,20 +1635,18 @@ class Worker implements Runnable {
             list.add(value);
         }
         
-        // die Zeilen vom Header werden ermittelt
-        tokenizer = new StringTokenizer(this.header, "\r\n");
-        
-        // die erste Zeile mit dem Request wird verworfen
+        // lines from the header are determined
+        // the first line with the request is discarded
+        StringTokenizer tokenizer = new StringTokenizer(this.header, "\r\n");
         if (tokenizer.hasMoreTokens())
             tokenizer.nextToken();
         
         while (tokenizer.hasMoreTokens()) {
-
-            value = tokenizer.nextToken();
-            index = value.indexOf(':');
+            String value = tokenizer.nextToken();
+            int index = value.indexOf(':');
             if (index <= 0)
                 continue;
-            label = value.substring(0, index).trim();
+            String label = value.substring(0, index).trim();
             value = value.substring(index +1).trim();
             if (label.length() <= 0
                     || value.length() <= 0)
@@ -2466,8 +2443,8 @@ class Worker implements Runnable {
     
     private void doDelete() {
         
-        // die angeforderte Ressource wird komplett geloescht,
-        // tritt dabei ein Fehler auf wird STATUS 424 gesetzt
+        // requested resource is completely deleted,
+        // if an error occurs STATUS 424 is set.
         if (Worker.fileDelete(new File(this.resource)))
             return;
         
@@ -2613,38 +2590,38 @@ class Worker implements Runnable {
     }
 
     /**
-     * Nimmt den Request an und organisiert die Verarbeitung und Beantwortung.
+     * Accepts the request and organizes the processing and response.
      * @throws Exception
-     *     Im Fall nicht erwarteter Fehler 
+     *     In case of unexpected errors
      */
     private void service()
             throws Exception {
 
-        File   file;
-        String method;
-        
         try {
             
-            // die Connection wird initialisiert, um den Serverprozess nicht zu
-            // behindern wird die eigentliche Initialisierung der Connection erst mit
-            // laufendem Thread als asynchroner Prozess vorgenommen
+            // the connection is already accepted, so that the server process
+            // does not block unnecessarily, the connection is initialized only
+            // with running thread as asynchronous process
             try {this.initiate();
             } catch (Exception exception) {
                 this.status = 500;
                 throw exception;
             }             
             
-            // die Ressource wird eingerichtet
-            file = new File(this.resource);
+            // determine the resource
+            File file = new File(this.resource);
 
-            // die Ressource muss auf Modul, Datei oder Verzeichnis verweisen
-            if (this.status == 0) this.status = file.isDirectory() || file.isFile() || this.resource.toUpperCase().contains("[M]") ? 200 : 404;            
+            // resource must refer a module, file or directory
+            if (this.status == 0)
+                this.status = this.resource.toUpperCase().contains("[M]")
+                        || file.isDirectory() || file.isFile() ? 200 : 404;            
             
             if (this.control) {
 
                 // PROCESS/(X)CGI/MODULE - wird bei gueltiger Angabe ausgefuehrt
-                if (this.status == 200 && this.gateway.length() > 0) {
-
+                if (this.status == 200
+                        && this.gateway.length() > 0) {
+                    
                     try {this.doGateway();
                     } catch (Exception exception) {
                         this.status = 502;
@@ -2653,41 +2630,39 @@ class Worker implements Runnable {
                     
                 } else {
 
-                    // die Methode wird ermittelt
-                    method = this.fields.get("req_method").toLowerCase();
+                    // determine the HTTP method
+                    String method = this.fields.get("req_method").toLowerCase();
 
-                    // vom Server werden die Methoden OPTIONS, HEAD, GET, PUT, DELETE
-                    // unterstuetzt bei anderen Methoden wird STATUS 501 gesetzt
+                    // server supports: OPTIONS, HEAD, GET, PUT, DELETE
+                    // for other methods STATUS 501 is responded
                     if (this.status == 200
-                            && !method.equals("options") && !method.equals("head") && !method.equals("get")
-                            && !method.equals("put") && !method.equals("delete"))
+                            && !method.equals("options")
+                            && !method.equals("head")
+                            && !method.equals("get")
+                            && !method.equals("put")
+                            && !method.equals("delete"))
                         this.status = 501;
-                    
-                    // METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
-                    if (this.status == 200 && method.equals("head"))
+
+                    if (this.status == 200
+                            && (method.equals("head")
+                                    || method.equals("get")))
                         try {this.doGet();
                         } catch (Exception exception) {
                             this.status = 500;
                             throw exception;
                         }                    
 
-                    if (this.status == 200 && method.equals("get"))
-                        try {this.doGet();
-                        } catch (Exception exception) {
-                            this.status = 500;
-                            throw exception;
-                        }                    
-
-                    // METHOD:PUT - wird bei gueltiger Angabe ausgefuehrt
-                    if ((this.status == 200 || this.status == 404) && method.equals("put"))
+                    if ((this.status == 200
+                                || this.status == 404)
+                            && method.equals("put"))
                         try {this.doPut();
                         } catch (Exception exception) {
                             this.status = 424;
                             throw exception;
                         }                    
                     
-                    // METHOD:DELETE - wird bei gueltiger Angabe ausgefuehrt
-                    if (this.status == 200 && method.equals("delete"))
+                    if (this.status == 200
+                            && method.equals("delete"))
                         try {this.doDelete();
                         } catch (Exception exception) {
                             this.status = 424;
@@ -2698,12 +2673,11 @@ class Worker implements Runnable {
             
         } finally {
 
-            // der Zeitpunkt evtl. blockierender Datenstroeme wird
-            // zurueckgesetzt
+            // timing of blocking data streams is reset
             if (this.isolation != 0)
                 this.isolation = -1;               
             
-            // STATUS/ERROR/METHOD:OPTIONS - wird ggf. ausgefuehrt
+            // STATUS/ERROR/METHOD:OPTIONS - will be executed if necessary
             if (this.control)
                 try {this.doStatus();            
                 } catch (IOException exception) {
@@ -2790,44 +2764,44 @@ class Worker implements Runnable {
     }
     
     /**
-     * Merkt den Worker zum Schliessen vor, wenn diese in der naechsten Zeit
-     * nicht mehr verwendet wird. Der Zeitpunkt zum Bereinigen betr&auml;gt
-     * 250ms Leerlaufzeit nach der letzen Nutzung. Die Zeit wird &uuml;ber das
-     * SoTimeout vom ServerSocket definiert.
+     * Marks the worker for closing if it will not be used in the next time.
+     * Workers are closed and disposed of after approximately 250ms of idle
+     * time. The idle time is defined by the SoTimeout of the ServerSocket.
      */
     void isolate() {
-
         if (this.accept == null
                 && this.socket != null)
             this.socket = null;
     }
 
     /**
-     * R&uuml;ckgabe {@code true}, wenn der Worker aktiv zur Verf&uuml;gung
-     * steht und somit weiterhin Requests entgegen nehmen kann.
-     * @return {@code true}, wenn der Worker aktiv verf&uuml;bar ist
+     * Return {@code true} if the worker is actively available and can continue
+     * to accept requests. For this purpose the socket is checked for blockages
+     * and closed if necessary.
+     * @return {@code true} if the worker is actively available
      */
     boolean available() {
-
-        // der Socket wird auf Blockaden geprueft und ggf. geschlossen
         if (this.socket != null
                 && this.isolation > 0
                 && this.isolation < System.currentTimeMillis() -this.timeout)
             this.destroy();
-
         return this.socket != null && this.accept == null;
     }
 
-    /** Beendet den Worker durch das Schliessen der Datenstr&ouml;me. */
+    /** 
+     * Terminates the worker by closing the data stream.
+     * After that, the worker cannot be reactivated.
+     */
     void destroy() {
 
-        // der ServerSocket wird zurueckgesetzt
+        // ServerSocket is reset
         this.socket = null;
 
+        // timing of blocking data streams is reset
         if (this.isolation != 0)
             this.isolation = -1;
 
-        // der Socket wird geschlossen
+        // socket is finally closed
         try {this.accept.close();
         } catch (Throwable throwable) {
         }
@@ -2836,11 +2810,8 @@ class Worker implements Runnable {
     @Override
     public void run() {
 
-        ServerSocket socket;
-        String       string;
-
         // der ServerSocket wird vorgehalten
-        socket = this.socket;
+        ServerSocket socket = this.socket;
 
         while (this.socket != null) {
 
@@ -2878,7 +2849,7 @@ class Worker implements Runnable {
             if (this.blocksize <= 0)
                 this.blocksize = 65535;
 
-            string = this.options.get("timeout");
+            String string = this.options.get("timeout");
 
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 

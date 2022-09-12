@@ -1868,17 +1868,17 @@ class Worker implements Runnable {
                     // HTTP/STATUS beginnt
                     if (!this.control) {
                         
-                        // der Zeitpunkt wird registriert, um auf blockierte
-                        // Datenstroeme reagieren zu koennen
+                        // Isolation defines the time from the last output
+                        // when strict timeout is used to detect blocking data
+                        // streams, because there is no socket-based timeout.
+                        // If the stream is still reacting at the end, the time
+                        // is reset.
                         if (this.isolation != 0)
                             this.isolation = System.currentTimeMillis();
-                        
                         if (header != null)
                             this.output.write(header.concat("\r\n\r\n").getBytes());
                         header = null;
-
                         this.output.write(bytes, offset, length -offset);
-
                         if (this.isolation != 0)
                             this.isolation = -1;
                         
@@ -2187,14 +2187,14 @@ class Worker implements Runnable {
                 // die Connection wird als verwendet gekennzeichnet
                 this.control = false;
                 
-                // der Zeitpunkt wird registriert, um auf blockierte
-                // Datenstroeme reagieren zu koennen
+                // Isolation defines the time from the last output when strict
+                // timeout is used to detect blocking data streams, because
+                // there is no socket-based timeout. If the stream is still
+                // reacting at the end, the time is reset.
                 if (this.isolation != 0)
                     this.isolation = System.currentTimeMillis();
-
                 this.output.write(string.getBytes());
                 this.output.write(bytes);
-
                 if (this.isolation != 0)
                     this.isolation = -1;
                 
@@ -2288,13 +2288,13 @@ class Worker implements Runnable {
         // die Connection wird als verwendet gekennzeichnet
         this.control = false;
 
-        // der Zeitpunkt wird registriert, um auf blockierte Datenstroeme
-        // reagieren zu koennen
+        // Isolation defines the time from the last output when strict timeout
+        // is used to detect blocking data streams, because there is no
+        // socket-based timeout. If the stream is still reacting at the end, the
+        // time is reset.
         if (this.isolation != 0)
             this.isolation = System.currentTimeMillis();
-
         this.output.write(string.getBytes());
-
         if (this.isolation != 0)
             this.isolation = -1;
         
@@ -2320,13 +2320,13 @@ class Worker implements Runnable {
                     if (this.status == 206 && (offset +this.volume +size > limit))
                         size = limit -(offset +this.volume);
 
-                    // der Zeitpunkt wird registriert, um auf blockierte
-                    // Datenstroeme reagieren zu koennen
+                    // Isolation defines the time from the last output when
+                    // strict timeout is used to detect blocking data streams,
+                    // because there is no socket-based timeout. If the stream
+                    // is still reacting at the end, the time is reset.
                     if (this.isolation != 0)
                         this.isolation = System.currentTimeMillis();
-
                     this.output.write(bytes, 0, Math.max(0, (int)size));
-
                     if (this.isolation != 0)
                         this.isolation = -1;
 
@@ -2571,22 +2571,21 @@ class Worker implements Runnable {
         // die Connection wird als verwendet gekennzeichnet
         this.control = false;         
 
-        // der Zeitpunkt wird registriert, um auf blockierte Datenstroeme
-        // reagieren zu koennen
+        // Isolation defines the time from the last output when strict timeout
+        // is used to detect blocking data streams, because there is no
+        // socket-based timeout. If the stream is still reacting at the end, the
+        // time is reset.
         if (this.isolation != 0)
             this.isolation = System.currentTimeMillis();
-
-        // der Response wird ausgegeben
         if (this.output != null) {
             this.output.write(string.getBytes());
             this.output.write(bytes);
         }
+        if (this.isolation != 0)
+            this.isolation = -1;
         
         // das Datenvolumen wird uebernommen
         this.volume += bytes.length;  
-            
-        if (this.isolation != 0)
-            this.isolation = -1;
     }
 
     /**
@@ -2673,7 +2672,10 @@ class Worker implements Runnable {
             
         } finally {
 
-            // timing of blocking data streams is reset
+            // Isolation defines the time from the last output when strict
+            // timeout is used to detect blocking data streams, because there is
+            // no socket-based timeout. If the data stream is still reacting at
+            // the end, the time is reset.
             if (this.isolation != 0)
                 this.isolation = -1;               
             
@@ -2765,7 +2767,7 @@ class Worker implements Runnable {
     
     /**
      * Marks the worker for closing if it will not be used in the next time.
-     * Workers are closed and disposed of after approximately 250ms of idle
+     * Workers are closed and disposed of after approximately TODO: 250ms of idle
      * time. The idle time is defined by the SoTimeout of the ServerSocket.
      */
     void isolate() {
@@ -2775,10 +2777,10 @@ class Worker implements Runnable {
     }
 
     /**
-     * Return {@code true} if the worker is actively available and can continue
-     * to accept requests. For this purpose the socket is checked for blockages
-     * and closed if necessary.
-     * @return {@code true} if the worker is actively available
+     * Returns {@code true} if the worker is active and available to continue
+     * accepting requests. This will also check for blocked streams if a strict
+     * timeout is configured. Then the socket will be closed if necessary.
+     * @return {@code true} if the worker is active and available
      */
     boolean available() {
         if (this.socket != null
@@ -2794,7 +2796,8 @@ class Worker implements Runnable {
      */
     void destroy() {
 
-        // ServerSocket is reset
+        // ServerSocket is reset,
+        // as indicator to abandonment of the worker in case of inactivity
         this.socket = null;
 
         // timing of blocking data streams is reset

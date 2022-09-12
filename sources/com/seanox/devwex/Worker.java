@@ -63,7 +63,7 @@ import javax.net.ssl.SSLSocket;
  * kompletter Abbruch.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220911
+ * @version 5.5.0 20220912
  */
 class Worker implements Runnable {
   
@@ -181,11 +181,11 @@ class Worker implements Runnable {
     }
 
     /**
-     * Erstellt zum String einen hexadezimalen MD5-Hash.
-     * @param  string zu dem der Hash erstellt werden soll
-     * @return der erstellte hexadezimale MD5-Hash
+     * Creates a hexadecimal MD5 hash for the string.
+     * @param  string for which the hash is to be created
+     * @return the created hexadecimal MD5 hash
      * @throws Exception
-     *     Im Fall nicht erwarteter Fehler
+     *     In case of unexpected errors
      */
     private static String textHash(String string)
             throws Exception {
@@ -202,44 +202,33 @@ class Worker implements Runnable {
     }
     
     /**
-     * Maskiert im String die Steuerzeichen: BS, HT, LF, FF, CR, ', ",  \ und
-     * alle Zeichen ausserhalb vom ASCII-Bereich 0x20-0x7F.
-     * Die Maskierung erfolgt per Slash:
+     * Escapes the control characters in the string: BS, HT, LF, FF, CR, ', ", \
+     * and characters outside the ASCII range 0x20-0x7F with a slash sequence:
      * <ul>
      *   <li>Slash + ISO</li>
-     *   <li>Slash + drei Bytes oktal (0x80-0xFF)</li>
-     *   <li>Slash + vier Bytes hexadezimal (0x100-0xFFFF)</li>
+     *   <li>Slash + three bytes octal (0x80-0xFF)</li>
+     *   <li>Slash + four bytes hexadecimal (0x100-0xFFFF)</li>
      * </ul>
-     * @param  string zu maskierender String
-     * @return der String mit den ggf. maskierten Zeichen.
+     * @param  string string to be escaped
+     * @return the string with escaped characters
      */
-    public static String textEscape(String string) {
-        
-        byte[] codex;
-        byte[] codec;
-        byte[] cache;
-
-        int    code;
-        int    count;
-        int    cursor;
-        int    length;
-        int    loop;
+    private static String textEscape(String string) {
         
         if (string == null)
             return null;   
+
+        int length = string.length();
+
+        byte[] codex = ("\b\t\n\f\r\"'\\btnfr\"'\\").getBytes();
+        byte[] codec = ("0123456789ABCDEF").getBytes();
+        byte[] cache = new byte[length *6];
         
-        length = string.length();
-        
-        cache = new byte[length *6];
-        
-        codex = ("\b\t\n\f\r\"'\\btnfr\"'\\").getBytes();
-        codec = ("0123456789ABCDEF").getBytes();
-        
-        for (loop = count = 0; loop < length; loop++) {
+        int count = 0;
+        for (int loop = 0; loop < length; loop++) {
             
-            code = string.charAt(loop);
+            int code = string.charAt(loop);
             
-            cursor = Arrays.binarySearch(codex, (byte)code);
+            int cursor = Arrays.binarySearch(codex, (byte)code);
             if (cursor >= 0 && cursor < 8) {
                 cache[count++] = '\\';
                 cache[count++] = codex[cursor +8];
@@ -258,46 +247,39 @@ class Worker implements Runnable {
             } else cache[count++] = (byte)code;
         }
         
-        return new String(Arrays.copyOfRange(cache, 0, count));          
+        return new String(cache, 0, count);
     }    
     
     /**
-     * Dekodiert den String tolerant als URL und UTF-8.
-     * Tolerant, da fehlerhafte kodierte Zeichenfolgen nicht direkt zum Fehler
-     * f&uml;hren, sondern erhalten bleiben und die UTF-8 Kodierung optional
-     * betrachtet wird.
-     * @param  string zu dekodierender String
-     * @return der dekodierte String
+     * Decodes URL and UTF-8 optionally encoded parts in a string. Non-compliant
+     * sequences do cause an error, instead they remain as unknown encoding.
+     * @param  string String to be decoded
+     * @return the decoded string
      */
     private static String textDecode(String string) {
-        
-        byte[]  bytes;
-        
-        boolean control;
-
-        int     code;
-        int     count;
-        int     length;
-        int     loop;
-        int     digit;
-        int     cursor;
         
         if (string == null)
             string = "";
         
-        // Datenpuffer wird eingerichtet
-        length = string.length();
-        bytes  = new byte[length *2];
+        // Part 1: URL decoding
+        // Non-compliant sequences do cause an error, instead they remain as
+        // unknown encoding
         
-        for (loop = count = 0; loop < length; loop++) {
+        int length = string.length();
+        
+        byte[] bytes = new byte[length *2];
+        
+        int count = 0;
+        for (int loop = 0; loop < length; loop++) {
             
-            // der ASCII Code wird ermittelt
-            code = string.charAt(loop);
+            // ASCII code is determined
+            int code = string.charAt(loop);
 
+            // Plus sign is converted to space.
             if (code == 43)
                 code = 32;
 
-            // der Hexcode wird in das ASCII Zeichen umgesetzt
+            // Hexadecimal sequences are converted to ASCII character
             if (code == 37) {
                 loop += 2;
                 try {code = Integer.parseInt(string.substring(loop -1, loop +1), 16);
@@ -309,24 +291,28 @@ class Worker implements Runnable {
             bytes[count++] = (byte)code;
         }
         
+        // Part 2: UTF-8 decoding
+        // Non-compliant sequences do cause an error, instead they remain as
+        // unknown encoding
+        
         bytes  = Arrays.copyOfRange(bytes, 0, count);
         length = bytes.length;
         
-        cursor = 0;
-        digit  = 0;
+        int cursor = 0;
+        int digit  = 0;
         
-        control = false; 
+        boolean control = false; 
         
-        for (loop = count = 0; loop < length; loop++) {
+        for (int loop = count = 0; loop < length; loop++) {
             
-            // der ASCII Code wird ermittelt
-            code = bytes[loop] & 0xFF;
+            // ASCII code is determined
+            int code = bytes[loop] & 0xFF;
 
             if (code >= 0xC0 && code <= 0xC3)
                 control = true;
 
-            // Decodierung der Bytes als UTF-8, das Muster 10xxxxxx
-            // wird um die 6Bits erweitert
+            // Decoding of the bytes as UTF-8.
+            // The pattern 10xxxxxx is extended by the 6Bits
             if ((code & 0xC0) == 0x80) {
 
                 digit = (digit << 0x06) | (code & 0x3F);
@@ -341,7 +327,7 @@ class Worker implements Runnable {
                 digit  = 0;
                 cursor = 0;
 
-                // 0xxxxxxx (7Bit/0Byte) werden direkt verwendet
+                // 0xxxxxxx (7Bit/0Byte) are used directly
                 if (((code & 0x80) == 0x00) || !control) {
                     bytes[count++] = (byte)code;
                     control = false;
@@ -395,12 +381,12 @@ class Worker implements Runnable {
     }
     
     /**
-     * Liest die Datei einer Datei.
-     * @param  file zu lesende Datei
-     * @return die gelesenen Daten, im Fehlerfall ein leeres Byte-Array
+     * Reads the data of a file as a byte array.
+     * In case of error null is returned.
+     * @param  file file to be read
+     * @return the read data, in case of error {@code null}
      */
     private static byte[] fileRead(File file) {
-        
         try {return Files.readAllBytes(file.toPath());
         } catch (Throwable throwable) {
             return null;
@@ -408,39 +394,36 @@ class Worker implements Runnable {
     }
     
     /**
-     * Normalisiert den String eines Pfads und l&ouml;sst ggf. existierende
-     * Pfad-Direktiven auf und &auml;ndert das Backslash in Slash.
-     * @param  path zu normalisierender Pfad
-     * @return der normalisierte Pfad
+     * Normalizes the string of a path and resolves existing path directives if
+     * necessary and changes the backslash to slash.
+     * @param  path Path to be normalized
+     * @return the normalized path
      */
     private static String fileNormalize(String path) {
-        
-        String string;
-        String stream;
-        
-        int    cursor;
 
-        // die Pfadangabe wird auf Slash umgestellt
-        string = path.replace('\\', '/').trim();
+        // path is changed to slash
+        String string = path.replace('\\', '/').trim();
 
-        // mehrfache Slashs werden zusammengefasst
-        while ((cursor = string.indexOf("//")) >= 0)
+        // multiple slashes are combined
+        for (int cursor; (cursor = string.indexOf("//")) >= 0;)
             string = string.substring(0, cursor).concat(string.substring(cursor +1));
 
-        // der Path wird ggf. ausgeglichen /abc/./def/../ghi -> /abc/ghi
-        // der Path wird um "/." ausgeglichen
+        // the path is compensated if necessary /abc/./def/../ghi -> /abc/ghi
+        // in the path /. is compensated
         if (string.endsWith("/."))
             string = string.concat("/");
 
-        while ((cursor = string.indexOf("/./")) >= 0)
+        for (int cursor; (cursor = string.indexOf("/./")) >= 0;)
             string = string.substring(0, cursor).concat(string.substring(cursor +2));
 
-        // der String wird um "/.." ausgeglichen
+        // in the path /.. is compensated
         if (string.endsWith("/.."))
             string = string.concat("/");
 
-        while ((cursor = string.indexOf("/../")) >= 0) {
+        for (int cursor; (cursor = string.indexOf("/../")) >= 0;) {
 
+            String stream;
+            
             stream = string.substring(cursor +3);
             string = string.substring(0, cursor);
 
@@ -449,8 +432,8 @@ class Worker implements Runnable {
             string = string.substring(0, cursor).concat(stream);
         }
 
-        // mehrfache Slashs werden zusammengefasst
-        while ((cursor = string.indexOf("//")) >= 0)
+        // multiple consecutive slashes are combined
+        for (int cursor; (cursor = string.indexOf("//")) >= 0;)
             string = string.substring(0, cursor).concat(string.substring(cursor +1));
         
         return string;

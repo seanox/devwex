@@ -1586,7 +1586,7 @@ class Worker implements Runnable {
      */
     private String[] getEnvironment() {
         
-        List list = new ArrayList();
+        ArrayList list = new ArrayList();
         
         // environment variables are determined and applied
         Enumeration enumeration = this.environment.elements();
@@ -1895,206 +1895,165 @@ class Worker implements Runnable {
     }
     
     /**
-     * TODO:
-     * Erstellt vom angeforderten Verzeichnisse auf Basis vom Template
-     * {@code index.html} eine navigierbare HTML-Seite.
-     * @param  directory Verzeichnis des Dateisystems
-     * @param  query     Option der Sortierung
-     * @return das Verzeichnisse als navigierbares HTML
+     * Creates a navigable HTML page for a requested directory based on the
+     * {@code index.html} template.
+     * @param  directory Directory
+     * @param  query     Sorting options
+     * @return the navigable HTML to the directory
      */
     private byte[] createDirectoryIndex(File directory, String query) {
         
-        Enumeration     enumeration;
-        File            file;
-        Generator       generator;
-        Hashtable       data;
-        Hashtable       values;
-        List            list;
-        List            storage;
-        StringTokenizer tokenizer;
-        String          entry;
-        String          path;
-        String          string;
-
-        File[]          files; 
-        String[]        entries;
-
-        int[]           assign;
-
-        boolean         control;
-        boolean         reverse;
-
-        int             cursor;
-        int             digit;
-        int             loop;
+        Hashtable values = new Hashtable();
         
-        values = new Hashtable();
-        
-        // der Header wird mit den Umgebungsvariablen zusammengefasst,
-        // die serverseitig gesetzten haben dabei die hoehere Prioritaet
-        enumeration = this.environment.elements();
+        // header and environment variables are merged,
+        // server side variables have the higher priority
+        Enumeration enumeration = this.environment.elements();
         while (enumeration.hasMoreElements()) {
-            entry = (String)enumeration.nextElement();
+            String entry = (String)enumeration.nextElement();
             if (entry.toLowerCase().equals("path")
                     || entry.toLowerCase().equals("file"))
                 continue;
             values.put(entry, this.environment.get(entry));
         }
-
-        // die Zuordung der Felder fuer die Sortierung wird definiert
+        
+        // assignment of the fields for sorting is defined
         if (query.length() <= 0)
             query = "n";
         query = query.substring(0, 1);
-        digit = query.charAt(0);
         
-        reverse = digit >= 'A' && digit <= 'Z';
+        char order = query.charAt(0);
+        boolean reverse = order >= 'A' && order <= 'Z';
         
         query = query.toLowerCase(); 
-        digit = query.charAt(0);
+        order = query.charAt(0);
          
         // case, name, date, size, type
-        assign = new int[] {0, 1, 2, 3, 4};
+        int[] assign = new int[] {0, 1, 2, 3, 4};
         
-        // die Sortierung wird durch die Query festgelegt und erfolgt nach
-        // Case, Query und Name, die Eintraege sind als Array abgelegt um eine
-        // einfache und flexible Zuordnung der Sortierreihenfolge zu erreichen
+        // sorting is determined by the query and works according to: case,
+        // query and name, the entries are put into an array to achieve a simple
+        // and flexible assignment of the sort order
         // 0 - case, 1 - name, 3 - date, 4 - size, 5 - type
-        if (digit == 'd') {
-
+        if (order == 'd') {
             // case, date, name, size, type
             assign = new int[] {0, 2, 1, 3, 4};
-
-        } else if (digit == 's') {
-
+        } else if (order == 's') {
             // case, size, name, date, type
             assign = new int[] {0, 3, 1, 2, 4};
-
-        } else if (digit == 't') {
-
+        } else if (order == 't') {
             // case, type, name, date, size
             assign = new int[] {0, 4, 1, 2, 3};
-
         } else query = "n";
         
-        // das Standard-Template fuer den INDEX wird ermittelt und geladen
-        file = new File(this.sysroot.concat("/index.html"));
+        // default template for the INDEX is determined and loaded
+        File file = new File(this.sysroot.concat("/index.html"));
+        Generator generator = Generator.parse(Worker.fileRead(file));
         
-        generator = Generator.parse(Worker.fileRead(file));
+        String path = this.environment.get("path_url");
+        if (!path.endsWith("/"))
+            path = path.concat("/");
+        values.put("path_url", path);
         
-        string = this.environment.get("path_url");
-        if (!string.endsWith("/"))
-            string = string.concat("/");
-        values.put("path_url", string);
-        
-        // der Pfad wird fragmentiert, Verzeichnissstruktur koennen so als
-        // einzelne Links abgebildet werden
-        tokenizer = new StringTokenizer(string, "/");
-        for (path = ""; tokenizer.hasMoreTokens();) {
-
+        // path is generated as breadcrumb navigation.
+        // each subpath is generated as a clickable path.
+        StringTokenizer tokenizer = new StringTokenizer(path, "/");
+        for (String chain = "", entry; tokenizer.hasMoreTokens();) {
             entry = tokenizer.nextToken();
-            path  = path.concat("/").concat(entry);
-
-            values.put("path", path);
+            chain = chain.concat("/").concat(entry);
+            values.put("path", chain);
             values.put("name", entry);
-            
             generator.set("location", values);
         }
-
-        // die Dateiliste wird ermittelt
-        files = directory.listFiles();
+        
+        // file list is determined
+        File[] files = directory.listFiles();
         if (files == null)
             files = new File[0];
-        storage = new ArrayList(Arrays.asList(files));
+        ArrayList storage = new ArrayList(Arrays.asList(files));
 
-        // mit der Option [S] werden versteckte Dateien nicht angezeigt
-        control = this.options.get("index").toUpperCase().contains("[S]");
-        
-        entries = new String[5];
-        
-        // die Dateiinformationen werden zusammengestellt
-        for (loop = 0; loop < storage.size(); loop++) {
+        // with the option [S] hidden files are not displayed
+        boolean hidden = this.options.get("index").toUpperCase().contains("[S]");
 
-            // die physiche Datei wird ermittlet
+        // file information is assembled
+        String[] columns = new String[5];
+        for (int loop = 0, cursor; loop < storage.size(); loop++) {
+
+            // physical file is determined
             file = (File)storage.get(loop);
             
-            // die Eintraege werden als Array abgelegt um eine einfache und
-            // flexible Zuordnung der Sortierreihenfolge zu erreichen
+            // the entries are put into an array to achieve a simple and
+            // flexible assignment of the sort order
             // 0 - base, 1 - name, 2 - date, 3 - size, 4 - type
 
-            // der Basistyp wird ermittelt
-            entries[0] = file.isDirectory() ? "directory" : "file";
+            // data type is determined
+            columns[0] = file.isDirectory() ? "directory" : "file";
             
-            // der Name wird ermittelt
-            entries[1] = file.getName();
+            // name is determined
+            columns[1] = file.getName();
             
-            // der Zeitpunkt der letzten Aenderung wird ermittelt
-            entries[2] = String.format("%tF %<tT", new Date(file.lastModified()));
+            // timestamp of the last change is determined
+            columns[2] = String.format("%tF %<tT", new Date(file.lastModified()));
 
-            // die Groesse wird ermittelt, nicht aber bei Verzeichnissen
-            string = file.isDirectory() ? "-" : String.valueOf(file.length());
+            // size is determined, but not for directories
+            columns[3] = file.isDirectory() ? "-" : String.valueOf(file.length());
             
-            // die Groesse wird an der ersten Stelle mit dem Character erweitert
-            // welches sich aus der Laenge der Groesse ergibt um diese nach
-            // numerischer Groesse zu sortieren
-            entries[3] = String.valueOf((char)string.length()).concat(string);
+            // size is extended at the first position with the character which
+            // results from the length of the size to sort it by numerical size
+            columns[3] = String.valueOf((char)columns[3].length()).concat(columns[3]);
 
-            // der Dateityp wird ermittlet, nicht aber bei Verzeichnissen
-            string = entries[1];
-            cursor = string.lastIndexOf(".");
-            string = cursor >= 0 ? string.substring(cursor +1) : "";
-
-            entries[4] = file.isDirectory() ? "-" : string.toLowerCase().trim();
+            // file type is determined, but not for directories
+            cursor = columns[1].lastIndexOf(".");
+            columns[4] = cursor >= 0 ? columns[1].substring(cursor +1) : "";
+            columns[4] = file.isDirectory() ? "-" : columns[4].toLowerCase().trim();
             
-            // Dateien und Verzeichnisse der Option "versteckt" werden markiert
-            string = String.join("\00 ", new String[] {entries[assign[0]], entries[assign[1]],
-                    entries[assign[2]], entries[assign[3]], entries[assign[4]]});
-            if (control && file.isHidden())
-                string = "";
-            storage.set(loop, string);
+            // files and directories of the "hidden" option are marked
+            String row = String.join("\00 ", new String[] {columns[assign[0]], columns[assign[1]],
+                    columns[assign[2]], columns[assign[3]], columns[assign[4]]});
+            if (hidden && file.isHidden())
+                row = "";
+            storage.set(loop, row);
         }
 
-        // die Dateiliste wird sortiert
+        // file list is sorted
         Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
         if (reverse)
             Collections.reverse(storage);
         
-        list = new ArrayList();
-        
-        // die Dateiinformationen werden zusammengestellt
-        for (loop = 0; loop < storage.size(); loop++) {
+        // file information is collected
+        ArrayList list = new ArrayList();
+        for (int loop = 0; loop < storage.size(); loop++) {
             
-            // nicht anerkannte Dateien werden unterdrueckt
+            // unrecognized files are suppressed
             tokenizer = new StringTokenizer((String)storage.get(loop), "\00");
             if (tokenizer.countTokens() <= 0)
                 continue;
             
-            data = new Hashtable(values);
+            Hashtable data = new Hashtable(values);
             list.add(data);
             
-            // die Eintraege werden als Array abgelegt um eine einfache und
-            // flexible Zuordnung der Sortierreihenfolge zu erreichen
+            // the entries are put into an array to achieve a simple and
+            // flexible assignment of the sort order
             // 0 - base, 1 - name, 2 - date, 3 - size, 4 - type
 
-            entries[assign[0]] = tokenizer.nextToken();
-            entries[assign[1]] = tokenizer.nextToken().substring(1);
-            entries[assign[2]] = tokenizer.nextToken().substring(1);
-            entries[assign[3]] = tokenizer.nextToken().substring(1);
-            entries[assign[4]] = tokenizer.nextToken().substring(1);
+            columns[assign[0]] = tokenizer.nextToken();
+            columns[assign[1]] = tokenizer.nextToken().substring(1);
+            columns[assign[2]] = tokenizer.nextToken().substring(1);
+            columns[assign[3]] = tokenizer.nextToken().substring(1);
+            columns[assign[4]] = tokenizer.nextToken().substring(1);
             
-            data.put("case", entries[0]);
-            data.put("name", entries[1]);
-            data.put("date", entries[2]);
-            data.put("size", entries[3].substring(1));
-            data.put("type", entries[4]);
+            data.put("case", columns[0]);
+            data.put("name", columns[1]);
+            data.put("date", columns[2]);
+            data.put("size", columns[3].substring(1));
+            data.put("type", columns[4]);
             
-            string = entries[4];
-            if (!string.equals("-")) {
-                string = this.mediatypes.get(string);
-                if (string.length() <= 0)
-                    string = this.options.get("mediatype");
-            } else string = "";
-
-            data.put("mime", string);
+            String mime = columns[4];
+            if (!mime.equals("-")) {
+                mime = this.mediatypes.get(mime);
+                if (mime.length() <= 0)
+                    mime = this.options.get("mediatype");
+            } else mime = "";
+            data.put("mime", mime);
         }
         
         query = query.concat(reverse ? "d" : "a");
@@ -2453,7 +2412,7 @@ class Worker implements Runnable {
                 this.resource = this.sysroot.concat("/status.html");
         }
         
-        List headers = new ArrayList();
+        ArrayList headers = new ArrayList();
 
         // determination of the type of authorization, if available 
         String authentication = this.fields.get("auth_type");
@@ -2485,7 +2444,7 @@ class Worker implements Runnable {
             generator = Generator.parse(null);
         else generator = Generator.parse(Worker.fileRead(new File(this.resource)));
         
-        // The header combines the environment variables, the server-side ones
+        // Header and environment variables are merged, server side variables
         // have the higher priority and override system environment variables.
 
         Hashtable values = new Hashtable();

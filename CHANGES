@@ -3,6 +3,7 @@
       The binary is getting a little smaller again. I did not expect that :-)
   BF: Generator: Correction when parsing structures
       Structures deeper 65535 levels no longer cause an exception.
+  BF: HTTP(S): Added status 301 in the list of status codes
   CR: Build: Releases are now only available on the release page
   CR: License: Changed to Apache License Version 2.0
   CR: Service: Added configuration file as optional program argument for startup

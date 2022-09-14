@@ -194,7 +194,7 @@
       - neues Standard-Passwort fuer den Keystore: changeIt
       - Erweiterung um die Umgebungsvariable AUTH_CERT zur Pruefung eingehender Zertifikate
         bei der Client-Authentication / Mutual-Authentication
-      - CLIENTAUTH: Erweiterung um die Option AUTO fuer eine tollerantes Verhalten
+      - CLIENTAUTH: Erweiterung um die Option AUTO fuer eine tolerantes Verhalten
         bei ungueltigen oder fehlenden Zertifikaten (Request wird vom Server beantwortet,
         ggf. mit einer Fehlerseite)   
   CR: HTTP XAPI: Ueberarbeitung/Optimierung/Erweiterung     

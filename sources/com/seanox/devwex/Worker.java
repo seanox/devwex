@@ -752,114 +752,91 @@ class Worker implements Runnable {
     }
     
     /**
-     * TODO:
-     * &Uuml;berpr&uuml;ft die Zugriffbrechtigungen f&uuml;r eine Referenz und
-     * setzt ggf. den entsprechenden Status.
-     * @param  reference Referenz
+     * Verifies the access permissions for a reference and sets the appropriate
+     * status if necessary.
+     * @param  reference Reference
      * @throws Exception
-     *     Im Fall nicht erwarteter Fehler
+     *     In case of unexpected errors
      */
     private void authorize(String reference)
             throws Exception {
         
-        Section         section;
-        String          access;
-        String          realm;
-        String          shadow;
-        String          buffer;
-        String          string;
-        String          target;
-        StringTokenizer tokenizer;
-        
-        boolean         control;
-        boolean         digest;
-        
-        string = reference.toLowerCase();
-        if (!string.contains("[acc:") || this.status >= 500)
+        String string = reference.toLowerCase();
+        if (!string.contains("[acc:")
+                || this.status >= 500)
             return;
         
-        // optional wird die Bereichskennung ermittelt
-        realm = reference.replaceAll("^(.*(\\[\\s*(?i)realm:([^\\[\\]]*?)\\s*\\]).*)|.*$", "$3");
-        realm = realm.replace("\"", "\\\"");
+        // optionally the realm caption is determined
+        // and is added to the request header for other processes
+        String realm = reference.replaceAll("^(.*(\\[\\s*(?i)realm:([^\\[\\]]*?)\\s*\\]).*)|.*$", "$3").replace("\"", "\\\"");
         this.fields.set("auth_realm", realm);
         
-        digest = string.contains("[d]");
-        
-        // der Authentication-Type wird gesetzt
+        // authentication method is determined
+        // and is added to the request header for other processes
+        boolean digest = string.contains("[d]");
         this.fields.set("auth_type", digest ? "Digest" : "Basic");
         
         // die Werte der ACC-Optionen werden ermittelt
         string = string.replaceAll("\\[acc:([^\\[\\]]*?)\\]", "\00$1\01");
         string = string.replaceAll("((((^|\01).*?)\00)|(\01.*$))|(^.*$)", " ").trim();
         
-        control   = false;
-        tokenizer = new StringTokenizer(string);
-        access    = "";
+        String access = "";
 
-        // die ACC-Eintraege (Gruppen) werden aufgeloest
-        // mit der Option [ACC:NONE] wird die Authorisation aufgehoben
+        // the ACC entries (groups) are collected
+        // with the option [ACC:NONE] the authorization is cancelled
+        boolean authorize = false;
+        StringTokenizer tokenizer = new StringTokenizer(string);
         while (tokenizer.hasMoreTokens()) {
-
             string = tokenizer.nextToken();
             if (string.equals("none"))
                 return;
-            control = true;
-            access  = access.concat(" ").concat(this.access.get(string));
+            authorize = true;
+            access = access.concat(" ").concat(this.access.get(string));
         }
         
         access = access.trim();
         if (access.length() <= 0) {
-            if (control)
+            if (authorize)
                 this.status = 401;
             return;
         }
         
-        // die Autorisierung wird ermittelt
         string = this.fields.get("http_authorization");
-
         if (string.toLowerCase().startsWith("digest ")
                 && digest) {
             
             string = string.replaceAll("(\\w+)\\s*=\\s*(?:(?:\"(.*?)\")|([^,]*))", "\00$1=$2$3\n");
             string = string.replaceAll("[^\n]+\00", "");
+            Section section = Section.parse(string, true);
             
-            section = Section.parse(string, true);
-            
-            target = section.get("response");
-            shadow = section.get("username");
+            String response = section.get("response");
+            String username = section.get("username");
 
-            buffer = shadow.concat(":").concat(realm).concat(":");
             string = Worker.textHash(this.environment.get("request_method").concat(":").concat(section.get("uri")));
             string = (":").concat(section.get("nonce")).concat(":").concat(section.get("nc")).concat(":").concat(section.get("cnonce")).concat(":").concat(section.get("qop")).concat(":").concat(string);
 
             tokenizer = new StringTokenizer(access);
-            
             while (tokenizer.hasMoreTokens()) {
-
                 access = tokenizer.nextToken();
-
-                if (shadow.equals(access))
-                    access = access.substring(shadow.length());
-                else if (access.startsWith(shadow.concat(":")))
-                    access = access.substring(shadow.length() +1);
+                if (username.equals(access))
+                    access = access.substring(username.length());
+                else if (access.startsWith(username.concat(":")))
+                    access = access.substring(username.length() +1);
                 else continue;
                 
-                access = Worker.textHash(buffer.concat(access));
+                access = Worker.textHash(username.concat(":").concat(realm).concat(":").concat(access));
                 access = Worker.textHash(access.concat(string));
-                if (target.equals(access)) {
-                    this.fields.set("auth_user", shadow);
+                if (response.equals(access)) {
+                    this.fields.set("auth_user", username);
                     return;
                 }
             }
-            
         } else if (string.toLowerCase().startsWith("basic ")
                 && !digest) {
-            
             try {string = new String(Base64.getDecoder().decode(string.substring(6).getBytes())).trim();
             } catch (Throwable throwable) {
                 string = "";
             }
-            
             access = (" ").concat(access).concat(" ");
             if (string.length() > 0
                     && access.contains((" ").concat(string).concat(" "))) {
@@ -873,166 +850,153 @@ class Worker implements Runnable {
     }
 
     /**
-     * TODO:
-     * &Uuml;berpr&uuml;ft die Filter und wendet diese bei Bedarf an.
-     * Filter haben keinen direkten R&uuml;ckgabewert, sie beieinflussen u.a.
-     * Server-Status und Datenflusskontrolle.
+     * Verifies the filters and applies them if necessary.
+     * Filters have no direct return value, they affect server status and data
+     * flow control, among other things.
+     * @return a target if the filter refers to one as a result
      */
     private String filter()
             throws Exception {
-        
-        Enumeration     enumeration;
-        File            file;
-        String          valueA;
-        String          valueB;
-        String          method;
-        String          buffer;
-        String          string;
-        String          location;
-        StringTokenizer rules;
-        StringTokenizer words;
 
-        boolean         control;
+        if (this.status == 400
+                || this.status >= 500)
+            return this.resource;
         
-        int             cursor;
-        int             status;
-        
-        location = this.resource;
+        String resource = this.resource;
 
-        if (this.status == 400 || this.status >= 500)
-            return location;
-        
-        // FILTER die Filter werden in den Vektor geladen
-        // die Steuerung erfolgt ueber REFERENCE, SCRIPT_URI und CODE
-        enumeration = this.filters.elements();
+        // FILTER the filters are in a vector
+        // the processing is done by REFERENCE, SCRIPT_URI and CODE
+        Enumeration enumeration = this.filters.elements();
         while (enumeration.hasMoreElements()) {
 
-            string = this.filters.get((String)enumeration.nextElement());
-            cursor = string.indexOf('>');
-            buffer = cursor >= 0 ? string.substring(cursor +1).trim() : "";
+            String filter = this.filters.get((String)enumeration.nextElement());
+            int cursor = filter.indexOf('>');
+            String reference = cursor >= 0 ? filter.substring(cursor +1).trim() : "";
             if (cursor >= 0)
-                string = string.substring(0, cursor);
+                filter = filter.substring(0, cursor);
             
-            // Die Auswertung der Filter erfolgt nach dem Auschlussprinzip.
-            // Dazu werden alle Regeln einer Zeile in einer Schleife einzeln
-            // geprueft und die Schleife mit der ersten nicht zutreffenden Regel
-            // verlassen. Somit wird das Ende der Schleife nur erreicht, wenn
-            // keine der Bedingungen versagt hat und damit alle zutreffen.
+            // The filters are evaluated according to the exclusion principle.
+            // For this purpose, all rules of a line are checked individually in
+            // a loop and the loop is exited with the first rule that does not
+            // apply. Thus, the end of the loop is reached only if none of the
+            // conditions has failed and thus all are true.
             
-            rules = new StringTokenizer(string, "[+]");
+            StringTokenizer rules = new StringTokenizer(filter, "[+]");
             while (rules.hasMoreTokens()) {
 
-                // die Filterbeschreibung wird ermittelt
-                string = rules.nextToken().toLowerCase().trim();
-
-                words = new StringTokenizer(string);
-                
-                // Methode und Bedingung muessen gesetzt sein
-                // mit Toleranz fuer [+] beim Konkatenieren leerer Bedingungen
+                // filter description is determined
+                // method and condition must be set
+                // with tolerance for [+] when concatenating empty conditions
+                String rule = rules.nextToken().toLowerCase().trim();
+                StringTokenizer words = new StringTokenizer(rule);
                 if (words.countTokens() < 2)
                     continue;
 
-                // die Methode wird ermittelt
-                string = words.nextToken();
-
-                // die Methode wird auf Erfuellung geprueft
-                if (string.length() > 0 && !string.equals("all")
-                        && !string.equals(this.environment.get("request_method").toLowerCase()))
+                // method is determined
+                // method must match the HTTP method
+                String method = words.nextToken();
+                if (method.length() > 0
+                        && !method.equals("all")
+                        && !method.equals(this.environment.get("request_method").toLowerCase()))
                     break;
+
+                boolean condition;
                 
-                // die Bedingung wird ermittelt
-                string = words.nextToken();
-                
-                // die Pseudobedingung ALWAYS spricht immer an
-                if (!string.equals("always")) {
+                // logical condition is determined
+                // the pseudo-condition ALWAYS always matches.
+                String logical = words.nextToken();
+                if (!logical.equals("always")) {
                     
-                    // die Filterkontrolle wird gesetzt, hierbei sind nur IS und
-                    // NOT zulaessig, andere Werte sind nicht zulaessig
-                    if (!string.equals("is") && !string.equals("not"))
+                    // filter control is set, only IS and NOT are allowed,
+                    // other values are not allowed.
+                    if (!logical.equals("is")
+                            && !logical.equals("not"))
                         break;
 
-                    control = string.equals("is");
+                    condition = logical.equals("is");
                     
-                    // Methode und Bedingung muessen gesetzt sein
+                    // method and condition must be set
                     if (words.countTokens() < 2)
                         break;
 
-                    // Funktion und Parameter werden ermittelt
-                    method = words.nextToken();
-                    string = words.nextToken();
+                    // function and parameters are determined
+                    String function = words.nextToken();
                     
-                    // der zu pruefende Wert wird ermittelt
-                    string = this.environment.get(string);
-                    valueA = string.toLowerCase();
-                    valueB = Worker.textDecode(valueA);
+                    // the variable to be verified is determined
+                    // and their value to be verified is determined
+                    String valueA = this.environment.get(words.nextToken()).toLowerCase();
+                    String valueB = Worker.textDecode(valueA);
                     
-                    // der zu pruefende Wert/Ausdruck wird ermittelt
-                    string = words.hasMoreTokens() ? words.nextToken() : "";
-                    
-                    if ((method.equals("starts")
-                            && control != (valueA.startsWith(string)
-                                || valueB.startsWith(string)))
-                        || (method.equals("contains")
-                                && control != (valueA.contains(string)
-                                        || valueB.contains(string)))
-                        || (method.equals("equals")
-                                && control != (valueA.equals(string)
-                                        || valueB.equals(string)))
-                        || (method.equals("ends")
-                                && control != (valueA.endsWith(string)
-                                        || valueB.endsWith(string)))
-                        || (method.equals("match")
-                                && control != (valueA.matches(string)
-                                        || valueB.matches(string)))
-                        || (method.equals("empty")
-                                && control != (valueA.length() <= 0)))
+                    // the comparative value is determined
+                    // and the comparison is done
+                    String pattern = words.hasMoreTokens() ? words.nextToken() : "";
+                    if ((function.equals("starts")
+                            && condition != (valueA.startsWith(pattern)
+                                || valueB.startsWith(pattern)))
+                        || (function.equals("contains")
+                                && condition != (valueA.contains(pattern)
+                                        || valueB.contains(pattern)))
+                        || (function.equals("equals")
+                                && condition != (valueA.equals(pattern)
+                                        || valueB.equals(pattern)))
+                        || (function.equals("ends")
+                                && condition != (valueA.endsWith(pattern)
+                                        || valueB.endsWith(pattern)))
+                        || (function.equals("match")
+                                && condition != (valueA.matches(pattern)
+                                        || valueB.matches(pattern)))
+                        || (function.equals("empty")
+                                && condition != (valueA.length() <= 0)))
                         break;
                 
                     if (rules.hasMoreTokens())
                         continue;
                 }
                     
-                // die Anweisung wird ermittelt
-                string = Worker.cleanOptions(buffer);
+                // the target is determined
+                // target is a reference without options, the pure target
+                String target = Worker.cleanOptions(reference);
                 
-                // wurde ein Modul definiert, wird es optional im Hintergrund
-                // als Filter- oder Process-Modul ausgefuehrt, die Verarbeitung
-                // endet erst, wenn das Modul die Datenflusskontrolle veraendert
-                if (buffer.toUpperCase().contains("[M]") && string.length() > 0) {
-                    control = this.control;
-                    status  = this.status;
-                    this.environment.set("module_opts", buffer);
-                    this.invoke(string, "filter");
-                    if (this.control != control
+                // if a module has been defined, it is optionally called in the
+                // background as a filter or process module, processing does not
+                // end until the module changes the data flow control
+                if (reference.toUpperCase().contains("[M]")
+                        && target.length() > 0) {
+                    condition = this.control;
+                    int status = this.status;
+                    this.environment.set("module_opts", reference);
+                    this.invoke(target, "filter");
+                    if (this.control != condition
                             || this.status != status)
                         return this.resource;
                     continue;
                 }
                 
-                // bei einer Weiterleitung (Redirect) wird STATUS 302 gesetzt   
-                if (buffer.toUpperCase().contains("[R]") && string.length() > 0) {
-                    this.environment.set("script_uri", string);
+                // in case of a redirect STATUS 302 is set
+                if (reference.toUpperCase().contains("[R]")
+                        && target.length() > 0) {
+                    this.environment.set("script_uri", target);
                     this.status = 302;
-                    return location;
+                    return resource;
                 }
                 
-                // Verweise auf Dateien oder Verzeichnisse werden diese als
-                // Location zurueckgegeben
-                if (string.length() > 0) {
-                    file = Worker.fileCanonical(new File(buffer));
-                    if (file != null && file.exists())
+                // references to files or directories are returned as a location
+                if (target.length() > 0) {
+                    File file = Worker.fileCanonical(new File(reference));
+                    if (file != null
+                            && file.exists())
                         return file.getPath();
                 }
                 
-                // sprechen alle Bedingungen an und es gibt keine spezielle
-                // Anweisung, wird der STATUS 403 gesetzt
+                // if all conditions match and there is no special
+                // reference/target, STATUS 403 is set
                 this.status = 403;
 
-                return location;
+                return resource;
             }
         }
         
-        return location;
+        return resource;
     }
     
     /**

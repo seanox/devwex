@@ -782,7 +782,7 @@ class Worker implements Runnable {
         
         String access = "";
 
-        // the ACC entries (groups) are collected
+        // ACC entries (groups) are collected
         // with the option [ACC:NONE] the authorization is cancelled
         boolean authorize = false;
         StringTokenizer tokenizer = new StringTokenizer(string);
@@ -903,7 +903,7 @@ class Worker implements Runnable {
                 boolean condition;
                 
                 // logical condition is determined
-                // the pseudo-condition ALWAYS always matches.
+                // the pseudo-condition ALWAYS always matches
                 String logical = words.nextToken();
                 if (!logical.equals("always")) {
                     
@@ -922,12 +922,12 @@ class Worker implements Runnable {
                     // function and parameters are determined
                     String function = words.nextToken();
                     
-                    // the variable to be verified is determined
+                    // variable to be verified is determined
                     // and their value to be verified is determined
                     String valueA = this.environment.get(words.nextToken()).toLowerCase();
                     String valueB = Worker.textDecode(valueA);
                     
-                    // the comparative value is determined
+                    // comparative value is determined
                     // and the comparison is done
                     String pattern = words.hasMoreTokens() ? words.nextToken() : "";
                     if ((function.equals("starts")
@@ -953,7 +953,7 @@ class Worker implements Runnable {
                         continue;
                 }
                     
-                // the target is determined
+                // target is determined
                 // target is a reference without options, the pure target
                 String target = Worker.cleanOptions(reference);
                 

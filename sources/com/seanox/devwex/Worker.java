@@ -1885,6 +1885,7 @@ class Worker implements Runnable {
                         if (this.isolation != 0)
                             this.isolation = -1;
                         
+                        // volume of sent data is registered
                         this.volume += length -offset;
                     }
                 }
@@ -2203,6 +2204,7 @@ class Worker implements Runnable {
                 if (this.isolation != 0)
                     this.isolation = -1;
                 
+                // volume of sent data is registered
                 this.volume += bytes.length;
                 
                 return;
@@ -2335,6 +2337,7 @@ class Worker implements Runnable {
                     if (this.isolation != 0)
                         this.isolation = -1;
 
+                    // volume of sent data is registered
                     this.volume += size;
                 }
 
@@ -2457,125 +2460,106 @@ class Worker implements Runnable {
         this.status = 424;
     }
 
-    // TODO:
     private void doStatus()
             throws Exception {
         
-        Enumeration enumeration;
-        Generator   generator;
-        Hashtable   elements;
-        List        header;
-        String      method;
-        String      string;
-        String      shadow;
-        
-        byte[]      bytes;
-        
-        header = new ArrayList();
-        
-        // die Methode wird ermittelt
-        method = this.fields.get("req_method").toLowerCase();
-        
+        String method = this.fields.get("req_method").toLowerCase();
         if (method.equals("options")
                 && (this.status == 302 || this.status == 404))
             this.status = 200;
 
         if (this.status == 302) {
 
-            // die LOCATION wird fuer die Weiterleitung ermittelt
-            string = this.environment.get("query_string");
+            // determination of the LOCATION for redirection 
+            String string = this.environment.get("query_string");
             if (string.length() > 0)
                 string = ("?").concat(string);
             string = this.environment.get("script_uri").concat(string);
-
             this.fields.set("req_location", string);
 
         } else {
-            
-            string = String.valueOf(this.status);
 
-            // das Template fuer den Server Status wird ermittelt
+            // determination of the template for the server status
+            // three variants with decreasing qualification are supported
+            String string = String.valueOf(this.status);
             this.resource = this.sysroot.concat("/status-").concat(string).concat(".html");
             if (!new File(this.resource).exists())
                 this.resource = this.sysroot.concat("/status-").concat(string.substring(0, 1)).concat("xx.html");
             if (!new File(this.resource).exists())
                 this.resource = this.sysroot.concat("/status.html");
         }
+        
+        List headers = new ArrayList();
 
-        // der Typ zur Autorisierung wird wenn vorhanden ermittelt
-        shadow = this.fields.get("auth_type");
-
-        if (this.status == 401 && shadow.length() > 0) {
-            
-            string = (" realm=\"").concat(this.fields.get("auth_realm")).concat("\"");
-
-            if (shadow.equals("Digest")) {
-                   
+        // determination of the type of authorization, if available 
+        String authentication = this.fields.get("auth_type");
+        if (this.status == 401
+                && authentication.length() > 0) {
+            String string = (" realm=\"").concat(this.fields.get("auth_realm")).concat("\"");
+            if (authentication.equals("Digest")) {
                 string = ("Digest").concat(string);
                 string = string.concat(", qop=\"auth\"");
-                shadow = this.environment.get("unique_id");
-                string = string.concat(", nonce=\"").concat(shadow).concat("\"");
-                shadow = Worker.textHash(shadow.concat(String.valueOf(shadow.hashCode())));
-                string = string.concat(", opaque=\"").concat(shadow).concat("\"");
+                authentication = this.environment.get("unique_id");
+                string = string.concat(", nonce=\"").concat(authentication).concat("\"");
+                authentication = Worker.textHash(authentication.concat(String.valueOf(authentication.hashCode())));
+                string = string.concat(", opaque=\"").concat(authentication).concat("\"");
                 string = string.concat(", algorithm=\"MD5\"");
-                
             } else string = ("Basic").concat(string);
-            
-            header.add(("WWW-Authenticate: ").concat(string));
+            headers.add(("WWW-Authenticate: ").concat(string));
         }
 
         if (this.fields.contains("req_location"))
-            header.add(("Location: ").concat(this.fields.get("req_location")));
+            headers.add(("Location: ").concat(this.fields.get("req_location")));
         
-        // der Generator wird eingerichtet, dabei werden fuer die STATUS
-        // Klasse 1xx, den STATUS 302 (Redirection), 200 (Success) sowie die
-        // METHOD:HEAD/METHOD:OPTIONS keine Templates verwendet
-        string = String.valueOf(this.status);
-        string = this.statuscodes.get(string);
-        generator = Generator.parse(method.equals("head")
-                || method.equals("options")
-                || string.toUpperCase().contains("[H]") ? null : Worker.fileRead(new File(this.resource)));
+        // The generator is established when it is not a HEAD or OPTION request
+        // and the status code is not labeled with the option [H] (head only).
+        String string = this.statuscodes.get(String.valueOf(this.status));
+        Generator generator;
+        if (!method.equals("head")
+                && method.equals("options")
+                && string.toUpperCase().contains("[H]"))
+            generator = Generator.parse(Worker.fileRead(new File(this.resource)));
+        else generator = Generator.parse(null);
         
-        // der Header wird mit den Umgebungsvariablen zusammengefasst,
-        // die serverseitig gesetzten haben dabei die hoehere Prioritaet
-        elements = new Hashtable();
+        // The header combines the environment variables, the server-side ones
+        // have the higher priority and override system environment variables.
 
-        enumeration = this.fields.elements();
-        while (enumeration.hasMoreElements()) {
-            string = (String)enumeration.nextElement();
-            elements.put(string, this.fields.get(string));
+        Hashtable values = new Hashtable();
+
+        Enumeration fields = this.fields.elements();
+        while (fields.hasMoreElements()) {
+            string = (String)fields.nextElement();
+            values.put(string, this.fields.get(string));
         }
         
-        enumeration = this.environment.elements();
-        while (enumeration.hasMoreElements()) {
-            string = (String)enumeration.nextElement();
-            elements.put(string, this.environment.get(string));
+        Enumeration environment = this.environment.elements();
+        while (environment.hasMoreElements()) {
+            string = (String)environment.nextElement();
+            values.put(string, this.environment.get(string));
         }
         
         string = String.valueOf(this.status);
-        elements.put("HTTP_STATUS", string);
-        elements.put("HTTP_STATUS_TEXT", Worker.cleanOptions(this.statuscodes.get(string)));
+        values.put("HTTP_STATUS", string);
+        values.put("HTTP_STATUS_TEXT", Worker.cleanOptions(this.statuscodes.get(string)));
         
-        // die allgemeinen Elemente werden gefuellt
-        generator.set(elements);
+        generator.set(values);
+        byte[] bytes = generator.extract();
 
-        bytes = generator.extract();
-
-        // bei Bedarf wird im Header CONTENT-TYPE / CONTENT-LENGTH  gesetzt
+        // if necessary, CONTENT-TYPE / CONTENT-LENGTH is set in the header
         if (bytes.length > 0) {
-            header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
-            header.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
+            headers.add(("Content-Type: ").concat(this.mediatypes.get("html")));
+            headers.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
         }
         
-        // die verfuegbaren Methoden werden ermittelt und zusammengestellt
+        // available methods are collected
         string = String.join(", ", this.options.get("methods").split("\\s+"));
         if (string.length() > 0)
-            header.add(("Allow: ").concat(string));
+            headers.add(("Allow: ").concat(string));
         
-        // der Header wird fuer die Ausgabe zusammengestellt
-        string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
+        // header is composed for the output
+        string = this.header(this.status, (String[])headers.toArray(new String[0])).concat("\r\n\r\n");
 
-        // die Connection wird als verwendet gekennzeichnet
+        // connection is marked as used
         this.control = false;         
 
         // Isolation defines the time from the last output when strict timeout
@@ -2591,7 +2575,7 @@ class Worker implements Runnable {
         if (this.isolation != 0)
             this.isolation = -1;
         
-        // das Datenvolumen wird uebernommen
+        // volume of sent data is registered
         this.volume += bytes.length;  
     }
 

@@ -2479,11 +2479,11 @@ class Worker implements Runnable {
         // and the status code is not labeled with the option [H] (head only).
         String string = this.statuscodes.get(String.valueOf(this.status));
         Generator generator;
-        if (!method.equals("head")
-                && method.equals("options")
-                && string.toUpperCase().contains("[H]"))
-            generator = Generator.parse(Worker.fileRead(new File(this.resource)));
-        else generator = Generator.parse(null);
+        if (method.equals("head")
+                || method.equals("options")
+                || string.toUpperCase().contains("[H]"))
+            generator = Generator.parse(null);
+        else generator = Generator.parse(Worker.fileRead(new File(this.resource)));
         
         // The header combines the environment variables, the server-side ones
         // have the higher priority and override system environment variables.

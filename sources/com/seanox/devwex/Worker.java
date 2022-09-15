@@ -45,7 +45,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -1627,137 +1626,117 @@ class Worker implements Runnable {
         return (String[])list.toArray(new String[0]);
     }
     
-    // TODO:
     private void doGateway()
             throws Exception {
         
-        InputStream  error;
-        InputStream  input;
-        OutputStream output;
-        Process      process;
-        String       shadow;
-        String       header;
-        String       string;
-        
-        String[]     environment;
-
-        byte[]       bytes;
-
-        int          cursor;
-        int          length;
-        int          offset;
-
-        long         duration;
-        long         size;
-
+        // modules can also be defined as a target with the gateway
+        // module definition is set as environment variables
         if (this.gateway.toUpperCase().contains("[M]")) {
-            
-            // die Moduldefinition wird als Umgebungsvariablen gesetzt
             this.environment.set("module_opts", this.gateway);
-            
             this.invoke(Worker.cleanOptions(this.gateway), "service");
-        
             return;
         }
         
-        string = this.gateway;
+        String target = this.gateway;
         
-        shadow = this.environment.get("script_filename");
-        cursor = shadow.replace('\\', '/').lastIndexOf("/") +1;
-        string = string.replace("[d]", "[D]");
-        string = string.replace("[D]", shadow.substring(0, cursor));
-        
-        string = string.replace("[c]", "[C]");
-        string = string.replace("[C]", shadow.replace((File.separator.equals("/")) ? '\\' : '/', File.separatorChar));
+        String script = this.environment.get("script_filename");
+        script = script.replace('\\', File.separatorChar);
+        script = script.replace('/', File.separatorChar);
 
-        shadow = shadow.substring(cursor);
-        cursor = shadow.lastIndexOf(".");
-        string = string.replace("[n]", "[N]");
-        string = string.replace("[N]", shadow.substring(0, cursor < 0 ? shadow.length() : cursor));
+        target = target.replace("[c]", "[C]");
+        target = target.replace("[C]", script);
+
+        String directory = script.replaceAll("[^\\\\/]+$", "");
+        target = target.replace("[d]", "[D]");
+        target = target.replace("[D]", directory);
+
+        String name = script.replaceAll("(^.*[\\\\/])|(\\..*$)", "");
+        target = target.replace("[n]", "[N]");
+        target = target.replace("[N]", name);
         
-        string = Worker.cleanOptions(string);
+        target = Worker.cleanOptions(target);
         
-        // die maximale Prozesslaufzeit wird ermittelt
+        // maximum process run time is determined
+        long duration = 0;
         try {duration = Long.parseLong(this.options.get("duration"));
         } catch (Throwable throwable) {
-            duration = 0;
         }
 
-        // der zeitliche Verfall des Prozess wird ermittelt
+        // the time limit of the process is determined
+        long timeout = 0;
         if (duration > 0)
-            duration += System.currentTimeMillis();
+            timeout = System.currentTimeMillis() +duration;
+
+        // environment variables are determined
+        String[] environment = this.getEnvironment();
         
-        // der Datenpuffer wird entsprechen der BLOCKSIZE eingerichtet
-        bytes = new byte[this.blocksize];
-
-        // initiale Einrichtung der Variablen
-        environment = this.getEnvironment();
-
-        // der Prozess wird gestartet, Daten werden soweit ausgelesen
-        // bis der Prozess beendet wird oder ein Fehler auftritt
-        process = Runtime.getRuntime().exec(string.trim(), environment);
+        // process is started
+        // data is read until the process is terminated or an error occurs
+        Process process = Runtime.getRuntime().exec(target.trim(), environment);
 
         try {
-            
-            input  = process.getInputStream();
-            output = process.getOutputStream();
 
-            // der XCGI-Header wird aus den CGI-Umgebungsvariablen
-            // erstellt und vergleichbar dem Header ins StdIO geschrieben
+            // data streams are established
+            // data stream of StdErr is opened only when needed
+            InputStream input = process.getInputStream();
+            OutputStream output = process.getOutputStream();
+
+            // data buffer is established
+            byte[] bytes = new byte[this.blocksize];
+
+            // the XCGI header is composed from the CGI environment variables
+            // and written to the StdIO in a similar way to the HTTP header
             if (this.gateway.toUpperCase().contains("[X]"))
                 output.write(String.join("\r\n", environment).trim().concat("\r\n\r\n").getBytes());
-
-            // die Laenge des Contents wird ermittelt
+            
+            // length of the content is determined
+            int length = 0;
             try {length = Integer.parseInt(this.fields.get("http_content_length"));
             } catch (Throwable throwable) {
-                length = 0;
             }
             
+            // data is read from the socket data stream and written to the CGI
+            // the amount of data is limited by CONTENT-LENGHT
             while (length > 0) {
 
-                // die Daten werden aus dem Datenstrom gelesen
-                size = this.input.read(bytes);
+                long size = this.input.read(bytes);
                 if (size < 0)
                     break;
-
-                // die an das CGI zu uebermittelnde Datenmenge wird auf die
-                // Menge von CONTENT-LENGHT begrenzt
                 if (size > length)
                     size = length;
-                
-                // die Daten werden an das CGI uebergeben
                 output.write(bytes, 0, (int)size);
 
-                // das verbleibende Datenvolumen wird berechnet
+                // remaining amount of data is calculated
                 length -= size;
                 
-                // die maximale Prozesslaufzeit wird geprueft
-                if (duration > 0
-                        && duration < System.currentTimeMillis()) {
+                // maximum process run time is verified
+                if (timeout > 0
+                        && timeout < System.currentTimeMillis()) {
                     this.status = 504;
                     break;
                 }
 
                 Thread.sleep(this.interrupt);
             }        
-            
-            // der Datenstrom wird geschlossen
+
+            // data stream is closed
             if (process.isAlive())
                 output.close();
             
-            // der Prozess wird zwangsweise beendet um auch die Prozesse
-            // abzubrechen deren Verarbeitung fehlerhaft verlief
+            // if the status is not 200, the termination of the process is
+            // forced via the final block, in order to also terminate the
+            // processes whose processing was faulty
             if (this.status != 200)
                 return;
             
-            // der Datenpuffer fuer den  wird eingerichtet
-            header = new String();
+            // data buffer for the header is established
+            String header = "";
             
-            // Responsedaten werden bis zum Ende der Anwendung gelesen
-            // dazu wird initial die Datenflusskontrolle gesetzt
+            // response data is read until the end of the application and the
+            // data flow control is initially set for this purpose
             while (true) {
                 
-                // das Beenden der Connection wird geprueft
+                // termination of the connection is verified
                 try {this.accept.getSoTimeout();
                 } catch (Throwable throwable) {
                     this.status = 503;
@@ -1765,26 +1744,27 @@ class Worker implements Runnable {
                 }
                 
                 if (input.available() > 0) {
-                    
-                    // die Daten werden aus dem StdIO gelesen
+                
+                    // data is read from the StdIO
                     length = input.read(bytes);
-                    offset = 0;
+                    int offset = 0;
                     
-                    // fuer die Analyse vom Header wird nur die erste Zeile
-                    // vom CGI-Output ausgewertet, der Header selbst wird
-                    // vom Server nicht geprueft oder manipuliert, lediglich
-                    // die erste Zeile wird HTTP-konform aufbereitet                        
-                    if (this.control && header != null) {
+                    // for the analysis of the header only the first line of the
+                    // CGI output is analyzed, the header itself is not verified
+                    // or manipulated by the server, only the first line is
+                    // prepared HTTP-conform.     
+                    if (this.control
+                            && header != null) {
                         
                         header = header.concat(new String(bytes, 0, length));
-                        cursor = header.indexOf("\r\n\r\n");
+                        int cursor = header.indexOf("\r\n\r\n");
                         if (cursor >= 0) {
                             offset = length -(header.length() -cursor -4); 
                             header = header.substring(0, cursor);
                         } else offset = header.length();
                         
-                        // der Buffer zur Header-Analyse ist auf 65535 Bytes
-                        // begrenzt, Ueberschreiten fuehrt zum STATUS 502                            
+                        // buffer for header analysis is limited to 65535 bytes,
+                        // exceeding causes STATUS 502  
                         if (header.length() > 65535) {
                             
                             this.status = 502;
@@ -1794,35 +1774,36 @@ class Worker implements Runnable {
                             
                             header = header.trim();
                             cursor = header.indexOf("\r\n");
-                            string = cursor >= 0 ? header.substring(0, cursor).trim() : header;
-                            shadow = string.toUpperCase();
-                            
-                            if (shadow.startsWith("HTTP/")) {
 
-                                if (shadow.matches("^HTTP/STATUS(\\s.*)*$"))
+                            String buffer = cursor >= 0 ? header.substring(0, cursor).trim() : header;
+                            String status = buffer.toUpperCase();
+                            
+                            if (status.startsWith("HTTP/")) {
+
+                                if (status.matches("^HTTP/STATUS(\\s.*)*$"))
                                     header = null;
                                     
-                                try {this.status = Math.abs(Integer.parseInt(string.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$2")));
+                                try {this.status = Math.abs(Integer.parseInt(buffer.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$2")));
                                 } catch (Throwable throwable) {
                                 }
-
-                                // ggf. werden die Statuscodes mit eigenen bzw.
-                                // unbekannten Codes und Text temporaer
-                                // angereichert, mit dem Ende der Connection wird
-                                // die Liste verworfen
-                                string = string.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$3");
-                                if (string.length() > 0
+                                
+                                // if necessary the status codes new codes and
+                                // text from the CGI response are added
+                                // temporarily so that all other worker
+                                // functions work with the code from the CGI
+                                // response. With the end of the connection
+                                // (accept) the status codes are then discarded
+                                buffer = buffer.replaceAll("^(\\S+)\\s*(\\S+)*\\s*(.*?)\\s*$", "$3");
+                                if (buffer.length() > 0
                                         && !this.statuscodes.contains(String.valueOf(this.status)))
-                                    this.statuscodes.set(String.valueOf(this.status), string);
+                                    this.statuscodes.set(String.valueOf(this.status), buffer);
                             }
                             
-                            // beginnt der Response mit HTTP/STATUS, wird der
-                            // Datenstrom ausgelesen, nicht aber an den Client
-                            // weitergeleitet, die Beantwortung vom Request
-                            // uebernimmt in diesem Fall der Server
-
+                            // if the response starts with HTTP/STATUS, the data
+                            // stream is read but not forwarded to the client
+                            // and the request is responded by the server, for
+                            // which the data flow control is used
                             if (header != null) {
-
                                 header = header.replaceAll("(?si)^ *HTTP */ *[^\r\n]*([\r\n]+|$)", "");
                                 header = this.header(this.status, header.split("[\r\n]+"));
                                 this.control = false;
@@ -1830,9 +1811,8 @@ class Worker implements Runnable {
                         }
                     }
 
-                    // die Daten werden nur in den Output geschrieben, wenn die
-                    // Ausgabekontrolle gesetzt wurde und der Response nicht mit
-                    // HTTP/STATUS beginnt
+                    // data is written only if the data flow control allows it
+                    // and the response does not start with HTTP/STATUS
                     if (!this.control) {
                         
                         // Isolation defines the time from the last output
@@ -1854,15 +1834,15 @@ class Worker implements Runnable {
                     }
                 }
 
-                // die maximale Prozesslaufzeit wird geprueft
-                if (duration > 0
-                        && duration < System.currentTimeMillis()) {
+                // maximum process run time is verified
+                if (timeout > 0
+                        && timeout < System.currentTimeMillis()) {
                     this.status = 504;
                     break;
                  }
                 
-                // der Datenstrom wird auf vorliegende Daten
-                // und der Prozess wird auf sein Ende geprueft
+                // data stream is verified for present data
+                // and the process is verified for its end
                 if (input.available() <= 0
                         && !process.isAlive())
                     break;
@@ -1873,20 +1853,23 @@ class Worker implements Runnable {
         } finally {
             
             try {
-                string = new String();
-                error  = process.getErrorStream();
+                // data buffer is established
+                byte[] bytes = new byte[this.blocksize];
+
+                String message = "";
+                InputStream error = process.getErrorStream();
                 while (error.available() > 0) {
-                    length = error.read(bytes);
-                    string = string.concat(new String(bytes, 0, length));
+                    int length = error.read(bytes);
+                    message = message.concat(new String(bytes, 0, length));
                 }
-                string = string.trim();
-                if (string.length() > 0)
-                    Service.print(("GATEWAY ").concat(string));
+                message = message.trim();
+                if (message.length() > 0)
+                    Service.print(("GATEWAY ").concat(message));
                 
             } finally {
                 
-                // der Prozess wird zwangsweise beendet um auch die Prozesse
-                // abzubrechen deren Verarbeitung fehlerhaft verlief
+                // the termination of the process is forced, in order to also
+                // terminate the processes whose processing was faulty
                 try {process.destroy();
                 } catch (Throwable throwable) {
                 }
@@ -2067,53 +2050,35 @@ class Worker implements Runnable {
         return generator.extract();
     }
 
-    // TODO:
     private void doGet()
             throws Exception {
-        
-        File            file;
-        InputStream     input;
-        List            header;
-        StringTokenizer tokenizer;
-        String          method;
-        String          string;
 
-        byte[]          bytes;
+        // HTTP method is determined
+        // because the logic is used for GET and HEAD
+        String method = this.fields.get("req_method").toLowerCase();
 
-        long            size;
-        long            offset;
-        long            limit;
+        ArrayList headers = new ArrayList();
         
-        header = new ArrayList();
-        
-        // die Methode wird ermittelt
-        method = this.fields.get("req_method").toLowerCase();
-        
-        // die Ressource wird eingerichtet
-        file = new File(this.resource);
+        // resource is established
+        File file = new File(this.resource);
         
         if (file.isDirectory()) {
 
-            // die Option INDEX ON wird ueberprueft
-            // bei Verzeichnissen und der INDEX OFF wird STATUS 403 gesetzt
+            // INDEX ON option is checked
+            // for directories and the INDEX OFF STATUS 403 is set
+            // otherwise a navigable HTML is generated for the directory
             if (Worker.cleanOptions(this.options.get("index")).toLowerCase().equals("on")) {
-
-                header.add(("Content-Type: ").concat(this.mediatypes.get("html")));
-
-                bytes = new byte[0]; 
-
-                // die Verzeichnisstruktur wird bei METHOD:GET generiert
+                headers.add(("Content-Type: ").concat(this.mediatypes.get("html")));
+                byte[] bytes = new byte[0]; 
                 if (method.equals("get")) {
-                    
                     bytes = this.createDirectoryIndex(file, this.environment.get("query_string"));
-                    
-                    header.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
+                    headers.add(("Content-Length: ").concat(String.valueOf(bytes.length)));
                 }
 
-                // der Header wird fuer die Ausgabe zusammengestellt
-                string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
+                // header is composed for the output
+                String header = this.header(this.status, (String[])headers.toArray(new String[0])).concat("\r\n\r\n");
 
-                // die Connection wird als verwendet gekennzeichnet
+                // connection is marked as used
                 this.control = false;
                 
                 // Isolation defines the time from the last output when strict
@@ -2122,7 +2087,7 @@ class Worker implements Runnable {
                 // reacting at the end, the time is reset.
                 if (this.isolation != 0)
                     this.isolation = System.currentTimeMillis();
-                this.output.write(string.getBytes());
+                this.output.write(header.getBytes());
                 this.output.write(bytes);
                 if (this.isolation != 0)
                     this.isolation = -1;
@@ -2134,45 +2099,43 @@ class Worker implements Runnable {
             } 
             
             this.status = 403;
-            
             return;
         }       
 
-        // wenn vom Client uebermittelt, wird IF-(UN)MODIFIED-SINCE geprueft
-        // und bei (un)gueltiger Angabe STATUS 304/412 gesetzt
+        // if the client sends IF-(UN)MODIFIED-SINCE it is verified
+        // if (un)valid STATUS 304/412 is set
         if (!Worker.fileIsModified(file, this.fields.get("http_if_modified_since"))) {
             this.status = 304;
             return;
         }
-        
         if (this.fields.contains("http_if_unmodified_since")
                 && Worker.fileIsModified(file, this.fields.get("http_if_unmodified_since"))) {
             this.status = 412;
             return;
         }
 
-        offset = 0;
-        size   = file.length();
-        limit  = size;
+        long offset = 0;
+        long size   = file.length();
+        long limit  = size;
 
-        // ggf. werden der partielle Datenbereich RANGE ermittelt
+        // if necessary, the partial data range RANGE is determined
         if (this.fields.contains("http_range")
                 && size > 0) {
             
-            // mogeliche Header fuer den Range:
+            // possible headers for the range:
             //   Range: ...; bytes=500-999 ...
             //          ...; bytes=-999 ...
             //          ...; bytes=500- ...
 
-            string = this.fields.get("http_range").replace(';', '\n');
-            string = Section.parse(string).get("bytes");
-            if (string.matches("^(\\d+)*\\s*-\\s*(\\d+)*$")) {
-                tokenizer = new StringTokenizer(string, "-");
+            String range = this.fields.get("http_range").replace(';', '\n');
+            range = Section.parse(range).get("bytes");
+            if (range.matches("^(\\d+)*\\s*-\\s*(\\d+)*$")) {
+                StringTokenizer tokenizer = new StringTokenizer(range, "-");
                 try {
                     offset = Long.parseLong(tokenizer.nextToken().trim());
                     if (tokenizer.hasMoreTokens()) {
                         limit = Long.parseLong(tokenizer.nextToken().trim());
-                    } else if (string.startsWith("-")) {
+                    } else if (range.startsWith("-")) {
                         if (offset > 0) {
                             limit  = size -1;
                             offset = Math.max(0, size -offset);
@@ -2191,7 +2154,6 @@ class Worker implements Runnable {
                         limit  = size;
                     }
                 } catch (Throwable throwable) {
-                    
                     offset = 0;
                     size   = file.length();
                     limit  = size;                            
@@ -2199,23 +2161,23 @@ class Worker implements Runnable {
             }
         }
         
-        // der Header wird zusammengestellt
-        header.add(("Last-Modified: ").concat(Worker.dateFormat("E, dd MMM yyyy HH:mm:ss z", new Date(file.lastModified()), "GMT")));
-        header.add(("Content-Length: ").concat(String.valueOf(limit -offset)));
-        header.add(("Accept-Ranges: bytes"));
+        // header is composed for the output
+        headers.add(("Last-Modified: ").concat(Worker.dateFormat("E, dd MMM yyyy HH:mm:ss z", new Date(file.lastModified()), "GMT")));
+        headers.add(("Content-Length: ").concat(String.valueOf(limit -offset)));
+        headers.add(("Accept-Ranges: bytes"));
         
-        // wenn verfuegbar wird der Content-Type gesetzt
+        // if available the content type is set
         if (this.mediatype.length() > 0)
-            header.add(("Content-Type: ").concat(this.mediatype));
+            headers.add(("Content-Type: ").concat(this.mediatype));
 
-        // ggf. wird der partielle Datenbereich gesetzt
+        // if available the content type is set
         if (this.status == 206)
-            header.add(("Content-Range: bytes ").concat(String.valueOf(offset)).concat("-").concat(String.valueOf(limit -1)).concat("/").concat(String.valueOf(size)));
+            headers.add(("Content-Range: bytes ").concat(String.valueOf(offset)).concat("-").concat(String.valueOf(limit -1)).concat("/").concat(String.valueOf(size)));
         
-        // der Header wird fuer die Ausgabe zusammengestellt
-        string = this.header(this.status, (String[])header.toArray(new String[0])).concat("\r\n\r\n");
+        // header is composed for the output
+        String header = this.header(this.status, (String[])headers.toArray(new String[0])).concat("\r\n\r\n");
         
-        // die Connection wird als verwendet gekennzeichnet
+        // connection is marked as used
         this.control = false;
 
         // Isolation defines the time from the last output when strict timeout
@@ -2224,30 +2186,28 @@ class Worker implements Runnable {
         // time is reset.
         if (this.isolation != 0)
             this.isolation = System.currentTimeMillis();
-        this.output.write(string.getBytes());
+        this.output.write(header.getBytes());
         if (this.isolation != 0)
             this.isolation = -1;
         
         if (method.equals("get")) {
 
-            // das ByteArray wird mit dem BLOCKSIZE eingerichtet
-            bytes = new byte[this.blocksize];
+            // data buffer is established
+            byte[] bytes = new byte[this.blocksize];
             
-            input = null;
+            // data stream is established
+            InputStream input = new FileInputStream(this.resource);
             
             try {
 
-                // der Datenstrom wird eingerichtet
-                input = new FileInputStream(this.resource);
-
-                // ggf. wird der partielle Datenbereich beruecksichtigt
+                // if necessary, the partial data range is applied
                 input.skip(offset);
 
-                // der Datenstrom wird ausgelesen
                 while ((offset +this.volume < limit)
                         && ((size = input.read(bytes)) >= 0)) {
 
-                    if (this.status == 206 && (offset +this.volume +size > limit))
+                    if (this.status == 206
+                            && (offset +this.volume +size > limit))
                         size = limit -(offset +this.volume);
 
                     // Isolation defines the time from the last output when
@@ -2265,8 +2225,6 @@ class Worker implements Runnable {
                 }
 
             } finally {
-
-                // der Datenstrom wird geschlossen
                 try {input.close();
                 } catch (Throwable throwable) {
                 }

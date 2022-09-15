@@ -2274,98 +2274,74 @@ class Worker implements Runnable {
         }
     }
 
-    // TODO:
     private void doPut()
             throws Exception {
         
-        File         file;
-        OutputStream output;
-
-        byte[]       bytes;
+        // resource is determined
+        File file = new File(this.resource);
         
-        long         length;
-        long         size;
-        
-        // die Ressource wird eingerichtet
-        file = new File(this.resource);
-        
-        // ohne CONTENT-LENGTH werden Verzeichnisse, sonst Dateien angelegt
+        // without CONTENT-LENGTH directories, otherwise files are created
         if (!this.fields.contains("http_content_length")) {
-
-            // die Verzeichnisstruktur wird angelegt
-            // bei Fehlern wird STATUS 424 gesetzt
-            if (!(file.isDirectory() || file.mkdirs()))
+            // directory structure is created
+            // if successful STATUS 201 is set
+            // in case of errors STATUS 424 is set
+            if (!file.isDirectory()
+                    && !file.mkdirs())
                 this.status = 424;
-            
-            // bei erfolgreicher Methode wird STATUS 201 gesetzt
             if (this.status == 200
                     || this.status == 404) {
                 this.fields.set("req_location", this.environment.get("script_uri"));
                 this.status = 201;
             }
-            
             return;
         } 
         
-        // die Laenge des Contents wird ermittelt
-        try {length = Long.parseLong(this.fields.get("http_content_length"));
+        // ength of the content is determined
+        // a valid content length is expected, without it STATUS 411 is set   
+        long length;
+        try {
+            length = Long.parseLong(this.fields.get("http_content_length"));
+            if (length < 0)
+                throw new Throwable();
         } catch (Throwable throwable) {
-            length = -1;
-        }
-
-        // die Methode setzt eine gueltige Dateilaenge voraus, ohne gueltige
-        // Dateilaenge wird STATUS 411 gesetzt            
-        if (length < 0) {
             this.status = 411;
             return;
         }
 
-        // ggf. bestehende Dateien werden entfernt
+        // if necessary existing files are removed
         file.delete();
 
-        // das Datenpuffer wird eingerichtet
-        bytes = new byte[this.blocksize];
-        
-        output = null;
-        
+        // data buffer is established
+        byte[] bytes = new byte[this.blocksize];
+
+        // data stream is established
+        OutputStream output = new FileOutputStream(this.resource);
+
         try {
-            
-            // der Datenstrom wird eingerichtet
-            output = new FileOutputStream(this.resource);
 
-            while (length > 0) {
-
-                // die Daten werden aus dem Datenstrom gelesen
+            // data is read from the data stream
+            // CONTENT-LENGHT is not exceeded in the process
+            for (long size; length > 0;) {
                 if ((size = this.input.read(bytes)) < 0)
                     break;
-
-                // die zu schreibende Datenmenge wird ermittelt
-                // CONTENT-LENGHT wird dabei nicht ueberschritten
                 size = Math.min(size, length);
-                
-                // die Daten werden geschrieben
                 output.write(bytes, 0, (int)size);
-
-                // das verbleibende Datenvolumen wird berechnet
                 length -= size;
-
                 Thread.sleep(this.interrupt);
             }
             
-            // kann die Datei nicht oder durch Timeout nur unvollstaendig
-            // angelegt werden wird STATUS 424 gesetzt
+            // if the file cannot be created or can only be created incompletely
+            // due to timeout, STATUS 424 is set
             if (length > 0)
                 this.status = 424;
 
         } finally {
-
-            // der Datenstrom wird geschlossen
             try {output.close();
             } catch (Throwable throwable) {
             }
         }
         
-        // bei erfolgreicher Methode wird STATUS 201 gesetzt
+        // if everything is successful, STATUS 201 is set
         if (this.status == 200
                 || this.status == 404) {
             this.fields.set("req_location", this.environment.get("script_uri"));

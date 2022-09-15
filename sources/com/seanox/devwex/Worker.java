@@ -1292,7 +1292,7 @@ class Worker implements Runnable {
         this.environment.set("path_context", "");
         this.environment.set("path_info", "");
 
-        // REFERRENCE - Zur Ressource werden ggf. der virtuellen Pfad im Unix
+        // REFERENCE - Zur Ressource werden ggf. der virtuellen Pfad im Unix
         // Fileformat (Slash) bzw. der reale Pfad, sowie optionale Parameter,
         // Optionen und Verweise auf eine Authentication ermittelt.
         this.resource = this.locate(shadow);
@@ -2733,7 +2733,7 @@ class Worker implements Runnable {
             // fields from the header are configured
             this.fields = new Section(true);
 
-            // configurations is loaded
+            // configuration is loaded
             this.access      = (Section)this.initialize.get(this.context.concat(":acc")).clone();
             this.environment = (Section)this.initialize.get(this.context.concat(":env")).clone();
             this.filters     = (Section)this.initialize.get(this.context.concat(":flt")).clone();
@@ -2755,7 +2755,7 @@ class Worker implements Runnable {
             String string = this.options.get("timeout");
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 
-            // timeout of the connecton is determined
+            // timeout of the connection is determined
             try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
             } catch (Throwable throwable) {
                 this.timeout = 0;

@@ -2698,6 +2698,7 @@ class Worker implements Runnable {
 
     /** 
      * Terminates the worker by closing the data stream.
+     * Current requests will abort hard.
      * After that, the worker cannot be reactivated.
      */
     void destroy() {
@@ -2706,27 +2707,18 @@ class Worker implements Runnable {
         // as indicator to abandonment of the worker in case of inactivity
         this.socket = null;
 
-        // timing of blocking data streams is reset
-        if (this.isolation != 0)
-            this.isolation = -1;
-
         // socket is finally closed
         try {this.accept.close();
         } catch (Throwable throwable) {
         }
     }
 
-    // TODO:
     @Override
     public void run() {
 
-        // ServerSocket is kept, so that later the worker, if it has been
-        // isolated in the meantime, can be reactivated under load
-        ServerSocket socket = this.socket;
-
         while (this.socket != null) {
 
-            // initiale Einrichtung der Variablen
+            // initial setup of the variables
             this.status = 0;
             this.volume = 0;
 
@@ -2738,10 +2730,10 @@ class Worker implements Runnable {
             this.mediatype = "";
             this.sysroot   = "";
 
-            // die Felder vom Header werde eingerichtet
+            // fields from the header are configured
             this.fields = new Section(true);
 
-            // die Konfigurationen wird geladen
+            // configurations is loaded
             this.access      = (Section)this.initialize.get(this.context.concat(":acc")).clone();
             this.environment = (Section)this.initialize.get(this.context.concat(":env")).clone();
             this.filters     = (Section)this.initialize.get(this.context.concat(":flt")).clone();
@@ -2751,7 +2743,7 @@ class Worker implements Runnable {
             this.statuscodes = (Section)this.initialize.get("statuscodes").clone();
             this.mediatypes  = (Section)this.initialize.get("mediatypes").clone();
 
-            // die zu verwendende Blockgroesse wird ermittelt
+            // block size to be used is determined
             try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
             } catch (Throwable throwable) {
                 this.blocksize = 65535;
@@ -2763,17 +2755,17 @@ class Worker implements Runnable {
             String string = this.options.get("timeout");
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
 
-            // das Timeout der Connecton wird ermittelt
+            // timeout of the connecton is determined
             try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
             } catch (Throwable throwable) {
                 this.timeout = 0;
             }
 
-            // die maximale Prozesslaufzeit wird gegebenfalls korrigiert
+            // maximum process timeout is corrected if necessary
             if (this.timeout < 0)
                 this.timeout = 0;
 
-            // der Interrupt wird ermittelt
+            // interrupt is determined
             try {this.interrupt = Long.parseLong(this.options.get("interrupt"));
             } catch (Throwable throwable) {
                 this.interrupt = 10;
@@ -2789,36 +2781,24 @@ class Worker implements Runnable {
                 break;
             }
 
-            // der Request wird verarbeitet
+            // request is processed
             try {this.service();
             } catch (Throwable throwable) {
                 Service.print(throwable);
             }
-            
-            // die Connection wird beendet
-            try {this.destroy();
+
+            // socket is finally closed
+            try {this.accept.close();
             } catch (Throwable throwable) {
             }
 
-            // HINWEIS - Beim Schliessen wird der ServerSocket verworfen, um
-            // die Connection von Aussen beenden zu koennen, intern wird
-            // diese daher nach dem Beenden neu gesetzt
-
-            // der Zugriff wird registriert
+            // access is logged
             try {this.register();
             } catch (Throwable throwable) {
                 Service.print(throwable);
             }
 
-            // der Socket wird alternativ geschlossen
-            try {this.accept.close();
-            } catch (Throwable throwable) {
-            }
-
-            // durch das Zuruecksetzen wird die Connection ggf. reaktivert
-            this.socket = socket;
-
-            // der Socket wird verworfen
+            // socket is discarded
             this.accept = null;
         }
     }

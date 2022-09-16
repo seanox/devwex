@@ -1010,7 +1010,6 @@ class Worker implements Runnable {
             throws Exception {
 
         File            file;
-        String          entry;
         String          shadow;
         String          string;
         StringTokenizer tokenizer;
@@ -1353,32 +1352,32 @@ class Worker implements Runnable {
             shadow = shadow.concat("/");
 
         // der HOST oder VIRTUAL HOST wird ermittelt
-        entry = this.fields.get("http_host");
-        if (entry.length() <= 0)
-            entry = this.accept.getLocalAddress().getHostAddress();
+        String server = this.fields.get("http_host");
+        if (server.length() <= 0)
+            server = this.accept.getLocalAddress().getHostAddress();
 
         // die OPTION IDENTITY wird geprueft
         if (this.options.get("identity").toLowerCase().equals("on"))
-            this.environment.set("server_name", entry);
+            this.environment.set("server_name", server);
 
         // aus dem Schema wird die Verwendung vom Secure-Layer ermittelt
         boolean secure = this.socket instanceof SSLServerSocket;
         
         // die Location wird zusammengestellt
-        string = this.environment.get("server_port");
-        string = (!string.equals("80") && !secure || !string.equals("443") && secure) && string.length() > 0 ? (":").concat(string) : "";
-        string = (secure ? "https" : "http").concat("://").concat(entry).concat(string);
+        String url = this.environment.get("server_port");
+        url = (!url.equals("80") && !secure || !url.equals("443") && secure) && url.length() > 0 ? (":").concat(url) : "";
+        url = (secure ? "https" : "http").concat("://").concat(server).concat(url);
 
         // die URI vom Skript wird komplementiert
         if (this.status != 302)
-            this.environment.set("script_uri", string.concat(this.fields.get("req_path")));
+            this.environment.set("script_uri", url.concat(this.fields.get("req_path")));
 
         // bei abweichendem Path wird die Location als Redirect eingerichtet
         if (this.status == 0
                 && !this.environment.get("path_url").equals(shadow)
                 && !virtual
                 && !connect) {
-            this.environment.set("script_uri", string.concat(shadow));
+            this.environment.set("script_uri", url.concat(shadow));
             this.status = 302;
         }
 
@@ -1407,18 +1406,18 @@ class Worker implements Runnable {
             // die Defaultdateien werden ermittelt
             tokenizer = new StringTokenizer(this.options.get("default").replace('\\', '/'));
             while (tokenizer.hasMoreTokens()) {
-                string = tokenizer.nextToken();
-                if (string.length() <= 0
-                        || string.indexOf('/') >= 0
-                        || !new File(this.resource.concat(string)).isFile())
+                String entry = tokenizer.nextToken();
+                if (entry.length() <= 0
+                        || entry.indexOf('/') >= 0
+                        || !new File(this.resource.concat(entry)).isFile())
                     continue;
-                this.resource = this.resource.concat(string);
-                shadow = this.environment.get("path_context");
-                if (shadow.length() <= 0)
-                    shadow = this.environment.get("path_url");
-                if (!shadow.endsWith("/"))
-                    shadow = shadow.concat("/");
-                this.environment.set("script_name", shadow.concat(string));
+                this.resource = this.resource.concat(entry);
+                String context = this.environment.get("path_context");
+                if (context.length() <= 0)
+                    context = this.environment.get("path_url");
+                if (!context.endsWith("/"))
+                    context = context.concat("/");
+                this.environment.set("script_name", context.concat(entry));
                 break;
             }
         }
@@ -1439,13 +1438,13 @@ class Worker implements Runnable {
         string = this.environment.get("request_method").toLowerCase();
         
         // METHODS, die zulaessigen Methoden werden ermittelt        
-        shadow = (" ").concat(this.options.get("methods").toLowerCase()).concat(" ");
+        String methods = (" ").concat(this.options.get("methods").toLowerCase()).concat(" ");
 
         // die aktuelle Methode wird in der Liste der zulaessigen gesucht, ist
         // nicht enthalten, wird STATUS 405 gesetzt, ausgenommen sind Module
         // mit der Option [X], da an diese alle Methoden weitergereicht werden
         if (((digit & (2 | 16)) != (2 | 16))
-                && !shadow.contains((" ").concat(string).concat(" "))
+                && !methods.contains((" ").concat(string).concat(" "))
                 && this.status <= 0)
             this.status = 405;
         
@@ -1467,16 +1466,15 @@ class Worker implements Runnable {
             return;
 
         // die Dateierweiterung wird ermittelt
-        cursor = this.resource.lastIndexOf(".");
-        entry  = cursor >= 0 ? this.resource.substring(cursor +1) : this.resource;
-
         // CGI - zur Dateierweiterung wird ggf. eine Anwendung ermittelt
-        this.gateway = this.interfaces.get(entry);
+        cursor = this.resource.lastIndexOf(".");
+        String type = cursor >= 0 ? this.resource.substring(cursor +1) : this.resource;
+        this.gateway = this.interfaces.get(type);
         if (this.gateway.length() > 0) {
             cursor = this.gateway.indexOf('>');
 
             // die zulaessigen Methoden werden ermittelt
-            String method2 = this.gateway.substring(0, Math.max(0, cursor)).toLowerCase().trim();
+            String allowed = this.gateway.substring(0, Math.max(0, cursor)).toLowerCase().trim();
 
             // die eigentliche Anwendung ermittelt
             if (cursor >= 0)
@@ -1490,8 +1488,8 @@ class Worker implements Runnable {
                 // die Methode wird geprueft, ob diese fuer das CGI zugelassen
                 // ist, wenn nicht zulaessig, wird STATUS 405 gesetzt
                 string = (" ").concat(this.environment.get("request_method")).concat(" ").toLowerCase();
-                shadow = (" ").concat(method2).concat(" ");
-                if (method2.length() > 0
+                shadow = (" ").concat(allowed).concat(" ");
+                if (allowed.length() > 0
                         && !shadow.contains(string)
                         && !shadow.contains(" all ")
                         && this.status < 500
@@ -1501,27 +1499,30 @@ class Worker implements Runnable {
         }
         
         // der Mediatype wird ermittelt
-        this.mediatype = this.mediatypes.get(entry);
+        this.mediatype = this.mediatypes.get(type);
 
         // kann dieser nicht festgelegt werden wird der Standardeintrag aus den
         // Server Basisoptionen eingetragen
-        if (this.mediatype.length() <= 0) this.mediatype = this.options.get("mediatype");
+        if (this.mediatype.length() <= 0)
+            this.mediatype = this.options.get("mediatype");
 
         // die vom Client unterstuetzten Mediatypes werden ermittelt
         // es wird geprueft ob der Client den Mediatype unterstuetzt,
         // ist dies nicht der Fall, wird STATUS 406 gesetzt
-        shadow = this.fields.get("http_accept");
-        if (shadow.length() > 0) {
-            tokenizer = new StringTokenizer(shadow.toLowerCase().replace(';', ','), ",");
+        String accept = this.fields.get("http_accept");
+        if (accept.length() > 0) {
+            tokenizer = new StringTokenizer(accept.toLowerCase().replace(';', ','), ",");
             while (this.status == 0) {
                 if (tokenizer.hasMoreTokens()) {
-                    string = tokenizer.nextToken().trim();
-                    if (string.equals(this.mediatype) || string.equals("*/*") || string.equals("*"))
+                    String entry = tokenizer.nextToken().trim();
+                    if (entry.equals(this.mediatype)
+                            || entry.equals("*/*")
+                            || entry.equals("*"))
                         break;
                     cursor = this.mediatype.indexOf("/");
                     if (cursor >= 0
-                            && (string.equals(this.mediatype.substring(0, cursor +1).concat("*"))
-                                    || string.equals(("*").concat(this.mediatype.substring(cursor)))))
+                            && (entry.equals(this.mediatype.substring(0, cursor +1).concat("*"))
+                                    || entry.equals(("*").concat(this.mediatype.substring(cursor)))))
                         break;
                 } else this.status = 406;
             }

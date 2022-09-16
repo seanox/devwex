@@ -1149,25 +1149,26 @@ class Worker implements Runnable {
         string = string.substring(0, offset < 0 ? string.length() : offset);
         offset = string.indexOf('?');
 
-        shadow = string.substring(offset < 0 ? string.length() : offset +1);
-        this.fields.set("req_query", shadow);
+        String uri = string.substring(0, offset < 0 ? string.length() : offset);
+        this.fields.set("req_uri", uri);
 
-        string = string.substring(0, offset < 0 ? string.length() : offset);
-        this.fields.set("req_uri", string);
+        String query = string.substring(offset < 0 ? string.length() : offset +1);
+        this.fields.set("req_query", query);
 
         // der Pfad wird dekodiert
         // und normalisiert /abc/./def/../ghi/ -> /abc/ghi
-        shadow = Worker.textDecode(string);
-        string = Worker.fileNormalize(shadow);
-        if (shadow.endsWith("/") && !string.endsWith("/"))
-            string = string.concat("/");
-        this.fields.set("req_path", string);
+        String destination = Worker.textDecode(uri);
+        String path = Worker.fileNormalize(destination);
+        if (destination.endsWith("/")
+                && !path.endsWith("/"))
+            path = path.concat("/");
+        this.fields.set("req_path", path);
 
         // ist der Request nicht korrekt wird STATUS 400 gesetzt
         // enthaelt der Request keinen Header wird STATUS 400 gesetzt
         // enthaelt der Request kein gueltige Pfadangabe wird STATUS 400 gesetzt
         if (this.status == 0
-                && (!string.startsWith("/")
+                && (!path.startsWith("/")
                         || this.header.length() <= 0))
             this.status = 400;
         

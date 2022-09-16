@@ -1010,7 +1010,6 @@ class Worker implements Runnable {
             throws Exception {
 
         File            file;
-        String          shadow;
         String          string;
         StringTokenizer tokenizer;
 
@@ -1262,12 +1261,9 @@ class Worker implements Runnable {
         unique = unique.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
         this.environment.set("unique_id", unique.toUpperCase());
 
-        // der Path wird ermittelt
-        shadow = this.fields.get("req_path");
-
         // die Umgebungsvariabeln werden entsprechend der Ressource gesetzt
-        this.environment.set("path_url", shadow);
-        this.environment.set("script_name", shadow);
+        this.environment.set("path_url", path);
+        this.environment.set("script_name", path);
         this.environment.set("script_url", this.fields.get("req_uri"));
         this.environment.set("path_context", "");
         this.environment.set("path_info", "");
@@ -1275,7 +1271,7 @@ class Worker implements Runnable {
         // REFERENCE - Zur Ressource werden ggf. der virtuellen Pfad im Unix
         // Fileformat (Slash) bzw. der reale Pfad, sowie optionale Parameter,
         // Optionen und Verweise auf eine Authentication ermittelt.
-        this.resource = this.locate(shadow);
+        this.resource = this.locate(path);
 
         // Option [A] fuer eine absolute Referenz wird ermittelt
         String options = this.resource.toUpperCase();
@@ -1344,12 +1340,12 @@ class Worker implements Runnable {
         }
         
         if (file.isFile()
-                && shadow.endsWith("/"))
-            shadow = shadow.substring(0, shadow.length() -1);
-
+                && path.endsWith("/"))
+            path = path.substring(0, path.length() -1);
+        
         if (file.isDirectory()
-                && !shadow.endsWith("/"))
-            shadow = shadow.concat("/");
+                && !path.endsWith("/"))
+            path = path.concat("/");
 
         // der HOST oder VIRTUAL HOST wird ermittelt
         String server = this.fields.get("http_host");
@@ -1374,10 +1370,10 @@ class Worker implements Runnable {
 
         // bei abweichendem Path wird die Location als Redirect eingerichtet
         if (this.status == 0
-                && !this.environment.get("path_url").equals(shadow)
+                && !this.environment.get("path_url").equals(path)
                 && !virtual
                 && !connect) {
-            this.environment.set("script_uri", url.concat(shadow));
+            this.environment.set("script_uri", url.concat(path));
             this.status = 302;
         }
 
@@ -1488,13 +1484,14 @@ class Worker implements Runnable {
                 // die Methode wird geprueft, ob diese fuer das CGI zugelassen
                 // ist, wenn nicht zulaessig, wird STATUS 405 gesetzt
                 string = (" ").concat(this.environment.get("request_method")).concat(" ").toLowerCase();
-                shadow = (" ").concat(allowed).concat(" ");
-                if (allowed.length() > 0
-                        && !shadow.contains(string)
-                        && !shadow.contains(" all ")
-                        && this.status < 500
-                        && this.status != 302)
-                    this.status = 405;
+                if (allowed.length() > 0) {
+                    allowed = (" ").concat(allowed).concat(" ");
+                    if (!allowed.contains(string)
+                            && !allowed.contains(" all ")
+                            && this.status < 500
+                            && this.status != 302)
+                        this.status = 405;
+                }
             }
         }
         

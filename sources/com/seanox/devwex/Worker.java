@@ -999,11 +999,11 @@ class Worker implements Runnable {
     }
     
     /**
-     * TODO:
-     * Initialisiert die Connection, liest den Request, analysiert diesen und
-     * richtet die Connection in der Laufzeitumgebung entsprechen ein.
+     * Initializes the connection, reads the request, analyzes it and prepares
+     * the request processing.
      * @throws Exception
      *     Im Fall nicht erwarteter Fehler
+     *     In case of unexpected errors
      */
     private void initiate()
             throws Exception {

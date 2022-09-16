@@ -1127,49 +1127,40 @@ class Worker implements Runnable {
 
         // die erste Zeile wird ermittelt
         tokenizer = new StringTokenizer(this.header, "\r\n");
-
-        string = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
-
-        this.fields.set("req_line", string);
+        String request = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
+        this.fields.set("req_line", request);
 
         // die Methode vom Request wird ermittelt
-        offset = string.indexOf(' ');
-        shadow = string.substring(0, offset < 0 ? string.length() : offset);
-        string = string.substring(offset < 0 ? string.length() : offset +1);
-
-        this.fields.set("req_method", shadow);
+        offset = request.indexOf(' ');
+        String method = request.substring(0, offset < 0 ? request.length() : offset);
+        this.fields.set("req_method", method);
 
         // ohne HTTP-Methode ist die Anfrage ungueltig, somit STATUS 400
         if (this.status == 0
-                && shadow.length() <= 0)
+                && method.length() <= 0)
             this.status = 400;
 
-        // Protokoll und Version vom Request werden ermittelt aber ignoriert
+        // Protokoll und Version vom Request werden ignoriert
+        // Pfad und Query vom Request werden ermittelt
+        string = request.substring(offset < 0 ? request.length() : offset +1);
         offset = string.lastIndexOf(' ');
         string = string.substring(0, offset < 0 ? string.length() : offset);
-
-        // Pfad und Query vom Request werden ermittelt
         offset = string.indexOf(' ');
         string = string.substring(0, offset < 0 ? string.length() : offset);
-
-        this.fields.set("req_path", string);
-
-        // Pfad und Query vom Request werden ermittelt
         offset = string.indexOf('?');
-        shadow = string.substring(offset < 0 ? string.length() : offset +1);
-        string = string.substring(0, offset < 0 ? string.length() : offset);
 
+        shadow = string.substring(offset < 0 ? string.length() : offset +1);
         this.fields.set("req_query", shadow);
+
+        string = string.substring(0, offset < 0 ? string.length() : offset);
         this.fields.set("req_uri", string);
 
         // der Pfad wird dekodiert
+        // und normalisiert /abc/./def/../ghi/ -> /abc/ghi
         shadow = Worker.textDecode(string);
-        
-        // der Pfad wird ausgeglichen /abc/./def/../ghi/ -> /abc/ghi
         string = Worker.fileNormalize(shadow);
         if (shadow.endsWith("/") && !string.endsWith("/"))
             string = string.concat("/");
-
         this.fields.set("req_path", string);
 
         // ist der Request nicht korrekt wird STATUS 400 gesetzt
@@ -1383,7 +1374,9 @@ class Worker implements Runnable {
 
         // bei abweichendem Path wird die Location als Redirect eingerichtet
         if (this.status == 0
-                && !this.environment.get("path_url").equals(shadow) && !virtual && !connect) {
+                && !this.environment.get("path_url").equals(shadow)
+                && !virtual
+                && !connect) {
             this.environment.set("script_uri", string.concat(shadow));
             this.status = 302;
         }
@@ -1478,16 +1471,15 @@ class Worker implements Runnable {
 
         // CGI - zur Dateierweiterung wird ggf. eine Anwendung ermittelt
         this.gateway = this.interfaces.get(entry);
-
         if (this.gateway.length() > 0) {
-
             cursor = this.gateway.indexOf('>');
 
             // die zulaessigen Methoden werden ermittelt
-            String method = this.gateway.substring(0, Math.max(0, cursor)).toLowerCase().trim();
+            String method2 = this.gateway.substring(0, Math.max(0, cursor)).toLowerCase().trim();
 
             // die eigentliche Anwendung ermittelt
-            if (cursor >= 0) this.gateway = this.gateway.substring(cursor +2).trim();
+            if (cursor >= 0)
+                this.gateway = this.gateway.substring(cursor +2).trim();
 
             // die Variable GATEWAY-INTERFACE wird fuer das (X)CGI gesetzt
             if (this.gateway.length() > 0) {
@@ -1497,9 +1489,8 @@ class Worker implements Runnable {
                 // die Methode wird geprueft, ob diese fuer das CGI zugelassen
                 // ist, wenn nicht zulaessig, wird STATUS 405 gesetzt
                 string = (" ").concat(this.environment.get("request_method")).concat(" ").toLowerCase();
-                shadow = (" ").concat(method).concat(" ");
-
-                if (method.length() > 0
+                shadow = (" ").concat(method2).concat(" ");
+                if (method2.length() > 0
                         && !shadow.contains(string)
                         && !shadow.contains(" all ")
                         && this.status < 500
@@ -1516,26 +1507,21 @@ class Worker implements Runnable {
         if (this.mediatype.length() <= 0) this.mediatype = this.options.get("mediatype");
 
         // die vom Client unterstuetzten Mediatypes werden ermittelt
+        // es wird geprueft ob der Client den Mediatype unterstuetzt,
+        // ist dies nicht der Fall, wird STATUS 406 gesetzt
         shadow = this.fields.get("http_accept");
-        
         if (shadow.length() > 0) {
-
-            // es wird geprueft ob der Client den Mediatype unterstuetzt,
-            // ist dies nicht der Fall, wird STATUS 406 gesetzt
             tokenizer = new StringTokenizer(shadow.toLowerCase().replace(';', ','), ",");
-            
             while (this.status == 0) {
-
                 if (tokenizer.hasMoreTokens()) {
-
                     string = tokenizer.nextToken().trim();
                     if (string.equals(this.mediatype) || string.equals("*/*") || string.equals("*"))
                         break;
                     cursor = this.mediatype.indexOf("/");
-                    if (cursor >= 0 && (string.equals(this.mediatype.substring(0, cursor +1).concat("*"))
-                            || string.equals(("*").concat(this.mediatype.substring(cursor)))))
+                    if (cursor >= 0
+                            && (string.equals(this.mediatype.substring(0, cursor +1).concat("*"))
+                                    || string.equals(("*").concat(this.mediatype.substring(cursor)))))
                         break;
-                    
                 } else this.status = 406;
             }
         }

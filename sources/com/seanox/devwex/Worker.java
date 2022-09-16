@@ -49,6 +49,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
 
 /**
@@ -380,7 +381,7 @@ class Worker implements Runnable {
     }
     
     /**
-     * Normalizes a path, resolves path statements, and changes to slashes.
+     * Normalizes a path, replaces dot directives, and changes to slashes.
      * @param  path Path to be normalized
      * @return the normalized path
      */
@@ -1379,7 +1380,7 @@ class Worker implements Runnable {
             this.environment.set("server_name", entry);
 
         // aus dem Schema wird die Verwendung vom Secure-Layer ermittelt
-        secure = this.socket instanceof javax.net.ssl.SSLServerSocket;
+        secure = this.socket instanceof SSLServerSocket;
         
         // die Location wird zusammengestellt
         string = this.environment.get("server_port");
@@ -2559,7 +2560,7 @@ class Worker implements Runnable {
             format = format.replaceAll("%\\[", "#[");
             format = format.replaceAll("%t", "%1\\$t");
  
-            // time symbols are resolved
+            // time symbols are filled
             format = String.format(Locale.US, format, new Date());
             
             String output;

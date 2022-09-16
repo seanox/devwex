@@ -1220,25 +1220,25 @@ class Worker implements Runnable {
 
         // das aktuelle Arbeitsverzeichnis wird ermittelt
         file = Worker.fileCanonical(new File("."));
-        string = file != null ? file.getPath().replace('\\', '/') : ".";
-        if (string.endsWith("/"))
-            string = string.substring(0, string.length() -1);
+        String workdir = file != null ? file.getPath().replace('\\', '/') : ".";
+        if (workdir.endsWith("/"))
+            workdir = workdir.substring(0, workdir.length() -1);
 
         // das Systemverzeichnis wird ermittelt
         file = Worker.fileCanonical(new File(this.options.get("sysroot")));
-        this.sysroot = file != null ? file.getPath().replace('\\', '/') : string;
+        this.sysroot = file != null ? file.getPath().replace('\\', '/') : workdir;
         if (this.sysroot.endsWith("/"))
             this.sysroot = this.sysroot.substring(0, this.sysroot.length() -1);
         if (this.options.get("sysroot").length() <= 0)
-            this.sysroot = string;
+            this.sysroot = workdir;
 
         // das Dokumentenverzeichnis wird ermittelt
         file = Worker.fileCanonical(new File(this.options.get("docroot")));
-        this.docroot = file != null ? file.getPath().replace('\\', '/') : string;
+        this.docroot = file != null ? file.getPath().replace('\\', '/') : workdir;
         if (this.docroot.endsWith("/"))
             this.docroot = this.docroot.substring(0, this.docroot.length() -1);
         if (this.options.get("docroot").length() <= 0)
-            this.docroot = string;
+            this.docroot = workdir;
 
         // die serverseitig festen Umgebungsvariablen werden gesetzt
         this.environment.set("server_port", String.valueOf(this.accept.getLocalPort()));
@@ -1259,9 +1259,9 @@ class Worker implements Runnable {
         // die Unique-Id wird aus dem HashCode des Sockets, den Millisekunden
         // sowie der verwendeten Portnummer ermittelt, die Laenge ist variabel
         // die eindeutige Request-Id wird gesetzt
-        string = Long.toString(Math.abs(this.accept.hashCode()), 36);
-        string = string.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
-        this.environment.set("unique_id", string.toUpperCase());
+        String unique = Long.toString(Math.abs(this.accept.hashCode()), 36);
+        unique = unique.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
+        this.environment.set("unique_id", unique.toUpperCase());
 
         // der Path wird ermittelt
         shadow = this.fields.get("req_path");

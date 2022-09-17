@@ -62,7 +62,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220912
+ * @version 5.5.0 20220917
  */
 class Worker implements Runnable {
   
@@ -117,7 +117,7 @@ class Worker implements Runnable {
     /** Header of the request */
     private volatile String header;
 
-    /** Mediatype of the request */
+    /** Media type of the request */
     private volatile String mediatype;
 
     /** Resource of the request */
@@ -154,7 +154,7 @@ class Worker implements Runnable {
      * Constructor, establishes the worker with socket and configuration.
      * @param context    Server context
      * @param socket     Socket with the accepted request
-     * @param initialize Server configuraiton
+     * @param initialize Server configuration
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
         this.context    = context.replaceAll("(?i):[a-z]+$", "");
@@ -464,19 +464,18 @@ class Worker implements Runnable {
 
         try {
 
-            // die Formatierung wird eingerichtet
-            // die Zeitzone wird gegebenenfalls fuer die Formatierung gesetzt
+            // formatting is established with time zone
             SimpleDateFormat pattern = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
             pattern.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-            // If-(Un)Modified-Since wird geprueft
-            // If-(Un)Modified-Since:Timedate wird geprueft
+            // If-(Un)Modified-Since is verified
+            // If-(Un)Modified-Since:Timedate is verified
             StringTokenizer tokenizer = new StringTokenizer(string, ";");
             long timing = pattern.parse(tokenizer.nextToken()).getTime() /1000L;
             if (timing != file.lastModified() /1000L)
                 return true;
 
-            // If-(Un)Modified-Since:Length wird geprueft
+            // If-(Un)Modified-Since:Length is verified
             while (tokenizer.hasMoreTokens()) {
                 string = tokenizer.nextToken().trim();
                 if (!string.toLowerCase().startsWith("length"))
@@ -543,78 +542,46 @@ class Worker implements Runnable {
     }
 
     /**
-     * TODO:
-     * Ermittelt f&uuml;r das angegebene virtuelle Verzeichnis den realen Pfad.
-     * Wurde der Pfad nicht als virtuelles Verzeichnis eingerichtet, wird ein
-     * leerer String zur&uuml;ckgegeben.
-     * @param  path Pfad des virtuellen Verzeichnis
-     * @return der reale Pfad oder ein leerer String
+     * Determines the real path for the specified virtual directory.
+     * If the path is not a virtual directory, an empty string is returned.
+     * @param  path Path of the virtual directory
+     * @return the real path or an empty string
      */
     private String locate(String path) {
-
-        Enumeration enumeration;
-        File        source;
-        String      access;
-        String      alias;
-        String      locale;
-        String      location;
-        String      options;
-        String      reference;
-        String      result;
-        String      rules;
-        String      shadow;
         
-        String      buffer;
-        String      string;
-        String      target;
-
-        boolean     absolute;
-        boolean     forward;
-        boolean     forbidden;
-        boolean     module;
-        boolean     redirect;
-        boolean     virtual;
-
-        int         cursor;
-
-        // der Pfad wird getrimmt, in Kleinbuchstaben umformatiert, die
-        // Backslashs gegen Slashs getauscht
+        // path is trimmed, lowercase, the backslashes are replaced by slashes
         path = path.replace('\\', '/').trim();
 
-        // fuer die Ermittlung wird der Pfad mit / abgeschlossen um auch
-        // Referenzen wie z.B. /a mit /a/ ermitteln zu koennen
-        locale = path.toLowerCase();
-
+        // for the determination the path is terminated with / to be able to
+        // determine also references like e.g. /a with /a/.
+        String locale = path.toLowerCase();
         if (!locale.endsWith("/"))
             locale = locale.concat("/");
 
-        // initiale Einrichtung der Variablen
-        access    = "";
-        location  = "";
-        options   = "";
-        reference = "";
-        result    = "";
-        shadow    = "";
+        String alias;
+        String target;
+        
+        String access    = "";
+        String locate    = "";
+        String location  = "";
+        String options   = "";
+        String reference = "";
+        String shadow    = "";
 
-        absolute  = false;
-        forbidden = false;
-        module    = false;
-        redirect  = false;
+        boolean absolute  = false;
+        boolean forbidden = false;
+        boolean module    = false;
+        boolean redirect  = false;
+        
+        // list of references is determined
+        // virtual directories are determined
+        Enumeration enumeration = this.references.elements();
+        for (File source = null; enumeration.hasMoreElements();) {
 
-        source    = null;
-
-        // die Liste der Referenzen wird ermittelt
-        enumeration = this.references.elements();
-
-        // die virtuellen Verzeichnisse werden ermittelt
-        while (enumeration.hasMoreElements()) {
-
-            // die Regel wird ermittelt
-            rules = ((String)enumeration.nextElement()).toLowerCase();
+            // rule, alias, target and options are determined
+            String rules = ((String)enumeration.nextElement()).toLowerCase();
             rules = this.references.get(rules);
-
-            // Alias, Ziel und Optionen werden ermittelt
-            cursor = rules.indexOf('>');
+            int cursor = rules.indexOf('>');
             if (cursor < 0) {
                 cursor = rules.replace(']', '[').indexOf('[');
                 if (cursor < 0)
@@ -629,49 +596,51 @@ class Worker implements Runnable {
             target = Worker.cleanOptions(rules);
             alias  = Worker.fileNormalize(alias);
             
-            // die Optionen werden ermittelt
-            string  = rules.toUpperCase();
-            virtual = string.contains("[A]") || string.contains("[M]");
-            forward = string.contains("[M]") || string.contains("[R]");
+            // options are determined
+            String string = rules.toUpperCase();
+            boolean virtual = string.contains("[A]") || string.contains("[M]");
+            boolean forward = string.contains("[M]") || string.contains("[R]");
             
-            // ungueltige bzw. unvollstaendige Regeln werden ignoriert
-            //   - ohne Alias
-            //   - Redirect / Modul ohne Ziel
-            //   - Alias ohne Ziel und Optionen
+            // following invalid or incomplete rules are ignored:
+            //   - without alias
+            //   - redirect / module without destination
+            //   - alias without destination and options
             if (alias.length() <= 0
                     || (forward && target.length() <= 0)
                     || (rules.length() <= 0 && target.length() <= 0))
                 continue;
             
-            // ggf. wird der Alias um Slash erweitert, damit spaeter DOCROOT
-            // und Alias einen plausiblen Pfad ergeben
+            // if necessary the alias is extended by slash, so that later
+            // DOCROOT and alias result in a plausible path
             if (!alias.startsWith("/"))
                 alias = ("/").concat(alias);            
             
-            // ggf. wird der Alias als Target uebernommen, wenn kein Target
-            // angegeben wurde, z.B. wenn fuer einen realen Pfad nur Optionen
-            // festgelegt werden
+            // if necessary the alias is used as target if no target is
+            // specified, e.g. if only options are specified for a real path
             if (target.length() <= 0)
                 target = this.docroot.concat(alias);
 
-            // das Ziel wird mit / abgeschlossen um auch Referenzen zwischen /a
-            // und /a/ ermitteln zu koennen
-            buffer = alias;
-            if (!virtual && !buffer.endsWith("/") && buffer.length() > 0)
+            // target is terminated with / to be able to determine references
+            // between /a and /a/ as well
+            String buffer = alias;
+            if (!virtual
+                    && !buffer.endsWith("/")
+                    && buffer.length() > 0)
                 buffer = buffer.concat("/");
             
-            // die qualifizierteste laengste Refrerenz wird ermittelt
+            // most qualified longest reference is determined
             if (locale.startsWith(buffer.toLowerCase())
-                    && buffer.length() > 0 && reference.length() <= buffer.length()) {
+                    && buffer.length() > 0
+                    && reference.length() <= buffer.length()) {
 
                 // optional wird die Sperrung des Verzeichnis ermittelt
                 forbidden = string.contains("[C]");
 
                 if (!forward) {
 
-                    // die Zieldatei wird eingerichtet
-                    // der absolute Pfad wird ermittelt
-                    // Verzeichnisse werden ggf. mit Slash beendet
+                    // destination file is established
+                    // absolute path is determined
+                    // Directories are terminated with slash if necessary
                     source = Worker.fileCanonical(new File(target));
                     if (source != null) {
                         target = source.getPath().replace('\\', '/');
@@ -680,7 +649,9 @@ class Worker implements Runnable {
                     }
                 }
 
-                if (source != null || virtual || forward) {
+                if (source != null
+                        || virtual
+                        || forward) {
 
                     location  = target;
                     options   = rules;
@@ -692,8 +663,8 @@ class Worker implements Runnable {
                 }
             }
 
-            // der Zielpfad wird mit / abgeschlossen um auch Referenzen
-            // zwischen /a und /a/ ermitteln zu koennen
+            // target is terminated with / to be able to determine references
+            // between /a and /a/ as well
             buffer = alias;
             if (!absolute
                     && !module
@@ -701,7 +672,7 @@ class Worker implements Runnable {
                     && buffer.length() > 0)
                 buffer = buffer.concat("/");
 
-            // die ACC-Eintraege zur Authentifizierung werden zusammengesammelt
+            // ACC entries for authentication are collected
             if (string.contains("[ACC:")
                     && locale.startsWith(buffer.toLowerCase())
                     && buffer.length() > 0
@@ -713,42 +684,43 @@ class Worker implements Runnable {
             }
         }
 
-        // die Referenz wird alternativ ermittelt
-        if (reference.length() <= 0) reference = path;
+        // reference is determined alternatively
+        if (reference.length() <= 0)
+            reference = path;
 
-        // konnte eine Referenz ermittelt werden wird diese geparst
+        // if a reference could be determined, it is parsed.
         if (reference.length() > 0) {
 
-            // die Location wird ermittelt und gesetzt
-            result = absolute || module ? location : location.concat(path.substring(Math.min(path.length(), reference.length())));
+            // location is determined and set
+            locate = absolute || module ? location : location.concat(path.substring(Math.min(path.length(), reference.length())));
 
-            // die Option [A] und [M] wird fuer absolute Referenzen geprueft
-            if (absolute || module) {
-
-                string = path.substring(0, Math.min(path.length(), reference.length()));
-
+            // option [A] and [M] are verified for absolute references
+            if (absolute
+                    || module) {
+                String string = path.substring(0, Math.min(path.length(), reference.length()));
                 this.environment.set("script_name", string);
                 this.environment.set("path_context", string);
                 this.environment.set("path_info", path.substring(string.length()));
             }
 
-            // die Moduldefinition wird als Umgebungsvariablen gesetzt
-            if (module) result = options;
+            // module definition is set as environment variables
+            if (module)
+                locate = options;
         }
         
-        if (result.length() <= 0)
-            result = this.docroot.concat(this.environment.get("path_url"));
+        if (locate.length() <= 0)
+            locate = this.docroot.concat(this.environment.get("path_url"));
 
-        if (!module && absolute)
-            result = result.concat("[A]");
-        if (!module && forbidden)
-            result = result.concat("[C]");
-        if (!module && redirect) 
-            result = result.concat("[R]");
-
-        result = result.concat(access);
-                
-        return result;
+        if (module)
+            return locate.concat(access);
+            
+        if (absolute)
+            locate = locate.concat("[A]");
+        if (forbidden)
+            locate = locate.concat("[C]");
+        if (redirect) 
+            locate = locate.concat("[R]");
+        return locate.concat(access);
     }
     
     /**
@@ -1391,7 +1363,7 @@ class Worker implements Runnable {
             if (!this.resource.endsWith("/"))
                 this.resource = this.resource.concat("/");
 
-            // default files are determinedt
+            // default files are determined
             tokenizer = new StringTokenizer(this.options.get("default").replace('\\', '/'));
             while (tokenizer.hasMoreTokens()) {
                 String entry = tokenizer.nextToken();
@@ -1441,7 +1413,7 @@ class Worker implements Runnable {
         this.environment.set("path_translated", script);
         
         // if the resource is a module, there is no assignment for the (X)CGI
-        // and the mediatype 
+        // and the media type
         if (forward
                 || this.resource.toUpperCase().contains("[M]")) {
             this.mediatype = this.options.get("mediatype");
@@ -1646,7 +1618,7 @@ class Worker implements Runnable {
             // data buffer is established
             byte[] bytes = new byte[this.blocksize];
 
-            // the XCGI header is composed from the CGI environment variables
+            // the XCGI header is composed of the CGI environment variables
             // and written to the StdIO in a similar way to the HTTP header
             if (this.gateway.toUpperCase().contains("[X]"))
                 output.write(String.join("\r\n", environment).trim().concat("\r\n\r\n").getBytes());
@@ -1658,7 +1630,7 @@ class Worker implements Runnable {
             }
             
             // data is read from the socket data stream and written to the CGI
-            // the amount of data is limited by CONTENT-LENGHT
+            // the amount of data is limited by CONTENT-LENGTH
             while (length > 0) {
 
                 long size = this.input.read(bytes);
@@ -2216,7 +2188,7 @@ class Worker implements Runnable {
             return;
         } 
         
-        // ength of the content is determined
+        // length of the content is determined
         // a valid content length is expected, without it STATUS 411 is set   
         long length;
         try {
@@ -2240,7 +2212,7 @@ class Worker implements Runnable {
         try {
 
             // data is read from the data stream
-            // CONTENT-LENGHT is not exceeded in the process
+            // CONTENT-LENGTH is not exceeded in the process
             for (long size; length > 0;) {
                 if ((size = this.input.read(bytes)) < 0)
                     break;
@@ -2427,7 +2399,7 @@ class Worker implements Runnable {
             
             if (this.control) {
 
-                // PROCESS/(X)CGI/MODULE - wird bei gueltiger Angabe ausgefuehrt
+                // PROCESS/(X)CGI/MODULE - will be executed if specified validly
                 if (this.status == 200
                         && this.gateway.length() > 0) {
                     

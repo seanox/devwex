@@ -569,7 +569,7 @@ class Worker implements Runnable {
         String      target;
 
         boolean     absolute;
-        boolean     connect;
+        boolean     forward;
         boolean     forbidden;
         boolean     module;
         boolean     redirect;
@@ -632,14 +632,14 @@ class Worker implements Runnable {
             // die Optionen werden ermittelt
             string  = rules.toUpperCase();
             virtual = string.contains("[A]") || string.contains("[M]");
-            connect = string.contains("[M]") || string.contains("[R]");
+            forward = string.contains("[M]") || string.contains("[R]");
             
             // ungueltige bzw. unvollstaendige Regeln werden ignoriert
             //   - ohne Alias
             //   - Redirect / Modul ohne Ziel
             //   - Alias ohne Ziel und Optionen
             if (alias.length() <= 0
-                    || (connect && target.length() <= 0)
+                    || (forward && target.length() <= 0)
                     || (rules.length() <= 0 && target.length() <= 0))
                 continue;
             
@@ -667,7 +667,7 @@ class Worker implements Runnable {
                 // optional wird die Sperrung des Verzeichnis ermittelt
                 forbidden = string.contains("[C]");
 
-                if (!connect) {
+                if (!forward) {
 
                     // die Zieldatei wird eingerichtet
                     // der absolute Pfad wird ermittelt
@@ -680,7 +680,7 @@ class Worker implements Runnable {
                     }
                 }
 
-                if (source != null || virtual || connect) {
+                if (source != null || virtual || forward) {
 
                     location  = target;
                     options   = rules;
@@ -1003,143 +1003,127 @@ class Worker implements Runnable {
      * Initializes the connection, reads the request, analyzes it and prepares
      * the request processing.
      * @throws Exception
-     *     Im Fall nicht erwarteter Fehler
      *     In case of unexpected errors
      */
     private void initiate()
             throws Exception {
 
-        File            file;
-        String          string;
-        StringTokenizer tokenizer;
+        String string;
 
-        boolean         connect;
-        boolean         virtual;
-        
-        int             count;
-        int             cursor;
-        int             digit;
-        int             offset;
-
-        // der Datenpuffer wird zum Auslesen vom Header eingerichtet
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream(65535);
-        
         if ((this.accept instanceof SSLSocket))
             try {this.fields.set("auth_cert", ((SSLSocket)this.accept).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
             }
         
+        // Part 1 - The request and headers is read bit by bit so that the
+        // request body in the data stream remains untouched.
+
+        // data buffer is established for reading from the header
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream(65535);
+        
         try {
 
-            // das SO-Timeout wird fuer den ServerSocket gesetzt
+            // SO timeout is set for the ServerSocket
             this.accept.setSoTimeout((int)this.timeout);
 
-            // die Datenstroeme werden eingerichtet
+            // data streams are established
             this.output = this.accept.getOutputStream();
             this.input  = this.accept.getInputStream();
 
-            // der Inputstream wird gepuffert
+            // input stream is buffered
             this.input = new BufferedInputStream(this.input, this.blocksize);
             
-            count = cursor = offset = 0;
-            
-            // der Header vom Requests wird gelesen, tritt beim Zugriff auf die
-            // Datenstroeme ein Fehler auf, wird STATUS 400 gesetzt
-            while (true) {
+            // the header of the request is read, if an error occurs in the data
+            // access, STATUS 400 is set
+            for (int digit, size = 0, count = 0, offset = 0; true;) {
 
-                if ((digit = this.input.read()) >= 0) {
+                digit = this.input.read();
+                if (digit < 0)
+                    break;
 
-                    // der Request wird auf kompletten Header geprueft
-                    cursor = (digit == ((cursor % 2) == 0 ? 13 : 10)) ? cursor +1 : 0;
-                    if (cursor > 0
-                            && count > 0
-                            && offset > 0
-                            && buffer.size() > 0) {
+                // request is verified for the complete header
+                count = (digit == ((count % 2) == 0 ? 13 : 10)) ? count +1 : 0;
+                if (count > 0
+                        && size > 0
+                        && offset > 0
+                        && buffer.size() > 0) {
 
-                        String header = new String(buffer.toByteArray(), offset, buffer.size() -offset);
+                    String header = new String(buffer.toByteArray(), offset, buffer.size() -offset);
+                    offset = header.indexOf(':');
+                    String value = header.substring(offset < 0 ? header.length() : offset +1).trim();
+                    header = header.substring(0, offset < 0 ? header.length() : offset).trim();
 
-                        offset = header.indexOf(':');
-                        String value = header.substring(offset < 0 ? header.length() : offset +1).trim();
-                        header = header.substring(0, offset < 0 ? header.length() : offset).trim();
+                    // According to RFC 3875 (CGI/1.1 specification) all fields
+                    // of the HTTP header as HTTP parameters. For this purpose
+                    // the character - is replaced by _ and all parameters are
+                    // prefixed with http_.  in front of all parameters.
+                    header = ("http_").concat(header.replace('-', '_'));
+                    if (!this.fields.contains(header)
+                            && header.length() > 0
+                            && value.length() > 0)
+                        this.fields.set(header, value);
 
-                        // entsprechend RFC 3875 (CGI/1.1-Spezifikation) werden
-                        // alle Felder vom HTTP-Header als HTTP-Parameter zur
-                        // Verfuegung gestellt, dazu wird das Zeichen - durch _
-                        // ersetzt und allen Parametern das Praefix "http_"
-                        // vorangestellt
-                        
-                        header = ("http_").concat(header.replace('-', '_'));
-                        if (!this.fields.contains(header)
-                                && header.length() > 0
-                                && value.length() > 0)
-                            this.fields.set(header, value);
+                    offset = buffer.size();
+                }
 
-                        offset = buffer.size();
-                    }
+                // field length is calculated
+                size = count > 0 ? 0 : size +1;
+                if (size == 1)
+                    offset = buffer.size();
 
-                    // die Feldlaenge wird berechnet
-                    count = cursor > 0 ? 0 : count +1;
-                    if (count == 1)
-                        offset = buffer.size();
+                // the line of a field from the header must be addressable with
+                // 8 bits (missing regulation in RFC 1945/2616)
+                if (size > 32768)
+                    this.status = 413;
 
-                    // die Zeile eines Felds vom Header muss sich mit 8-Bit
-                    // addressieren lassen (fehlende Regelung im RFC 1945/2616)
-                    if (count > 32768)
-                        this.status = 413;
+                // data are buffered
+                buffer.write(digit);
 
-                    // die Daten werden gespeichert
-                    buffer.write(digit);
+                // header of the request is limited to 65535 bytes
+                if (buffer.size() >= 65535
+                        && count < 4) {
+                    this.status = 413;
+                    break;
+                }
 
-                    // der Header des Request wird auf 65535 Bytes begrenzt
-                    if (buffer.size() >= 65535
-                            && cursor < 4) {
-                        this.status = 413;
-                        break;
-                    }
-                    
-                    // der Request wird auf kompletter Header geprueft
-                    if (cursor == 4)
-                        break;
-
-                } else {
-
-                    // der Datenstrom wird auf Ende geprueft
-                    if (digit >= 0)
-                        Thread.sleep(this.interrupt);
-                    else break;
-                } 
+                // request is verified for the complete header
+                if (count == 4)
+                    break;
             }
-
         } catch (Throwable throwable) {
             this.status = 400;
             if (throwable instanceof SocketTimeoutException)
                 this.status = 408;
         }
         
-        // der Header wird vorrangig fuer die Schnittstellen gesetzt
+        // header is set primarily for the interfaces
         this.header = buffer.toString().trim();
 
-        // die zusaetzlichen Header-Felder werden vorrangig fuer Filter
-        // ermittelt und sind nicht Bestandteil vom (X)CGI, dafuer werden nur
-        // die relevanten Parameter wie Methode, Pfade und Query uebernommen
+        // Part 2 - The request header is parsed, validated and the environment
+        //is prepared for the HTTP method.
 
-        // die erste Zeile wird ermittelt
+        // The additional header fields are primarily determined for filters and
+        // are not part of the (X)CGI, but only the relevant parameters like
+        // method, paths and query are taken over.
+
+        StringTokenizer tokenizer;
+
+        // first line of the request is determined
         tokenizer = new StringTokenizer(this.header, "\r\n");
         String request = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
         this.fields.set("req_line", request);
 
-        // die Methode vom Request wird ermittelt
-        offset = request.indexOf(' ');
+        // request method is determined
+        // without HTTP method the request is invalid, thus STATUS 400
+        int offset = request.indexOf(' ');
         String method = request.substring(0, offset < 0 ? request.length() : offset);
         this.fields.set("req_method", method);
-
-        // ohne HTTP-Methode ist die Anfrage ungueltig, somit STATUS 400
         if (this.status == 0
                 && method.length() <= 0)
             this.status = 400;
 
-        // Protokoll und Version vom Request werden ignoriert
-        // Pfad und Query vom Request werden ermittelt
+        // protocol and version of the request are ignored
+        // path and query from the request are determined
         string = request.substring(offset < 0 ? request.length() : offset +1);
         offset = string.lastIndexOf(' ');
         string = string.substring(0, offset < 0 ? string.length() : offset);
@@ -1153,8 +1137,8 @@ class Worker implements Runnable {
         String query = string.substring(offset < 0 ? string.length() : offset +1);
         this.fields.set("req_query", query);
 
-        // der Pfad wird dekodiert
-        // und normalisiert /abc/./def/../ghi/ -> /abc/ghi
+        // path is decoded
+        // and normalized /abc/./def/../ghi/ -> /abc/ghi
         String destination = Worker.textDecode(uri);
         String path = Worker.fileNormalize(destination);
         if (destination.endsWith("/")
@@ -1162,16 +1146,16 @@ class Worker implements Runnable {
             path = path.concat("/");
         this.fields.set("req_path", path);
 
-        // ist der Request nicht korrekt wird STATUS 400 gesetzt
-        // enthaelt der Request keinen Header wird STATUS 400 gesetzt
-        // enthaelt der Request kein gueltige Pfadangabe wird STATUS 400 gesetzt
+        // if the request is not correct STATUS 400 is set
+        // if the request does not contain a header STATUS 400 is set
+        // if the request does not contain a valid path STATUS 400 is set
         if (this.status == 0
                 && (!path.startsWith("/")
                         || this.header.length() <= 0))
             this.status = 400;
         
-        // der Host wird ohne Port ermittelt und verwendet
-        // ist kein Host im Request, wird die aktuelle Adresse verwendet
+        // host is determined and used without a port
+        // if no host is in the request, the current address is used
         String host = this.fields.get("http_host");
         offset = host.indexOf(':');
         host = host.substring(0, offset < 0 ? host.length() : offset);
@@ -1179,15 +1163,18 @@ class Worker implements Runnable {
             host = this.accept.getLocalAddress().getHostAddress();
         this.fields.set("http_host", host);
 
-        // der Host wird zur Virtualisierung ermittelt
+        // Part 3 - Virtual hosts are included and the configuration of the
+        // environment is further qualified.
+        
+        // host is determined for virtualization
         if (host.length() > 0) {
             
             String  context = ("virtual:").concat(host);
             Section section = this.initialize.get(context.concat(":ini"));
             String  server  = section.get("server").toLowerCase();
 
-            // die Optionen werden mit allen Vererbungen ermittelt bzw.
-            // erweitert wenn ein virtueller Host fuer den Server existiert
+            // the options are determined or extended with all inheritances if a
+            // virtual host exists for the server
             if ((" ").concat(server).concat(" ").contains((" ").concat(this.context.toLowerCase()).concat(" "))
                     || server.length() <= 0) {
                 this.options.merge(section);
@@ -1198,7 +1185,7 @@ class Worker implements Runnable {
                 this.interfaces.merge(this.initialize.get(context.concat(":cgi")));
             }
             
-            // die zu verwendende Blockgroesse wird ermittelt
+            // block size to be used for data accesses is determined
             try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
             } catch (Throwable throwable) {
                 this.blocksize = 65535;
@@ -1207,7 +1194,7 @@ class Worker implements Runnable {
             if (this.blocksize <= 0)
                 this.blocksize = 65535;
 
-            // das Timeout der Connection wird ermittelt
+            // timeout of the connection is determined
             string = this.options.get("timeout");
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
             try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
@@ -1215,14 +1202,16 @@ class Worker implements Runnable {
                 this.timeout = 0;
             }
         }
+        
+        File file;
 
-        // das aktuelle Arbeitsverzeichnis wird ermittelt
+        // working directory is determined
         file = Worker.fileCanonical(new File("."));
         String workdir = file != null ? file.getPath().replace('\\', '/') : ".";
         if (workdir.endsWith("/"))
             workdir = workdir.substring(0, workdir.length() -1);
 
-        // das Systemverzeichnis wird ermittelt
+        // system directory is determined
         file = Worker.fileCanonical(new File(this.options.get("sysroot")));
         this.sysroot = file != null ? file.getPath().replace('\\', '/') : workdir;
         if (this.sysroot.endsWith("/"))
@@ -1230,7 +1219,7 @@ class Worker implements Runnable {
         if (this.options.get("sysroot").length() <= 0)
             this.sysroot = workdir;
 
-        // das Dokumentenverzeichnis wird ermittelt
+        // document directory is determined
         file = Worker.fileCanonical(new File(this.options.get("docroot")));
         this.docroot = file != null ? file.getPath().replace('\\', '/') : workdir;
         if (this.docroot.endsWith("/"))
@@ -1238,14 +1227,14 @@ class Worker implements Runnable {
         if (this.options.get("docroot").length() <= 0)
             this.docroot = workdir;
 
-        // die serverseitig festen Umgebungsvariablen werden gesetzt
+        // fixed server-side environment variables are set
         this.environment.set("server_port", String.valueOf(this.accept.getLocalPort()));
         this.environment.set("server_protocol", "HTTP/1.0");
         this.environment.set("server_software", "Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
 
         this.environment.set("document_root", this.docroot);
 
-        // die Requestspezifischen Umgebungsvariablen werden gesetzt
+        // request specific environment variables are set
         this.environment.set("content_length", this.fields.get("http_content_length"));
         this.environment.set("content_type", this.fields.get("http_content_type"));
         this.environment.set("query_string", this.fields.get("req_query"));
@@ -1254,26 +1243,27 @@ class Worker implements Runnable {
         this.environment.set("remote_addr", this.accept.getInetAddress().getHostAddress());
         this.environment.set("remote_port", String.valueOf(this.accept.getPort()));
 
-        // die Unique-Id wird aus dem HashCode des Sockets, den Millisekunden
-        // sowie der verwendeten Portnummer ermittelt, die Laenge ist variabel
-        // die eindeutige Request-Id wird gesetzt
+        // the unique id is determined from the hash code of the socket, the
+        // milliseconds and the port number used, the length is variable
         String unique = Long.toString(Math.abs(this.accept.hashCode()), 36);
         unique = unique.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
         this.environment.set("unique_id", unique.toUpperCase());
 
-        // die Umgebungsvariabeln werden entsprechend der Ressource gesetzt
+        // die resource-related environment variables are set
         this.environment.set("path_url", path);
         this.environment.set("script_name", path);
         this.environment.set("script_url", this.fields.get("req_uri"));
         this.environment.set("path_context", "");
         this.environment.set("path_info", "");
 
-        // REFERENCE - Zur Ressource werden ggf. der virtuellen Pfad im Unix
-        // Fileformat (Slash) bzw. der reale Pfad, sowie optionale Parameter,
-        // Optionen und Verweise auf eine Authentication ermittelt.
+        // REFERENCE - If necessary, for the resource the virtual path in Unix
+        // file format (slash) or the real path, as well as optional parameters,
+        // options and references to an authentication are determined.
         this.resource = this.locate(path);
 
-        // Option [A] fuer eine absolute Referenz wird ermittelt
+        int digit;
+        
+        // options for the reference are determined
         String options = this.resource.toUpperCase();
         digit  = options.contains("[A]") ?  1 : 0;
         digit |= options.contains("[M]") ?  2 : 0;
@@ -1281,12 +1271,12 @@ class Worker implements Runnable {
         digit |= options.contains("[C]") ?  8 : 0;
         digit |= options.contains("[X]") ? 16 : 0;
         
-        virtual = (digit & 1) != 0;
-        connect = (digit & (2|4)) != 0;
+        boolean virtual = (digit & 1) != 0;
+        boolean forward = (digit & (2|4)) != 0;
 
-        // HINWEIS - Auch Module koennen die Option [R] besitzen, diese wird
-        // dann aber ignoriert, da die Weiterleitung zu Modulen nur ueber deren
-        // virtuellen Pfad erfolgt
+        // NOTICE - Modules can also have the [R] option. However, this is then
+        // ignored, because the forwarding to modules takes place only over
+        // their virtual path.
 
         if ((this.status == 0 || this.status == 404) && (digit & 8) != 0) this.status = 403;
         if ((this.status == 0 || this.status == 404) && (digit & 2) != 0) this.status = 0;
@@ -1295,12 +1285,12 @@ class Worker implements Runnable {
             this.status = 302;
         }
         
-        // ggf. wird die Zugriffsbrechtigung geprueft
-        // unterstuetzt werden Basic- und Digest-Authentication
+        // if necessary the access permission is checked
+        // basic and digest authentication are supported
         this.authorize(this.resource);
         
-        // die Request-Parameter (nur mit dem Praefix http_ und auth_) werden in
-        // die Umgebungsvariablen uebernommen
+        // request parameters with the prefix http_ and auth_ are added to the
+        // environment variables
         Enumeration enumeration = this.fields.elements();
         while (enumeration.hasMoreElements()) {
             String key = (String)enumeration.nextElement();
@@ -1312,21 +1302,21 @@ class Worker implements Runnable {
         
         this.environment.set("remote_user", this.fields.get("auth_user"));
         
-        if (!connect)
+        if (!forward)
             this.resource = Worker.cleanOptions(this.resource);
 
         if (this.resource.length() <= 0)
             this.resource = this.docroot.concat(this.environment.get("path_url"));
 
-        // die Ressource wird als File eingerichtet
+        // resource is established as a file
         file = new File(this.resource);
         
-        // die Ressource wird syntaktisch geprueft, nicht real existierende
-        // Ressourcen sowie Abweichungen im  kanonisch Pfad werden mit Status
-        // 404 quitiert (das schliesst die Bugs im Windows-Dateisystem / / und
-        // Punkt vorm Slash ein), die Gross- und Kleinschreibung wird in Windows
-        // ignoriert
-        if (!connect
+        // The resource is syntactically verified, not real existing resources
+        // as well as deviations in the canonical path are quitted with status
+        // 404 (this includes the bugs in the Windows file system / / and dot
+        // before slash), the upper and lower case is ignored in Windows.
+        
+        if (!forward
                 && this.status == 0) {
             File canonical = Worker.fileCanonical(file);
             if (!file.equals(canonical))
@@ -1347,59 +1337,59 @@ class Worker implements Runnable {
                 && !path.endsWith("/"))
             path = path.concat("/");
 
-        // der HOST oder VIRTUAL HOST wird ermittelt
+        // HOST or VIRTUAL HOST are determined
         String server = this.fields.get("http_host");
         if (server.length() <= 0)
             server = this.accept.getLocalAddress().getHostAddress();
 
-        // die OPTION IDENTITY wird geprueft
+        // OPTION IDENTITY is verified
         if (this.options.get("identity").toLowerCase().equals("on"))
             this.environment.set("server_name", server);
 
-        // aus dem Schema wird die Verwendung vom Secure-Layer ermittelt
+        // the use of the secure layer is determined from the schema
         boolean secure = this.socket instanceof SSLServerSocket;
         
-        // die Location wird zusammengestellt
+        // location is composed
         String url = this.environment.get("server_port");
         url = (!url.equals("80") && !secure || !url.equals("443") && secure) && url.length() > 0 ? (":").concat(url) : "";
         url = (secure ? "https" : "http").concat("://").concat(server).concat(url);
 
-        // die URI vom Skript wird komplementiert
+        // URI from the script is complemented
         if (this.status != 302)
             this.environment.set("script_uri", url.concat(this.fields.get("req_path")));
 
-        // bei abweichendem Path wird die Location als Redirect eingerichtet
+        // if the path is different, the location is configured as a redirect
         if (this.status == 0
                 && !this.environment.get("path_url").equals(path)
                 && !virtual
-                && !connect) {
+                && !forward) {
             this.environment.set("script_uri", url.concat(path));
             this.status = 302;
         }
 
-        // die aktuelle Referenz wird ermittelt
-        string = this.environment.get("script_uri");
-        string = Worker.fileNormalize(string);
-
-        // bezieht sich die Referenz auf ein Verzeichnis und der URI endet
-        // aber nicht auf "/" wird STATUS 302 gesetzt
-        if (file.isDirectory()
-                && !string.endsWith("/")) {
-            this.environment.set("script_uri", string.concat("/"));
-            if (this.status == 0)
-                this.status = 302;
+        // the current reference is determined
+        // if the destination is a directory and the URI does not end on /
+        // STATUS 302 is set
+        if (file.isDirectory()) {
+            String target = this.environment.get("script_uri");
+            target = Worker.fileNormalize(target);
+            if (!target.endsWith("/")) {
+                this.environment.set("script_uri", target.concat("/"));
+                if (this.status == 0)
+                    this.status = 302;
+            }
         }
         
-        // DEFAULT, beim Aufruf von Verzeichnissen wird nach einer alternativ
-        // anzuzeigenden Datei gesucht, was intern wie ein Verweis funktioniert
+        // DEFAULT - for directories an alternative file is searched for the
+        // output, which works internally like a reference
         if (file.isDirectory()
                 && this.status == 0) {
 
-            // das Verzeichnis wird mit Slash abgeschlossen
+            // directory is terminated with slash
             if (!this.resource.endsWith("/"))
                 this.resource = this.resource.concat("/");
 
-            // die Defaultdateien werden ermittelt
+            // default files are determinedt
             tokenizer = new StringTokenizer(this.options.get("default").replace('\\', '/'));
             while (tokenizer.hasMoreTokens()) {
                 String entry = tokenizer.nextToken();
@@ -1418,40 +1408,39 @@ class Worker implements Runnable {
             }
         }
         
-        string = Worker.cleanOptions(this.resource);
-        this.environment.set("script_filename", string);
-        this.environment.set("path_translated", string);
+        String script = Worker.cleanOptions(this.resource);
+        this.environment.set("script_filename", script);
+        this.environment.set("path_translated", script);
 
-        // der Query String wird ermittelt
-        // der Query String wird die Request URI aufbereite
-        // die Request URI wird gesetzt
-        string = this.environment.get("query_string");
-        if (string.length() > 0)
-            string = ("?").concat(string);
-        this.environment.set("request_uri", this.fields.get("req_uri").concat(string));
+        // query string is determined
+        // and if present, the request URI is extended with it
+        if (query.length() > 0)
+            this.environment.set("request_uri", uri.concat("?").concat(query));
+        else this.environment.set("request_uri", uri);
 
-        // die aktuelle HTTP-Methode wird ermittelt
-        string = this.environment.get("request_method").toLowerCase();
+        // the current method is searched in the list of allowed ones, is not
+        // included, STATUS 405 is set, except for modules with the option [X],
+        // in this case all methods are allowed
+        if (((digit & (2 | 16)) != (2 | 16))) {
+            // METHODS - allowed methods are determined        
+            String methods = (" ").concat(this.options.get("methods").toLowerCase()).concat(" ");
+            if (!methods.contains((" ").concat(method.toLowerCase()).concat(" "))
+                    && this.status <= 0)
+                this.status = 405;
+        }
         
-        // METHODS, die zulaessigen Methoden werden ermittelt        
-        String methods = (" ").concat(this.options.get("methods").toLowerCase()).concat(" ");
-
-        // die aktuelle Methode wird in der Liste der zulaessigen gesucht, ist
-        // nicht enthalten, wird STATUS 405 gesetzt, ausgenommen sind Module
-        // mit der Option [X], da an diese alle Methoden weitergereicht werden
-        if (((digit & (2 | 16)) != (2 | 16))
-                && !methods.contains((" ").concat(string).concat(" "))
-                && this.status <= 0)
-            this.status = 405;
+        // Part 4 - Available filters are applied.
+        // These can influence the further course of the request processing or
+        // take over completely.
         
         this.resource = this.filter();
-        string = Worker.cleanOptions(this.resource);
-        this.environment.set("script_filename", string);
-        this.environment.set("path_translated", string);
-
-        // handelt es sich bei der Ressource um ein Modul wird keine Zuweisung
-        // fuer das (X)CGI und den Mediatype vorgenommen
-        if (connect
+        script = Worker.cleanOptions(this.resource);
+        this.environment.set("script_filename", script);
+        this.environment.set("path_translated", script);
+        
+        // if the resource is a module, there is no assignment for the (X)CGI
+        // and the mediatype 
+        if (forward
                 || this.resource.toUpperCase().contains("[M]")) {
             this.mediatype = this.options.get("mediatype");
             this.gateway   = this.resource;
@@ -1461,32 +1450,34 @@ class Worker implements Runnable {
         if (this.status == 302) 
             return;
 
-        // die Dateierweiterung wird ermittelt
-        // CGI - zur Dateierweiterung wird ggf. eine Anwendung ermittelt
-        cursor = this.resource.lastIndexOf(".");
-        String type = cursor >= 0 ? this.resource.substring(cursor +1) : this.resource;
+        // Part 5 - If available, the (X)CGI is prepared. 
+        // Few more environment variables are required here and there is
+        // additional verification of the requested HTTP method.
+        
+        // file extension is determined
+        // CGI - if available, the application for the extension is determined
+        offset = this.resource.lastIndexOf(".");
+        String type = this.resource.substring(offset >= 0 ? offset +1 : 0);
         this.gateway = this.interfaces.get(type);
         if (this.gateway.length() > 0) {
-            cursor = this.gateway.indexOf('>');
+            offset = this.gateway.indexOf('>');
 
-            // die zulaessigen Methoden werden ermittelt
-            String allowed = this.gateway.substring(0, Math.max(0, cursor)).toLowerCase().trim();
+            // allowed methods are determined
+            String allowed = this.gateway.substring(0, Math.max(0, offset)).toLowerCase().trim();
 
-            // die eigentliche Anwendung ermittelt
-            if (cursor >= 0)
-                this.gateway = this.gateway.substring(cursor +2).trim();
+            // actual application determined
+            if (offset >= 0)
+                this.gateway = this.gateway.substring(offset +2).trim();
 
-            // die Variable GATEWAY-INTERFACE wird fuer das (X)CGI gesetzt
+            // variable GATEWAY-INTERFACE is set for the (X)CGI
             if (this.gateway.length() > 0) {
 
                 this.environment.set("gateway_interface", "CGI/1.1");
 
-                // die Methode wird geprueft, ob diese fuer das CGI zugelassen
-                // ist, wenn nicht zulaessig, wird STATUS 405 gesetzt
-                string = (" ").concat(this.environment.get("request_method")).concat(" ").toLowerCase();
+                // if the method is not allowed for (X)CGI, STATUS 405 is set
                 if (allowed.length() > 0) {
                     allowed = (" ").concat(allowed).concat(" ");
-                    if (!allowed.contains(string)
+                    if (!allowed.contains((" ").concat(method.toLowerCase()).concat(" "))
                             && !allowed.contains(" all ")
                             && this.status < 500
                             && this.status != 302)
@@ -1494,18 +1485,19 @@ class Worker implements Runnable {
                 }
             }
         }
+
+        // Part 5 - Media type / Content type are determined and it is verified
+        // whether the client supports it.
         
-        // der Mediatype wird ermittelt
+        // media type/content type is determined
         this.mediatype = this.mediatypes.get(type);
 
-        // kann dieser nicht festgelegt werden wird der Standardeintrag aus den
-        // Server Basisoptionen eingetragen
+        // if the media type cannot be determined, the default is used
         if (this.mediatype.length() <= 0)
             this.mediatype = this.options.get("mediatype");
 
-        // die vom Client unterstuetzten Mediatypes werden ermittelt
-        // es wird geprueft ob der Client den Mediatype unterstuetzt,
-        // ist dies nicht der Fall, wird STATUS 406 gesetzt
+        // media types supported by the client are determined
+        // if the client does not accept the media type, STATUS 406 is set
         String accept = this.fields.get("http_accept");
         if (accept.length() > 0) {
             tokenizer = new StringTokenizer(accept.toLowerCase().replace(';', ','), ",");
@@ -1516,10 +1508,10 @@ class Worker implements Runnable {
                             || entry.equals("*/*")
                             || entry.equals("*"))
                         break;
-                    cursor = this.mediatype.indexOf("/");
-                    if (cursor >= 0
-                            && (entry.equals(this.mediatype.substring(0, cursor +1).concat("*"))
-                                    || entry.equals(("*").concat(this.mediatype.substring(cursor)))))
+                    offset = this.mediatype.indexOf("/");
+                    if (offset >= 0
+                            && (entry.equals(this.mediatype.substring(0, offset +1).concat("*"))
+                                    || entry.equals(("*").concat(this.mediatype.substring(offset)))))
                         break;
                 } else this.status = 406;
             }

@@ -1008,8 +1008,6 @@ class Worker implements Runnable {
     private void initiate()
             throws Exception {
 
-        String string;
-
         if ((this.accept instanceof SSLSocket))
             try {this.fields.set("auth_cert", ((SSLSocket)this.accept).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
@@ -1113,14 +1111,18 @@ class Worker implements Runnable {
         String request = tokenizer.hasMoreTokens() ? tokenizer.nextToken() : "";
         this.fields.set("req_line", request);
 
+        int offset;
+        
         // request method is determined
         // without HTTP method the request is invalid, thus STATUS 400
-        int offset = request.indexOf(' ');
+        offset = request.indexOf(' ');
         String method = request.substring(0, offset < 0 ? request.length() : offset);
         this.fields.set("req_method", method);
         if (this.status == 0
                 && method.length() <= 0)
             this.status = 400;
+
+        String string;
 
         // protocol and version of the request are ignored
         // path and query from the request are determined

@@ -6,6 +6,10 @@
   BF: SAPI: Correction of passed context to constructor
       Until now the context always ended with section :INI -- that was wrong.
   BF: HTTP(S): Added status 301 in the list of status codes
+  BF: HTTP(S): Configuration of BLOCKSIZE is changeable by virtual host
+  BF: HTTP(S): Configuration of INTERRUPT is changeable by virtual host
+  BF: HTTP(S): Configuration of ISOLATION is changeable by virtual host
+  BF: HTTP(S): Configuration of TIMEOUT is changeable by virtual host
   CR: Build: Releases are now only available on the release page
   CR: License: Changed to Apache License Version 2.0
   CR: Service: Added configuration file as optional program argument for startup

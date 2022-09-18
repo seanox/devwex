@@ -979,7 +979,27 @@ class Worker implements Runnable {
      */
     private void initiate()
             throws Exception {
-
+        
+        // Part 0 - The parameters required for request analysis from the
+        // server-side configuration are loaded.
+        
+        // block size to be used for data accesses is determined
+        try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
+        } catch (Throwable throwable) {
+            this.blocksize = 65535;
+        }
+        if (this.blocksize <= 0)
+            this.blocksize = 65535;
+        
+        // timeout of connection and internal processes is determined
+        String timeout = this.options.get("timeout");
+        try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
+        } catch (Throwable throwable) {
+            this.timeout = 0;
+        }
+        if (this.timeout < 0)
+            this.timeout = 0;
+        
         if ((this.accept instanceof SSLSocket))
             try {this.fields.set("auth_cert", ((SSLSocket)this.accept).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
@@ -1158,25 +1178,32 @@ class Worker implements Runnable {
                 this.options.merge(this.initialize.get(context.concat(":ini")));
                 this.references.merge(this.initialize.get(context.concat(":ref")));
             }
-            
-            // block size to be used for data accesses is determined
-            try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
-            } catch (Throwable throwable) {
-                this.blocksize = 65535;
-            }
-            if (this.blocksize <= 0)
-                this.blocksize = 65535;
-
-            // isolation is determined, based on the options of timeout
-            string = this.options.get("timeout");
-            this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
-
-            // timeout of connection and internal processes is determined
-            try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
-            } catch (Throwable throwable) {
-                this.timeout = 0;
-            }
         }
+        
+        // block size to be used for data accesses is determined final
+        try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
+        } catch (Throwable throwable) {
+        }
+        if (this.blocksize <= 0)
+            this.blocksize = 65535;
+
+        // interrupt is determined final
+        try {this.interrupt = Long.parseLong(this.options.get("interrupt"));
+        } catch (Throwable throwable) {
+        }
+        if (this.interrupt < 0)
+            this.interrupt = 10;
+        
+        // isolation is determined final, based on the options of timeout
+        timeout = this.options.get("timeout");
+        this.isolation = timeout.toUpperCase().contains("[S]") ? -1 : 0;
+
+        // timeout of connection and internal processes is determined final
+        try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
+        } catch (Throwable throwable) {
+        }
+        if (this.timeout < 0)
+            this.timeout = 0;
         
         File file;
 
@@ -2613,34 +2640,6 @@ class Worker implements Runnable {
 
             this.mediatypes  = initialize.get("mediatypes");
             this.statuscodes = initialize.get("statuscodes");
-
-            // block size to be used is determined
-            try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
-            } catch (Throwable throwable) {
-                this.blocksize = 65535;
-            }
-            if (this.blocksize <= 0)
-                this.blocksize = 65535;
-
-            // isolation is determined, based on the options of timeout
-            String timeout = this.options.get("timeout");
-            this.isolation = timeout.toUpperCase().contains("[S]") ? -1 : 0;
-            
-            // timeout of connection and internal processes is determined
-            try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
-            } catch (Throwable throwable) {
-                this.timeout = 0;
-            }
-            if (this.timeout < 0)
-                this.timeout = 0;
-
-            // interrupt is determined
-            try {this.interrupt = Long.parseLong(this.options.get("interrupt"));
-            } catch (Throwable throwable) {
-                this.interrupt = 10;
-            }
-            if (this.interrupt < 0)
-                this.interrupt = 10;
 
             try {this.accept = this.socket.accept();
             } catch (InterruptedIOException exception) {

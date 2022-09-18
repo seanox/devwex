@@ -2544,7 +2544,7 @@ class Worker implements Runnable {
         }
     }
     
-    /** Marks the worker for abandonment in case of inactivity. */
+    /** Marks the worker for disposable in case of inactivity. */
     void isolate() {
         if (this.accept == null
                 && this.socket != null)
@@ -2558,8 +2558,7 @@ class Worker implements Runnable {
      * @return {@code true} if the worker is active and available
      */
     boolean available() {
-        if (this.socket != null
-                && this.isolation > 0
+        if (this.isolation > 0
                 && this.isolation < System.currentTimeMillis() -this.timeout)
             this.destroy();
         return this.socket != null && this.accept == null;

@@ -33,7 +33,7 @@ import java.net.SocketException;
  * control of the service for status requests, restart and stop.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220910
+ * @version 5.2.0 20220917
  */
 public class Remote implements Runnable {
 
@@ -61,7 +61,7 @@ public class Remote implements Runnable {
         context = context.trim();
         
         // REMOTE:INI - Loading the server configuration
-        Section options = initialize.get(context);
+        Section options = initialize.get(context.concat(":ini"));
         
         // REMOTE:INI:ADDRESS - Host address of the server socket
         InetAddress address = null;

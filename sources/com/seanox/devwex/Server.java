@@ -40,7 +40,7 @@ import javax.net.ssl.TrustManagerFactory;
  * will be accessed directly.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220910
+ * @version 5.2.0 20220917
  */
 public class Server implements Runnable {
 
@@ -98,7 +98,7 @@ public class Server implements Runnable {
         }
 
         // SERVER:INI - Loading the server configuration
-        Section options = this.initialize.get(this.context);
+        Section options = this.initialize.get(this.context.concat(":ini"));
 
         // SERVER:INI:ADDRESS - Host address of the server socket
         InetAddress address = null;
@@ -125,7 +125,7 @@ public class Server implements Runnable {
         }
 
         // SERVER:SSL - If the SSL section is present, a secure socket is used.
-        context = this.context.replaceAll("(?i):[a-z]+$", ":ssl");
+        context = this.context.concat(":ssl");
         if (this.initialize.contains(context)) {
 
             // SERVER:SSL - Loading SSL configuration
@@ -206,7 +206,7 @@ public class Server implements Runnable {
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
         // The server configuration is loaded.
-        Section options = this.initialize.get(this.context);
+        Section options = this.initialize.get(this.context.concat(":ini"));
 
         // SERVER:INI:MAXACCESS - max. number of concurrent connections
         int maxaccess = 0;

@@ -196,7 +196,7 @@ import java.util.Vector;
  * </ul>
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220911
+ * @version 5.5.0 20220917
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -542,15 +542,16 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                     context = (String)enumeration.nextElement();
                     if (!context.matches("^(?i)(?!virtual\\s*:.*$)([^:]+)(?=:).*:ini$"))
                         continue;
+                    context = context.replaceAll(":[^:]+$", "").trim();
                     
                     object = null;
 
                     try {
 
-                        Service.print(String.format("SERVICE INITIATE %s", context.replaceAll(":[^:]+$", "").trim()));
+                        Service.print(String.format("SERVICE INITIATE %s", context));
                         
                         // die Server Klasse wird geladen
-                        scope = service.initialize.get(context).get("scope", "com.seanox.devwex");
+                        scope = service.initialize.get(context.concat(":ini")).get("scope", "com.seanox.devwex");
                         scope = scope.replaceAll("\\s*>.*$", "");
                         try {source = loader.loadClass(scope);
                         } catch (ClassNotFoundException exception1) {

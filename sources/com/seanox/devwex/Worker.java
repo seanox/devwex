@@ -71,84 +71,84 @@ class Worker implements Runnable {
 
     /** Server configuration */
     private final Initialize initialize;
-    
-    /** Accepted socket of the worker */
-    private volatile Socket accept;
 
     /** Socket of the server */
-    private volatile ServerSocket socket;
+    private ServerSocket socket;
+
+    /** Accepted socket of the worker */
+    private Socket accept;
     
     /** Data input stream of the accepted socket */
-    private volatile InputStream input;
+    private InputStream input;
 
     /** Data output stream of the accepted socket */
-    private volatile OutputStream output;
+    private OutputStream output;
 
     /** Access rights of the server */
-    private volatile Section access;
+    private Section access;
 
     /** Environment variables of the server */
-    private volatile Section environment;
+    private Section environment;
 
     /** Fields of the request header */
-    private volatile Section fields;
+    private Section fields;
 
     /** Filters of the server */
-    private volatile Section filters;
+    private Section filters;
 
     /** Common Gateway Interfaces of the server */
-    private volatile Section interfaces;
+    private Section interfaces;
+
+    /** Section with the mediatypes configuration from the server */
+    private Section mediatypes;
 
     /** Section with the connection configuration from the server */
-    private volatile Section options;
+    private Section options;
 
     /** Section with the configuration of references from the server */
-    private volatile Section references;
-    
-    /** Section with the mediatypes configuration from the server */
-    private volatile Section mediatypes;
+    private Section references;
 
     /** Section with the status codes configuration from the server */
-    private volatile Section statuscodes;
+    private Section statuscodes;
 
     /** Document directory of the server */
-    private volatile String docroot;
-
-    /** Header of the request */
-    private volatile String header;
-
-    /** Media type of the request */
-    private volatile String mediatype;
-
-    /** Resource of the request */
-    private volatile String resource;
+    private String docroot;
 
     /** Gateway interface of the request */
-    private volatile String gateway;
-    
+    private String gateway;
+
+    /** Header of the request */
+    private String header;
+
+    /** Media type of the request */
+    private String mediatype;
+
+    /** Resource of the request */
+    private String resource;
+
     /** System directory of the server */
-    private volatile String sysroot;
+    private String sysroot;
 
     /** Data flow control */
-    private volatile boolean control;
+    private boolean control;
 
     /** Block size for data access */
-    private volatile int blocksize;
+    private int blocksize;
 
     /** Status code of the response */
-    private volatile int status;
+    private int status;
 
     /** Interrupt for system processes in milliseconds */
-    private volatile long interrupt;
+    private long interrupt;
 
     /** Timeout during outgoing data transfer in milliseconds */
-    private volatile long isolation;
+    private long isolation;
 
     /** Timeout on data idle in milliseconds */
-    private volatile long timeout;
+    private long timeout;
 
     /** Amount of transmitted data */
-    private volatile long volume;
+    private long volume;
 
     /**
      * Constructor, establishes the worker with socket and configuration.
@@ -157,7 +157,7 @@ class Worker implements Runnable {
      * @param initialize Server configuration
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
-        this.context    = context.replaceAll("(?i):[a-z]+$", "");
+        this.context    = context;
         this.socket     = socket;
         this.initialize = initialize;
     }
@@ -1147,16 +1147,16 @@ class Worker implements Runnable {
             Section section = this.initialize.get(context.concat(":ini"));
             String  server  = section.get("server").toLowerCase();
 
-            // the options are determined or extended with all inheritances if a
+            // options are determined or extended with all inheritances if a
             // virtual host exists for the server
             if ((" ").concat(server).concat(" ").contains((" ").concat(this.context.toLowerCase()).concat(" "))
                     || server.length() <= 0) {
-                this.options.merge(section);
-                this.references.merge(this.initialize.get(context.concat(":ref")));
                 this.access.merge(this.initialize.get(context.concat(":acc")));
-                this.filters.merge(this.initialize.get(context.concat(":flt")));
                 this.environment.merge(this.initialize.get(context.concat(":env")));
+                this.filters.merge(this.initialize.get(context.concat(":flt")));
                 this.interfaces.merge(this.initialize.get(context.concat(":cgi")));
+                this.options.merge(this.initialize.get(context.concat(":ini")));
+                this.references.merge(this.initialize.get(context.concat(":ref")));
             }
             
             // block size to be used for data accesses is determined
@@ -1164,13 +1164,14 @@ class Worker implements Runnable {
             } catch (Throwable throwable) {
                 this.blocksize = 65535;
             }
-
             if (this.blocksize <= 0)
                 this.blocksize = 65535;
 
-            // timeout of the connection is determined
+            // isolation is determined, based on the options of timeout
             string = this.options.get("timeout");
             this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
+
+            // timeout of connection and internal processes is determined
             try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
             } catch (Throwable throwable) {
                 this.timeout = 0;
@@ -2379,7 +2380,7 @@ class Worker implements Runnable {
             throws Exception {
 
         try {
-            
+
             // the connection is already accepted, so that the server process
             // does not block unnecessarily, the connection is initialized only
             // with running thread as asynchronous process
@@ -2563,14 +2564,14 @@ class Worker implements Runnable {
             this.destroy();
         return this.socket != null && this.accept == null;
     }
-
+    
     /** 
      * Terminates the worker by closing the data stream.
      * Current requests will abort hard.
      * After that, the worker cannot be reactivated.
      */
     void destroy() {
-
+        
         // ServerSocket is reset,
         // as indicator to abandonment of the worker in case of inactivity
         this.socket = null;
@@ -2594,42 +2595,43 @@ class Worker implements Runnable {
 
             this.docroot   = "";
             this.gateway   = "";
-            this.resource  = "";
             this.mediatype = "";
+            this.resource  = "";
             this.sysroot   = "";
 
             // fields from the header are configured
             this.fields = new Section(true);
+            
+            Initialize initialize = (Initialize)this.initialize.clone();
 
             // configuration is loaded
-            this.access      = (Section)this.initialize.get(this.context.concat(":acc")).clone();
-            this.environment = (Section)this.initialize.get(this.context.concat(":env")).clone();
-            this.filters     = (Section)this.initialize.get(this.context.concat(":flt")).clone();
-            this.interfaces  = (Section)this.initialize.get(this.context.concat(":cgi")).clone();
-            this.options     = (Section)this.initialize.get(this.context.concat(":ini")).clone();
-            this.references  = (Section)this.initialize.get(this.context.concat(":ref")).clone();
-            this.statuscodes = (Section)this.initialize.get("statuscodes").clone();
-            this.mediatypes  = (Section)this.initialize.get("mediatypes").clone();
+            this.access      = initialize.get(this.context.concat(":acc"));
+            this.environment = initialize.get(this.context.concat(":env"));
+            this.filters     = initialize.get(this.context.concat(":flt"));
+            this.interfaces  = initialize.get(this.context.concat(":cgi"));
+            this.options     = initialize.get(this.context.concat(":ini"));
+            this.references  = initialize.get(this.context.concat(":ref"));
+
+            this.mediatypes  = initialize.get("mediatypes");
+            this.statuscodes = initialize.get("statuscodes");
 
             // block size to be used is determined
             try {this.blocksize = Integer.parseInt(this.options.get("blocksize"));
             } catch (Throwable throwable) {
                 this.blocksize = 65535;
             }
-
             if (this.blocksize <= 0)
                 this.blocksize = 65535;
 
-            String string = this.options.get("timeout");
-            this.isolation = string.toUpperCase().contains("[S]") ? -1 : 0;
-
-            // timeout of the connection is determined
-            try {this.timeout = Long.parseLong(Worker.cleanOptions(string));
+            // isolation is determined, based on the options of timeout
+            String timeout = this.options.get("timeout");
+            this.isolation = timeout.toUpperCase().contains("[S]") ? -1 : 0;
+            
+            // timeout of connection and internal processes is determined
+            try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
             } catch (Throwable throwable) {
                 this.timeout = 0;
             }
-
-            // maximum process timeout is corrected if necessary
             if (this.timeout < 0)
                 this.timeout = 0;
 
@@ -2638,11 +2640,10 @@ class Worker implements Runnable {
             } catch (Throwable throwable) {
                 this.interrupt = 10;
             }
-
             if (this.interrupt < 0)
                 this.interrupt = 10;
 
-            try {this.accept = socket.accept();
+            try {this.accept = this.socket.accept();
             } catch (InterruptedIOException exception) {
                 continue;
             } catch (IOException exception) {

@@ -2587,7 +2587,9 @@ class Worker implements Runnable {
     boolean available() {
         if (this.isolation > 0
                 && this.isolation < System.currentTimeMillis() -this.timeout)
-            this.destroy();
+            try {this.accept.close();
+            } catch (Throwable throwable) {
+            }
         return this.socket != null && this.accept == null;
     }
     

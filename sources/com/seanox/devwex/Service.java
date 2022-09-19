@@ -196,7 +196,7 @@ import java.util.Vector;
  * </ul>
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220917
+ * @version 5.5.0 20220919
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -770,8 +770,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         // bei unbekannten Kommandos wird die Kommandoliste ausgegeben
         if (!string.matches("^start|restart|status|stop$")) {
-            Service.print("Usage: devwex [start] [ini file]", true);
-            Service.print("       devwex [restart|status|stop] [address:port]", true);
+            Service.print(("Usage: devwex [start] [ini file]")
+                    .concat("\r\n       devwex [restart|status|stop] [address:port]"), true);
             return;
         }
 

@@ -27,8 +27,6 @@
   <property name="build.sources" value="${build.project}/sources"/>
   <property name="build.classes" value="${build.project}/classes"/>
   
-  <property name="sources.filter" value="**/*.java,**/*.txt,**/*.css,**/*.html,**/*.ini,**/*.bat,**/*.cmd"/>
-  
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
   <property name="compile.debug" value="off"/>
@@ -46,15 +44,27 @@
       <delete file="${workspace}/CHANGES.tmp"/>
     </sequential>
   </macrodef>  
-  
+
+  <fileset id="release.sources.fileset" dir="${build}">
+    <include name="**/*.cmd"/>
+    <include name="**/*.java"/>
+    <include name="**/*.html"/>
+  </fileset>  
+
   <macrodef name="release-insert">
     <sequential>
-      <replace dir="${build}" includes="${sources.filter}"
-          token="#[ant:release-year]" value="${release.year}"/>
-      <replace dir="${build}" includes="${sources.filter}"
-          token="#[ant:release-date]" value="${release.date}"/>
-      <replace dir="${build}" includes="${sources.filter}"
-          token="#[ant:release-version]" value="${release.version}"/>        
+      <replaceregexp match="(?&lt;!\.)0\.0\.0(?!\.)" flags="g" byline="false"
+          replace="${release.version}">
+        <fileset refid="release.sources.fileset"/>
+      </replaceregexp>
+      <replaceregexp match="(?&lt;=\s)0000(?=\s)" flags="g" byline="false"
+          replace="${release.year}">
+        <fileset refid="release.sources.fileset"/>
+      </replaceregexp>
+      <replaceregexp match="\b00000000\b" flags="g" byline="false"
+          replace="${release.date}">
+        <fileset refid="release.sources.fileset"/>
+      </replaceregexp>
     </sequential>
   </macrodef>
   

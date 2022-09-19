@@ -225,7 +225,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     private static volatile Service service;
 
     /** Konstante mit der aktuellen Version des Services */
-    public static final String VERSION = "#[ant:release-version] #[ant:release-date]";
+    public static final String VERSION = "0.0.0 00000000";
 
     /** Konstante f&uuml;r den Betriebsstatus Unbekannt */
     public static final int UNKNOWN = 0;
@@ -674,7 +674,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         Object      caption;
         
-        String result = "VERS: #[ant:release-version] #[ant:release-date]\r\n";
+        String result = "VERS: 0.0.0 00000000\r\n";
         result = result.concat(String.format("TIME: %tF %<tT\r\n", new Date()));
      
         synchronized (Service.class) {
@@ -763,8 +763,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         }
         
         // Ausgabeinformation wird zusammen gestellt und ausgegeben
-        Service.print("Seanox Devwex [Version #[ant:release-version] #[ant:release-date]]", true);
-        Service.print("Copyright (C) #[ant:release-year] Seanox Software Solutions", true);
+        Service.print("Seanox Devwex [Version 0.0.0 00000000]", true);
+        Service.print("Copyright (C) 0000 Seanox Software Solutions", true);
         Service.print("Advanced Server Development", true);
         Service.print("\r\n", true);
         

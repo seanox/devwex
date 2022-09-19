@@ -12,13 +12,14 @@
   BF: HTTP(S): Configuration of TIMEOUT is changeable by virtual host
   BF: Build: Empty storage directory is included in the zip file
   CR: Build: Releases are now only available on the release page
+  CR: Build: Simplification when inserting release infos
   CR: License: Changed to Apache License Version 2.0
   CR: Service: Added configuration file as optional program argument for startup
       Usage: devwex [start] [ini file]
   CR: SAPI: Constructors for servers support alternative signature(s)
       Server(String context, Object initialize)
       Server(String context, Initialize initialize)
-  CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)    
+  CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)
 
 5.4.0 20210411
   BF: HTTP(S) Server Status: Update of class 4xx

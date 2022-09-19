@@ -27,8 +27,8 @@
   rem this will be resolved automatically. The declaration of both values is
   rem optional.
 
-  echo Seanox Devwex Service [Version #[ant:release-version] #[ant:release-date]]
-  echo Copyright (C) #[ant:release-year] Seanox Software Solutions
+  echo Seanox Devwex Service 0.0.0 00000000
+  echo Copyright (C) 0000 Seanox Software Solutions
   echo Advanced Server Development
   echo.
 

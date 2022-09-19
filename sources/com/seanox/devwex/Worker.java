@@ -1232,7 +1232,7 @@ class Worker implements Runnable {
         // fixed server-side environment variables are set
         this.environment.set("server_port", String.valueOf(this.accept.getLocalPort()));
         this.environment.set("server_protocol", "HTTP/1.0");
-        this.environment.set("server_software", "Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
+        this.environment.set("server_software", "Seanox-Devwex/0.0.0 00000000");
 
         this.environment.set("document_root", this.docroot);
 
@@ -1533,7 +1533,7 @@ class Worker implements Runnable {
         string = String.valueOf(status);
         string = ("HTTP/1.0 ").concat(string).concat(" ").concat(Worker.cleanOptions(this.statuscodes.get(string))).trim();
         if (this.options.get("identity").toLowerCase().equals("on"))
-            string = string.concat("\r\nServer: Seanox-Devwex/#[ant:release-version] #[ant:release-date]");
+            string = string.concat("\r\nServer: Seanox-Devwex/0.0.0 00000000");
         string = string.concat("\r\n").concat(Worker.dateFormat("'Date: 'E, dd MMM yyyy HH:mm:ss z", new Date(), "GMT"));
         string = string.concat("\r\n").concat(String.join("\r\n", header));
 

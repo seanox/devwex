@@ -10,6 +10,7 @@
   BF: HTTP(S): Configuration of INTERRUPT is changeable by virtual host
   BF: HTTP(S): Configuration of ISOLATION is changeable by virtual host
   BF: HTTP(S): Configuration of TIMEOUT is changeable by virtual host
+  BF: Build: Empty storage directory is included in the zip file
   CR: Build: Releases are now only available on the release page
   CR: License: Changed to Apache License Version 2.0
   CR: Service: Added configuration file as optional program argument for startup

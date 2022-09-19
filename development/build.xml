@@ -363,6 +363,7 @@
     </copy>
     <copy file="${workspace}/program/${ant.project.name}.jar" todir="${build}/release/program"/>
     <copy file="${workspace}/program/keystore" todir="${build}/release/program"/>
+    <mkdir dir="${build}/release/storage"/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
     </touch>      

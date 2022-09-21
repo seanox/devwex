@@ -33,7 +33,7 @@ import java.net.SocketException;
  * control of the service for status requests, restart and stop.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220917
+ * @version 5.2.0 20220921
  */
 public class Remote implements Runnable {
 
@@ -79,7 +79,7 @@ public class Remote implements Runnable {
         this.socket = new ServerSocket(port, 0, address);
 
         // Setting the timeout for the socket
-        this.socket.setSoTimeout(1000);
+        this.socket.setSoTimeout(10000);
 
         // Server short description is composed
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress())

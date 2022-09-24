@@ -62,7 +62,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220917
+ * @version 5.5.0 20220924
  */
 class Worker implements Runnable {
   
@@ -1620,7 +1620,7 @@ class Worker implements Runnable {
         
         // maximum process run time is determined
         long duration = 0;
-        try {duration = Long.parseLong(this.options.get("duration"));
+        try {duration = Long.parseLong(this.options.get("isolation"));
         } catch (Throwable throwable) {
         }
 
@@ -2478,7 +2478,14 @@ class Worker implements Runnable {
                             throw exception;
                         }    
                 }
-            }            
+            }   
+            
+        } catch (Exception exception) {
+            
+            if (this.status == 0
+                    || this.status == 200)
+                this.status = 500;
+            throw exception;
             
         } finally {
 
@@ -2497,8 +2504,8 @@ class Worker implements Runnable {
         }
     }
    
-    /** Logs the access in the logging medium. */
-    private void register()
+    /** Creates a log entry about the request. */
+    private void trace()
             throws Exception {
 
         // client is determined
@@ -2662,7 +2669,7 @@ class Worker implements Runnable {
             }
 
             // access is logged
-            try {this.register();
+            try {this.trace();
             } catch (Throwable throwable) {
                 Service.print(throwable);
             }

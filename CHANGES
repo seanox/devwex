@@ -20,6 +20,12 @@
       Server(String context, Object initialize)
       Server(String context, Initialize initialize)
   CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)
+  CR: HTTP(S): Consolidation of TIMEOUT, DURATION, ISOLATION
+      TIMEOUT timeout for sockets (SO_TIMEOUT), request, streams, option [S] is omitted
+      ISOLATION maximum time of the (X)CGI process
+      If exceeded, the request is isolated and closed with an HTTP error status.
+      This also protects against blocked or extremely slow data streams.
+      DURATION is omitted
 
 5.4.0 20210411
   BF: HTTP(S) Server Status: Update of class 4xx

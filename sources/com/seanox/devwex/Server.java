@@ -40,7 +40,7 @@ import javax.net.ssl.TrustManagerFactory;
  * will be accessed directly.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220917
+ * @version 5.2.0 20220924
  */
 public class Server implements Runnable {
 
@@ -118,12 +118,6 @@ public class Server implements Runnable {
         } catch (Throwable throwable) {
         }
 
-        // SERVER:INI:ISOLATION - Idle time and timeout of the server sockets
-        int isolation = 0;
-        try {isolation = Integer.parseInt(options.get("isolation"));
-        } catch (Throwable throwable) {
-        }
-
         // SERVER:SSL - If the SSL section is present, a secure socket is used.
         context = this.context.concat(":ssl");
         if (this.initialize.contains(context)) {
@@ -168,9 +162,13 @@ public class Server implements Runnable {
             // Establishment of non-secure socket
             this.socket = new ServerSocket(port, backlog, address);
         }
-
-        // SERVER:INI:ISOLATION - Setting the timeout for the socket
-        this.socket.setSoTimeout(isolation <= 0 ? 250 : isolation);
+        
+        // SERVER:INI:TIMEOUT - timeout to establish a connection in milliseconds
+        int timeout = 0;
+        try {timeout = Integer.parseInt(options.get("timeout"));
+        } catch (Throwable throwable) {
+        }
+        this.socket.setSoTimeout(timeout);
 
         // Server short description is composed
         this.caption = ("TCP ").concat(this.socket.getInetAddress().getHostAddress())

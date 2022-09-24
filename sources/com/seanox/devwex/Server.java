@@ -118,6 +118,12 @@ public class Server implements Runnable {
         } catch (Throwable throwable) {
         }
 
+        // SERVER:INI:TIMEOUT - timeout to establish a connection in milliseconds
+        int timeout = 0;
+        try {timeout = Integer.parseInt(options.get("timeout"));
+        } catch (Throwable throwable) {
+        }
+
         // SERVER:SSL - If the SSL section is present, a secure socket is used.
         context = this.context.concat(":ssl");
         if (this.initialize.contains(context)) {
@@ -163,11 +169,6 @@ public class Server implements Runnable {
             this.socket = new ServerSocket(port, backlog, address);
         }
         
-        // SERVER:INI:TIMEOUT - timeout to establish a connection in milliseconds
-        int timeout = 0;
-        try {timeout = Integer.parseInt(options.get("timeout"));
-        } catch (Throwable throwable) {
-        }
         this.socket.setSoTimeout(timeout);
 
         // Server short description is composed

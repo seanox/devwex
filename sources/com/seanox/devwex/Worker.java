@@ -141,10 +141,15 @@ class Worker implements Runnable {
     /** Interrupt for system processes in milliseconds */
     private long interrupt;
 
-    /** Timeout during outgoing data transfer in milliseconds */
-    private long isolation;
+    /** 
+     * Timelock is a timestamp with start from write and will be used to detect
+     * blocking data streams when the time exceeds a threshold value (timeout).
+     * If the stream is still reacting after writing, the timestamp is reset.
+     * There is no SO_TIMEOUT for outgoing data streams, therefore this approach. 
+     */
+    private long timelock;
 
-    /** Timeout on data idle in milliseconds */
+    /** TODO: Timeout on data idle in milliseconds */
     private long timeout;
 
     /** Amount of transmitted data */
@@ -991,15 +996,6 @@ class Worker implements Runnable {
         if (this.blocksize <= 0)
             this.blocksize = 65535;
         
-        // timeout of connection and internal processes is determined
-        String timeout = this.options.get("timeout");
-        try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
-        } catch (Throwable throwable) {
-            this.timeout = 0;
-        }
-        if (this.timeout < 0)
-            this.timeout = 0;
-        
         if ((this.accept instanceof SSLSocket))
             try {this.fields.set("auth_cert", ((SSLSocket)this.accept).getSession().getPeerPrincipal().getName());
             } catch (Throwable throwable) {
@@ -1012,13 +1008,6 @@ class Worker implements Runnable {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream(65535);
         
         try {
-
-            // SO timeout is set for the ServerSocket
-            this.accept.setSoTimeout((int)this.timeout);
-
-            // data streams are established
-            this.output = this.accept.getOutputStream();
-            this.input  = this.accept.getInputStream();
 
             // input stream is buffered
             this.input = new BufferedInputStream(this.input, this.blocksize);
@@ -1194,16 +1183,13 @@ class Worker implements Runnable {
         if (this.interrupt < 0)
             this.interrupt = 10;
         
-        // isolation is determined final, based on the options of timeout
-        timeout = this.options.get("timeout");
-        this.isolation = timeout.toUpperCase().contains("[S]") ? -1 : 0;
-
         // timeout of connection and internal processes is determined final
-        try {this.timeout = Long.parseLong(Worker.cleanOptions(timeout));
+        try {this.timeout = Long.parseLong(this.options.get("timeout"));
         } catch (Throwable throwable) {
         }
-        if (this.timeout < 0)
-            this.timeout = 0;
+        
+        // SO timeout is set for the ServerSocket final
+        this.accept.setSoTimeout((int)this.timeout);
         
         File file;
 
@@ -1619,15 +1605,15 @@ class Worker implements Runnable {
         target = Worker.cleanOptions(target);
         
         // maximum process run time is determined
-        long duration = 0;
-        try {duration = Long.parseLong(this.options.get("isolation"));
+        long isolation = 0;
+        try {isolation = Long.parseLong(this.options.get("isolation"));
         } catch (Throwable throwable) {
         }
 
         // the time limit of the process is determined
         long timeout = 0;
-        if (duration > 0)
-            timeout = System.currentTimeMillis() +duration;
+        if (isolation > 0)
+            timeout = System.currentTimeMillis() +isolation;
 
         // environment variables are determined
         String[] environment = this.getEnvironment();
@@ -1782,14 +1768,13 @@ class Worker implements Runnable {
                         // streams, because there is no socket-based timeout.
                         // If the stream is still reacting at the end, the time
                         // is reset.
-                        if (this.isolation != 0)
-                            this.isolation = System.currentTimeMillis();
+                        if (this.timeout > 0)
+                            this.timelock = System.currentTimeMillis();
                         if (header != null)
                             this.output.write(header.concat("\r\n\r\n").getBytes());
                         header = null;
                         this.output.write(bytes, offset, length -offset);
-                        if (this.isolation != 0)
-                            this.isolation = -1;
+                        this.timelock = 0;
                         
                         // volume of sent data is registered
                         this.volume += length -offset;
@@ -2047,12 +2032,11 @@ class Worker implements Runnable {
                 // timeout is used to detect blocking data streams, because
                 // there is no socket-based timeout. If the stream is still
                 // reacting at the end, the time is reset.
-                if (this.isolation != 0)
-                    this.isolation = System.currentTimeMillis();
+                if (this.timeout > 0)
+                    this.timelock = System.currentTimeMillis();
                 this.output.write(header.getBytes());
                 this.output.write(bytes);
-                if (this.isolation != 0)
-                    this.isolation = -1;
+                this.timelock = 0;
                 
                 // volume of sent data is registered
                 this.volume += bytes.length;
@@ -2142,15 +2126,10 @@ class Worker implements Runnable {
         // connection is marked as used
         this.control = false;
 
-        // Isolation defines the time from the last output when strict timeout
-        // is used to detect blocking data streams, because there is no
-        // socket-based timeout. If the stream is still reacting at the end, the
-        // time is reset.
-        if (this.isolation != 0)
-            this.isolation = System.currentTimeMillis();
+        if (this.timeout > 0)
+            this.timelock = System.currentTimeMillis();
         this.output.write(header.getBytes());
-        if (this.isolation != 0)
-            this.isolation = -1;
+        this.timelock = 0;
         
         if (method.equals("get")) {
 
@@ -2172,15 +2151,10 @@ class Worker implements Runnable {
                             && (offset +this.volume +size > limit))
                         size = limit -(offset +this.volume);
 
-                    // Isolation defines the time from the last output when
-                    // strict timeout is used to detect blocking data streams,
-                    // because there is no socket-based timeout. If the stream
-                    // is still reacting at the end, the time is reset.
-                    if (this.isolation != 0)
-                        this.isolation = System.currentTimeMillis();
+                    if (this.timeout > 0)
+                        this.timelock = System.currentTimeMillis();
                     this.output.write(bytes, 0, Math.max(0, (int)size));
-                    if (this.isolation != 0)
-                        this.isolation = -1;
+                    this.timelock = 0;
 
                     // volume of sent data is registered
                     this.volume += size;
@@ -2381,18 +2355,13 @@ class Worker implements Runnable {
         // connection is marked as used
         this.control = false;         
 
-        // Isolation defines the time from the last output when strict timeout
-        // is used to detect blocking data streams, because there is no
-        // socket-based timeout. If the stream is still reacting at the end, the
-        // time is reset.
-        if (this.isolation != 0)
-            this.isolation = System.currentTimeMillis();
+        if (this.timeout > 0)
+            this.timelock = System.currentTimeMillis();
         if (this.output != null) {
             this.output.write(string.getBytes());
             this.output.write(bytes);
         }
-        if (this.isolation != 0)
-            this.isolation = -1;
+        this.timelock = 0;
         
         // volume of sent data is registered
         this.volume += bytes.length;  
@@ -2407,6 +2376,13 @@ class Worker implements Runnable {
             throws Exception {
 
         try {
+            
+            // SO timeout is set for the ServerSocket
+            this.accept.setSoTimeout((int)this.timeout);
+
+            // data streams are established
+            this.input  = this.accept.getInputStream();
+            this.output = this.accept.getOutputStream();
 
             // the connection is already accepted, so that the server process
             // does not block unnecessarily, the connection is initialized only
@@ -2489,12 +2465,7 @@ class Worker implements Runnable {
             
         } finally {
 
-            // Isolation defines the time from the last output when strict
-            // timeout is used to detect blocking data streams, because there is
-            // no socket-based timeout. If the data stream is still reacting at
-            // the end, the time is reset.
-            if (this.isolation != 0)
-                this.isolation = -1;               
+            this.timelock = 0;               
             
             // STATUS/ERROR/METHOD:OPTIONS - will be executed if necessary
             if (this.control)
@@ -2592,8 +2563,8 @@ class Worker implements Runnable {
      * @return {@code true} if the worker is active and available
      */
     boolean available() {
-        if (this.isolation > 0
-                && this.isolation < System.currentTimeMillis() -this.timeout)
+        if (this.timelock > 0
+                && System.currentTimeMillis() -this.timelock > this.timeout)
             try {this.accept.close();
             } catch (Throwable throwable) {
             }
@@ -2620,7 +2591,11 @@ class Worker implements Runnable {
     @Override
     public void run() {
 
-        while (this.socket != null) {
+        while (true) {
+            
+            ServerSocket socket = this.socket;
+            if (socket == null)
+                break;
 
             // initial setup of the variables
             this.status = 0;
@@ -2650,7 +2625,12 @@ class Worker implements Runnable {
             this.mediatypes  = initialize.get("mediatypes");
             this.statuscodes = initialize.get("statuscodes");
 
-            try {this.accept = this.socket.accept();
+            try {this.timeout = socket.getSoTimeout();
+            } catch (Throwable throwable) {
+                this.timeout = 0;
+            }
+
+            try {this.accept = socket.accept();
             } catch (InterruptedIOException exception) {
                 continue;
             } catch (IOException exception) {

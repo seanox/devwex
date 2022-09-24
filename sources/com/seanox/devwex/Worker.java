@@ -149,7 +149,7 @@ class Worker implements Runnable {
      */
     private long timelock;
 
-    /** TODO: Timeout on data idle in milliseconds */
+    /** Timeout for sockets, request, streams in milliseconds */
     private long timeout;
 
     /** Amount of transmitted data */

@@ -29,7 +29,7 @@ decisions in the project easier to understand :-)__
 
 # Features
 - __Architecture__  
-  Seanox Devwex is a multithreaded runtime container for (server)modules, which
+  Seanox Devwex is a multithreaded runtime container for (server) modules, which
   are integrated via the provided Server and Module API. The own ClassLoader
   supports the loading and unloading of servers and modules at the runtime. 
 - __Hypertext Transfer Protocol__  
@@ -127,17 +127,21 @@ Unpack the zip file to any location in the file system.
 Go to the program directory and start the program directly or by script.
 
 
-# Changes (Change Log)
-## 5.4.0 20210411 (summary of the current version)  
-BF: HTTP(S) Server Status: Update of class 4xx  
-BF: HTTP(S) CGI: Correction of REQUEST_URI  
-BF: HTTP(S) CGI: Correction of SCRIPT_URI / SCRIPT_URL  
-BF: Service: Optimization / correction of Service::Print  
-BF: Documentation: Update / corrections  
-CR: HTTP(S) CGI: Output of the error pipe of the CGI process  
-CR: HTTP(S) CGI: PATH_CONTEXT replaces PATH_ABSOLUTE (omitted)  
-CR: Build: Target release replaced archive (omitted)  
-CR: Windows: Integration and merge of Seanox Devwex Service project  
+# Changes
+## 5.5.0 2022xxxx (upcoming version)  
+BF: Review: Optimization and corrections (without functional impact)  
+BF: Generator: Correction when parsing structures  
+BF: SAPI: Correction of passed context to constructor  
+BF: HTTP(S): Added status 301 in the list of status codes  
+BF: HTTP(S): BLOCKSIZE, INTERRUPT, ISOLATION, TIMEOUT is changeable by virtual host  
+BF: Build: Empty storage directory is included in the zip file  
+CR: Build: Releases are now only available on the release page  
+CR: Build: Simplification when inserting release infos  
+CR: License: Changed to Apache License Version 2.0  
+CR: Service: Added configuration file as optional program argument for startup  
+CR: SAPI: Constructors for servers support alternative signature(s)  
+CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)  
+CR: HTTP(S): Consolidation of TIMEOUT, DURATION, ISOLATION  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

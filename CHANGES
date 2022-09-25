@@ -1,4 +1,4 @@
-5.5.0 2022xxxx
+5.5.0 20221011
   BF: Review: Optimization and corrections (without functional impact)
       The binary is getting a little smaller again. I did not expect that :-)
   BF: Generator: Correction when parsing structures

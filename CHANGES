@@ -6,10 +6,7 @@
   BF: SAPI: Correction of passed context to constructor
       Until now the context always ended with section :INI -- that was wrong.
   BF: HTTP(S): Added status 301 in the list of status codes
-  BF: HTTP(S): Configuration of BLOCKSIZE is changeable by virtual host
-  BF: HTTP(S): Configuration of INTERRUPT is changeable by virtual host
-  BF: HTTP(S): Configuration of ISOLATION is changeable by virtual host
-  BF: HTTP(S): Configuration of TIMEOUT is changeable by virtual host
+  BF: HTTP(S): BLOCKSIZE, INTERRUPT, ISOLATION, TIMEOUT is changeable by virtual host
   BF: Build: Empty storage directory is included in the zip file
   CR: Build: Releases are now only available on the release page
   CR: Build: Simplification when inserting release infos
@@ -22,7 +19,7 @@
   CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)
   CR: HTTP(S): Consolidation of TIMEOUT, DURATION, ISOLATION
       TIMEOUT timeout for sockets (SO_TIMEOUT), request, streams, option [S] is omitted
-      ISOLATION maximum time of the (X)CGI process
+      ISOLATION maximum time of (X)CGI processes
       If exceeded, the request is isolated and closed with an HTTP error status.
       This also protects against blocked or extremely slow data streams.
       DURATION is omitted

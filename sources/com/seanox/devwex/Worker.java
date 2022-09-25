@@ -2648,7 +2648,7 @@ class Worker implements Runnable {
             } catch (Throwable throwable) {
             }
 
-            // access is logged
+            // logging from request
             try {this.trace();
             } catch (Throwable throwable) {
                 Service.print(throwable);

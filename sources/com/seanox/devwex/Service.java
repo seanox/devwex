@@ -791,8 +791,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         // unknown commands output the command list
         if (!string.matches("^start|restart|status|stop$")) {
-            Service.print(("Usage: devwex [start] [ini file]")
-                    .concat("\r\n       devwex [restart|status|stop] [address:port]"), true);
+            Service.print(("usage: devwex [start] [ini file]\r\n")
+                    .concat("       devwex [restart|status|stop] [address:port]"), true);
             return;
         }
 

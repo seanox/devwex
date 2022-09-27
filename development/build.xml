@@ -248,6 +248,8 @@
       <os family="unix"/>
     </condition>   
     <antcall target="compress"/>
+    <length file="${workspace.program}/${ant.project.name}.jar" property="build.binary.length"/>
+    <echo>---&gt; ${ant.project.name}.jar: ${build.binary.length} bytes</echo>
     <delete dir="${build}"/>
   </target>  
   

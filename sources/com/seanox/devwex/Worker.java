@@ -62,7 +62,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220924
+ * @version 5.5.0 20220928
  */
 class Worker implements Runnable {
   
@@ -2633,7 +2633,8 @@ class Worker implements Runnable {
             try {this.accept = socket.accept();
             } catch (InterruptedIOException exception) {
                 continue;
-            } catch (IOException exception) {
+            } catch (Throwable throwable) {
+                Service.print(throwable);
                 break;
             }
 

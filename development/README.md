@@ -1,5 +1,4 @@
 # Notes for development and the project
-
 The size of the Devwex binary is limited to a maximum of 30kB. There is no
 technical reason for this, it is rather the more than 20 years old quirk and
 question -- Why are web servers so big? This should make some unconventional
@@ -7,8 +6,8 @@ decisions in the project easier to understand :-)
 
 __Each decision always considers the size of the binary.__ 
 
-# List of known peculiarities
 
+# List of peculiarities
 - Use Java-5 as compiler setting for source and target  
   This creates the smaller binary, later versions will always be larger.
 - Use the language features of Java 5 and 6 but no generics
@@ -31,3 +30,18 @@ __Each decision always considers the size of the binary.__
 - Refactoring is a standard procedure, therefore the tests must always be well
   maintained 
 - Even with all the quirks, keep the code simple, understandable and clean  
+
+
+# What can/should be ignored during code analysis?
+- Java | Compiler issues | Unchecked warning  
+  Safety in data types is a win, but creates a larger binary and up until Java
+  4 you could handle it just fine. In general, many views are based on Java 4.
+- Java | Error handling | Catch block may ignore exception  
+  Comment mainly on the why. The how can be seen in the code. However, this
+  decision was made later in the project. But an empty catch block "can be
+  ignored" was kind of like boilerplate.
+- Java | Java language level migration aids | Java 5 | Raw use of parameterized class  
+  See comment to: Unchecked warning
+
+In general, these quirks and peculiarities apply only to Devwex, everything that
+arises around it uses modern and well-known standards and recommendations.

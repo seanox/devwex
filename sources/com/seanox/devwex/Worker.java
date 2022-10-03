@@ -62,7 +62,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220928
+ * @version 5.5.0 20221003
  */
 class Worker implements Runnable {
   
@@ -175,9 +175,9 @@ class Worker implements Runnable {
      */
     private static String cleanOptions(String string) {
         int cursor = string.indexOf('[');
-        if (cursor >= 0)
-            string = string.substring(0, cursor).trim();
-        return string;
+        if (cursor < 0)
+            return string;
+        return string.substring(0, cursor).trim();
     }
 
     /**

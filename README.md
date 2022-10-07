@@ -118,8 +118,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox Devwex 5.4.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.4.0.zip)  
-[Seanox Devwex 5.4.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.4.0-win.zip)  
+[Seanox Devwex 5.5.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.5.0.zip)  
+[Seanox Devwex 5.5.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.5.0-win.zip)  
 
 
 # Installation
@@ -128,7 +128,7 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes
-## 5.5.0 2022xxxx (upcoming version)  
+## 5.5.0 20221007  
 BF: Review: Optimization and corrections (without functional impact)  
 BF: Generator: Correction when parsing structures  
 BF: SAPI: Correction of passed context to constructor  

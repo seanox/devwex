@@ -1,3 +1,7 @@
+5.5.1 2023xxxx
+  BF: Review: Optimization and corrections
+      And the binary becomes a bit smaller again :-)
+
 5.5.0 20221007
   BF: Review: Optimization and corrections (without functional impact)
       The binary is getting a little smaller again. I did not expect that :-)

@@ -25,7 +25,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.security.KeyStore;
 import java.util.Enumeration;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -40,7 +39,7 @@ import javax.net.ssl.TrustManagerFactory;
  * will be accessed directly.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220924
+ * @version 5.2.1 20221008
  */
 public class Server implements Runnable {
 
@@ -74,28 +73,6 @@ public class Server implements Runnable {
         this.context = context.trim();
 
         this.initialize = (Initialize)initialize.clone();
-
-        // MEDIATYPES - The media types are rewritten for faster access. For
-        // configuration, it is easier to use the media type as the key, but at
-        // runtime it is easier and faster if the file extension is the key.
-
-        // Mapping in a Dictionary, incomplete entries are ignored.
-        Section section = new Section(true);
-        Section mediatypes = this.initialize.get("mediatypes");
-        if (mediatypes != null) {
-            Enumeration enumeration = mediatypes.elements();
-            while (enumeration.hasMoreElements()) {
-                String string = (String)enumeration.nextElement();
-                StringTokenizer tokenizer = new StringTokenizer(mediatypes.get(string));
-                while (tokenizer.hasMoreTokens()) {
-                    String buffer = tokenizer.nextToken().trim();
-                    if (buffer.length() > 0)
-                        section.set(buffer, string.toLowerCase());
-                }
-            }
-            mediatypes.clear();
-            mediatypes.merge(section);
-        }
 
         // SERVER:INI - Loading the server configuration
         Section options = this.initialize.get(this.context.concat(":ini"));

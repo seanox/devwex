@@ -62,7 +62,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20221003
+ * @version 5.5.1 20221008
  */
 class Worker implements Runnable {
   
@@ -162,9 +162,32 @@ class Worker implements Runnable {
      * @param initialize Server configuration
      */
     Worker(String context, ServerSocket socket, Initialize initialize) {
+
         this.context    = context;
         this.socket     = socket;
         this.initialize = initialize;
+        
+        // MEDIATYPES - The media types are rewritten for faster access. For
+        // configuration, it is easier to use the media type as the key, but at
+        // runtime it is easier and faster if the file extension is the key.
+
+        // Mapping in a Dictionary, incomplete entries are ignored.
+        Section section = new Section(true);
+        Section mediatypes = this.initialize.get("mediatypes");
+        if (mediatypes != null) {
+            Enumeration enumeration = mediatypes.elements();
+            while (enumeration.hasMoreElements()) {
+                String string = (String)enumeration.nextElement();
+                StringTokenizer tokenizer = new StringTokenizer(mediatypes.get(string));
+                while (tokenizer.hasMoreTokens()) {
+                    String buffer = tokenizer.nextToken().trim();
+                    if (buffer.length() > 0)
+                        section.set(buffer, string.toLowerCase());
+                }
+            }
+            mediatypes.clear();
+            mediatypes.merge(section);
+        }
     }
 
     /**

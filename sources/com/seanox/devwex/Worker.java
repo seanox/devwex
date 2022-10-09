@@ -217,7 +217,7 @@ class Worker implements Runnable {
             string = "";
 
         MessageDigest digest = MessageDigest.getInstance("md5");
-        byte[] bytes  = digest.digest(string.getBytes());
+        byte[] bytes = digest.digest(string.getBytes());
         string = new BigInteger(1, bytes).toString(16);
         while (string.length() < 32)
             string = ("0").concat(string);

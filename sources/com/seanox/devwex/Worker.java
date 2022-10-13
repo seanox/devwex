@@ -34,6 +34,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.nio.file.Files;
 import java.security.MessageDigest;
@@ -2656,6 +2657,8 @@ class Worker implements Runnable {
             try {this.accept = socket.accept();
             } catch (InterruptedIOException exception) {
                 continue;
+            } catch (SocketException exception) {
+                  break;  
             } catch (Throwable throwable) {
                 Service.print(throwable);
                 break;

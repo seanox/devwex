@@ -1,7 +1,7 @@
 5.5.1 2023xxxx
   BF: Review: Optimization and corrections
       And the binary becomes a bit smaller again :-)
-  BF: HTTP(S): Correction of the unwanted SocketException on stop and restart
+  BF: Worker: Correction of the unwanted SocketException on stop and restart
       The behavior is correct, only the error output is wrong.
 
 5.5.0 20221007

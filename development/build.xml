@@ -74,7 +74,7 @@
     <attribute name="content"/>
     <sequential>
       <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.css)&quot;/&gt;" flags="g" byline="true"
-          replace="\1&lt;style type=&quot;text/css&quot;&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/style&gt;"/>
+          replace="\1&lt;style&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/style&gt;"/>
       <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.js)&quot;/&gt;" flags="g" byline="true"
           replace="\1&lt;script type=&quot;text/javascript&quot;&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/script&gt;"/>
       <replace file="@{file}" token=":::@{context}.@{content}" value="${file.@{context}.@{content}}"/>

@@ -3,6 +3,7 @@
       And the binary becomes a bit smaller again :-)
   BF: Worker: Correction of the unwanted SocketException on stop and restart
       The behavior is correct, only the error output is wrong.
+  BF: HTML: Cleanup of the obsolete type attribute in the style tag
 
 5.5.0 20221007
   BF: Review: Optimization and corrections (without functional impact)

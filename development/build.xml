@@ -1,17 +1,16 @@
 <?xml version="1.0" ?>
 <project name="devwex" default="usage" basedir="..">
   <target name="usage">
-    <echo>                                                     </echo>
-    <echo>Following targets are available...                   </echo>
-    <echo>                                                     </echo>
-    <echo>   compile   compile and build classes               </echo>
-    <echo>                                                     </echo>
-    <echo>   release   compile, build classes and make releases</echo>
-    <echo>             for distribution and development        </echo>
-    <echo>                                                     </echo>
-    <echo>   keystore  creates a new keystore                  </echo>
-    <echo>                                                     </echo>
-    <echo>   changes   Synchronizes README.md with CHANGES.    </echo>
+    <echo>Following targets are available:                               </echo>
+    <echo>                                                               </echo>
+    <echo>   compile   Compile and build classes                         </echo>
+    <echo>                                                               </echo>
+    <echo>   release   Compile, build classes and make releases          </echo>
+    <echo>             for distribution and development                  </echo>
+    <echo>                                                               </echo>
+    <echo>   keystore  Creates a new keystore                            </echo>
+    <echo>                                                               </echo>
+    <echo>   changes   Synchronizes README.md with CHANGES               </echo>
   </target>
     
   <property name="workspace" value="${basedir}"/>

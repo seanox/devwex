@@ -10,6 +10,6 @@ Machine translation with [DeepL](https://deepl.com).
 - [System Requirements](requirements.md)
 - [Installation](installation.md)
 - [Configuration](configuration.md)
-- [Start](start.md)
-- [Control and Monitoring](control.md)
+- [Starting and Stopping](starting.md)
+- [Controlling and Monitoring](control.md)
 - [Development](development.md)

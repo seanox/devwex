@@ -8,6 +8,6 @@
 - [Systemanforderung](requirements.md)
 - [Installation](installation.md)
 - [Konfiguration](configuration.md)
-- [Start](start.md)
-- [Steuerung und &UUml;berwachung](control.md)
+- [Starten und Stoppen](starting.md)
+- [Steueren und Überwachen](control.md)
 - [Entwicklung](development.md)

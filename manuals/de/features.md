@@ -5,22 +5,22 @@
 
 
 ## Inhalt
-* [Architektur](#architektur)
-* [Hypertext Transfer Protocol](#hypertext-transfer-protocol)
-* [Fernüberwachung](#fern-berwachung)
-* [Konfiguration](#konfiguration)
-* [Schnittstellen](#schnittstellen)
-  * [Server-API (SAPI)](#server-api-sapi)
-  * [Module-API (XAPI)](#module-api-xapi)
-  * [HTTP](#http)
-  * [HTTP-Module-API (XAPI+)](#http-module-api-xapi)
-  * [(Fast)CGI](#fast-cgi)
-  * [XCGI](#xcgi)
-  * [Telnet](#telnet)
-* [Sicherheit](#sicherheit)
-* [Virtualisierung](#virtualisierung)
-* [Individuelle Anpassung](#individuelle-anpassung)
-* [Erweiterbarkeit](#erweiterbarkeit)
+- [Architektur](#architektur)
+- [Hypertext Transfer Protocol](#hypertext-transfer-protocol)
+- [Fernüberwachung](#fernüberwachung)
+- [Konfiguration](#konfiguration)
+- [Schnittstellen](#schnittstellen)
+  - [Server-API (SAPI)](#server-api-sapi)
+  - [Module-API (XAPI)](#module-api-xapi)
+  - [HTTP](#http)
+  - [HTTP-Module-API (XAPI+)](#http-module-api-xapi)
+  - [(Fast)CGI](#fast-cgi)
+  - [XCGI](#xcgi)
+  - [Telnet](#telnet)
+- [Sicherheit](#sicherheit)
+- [Virtualisierung](#virtualisierung)
+- [Individuelle Anpassung](#individuelle-anpassung)
+- [Erweiterbarkeit](#erweiterbarkeit)
 
 
 ## Architektur

@@ -20,15 +20,21 @@ Upper and lower case letters are ignored in the commands.
 
 > __Examples of program calls:__
 >
-> ```java -cp devwex.jar com.seanox.devwex.Service start```
+> ```
+> java -cp devwex.jar com.seanox.devwex.Service start
+> ```
 >
 > Program call as Java binary
 >
-> ```devwex.cmd start```
+> ```
+> devwex.cmd start
+> ```
 >
 > Program call via batch script in Windows
 >
-> ```devwex.sh status```
+> ```
+> devwex.sh status
+> ```
 >
 > Program call for output of operating status via shell script in
 > Unix/Linux/MacOS
@@ -47,7 +53,9 @@ properties (VM arguments) have a higher priority than environment variables.
 
 > __Example for passing VM arguments with the program call:__
 >
-> ```java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start```
+> ```
+> java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start
+> ```
 > 
 > The VM arguments `argument1` and `argument2` are passed with the
 > program call at startup, which can then be used in the Java

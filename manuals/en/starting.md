@@ -18,7 +18,8 @@ Upper and lower case letters are ignored in the commands.
 | `restart` | Stops Seanox Devwex including all active modules and servers and restarts with reloaded configuration. If the new configuration contains any malfunctioning errors, the last used configuration will be reused. |
 | `stop`    | Terminates Seanox Devwex including all active modules and servers. |
 
-> Examples of program calls:
+Examples of program calls:
+
 >
 > ```java -cp devwex.jar com.seanox.devwex.Service start```
 >
@@ -45,8 +46,8 @@ In both cases, the VM arguments and the environment variables can then be used
 as dynamic keys in the configuration file `devwex.ini`. In this case,
 properties (VM arguments) have a higher priority than environment variables.
 
-> Example for passing VM arguments with the program call:
-> 
+Example for passing VM arguments with the program call:
+
 > ```java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start```
 > 
 > The VM arguments `argument1` and `argument2` are passed with the
@@ -62,8 +63,8 @@ the path separator defined for the operating system. At startup, Seanox Devwex
 automatically adds all files specified in this way to its class path (ClassPath)
 as well as the files of the specified directories.
 
-> Example for passing VM arguments with the program call:
->
+Example for passing VM arguments with the program call:
+
 > ```
 > java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start
 > ```

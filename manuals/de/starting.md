@@ -12,18 +12,18 @@ kann bei den Befehlen unbeachtet bleiben.
 > Aufruf mit dem Java-Binary
 >
 > ```
-> java -cp devwex.jar com.seanox.devwex.Service &lg;command&gt;
+> java -cp devwex.jar com.seanox.devwex.Service <command>
 
 > Aufruf per Batch-Skript in Windows
 >
 > ```
-> devwex.cmd &lg;command&gt;
+> devwex.cmd <command>
 > ```
 
 > Aufruf per Shell-Skript in Unix/Linux/MacOS
 > 
 > ```
-> devwex.sh &lg;command&gt;
+> devwex.sh <command>
 > ```
 
 Bei laufwender Anwendung kann die Server-Steuerung zudem per Telnet aufgerufen
@@ -33,7 +33,7 @@ werden.
 > 
 > ```
 > telnet 127.0.0.1:25000
-> &lg;command&gt;
+> <command>
 > ```
 
 

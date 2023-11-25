@@ -11,18 +11,18 @@ available startup scripts. Upper and lower case can be ignored for the commands.
 > Java binary
 >
 > ```
-> java -cp devwex.jar com.seanox.devwex.Service &lg;command&gt;
+> java -cp devwex.jar com.seanox.devwex.Service <command>
 
 > Batch-Skript in Windows
 >
 > ```
-> devwex.cmd &lg;command&gt;
+> devwex.cmd <command>
 > ```
 
 > Shell-Skript in Unix/Linux/MacOS
 > 
 > ```
-> devwex.sh &lg;command&gt;
+> devwex.sh <command>
 > ```
 
 When the application is running, the server control can also be called up via
@@ -32,7 +32,7 @@ Telnet.
 > 
 > ```
 > telnet 127.0.0.1:25000
-> &lg;command&gt;
+> <command>
 > ```
 
 

@@ -1,68 +1,71 @@
 [Configuration](configuration.md) | [TOC](README.md) | [Controlling and Monitoring](control.md)
 - - -
 
-# Start
+# Starting and Stopping
   
 Seanox Devwex is a Java console application. After opening the console
 (shell/prompt) it changes to the working directory `./devwex/program` and calls
 Seanox Devwex with the command to be executed as Java binary or via the
-available startup scripts.
+available startup scripts. Upper and lower case can be ignored for the commands. 
 
-Overview of available commands:  
-Upper and lower case letters are ignored in the commands.
-
-| Command   | Description |
-| :---      | :--- |
-| `start`   | Starts Seanox Devwex according to the current configuration. |
-| `status`  | Shows information about the version, start and system time as well as the loaded modules and servers. |
-| `restart` | Stops Seanox Devwex including all active modules and servers and restarts with reloaded configuration. If the new configuration contains any malfunctioning errors, the last used configuration will be reused. |
-| `stop`    | Terminates Seanox Devwex including all active modules and servers. |
-
-> __Examples of program calls:__
+> Java binary
 >
 > ```
-> java -cp devwex.jar com.seanox.devwex.Service start
-> ```
->
-> Program call as Java binary
->
-> ```
-> devwex.cmd start
-> ```
->
-> Program call via batch script in Windows
+> java -cp devwex.jar com.seanox.devwex.Service &lg;command&gt;
+
+> Batch-Skript in Windows
 >
 > ```
-> devwex.sh status
+> devwex.cmd &lg;command&gt;
 > ```
->
-> Program call for output of operating status via shell script in
-> Unix/Linux/MacOS
 
-In addition to the command to be executed, other VM arguments can be passed to
-the program as properties or environment variables.
+> Shell-Skript in Unix/Linux/MacOS
+> 
+> ```
+> devwex.sh &lg;command&gt;
+> ```
 
-Properties are set in format `-Dproperty=value` directly on Java call.
+When the application is running, the server control can also be called up via
+Telnet. 
 
-Environment variables are set in the operating system before the program is
-called.
+> Telnet
+> 
+> ```
+> telnet 127.0.0.1:25000
+> &lg;command&gt;
+> ```
 
-In both cases, the VM arguments and the environment variables can then be used
-as dynamic keys in the configuration file `devwex.ini`. In this case,
-properties (VM arguments) have a higher priority than environment variables.
 
-> __Example for passing VM arguments with the program call:__
+## Contents Overview
+- [Start](#start)
+- [Status](#status)
+- [Restart](#restart)
+- [Stop](#stop)
+
+
+## Start
+
+Starts Seanox Devwex according to the current configuration.
+
+With the start, further VM arguments can be passed as properties or environment
+variables. Properties are set in format `-Dproperty=value` directly on Java
+call. Environment variables are set in the operating system before the program
+is called. In both cases, the VM arguments and the environment variables can
+then be used as dynamic keys in the configuration file `devwex.ini`. In this
+case, properties (VM arguments) have a higher priority than environment
+variables.
+
+> Passing VM arguments with the program start
 >
 > ```
 > java -cp devwex.jar -Dargument1=value1 -Dargument2=value2 com.seanox.devwex.Service start
 > ```
 > 
-> The VM arguments `argument1` and `argument2` are passed with the
-> program call at startup, which can then be used in the Java
-> implementation and in the configuration. The VM arguments are
-> available as dynamic keys in the configuration (see also
-> [Configuration - Configuration File](
->    configuration.md#configuration-file)).
+> With the program start, the VM arguments `argument1` and `argument2` are
+> passed, which can then be used in the Java implementation and in the
+> configuration. The VM arguments are available as dynamic keys in the
+> configuration (see also [Configuration - Configuration File](
+>     configuration.md#configuration-file)).
 
 The argument `libraries` is a fixed part of the argument, which can be used to
 pass additional resources, libraries and classes whose paths are separated by
@@ -70,7 +73,7 @@ the path separator defined for the operating system. At startup, Seanox Devwex
 automatically adds all files specified in this way to its class path (ClassPath)
 as well as the files of the specified directories.
 
-> __Example for passing VM arguments with the program call:__
+> Passing VM arguments with the program start
 >
 > ```
 > java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start
@@ -78,12 +81,24 @@ as well as the files of the specified directories.
 >
 > The VM argument `libraries` is passed with the program call at startup. This
 > can then be used in the Java implementation and in the configuration. 
-      
-> [!TIP]
-> Seanox Control is a desktop-based administration tool for Seanox Devwex that
-> integrates as a tray icon and and allows the display of the operating status
-> as well as access to the server control and server configuration in the local
-> and remote network.
+
+
+## Status
+
+Shows information about the version, start and system time as well as the loaded
+modules and servers.
+
+
+## Restart
+
+Stops Seanox Devwex including all active modules and servers and restarts with
+reloaded configuration. If the new configuration contains any malfunctioning
+errors, the last used configuration will be reused.
+
+
+## Stop
+
+Terminates Seanox Devwex including all active modules and servers.
       
       
 - - -

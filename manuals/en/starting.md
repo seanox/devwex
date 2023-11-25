@@ -11,14 +11,11 @@ available startup scripts.
 Overview of available commands:  
 Upper and lower case letters are ignored in the commands.
 
-| Command     | Description                                                       |
-| :---        | :---                                                              |
+| Command   | Description |
+| :---      | :--- |
 | `start`   | Starts Seanox Devwex according to the current configuration. |
-| `status`  | Shows information about the version, start and system time as well
-               as the loaded modules and servers. |
-| `restart` | Stops Seanox Devwex including all active modules and servers and
-               restarts with reloaded configuration. If the new configuration
-               contains any malfunctioning errors, the last used configuration will be reused. |
+| `status`  | Shows information about the version, start and system time as well as the loaded modules and servers. |
+| `restart` | Stops Seanox Devwex including all active modules and servers and restarts with reloaded configuration. If the new configuration contains any malfunctioning errors, the last used configuration will be reused. |
 | `stop`    | Terminates Seanox Devwex including all active modules and servers. |
 
 > Examples of program calls:

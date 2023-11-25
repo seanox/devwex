@@ -10,11 +10,12 @@ im Dateisystem entpackt wird.
 ## Inhalt
 
 - [Windows Service](#windows-service)
-
+- [Linux Service](#linux-service)
+- [MacOS Service](#macos-service)
 
 ## Windows Service
 
-Für Windows ist eine Distribution mit[Procrun](
+Für Windows ist eine Distribution mit [Procrun](
     https://commons.apache.org/daemon/procrun.html) verfügbar, die Seanox Devwex
 in Windows als Dienst installiert. Die Distribution basiert auf der Java-Version
 und enthält zusätzlich die Service-Runner für 32 und 64 Bit sowie die
@@ -62,13 +63,14 @@ Die Schreibweise (Gross- und Kleinschreibung) ist bei den Befehlen zubeachten.
 > werden. Alternativ lässt sich das JRE auch in `./runtime/java`
 > bereitgestellen. In dem Fall findet das Batch-Skript die JRE automatisch. 
 
-> [!HINWEIS]
-> Die Distribution enthält kein JRE.
->
-> Soll ein bereits installiertes bzw. im System verfügbares verwendete werden,
-> kann das Java-Home in `service.cmd` mit der Variablen `java` festgelegt
-> werden. Alternativ lässt sich das JRE auch in `./runtime/java`
-> bereitgestellen. In dem Fall findet das Batch-Skript die JRE automatisch. 
+
+## Linux Service
+
+TODO:
+
+## MacOS Service
+
+TODO:
 
 
 - - -

@@ -84,11 +84,11 @@ decisions in the project easier to understand :-)__
   redirections and modules. 
 - __Virtualization__  
   The HTTP server supports virtual hosting and aliasing for virtual paths. 
-- __Individuality__  
+- __Customization__  
   HTTP servers and virtual hosts use customizable templates for the error pages
   and list view of the directories (directory listing). With support for CGI
   environment variables, the content can be designed dynamically. 
-- __Expandability__  
+- __Extensibility__  
   The modular architecture and many interfaces allow the modification, extension
   and addition of functionalities. 
 

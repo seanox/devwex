@@ -18,8 +18,8 @@ Seanox Devwex is a minimalist runtime container with a modular architecture for
 virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory listing,
 templates and a telnet-based remote access to container control. Additional
 servers and modules/applications can be integrated via the available APIs. The
-runtime container with the servers is a pure Java implementation and can be used
-on many operating systems due to the corresponding runtime environments. 
+runtime container with the servers is a Java implementation and can be used on
+many operating systems due to the corresponding runtime environments. 
 
 __The size of the Devwex binary is limited to a maximum of 30kB. There is no
 technical reason for this, it is rather the more than 20 years old quirk and

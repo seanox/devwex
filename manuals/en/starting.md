@@ -31,7 +31,7 @@ Telnet.
 > Telnet
 > 
 > ```
-> telnet 127.0.0.1:25000
+> telnet 127.0.0.1 25000
 > <command>
 > ```
 

@@ -54,8 +54,7 @@ von Modulen sind feste Abfolgen vom Laufzeit-Container.
 
 ### Neustart
 
-Die Sequenz entspricht der Kombination aus [Beenden](#beenden) und [Start](
-    #start).
+Die Sequenz ist eine Kombination aus [Beenden](#beenden) und [Start](#start).
 
 - Alle registrierten Server-Instanzen werden über die Methode `Server.destroy()`
   zum Beenden aufgefordert.
@@ -115,6 +114,20 @@ Server stellen den physischen Zugriff im Netzwerk für ein Protokoll an einer
 Adresse und einem Port zur Verfügung. Seanox Devwex bindet Server über die
 Server-API (SAPI) ein. Mit der API lassen sich auch bestehende Server- und
 Netzwerk-Funktionalitäten ändern bzw. neue bereitstellen.
+
+### API (SAPI)
+
+Die Server-API basiert auf der Implementierung vom Runnable-Interface. Die
+Initialisierung erfolgt über den Konstruktor `Server(String name, Initialize
+    initialize)` oder `Server(String name, Object initialize)`. Die Reihenfolge
+bei der Initialisierung wird durch die Reihenfolge der Server-Konfigurationen in
+der Konfigurationsdatei festgelegt. Die erstellten Server-Instanzen werden vom
+Laufzeit-Container (Service) mit der Methode `Server.run()` gestartet und per
+`Service.destroy()` zum Beenden aufgefordert. Der Aufruf beider Methoden ist
+asynchron. Verzögert sich das Beenden, wartet der Laufzeit-Container auf das
+Ende aller registrierten Server-Instanzen. Optional wird die Implementierung der
+Methode `Server.explain()` zur Abfrage allgemeiner Informationen, wie Protokoll
+und Netzwerkverbindung, unterstützt.
 
 
 - - -

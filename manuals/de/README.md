@@ -33,4 +33,8 @@
   - [Restart](starting.md#restart)
   - [Stop](starting.md#stop)
 - [Steueren und Überwachen](control.md)
+  - [Client](control.md#client)
+  - [Status](control.md#status)
+  - [Restart](control.md#restart)
+  - [Stop](control.md#stop)
 - [Entwicklung](development.md)

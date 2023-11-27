@@ -35,4 +35,8 @@ Machine translation with [DeepL](https://deepl.com).
   - [Restart](starting.md#restart)
   - [Stop](starting.md#stop)
 - [Controlling and Monitoring](control.md)
+  - [Client](control.md#client)
+  - [Status](control.md#status)
+  - [Restart](control.md#restart)
+  - [Stop](control.md#stop)
 - [Development](development.md)

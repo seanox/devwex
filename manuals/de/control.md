@@ -13,9 +13,41 @@ Gross- und Kleinschreibung unbeachtet bleiben kann.
 
 
 ## Inhalt
+- [Client](#client)
 - [Status](#status)
 - [Restart](#restart)
 - [Stop](#stop)
+
+
+## Client
+
+Bei der Verwendung von Seanox Devwex als Telnet-Client, werden die
+Verbindungsdaten aus der Server-Konfiguration `devwex.ini`, welche sich im
+Arbeitsverzeichnis befinden muss, ermittelt.
+
+> Aufruf mit dem Java-Binary
+>
+> ```
+> java -cp devwex.jar com.seanox.devwex.Service <command>
+
+> Aufruf per Batch-Skript in Windows
+>
+> ```
+> devwex.cmd <command>
+> ```
+
+> Aufruf per Shell-Skript in Unix/Linux/MacOS
+> 
+> ```
+> devwex.sh <command>
+> ```
+
+> Aufruf mit Telnet
+> 
+> ```
+> telnet 127.0.0.1 25000
+> <command>
+> ```
 
 
 ## Status
@@ -40,6 +72,16 @@ Modulen und Servern.
 > SAPI: TCP 127.0.0.1:25000
 > SAPI: TCP 127.0.0.1:443
 > SAPI: TCP 127.0.0.1:80
+> ```
+>
+> Die Ausgabe vom Betriebsstatus ist mehrzeilig und jede Zeile beginnt mit einem
+> Präfix gefolgt vom Wert.
+> 
+> `VERS` Versionsinformation
+> `TIME` Aktuelle Systemzeit
+> `TIUP` Initiale Startzeit vom Service
+> `XAPI` Extension-API (Modulidentifikation: Hersteller-Name/Version)  
+> `SAPI` Server-API (Serveridentifikation: Protokoll Adresse:Port)
 
 
 ## Restart

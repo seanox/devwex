@@ -12,9 +12,41 @@ lower case letters can be ignored.
 
 
 ## Contents Overview
+- [Client](#client)
 - [Status](#status)
 - [Restart](#restart)
 - [Stop](#stop)
+
+
+## Client
+
+When using Seanox Devwex as a Telnet client, the connection data is determined
+from the server configuration `devwex.ini`, which must be in the working
+directory.
+
+> Java binary
+>
+> ```
+> java -cp devwex.jar com.seanox.devwex.Service <command>
+
+> Batch-Skript in Windows
+>
+> ```
+> devwex.cmd <command>
+> ```
+
+> Shell-Skript in Unix/Linux/MacOS
+> 
+> ```
+> devwex.sh <command>
+> ```
+
+> Telnet
+> 
+> ```
+> telnet 127.0.0.1 25000
+> <command>
+> ```
 
 
 ## Status
@@ -27,7 +59,7 @@ modules and servers.
 > status
 > ```
 >
-> Ausgabe 
+> Output 
 >
 > ```
 > VERS: 0.0.0 00000000
@@ -39,6 +71,16 @@ modules and servers.
 > SAPI: TCP 127.0.0.1:25000
 > SAPI: TCP 127.0.0.1:443
 > SAPI: TCP 127.0.0.1:80
+> ```
+>
+> The output of the operating status is multi-line and each line begins with a
+> prefix followed by the value.
+> 
+> `VERS` Version information
+> `TIME` Current system time
+> `TIUP` Initial start time of the service
+> `XAPI` Extension API (module identification: manufacturer name/version)
+> `SAPI` Server API (server identification: protocol address:port)
 
 
 ## Restart
@@ -52,7 +94,7 @@ errors, the last used configuration will be reused.
 > restart
 > ```
 >
-> Ausgabe
+> Output
 > 
 > ```
 > SERVICE RESTARTED
@@ -68,7 +110,7 @@ Terminates Seanox Devwex including all active modules and servers.
 > stop
 > ```
 >
-> Ausgabe
+> Output
 > 
 > ```
 > SERVICE STOPPED

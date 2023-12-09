@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Devwex, Advanced Server Development
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -55,7 +55,7 @@ import java.util.Vector;
  * to terminate by {@code Service.destroy()}. Both methods are called
  * asynchronously. If the termination is delayed, the runtime container waits
  * for all registered server instances to finish. Optionally, the implementation
- * of the {@code Server.explain()} method to get general information, such as
+ * of the {@code Server.expose()} method to get general information, such as
  * protocol and network connection, is supported.
  * 
  * <h3>Modules</h3>
@@ -78,7 +78,7 @@ import java.util.Vector;
  * Modules are triggered for termination via {@code Module.destroy()}. The
  * runtime container does not monitor the termination and discards the modules
  * by unloading them from the ClassLoader. Optionally, the implementation of the
- * {@code Server.explain()} method to get general information, such as
+ * {@code Server.expose()} method to get general information, such as
  * manufacturer and version, is supported.
  * 
  * <h3>HTTP Modules</h3>
@@ -225,7 +225,7 @@ import java.util.Vector;
  * </ul>
  *
  * @author  Seanox Software Solutions
- * @version 5.5.0 20220919
+ * @version 5.6.0 20231209
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 
@@ -710,7 +710,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 Enumeration enumeration = service.modules.elements();
                 while (enumeration.hasMoreElements()) {
                     Object object = enumeration.nextElement();
-                    try {caption = object.getClass().getMethod("explain").invoke(object);
+                    try {caption = object.getClass().getMethod("expose").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }
@@ -720,11 +720,11 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 }
                 
                 // all registered servers are detected
-                // server identifier is determined via explain
+                // server identifier is determined via expose
                 enumeration = service.servers.elements();
                 while (enumeration.hasMoreElements()) {
                     Object object = ((Object[])enumeration.nextElement())[0];
-                    try {caption = object.getClass().getMethod("explain").invoke(object);
+                    try {caption = object.getClass().getMethod("expose").invoke(object);
                     } catch (Throwable throwable) {
                         caption = null;
                     }

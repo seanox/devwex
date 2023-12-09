@@ -4,7 +4,7 @@
  * Diese Software unterliegt der Version 2 der Apache License.
  *
  * Devwex, Advanced Server Development
- * Copyright (C) 2022 Seanox Software Solutions
+ * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,7 +33,7 @@ import java.net.SocketException;
  * control of the service for status requests, restart and stop.
  *
  * @author  Seanox Software Solutions
- * @version 5.2.0 20220921
+ * @version 5.6.0 20231209
  */
 public class Remote implements Runnable {
 
@@ -90,7 +90,7 @@ public class Remote implements Runnable {
      * Returns the server short description.
      * @return server short description
      */
-    public String explain() {
+    public String expose() {
         return this.caption;
     }
 

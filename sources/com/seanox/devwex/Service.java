@@ -3,7 +3,7 @@
  * Folgenden Seanox Software Solutions oder kurz Seanox genannt.
  * Diese Software unterliegt der Version 2 der Apache License.
  *
- * Devwex, Minimalistic Server Engine
+ * Devwex, Experimental Server Engine
  * Copyright (C) 2023 Seanox Software Solutions
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -786,7 +786,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         // output information is composed and output
         Service.print("Seanox Devwex [Version 0.0.0 00000000]", true);
         Service.print("Copyright (C) 0000 Seanox Software Solutions", true);
-        Service.print("Minimalistic Server Engine", true);
+        Service.print("Experimental Server Engine", true);
         Service.print("\r\n", true);
         
         // unknown commands output the command list

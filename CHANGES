@@ -4,6 +4,7 @@ BF: Review: Optimization and corrections
 BF: Worker: Correction of the unwanted SocketException on stop and restart
     The behavior is correct, only the error output is wrong.
 BF: HTML: Cleanup of the obsolete type attribute in the style tag
+BF: Project: Update of slogan (Minimalistic Server Engine)
 CR: Manual: Switch to Markdown
 CR: XAPI: Change method String Module.explain() to String Module.expose()
 CR: SAPI: Change method String Server.explain() to String Server.expose()

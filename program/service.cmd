@@ -29,7 +29,7 @@
 
   echo Seanox Devwex Service 0.0.0 00000000
   echo Copyright (C) 0000 Seanox Software Solutions
-  echo Advanced Server Development
+  echo Experimental Server Engine
   echo.
 
   cd /D "%~dp0"
@@ -40,7 +40,7 @@
 
   set name=Devwex
   set text=Seanox Devwex
-  set note=Seanox Advanced Server Development
+  set note=Seanox Experimental Server Engine
 
   set home=%cd%
   set java=

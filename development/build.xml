@@ -263,8 +263,7 @@
     <include name="documents/index.css"/>
     <include name="documents/index.html"/>
     <include name="manuals/seanox-icons.zip"/>
-    <include name="manuals/seanox-devwex_de.html"/>
-    <include name="manuals/seanox-devwex_en.html"/>
+    <include name="manuals/seanox-devwex.html"/>
     <include name="manuals/seanox-devwex.css"/>  
     <include name="manuals/seanox-devwex.js"/>
     <include name="program/devwex.cmd"/>
@@ -302,8 +301,7 @@
   
   <fileset id="fileset.release" dir="${build}/sources">
     <include name="documents/index.html"/>
-    <include name="manuals/seanox-devwex_de.html"/>
-    <include name="manuals/seanox-devwex_en.html"/> 
+    <include name="manuals/seanox-devwex.html"/> 
     <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.jar"/>
@@ -350,8 +348,7 @@
     <compress-stylesheet context="system" file="${build}/sources/system/index.css"/>
     <compress-stylesheet context="system" file="${build}/sources/system/status.css"/>
     <compress-markup file="${build}/sources/documents/index.html"/>
-    <compress-markup file="${build}/sources/manuals/seanox-devwex_de.html"/>
-    <compress-markup file="${build}/sources/manuals/seanox-devwex_en.html"/>    
+    <compress-markup file="${build}/sources/manuals/seanox-devwex.html"/>    
     <compress-markup file="${build}/sources/system/index.html"/>
     <compress-markup file="${build}/sources/system/status-2xx.html"/>
     <compress-markup file="${build}/sources/system/status-3xx.html"/>

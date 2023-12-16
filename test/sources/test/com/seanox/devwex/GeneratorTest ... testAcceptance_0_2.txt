@@ -1,0 +1,20 @@
+
+Line: #[missing] #[path[aaa#[basebbb#[name]ccc]]]
+
+Container: #[sort]
+  Iteration:
+    #[file[[
+    Row: #[cAse] #[tYpe] #[mIme]
+      Cell1: #[case] #[type] #[mime] #[name]
+      Cell2: #[mime]
+      Cell3: #[type] #[size]
+      Cell4: #[date]
+    ]]]
+
+Decode:
+  #[0x53454354494F4E2D41]
+  #[0x53454354494F4E2DY1]
+  #[0X53454354494F4E2D41]
+  #[0X53454354494F4E2D4]
+
+End:

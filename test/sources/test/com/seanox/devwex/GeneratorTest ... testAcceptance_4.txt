@@ -1,0 +1,21 @@
+
+Line:  aaabbbcccaaa1bbb1cccaaa122bbb22cccaaa122333bbb333cccaaa1223334444bbb4444cccaaa122333444455555bbb55555ccc
+
+Container: 
+  Iteration:
+    
+
+Decode:
+  SECTION-A
+  
+  SECTION-A
+  
+  S
+  S
+  
+  
+  S
+  
+  
+
+End:

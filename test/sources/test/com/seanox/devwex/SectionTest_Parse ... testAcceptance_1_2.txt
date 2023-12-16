@@ -1,0 +1,7 @@
+PARAM-A              = ValuE-1
+PARAM-B          [+] = ValuE-2; ValuE-3 ValuE-4; ValuE-5 ValuE-6
+PARAM-C              = p_c
+PARAM-D
+PARAM-E              = aaa
+PARAM-E        + BBB
+PARAM-F              = ccc

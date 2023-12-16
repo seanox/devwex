@@ -1,0 +1,11 @@
+PARAm-A        = ValuE-1         ;comment
+PARAm-B    [+] = ValuE-2; ValuE-3
+               + ValuE-4; ValuE-5
+               +                 
+               +     ValuE-6
+PARAm-C [?][+] = ValuE-6; ValuE-7
+PARAm-D [?]                     ;comment
+PARAm-E        = aaa 
+PARAm-E        + bbb
+PARAm-F        = ccc
+               = ddd

@@ -1,0 +1,9 @@
+  A AA xx1
+  -A-xx1-A-  
+    B 
+  -A-xx1-E-     
+  AA xx2
+  -A-xx2-A-  
+    B 
+  -A-xx2-E-     
+   E

@@ -1,0 +1,17 @@
+  A #[path[[AA #[teST]
+  -A-#[teST]-A-  
+    B #[path[[BB #[teST]
+    -B-#[teST]-A-
+      C #[path[[CC #[teST]
+      -C-#[teST]-A-    
+        D #[path[[DD #[teST]
+        -D-#[teST]-A-
+        xxx#[path]xxx
+        -D-#[teST]-E-    
+        ]]]
+      -C-#[teST]-E-         
+      ]]] 
+    -B-#[teST]-E-
+    ]]]
+  -A-#[teST]-E-     
+  ]]] E

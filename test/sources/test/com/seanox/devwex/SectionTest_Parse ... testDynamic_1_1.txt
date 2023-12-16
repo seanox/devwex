@@ -1,0 +1,9 @@
+SystemDrive     = x1
+SystemDrive [?] = x2
+SystemDrive [?]
+SystemRoot  [?] = x2
+A           [?]
+B           [?] = b
+C           [?] = c;123
+D        [?][+] = d;123
+E        [+][?] = e;123

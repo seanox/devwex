@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/Java-8"/>  
+	<classpathentry kind="src" path="sources/test"/>
+	<classpathentry kind="src" path="sources/main"/>
+	<classpathentry kind="lib" path="libraries/hamcrest-2.2.jar"/>
+	<classpathentry kind="lib" path="libraries/hamcrest-2.2.license"/>
+	<classpathentry kind="lib" path="libraries/hamcrest-2.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="libraries/hamcrest-2.2-sources.jar"/>
+	<classpathentry kind="lib" path="libraries/junit-4.13.2.jar"/>
+	<classpathentry kind="lib" path="libraries/junit-4.13.2.license"/>
+	<classpathentry kind="lib" path="libraries/junit-4.13.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="libraries/junit-4.13.2-sources.jar"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

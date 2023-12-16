@@ -8,6 +8,7 @@ BF: Project: Update of slogan (Experimental Server Engine)
 CR: XAPI: Change method String Module.explain() to String Module.expose()
 CR: SAPI: Change method String Server.explain() to String Server.expose()
 CR: Documentation: Reduction to English
+CR: Test: Intergation of the test environment
 
 5.5.0 20221007
 BF: Review: Optimization and corrections (without functional impact)

@@ -1,0 +1,296 @@
+<?xml version="1.0" ?>
+<project name="devwex-test" default="compile" basedir="..">
+  
+  <property name="workspace" value="${basedir}"/>
+  <property name="workspace.resources" value="${workspace}/resources"/>  
+  <property name="workspace.resources.libraries" value="${workspace.resources}/libraries"/>
+  <property name="workspace.resources.certificates" value="${workspace.resources}/certificates"/>
+  <property name="compiler.level" value="8"/>
+  
+  <target name="compile">
+    <delete>
+      <fileset dir="${workspace.resources.libraries}">
+        <include name="**/*.class"/>
+        <include name="**/*.jar"/>
+      </fileset>
+    </delete>    
+    
+    <javac srcdir="${workspace.resources.libraries}" destdir="${workspace.resources.libraries}"
+        classpath="${workspace}/../program/devwex.jar"
+        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true"/>
+
+    <jar destfile="${workspace.resources.libraries}/workerModule_A.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_A*.class module/Abstract*Module*.class"/>
+    <jar destfile="${workspace.resources.libraries}/workerModule_B.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_B*.class module/Abstract*Module*.class"/> 
+    <jar destfile="${workspace.resources.libraries}/workerModule_C.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_C*.class module/Abstract*Module*.class"/>      
+    <jar destfile="${workspace.resources.libraries}/workerModule_D.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_D*.class module/Abstract*Module*.class"/>
+    <jar destfile="${workspace.resources.libraries}/workerModule_E.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_E*.class module/Abstract*Module*.class"/>
+    <jar destfile="${workspace.resources.libraries}/workerModule_F.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/WorkerModule_B*.class module/Abstract*Module*.class"/>
+
+    <jar destfile="${workspace.resources.libraries}/server-count_A.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="com/seanox/devwex/Count*.class"/> 
+    
+    <jar destfile="${workspace.resources.libraries}/server-count_B.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Count*.class"/>     
+    
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_01.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*01*.class"/> 
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_02.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*02*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_03.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*03*.class"/> 
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_11.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*11*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_12.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*12*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_13.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*13*.class"/>
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_14.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*14*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_15.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*15*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_16.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*16*.class"/>
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_17.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*17*.class"/> 
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_18.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*18*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_19.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*19*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_20.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*20*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_21.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*21*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_22.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*22*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_30.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*30*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_31.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*31*.class"/>     
+    <jar destfile="${workspace.resources.libraries}/server-acceptance_32.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="server/Acceptance*32*.class"/>
+    
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_01.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*01.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_02.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*02.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_03.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*03.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_04.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*04.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_05.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*05.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_06.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*06.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_07.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*07.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_08.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*08.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_09.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*09.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_10.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*10.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_11.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*11.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_12.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*12.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_13.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*13.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_14.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*14.class"/>      
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_15.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*15.class"/>
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_16.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*16.class"/>
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_17.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*17.class"/>
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_18.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*18.class"/>   
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_19.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*19.class"/>
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_20.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*20.class"/>
+    <jar destfile="${workspace.resources.libraries}/module-acceptance_21.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="module/Acceptance*21.class"/>                
+    
+    <jar destfile="${workspace.resources.libraries}/scripting.jar"
+        basedir="${workspace.resources.libraries}"
+        includes="extras/Scripting.class">
+      <manifest>
+        <attribute name="Main-Class" value="extras.Scripting"/>
+      </manifest>      
+    </jar>
+
+    <jar destfile="${workspace.resources}/documents_vh_A/parameter.jex"
+        basedir="${workspace.resources.libraries}"
+        includes="extras/Parameter.class">
+      <manifest>
+        <attribute name="Main-Class" value="extras.Parameter"/>
+      </manifest>      
+    </jar>
+
+    <delete>
+      <fileset dir="${workspace.resources.libraries}">
+        <include name="**/*.class"/>
+      </fileset>
+    </delete>   
+  </target>
+  
+  <target name="keystore">
+    <delete dir="${workspace.resources.certificates}"/>
+    <mkdir dir="${workspace.resources.certificates}"/>
+    
+    <!-- Server: One keystore for everything Keystore + Truststore -->
+    <exec executable="keytool">
+      <arg line="-genkeypair -alias Server -keyalg RSA -keysize 2048 -validity 365 -dname 'CN=Server'
+          -keystore ${workspace.resources.certificates}/server.keystore -keypass changeIt -storetype PKCS12 -storepass changeIt"/>
+    </exec>    
+    <exec executable="keytool">
+      <arg line="-exportcert -alias Server -keystore ${workspace.resources.certificates}/server.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/server.cer"/>
+    </exec>
+    
+    <!-- Client: A-C are added to the server keystore, X are not. -->
+    <exec executable="keytool">
+      <arg line="-genkeypair -alias ClientA -keyalg RSA -keysize 2048 -validity 365 -dname 'CN=ClientA,O=Seanox Software Solutions,C=TA'
+          -keystore ${workspace.resources.certificates}/client.keystore -keypass changeIt -storetype PKCS12 -storepass changeIt"/>
+    </exec>
+    <exec executable="keytool">
+      <arg line="-exportcert -alias ClientA -keystore ${workspace.resources.certificates}/client.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_a.cer"/>
+    </exec>  
+    <exec executable="keytool">
+      <arg line="-importcert -alias ClientA -keystore ${workspace.resources.certificates}/server.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_a.cer -noprompt"/>
+    </exec>    
+
+    <exec executable="keytool">
+      <arg line="-genkeypair -alias ClientB -keyalg RSA -keysize 2048 -validity 365 -dname 'CN=ClientB,O=Seanox Software Solutions,C=TB'
+          -keystore ${workspace.resources.certificates}/client.keystore -keypass changeIt -storetype PKCS12 -storepass changeIt"/>
+    </exec>
+    <exec executable="keytool">
+      <arg line="-exportcert -alias ClientB -keystore ${workspace.resources.certificates}/client.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_b.cer"/>
+    </exec> 
+    <exec executable="keytool">
+      <arg line="-importcert -alias ClientB -keystore ${workspace.resources.certificates}/server.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_b.cer -noprompt"/>
+    </exec>     
+    
+    <exec executable="keytool">
+      <arg line="-genkeypair -alias ClientC -keyalg RSA -keysize 2048 -validity 365 -dname 'CN=ClientC,O=Seanox Software Solutions,C=TC'
+          -keystore ${workspace.resources.certificates}/client.keystore -keypass changeIt -storetype PKCS12 -storepass changeIt"/>
+    </exec>
+    <exec executable="keytool">
+      <arg line="-exportcert -alias ClientC -keystore ${workspace.resources.certificates}/client.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_c.cer"/>
+    </exec>  
+    <exec executable="keytool">
+      <arg line="-importcert -alias ClientC -keystore ${workspace.resources.certificates}/server.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_c.cer -noprompt"/>
+    </exec>     
+    
+    <exec executable="keytool">
+      <arg line="-genkeypair -alias ClientX -keyalg RSA -keysize 2048 -validity 365 -dname 'CN=ClientX,O=Seanox Software Solutions,C=TX'
+          -keystore ${workspace.resources.certificates}/client.keystore -keypass changeIt -storetype PKCS12 -storepass changeIt"/>
+    </exec>    
+    <exec executable="keytool">
+      <arg line="-exportcert -alias ClientX -keystore ${workspace.resources.certificates}/client.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/client_x.cer"/>
+    </exec>
+
+    <!-- 
+      Server and client keystore are mutually migrated.
+      Thus, only the server keystore is needed. 
+    -->
+    
+    <exec executable="keytool">
+      <arg line="-importcert -alias Server -keystore ${workspace.resources.certificates}/client.keystore -storepass changeIt
+          -file ${workspace.resources.certificates}/server.cer -noprompt"/>
+    </exec>
+    
+    <exec executable="keytool">
+      <arg line="-importkeystore -srckeystore ${workspace.resources.certificates}/server.keystore -destkeystore ${workspace.resources.certificates}/server.p12
+          -deststoretype PKCS12 -keypass changeIt -storepass changeIt -srcstorepass changeIt -noprompt"/>
+    </exec>    
+
+    <!-- 
+      Export the client and server certificates.
+      The client/browser must install the client certificate(s).
+      The server certificate can be ignored.
+    -->
+
+    <exec executable="keytool">
+      <arg line="-importkeystore -alias ClientA
+          -srckeystore ${workspace.resources.certificates}/client.keystore -srcstorepass changeIt
+          -destkeystore ${workspace.resources.certificates}/client_a.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt -noprompt"/>
+    </exec> 
+    <exec executable="keytool">
+      <arg line="-importkeystore -alias ClientB
+          -srckeystore ${workspace.resources.certificates}/client.keystore -srcstorepass changeIt
+          -destkeystore ${workspace.resources.certificates}/client_b.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt -noprompt"/>
+    </exec> 
+    <exec executable="keytool">
+      <arg line="-importkeystore -alias ClientC
+          -srckeystore ${workspace.resources.certificates}/client.keystore -srcstorepass changeIt
+          -destkeystore ${workspace.resources.certificates}/client_c.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt -noprompt"/>
+    </exec> 
+    <exec executable="keytool">
+      <arg line="-importkeystore -alias ClientX
+          -srckeystore ${workspace.resources.certificates}/client.keystore -srcstorepass changeIt
+          -destkeystore ${workspace.resources.certificates}/client_x.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt -noprompt"/>
+    </exec>
+  </target>
+</project>

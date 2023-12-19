@@ -13,13 +13,14 @@
 
 
 # Description
-Seanox Devwex is a minimalist runtime container with a modular architecture for
-(web) servers and applications. The included server instances support HTTP with
-virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, directory listing,
-templates and a telnet-based remote access to container control. Additional
-servers and modules/applications can be integrated via the available APIs. The
-runtime container with the servers is a Java implementation and can be used on
-many operating systems due to the corresponding runtime environments. 
+
+Seanox Devwex is a experimental server engine with a modular architecture for
+(web)servers and applications, which can be used with a appropriate Java runtime
+environment on many operating systems. The included server instances support
+HTTP with virtual hosting, filters, modules, SSL/TLS, XCGI/CGI1.1, director
+listing, templates and a Telnet-base remote control the server engine.
+Additional servers, modules and applications can be integrated via the available
+APIs. 
 
 __The size of the Devwex binary is limited to a maximum of 30kB. There is no
 technical reason for this, it is rather the more than 20 years old quirk and
@@ -28,70 +29,35 @@ decisions in the project easier to understand :-)__
 
 
 # Features
-- __Architecture__  
-  Seanox Devwex is a multithreaded runtime container for (server) modules, which
-  are integrated via the provided Server and Module API. The own ClassLoader
-  supports the loading and unloading of servers and modules at the runtime. 
-- __Hypertext Transfer Protocol__  
-  The HTTP server implementation provides virtual hosting, filters, HTTP
-  modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and more. In
-  accordance with specification 1.0, GET, POST and HEAD as well as OPTIONS, PUT
-  and DELETE are supported by HTTP 1.1 and other methods can be provided via
-  HTTP modules, XCGI and CGI. 
+- __Modular Architecture__  
+  Seanox Devwex is a experimental server engine with a modular architecture for
+  (web)servers and applications, which are integrated via the provided Server
+  and Module API. The own ClassLoader supports the loading and unloading of
+  servers and modules at the runtime. In addition, cascaded constructors for
+  servers and modules are supported. Along with classic inheritance, 
+  constructors can be chained, which enables the insertion of additional class
+  loaders, for example.
+- __Central configuration__  
+  The configuration is based on a central file in an extended INI format, which
+  is divided into sections with keys and values, supports multiple inheritance
+  in the sections, dynamic values and access to system and environment
+  variables.
+- __Web Server implementation / Hypertext Transfer Protocol__  
+  Already included is a web server implementation with the following features: 
+  Virtual hosting, filters, HTTP modules, TLS/SSL, basic as well as digest 
+  access authentication, XCGI/(Fast)CGI1.1, directory listing, templates with
+  support for CGI environment variables and more. In accordance with
+  specification HTTP 1.0, GET, POST and HEAD as well OPTIONS, PUT and DELETE are
+  supported by HTTP 1.1 and other methods can be provided via HTTP modules
+  (XAPI+), XCGI and (Fast)CGI. 
 - __Remote Control__  
-  The included remote access supports a telnet-based control of the runtime
-  container (restart and stop) and queries about the operating status of
-  running servers and modules. In addition to the server implementation, a
-  client implementation is also included. 
-- __Configuration__  
-  The configuration uses a central file in an advanced INI format, divided into
-  sections with keys and values, which supports multiple inheritance in the
-  sections, dynamic values, and access to system and environment variables.
-- __Server API (SAPI)__  
-  The Server API integrates implementations that provide physical access to the
-  network for a protocol at one address and one port, allowing existing server
-  and network functionalities to be changed or new ones to be deployed. 
-- __Module API (XAPI)__  
-  The module API integrates implementations that act in the background and do
-  not provide direct external functions. 
-- __HTTP Module API (XAPI+)__  
-  The HTTP Module API is an extension of the Module API for the HTTP server to
-  implement filter and service functions that run in the context of the server. 
-- __(Fast)CGI__  
-  For data exchange as well as for connecting external runtime environments and
-  applications, the specification 1.1 of the Common Gateway Interface and thus
-  PHP, Perl, Python and others are supported. FastCGI is also available as an
-  option. 
-- __XCGI__  
-  The XCGI is an interface based on the CGI and has the same basic principle to
-  communicate via the standard I/O, but also transmits server-relevant
-  information and environment variables in this way, so that applications can
-  also be used which do not have an exclusive environment or do not have access
-  to the environment variables of the operating system. 
-- __Telnet__  
-  The included remote access supports a telnet-based control of the container
-  (restart and stop) and queries about the operating status of running servers
-  and modules. In addition to the server implementation, a client
-  implementation is also included. 
-- __Security__  
-  Transport Layer Security (TLS) and Secure Socket Layer (SSL) with server and
-  client certificates are supported for secure data transfer, allowing
-  certificates to be assigned to each physical host individually, by
-  inheritance in groups or globally.  
-  Access to directories and files can be provided with basic as well as digest
-  access authentication, which supports groups and can be controlled by filters
-  that support freely definable rules, individual error pages, automatic
-  redirections and modules. 
-- __Virtualization__  
-  The HTTP server supports virtual hosting and aliasing for virtual paths. 
-- __Customization__  
-  HTTP servers and virtual hosts use customizable templates for the error pages
-  and list view of the directories (directory listing). With support for CGI
-  environment variables, the content can be designed dynamically. 
-- __Extensibility__  
-  The modular architecture and many interfaces allow the modification, extension
-  and addition of functionalities. 
-
+  The included remote access supports a telnet-based control of the server
+  engine (restart and stop) and queries about the operating status of running
+  servers and modules. It includes a server and a client component. 
+- __Expandability and Customization__
+  The modular architecture and many interfaces (SAPI, XAPI, XAPI+, (Fast)CGI,
+  XCGI) allow the modification, extension and addition of functionalities.
+ 
 
 # Licence Agreement
 LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
@@ -99,7 +65,7 @@ Folgenden Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2022 Seanox Software Solutions
+Copyright (C) 2023 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -128,20 +94,16 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes
-## 5.5.0 20221007  
-BF: Review: Optimization and corrections (without functional impact)  
-BF: Generator: Correction when parsing structures  
-BF: SAPI: Correction of passed context to constructor  
-BF: HTTP(S): Added status 301 in the list of status codes  
-BF: HTTP(S): BLOCKSIZE, INTERRUPT, ISOLATION, TIMEOUT is changeable by virtual host  
-BF: Build: Empty storage directory is included in the zip file  
-CR: Build: Releases are now only available on the release page  
-CR: Build: Simplification when inserting release infos  
-CR: License: Changed to Apache License Version 2.0  
-CR: Service: Added configuration file as optional program argument for startup  
-CR: SAPI: Constructors for servers support alternative signature(s)  
-CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.1.0)  
-CR: HTTP(S): Consolidation of TIMEOUT, DURATION, ISOLATION  
+## 5.6.0 2023xxxx (upcoming version)  
+BF: Review: Optimization and corrections  
+BF: Worker: Correction of the unwanted SocketException on stop and restart  
+BF: HTML: Cleanup of the obsolete type attribute in the style tag  
+BF: Project: Update of slogan (Experimental Server Engine)  
+CR: XAPI: Change method String Module.explain() to String Module.expose()  
+CR: SAPI: Change method String Server.explain() to String Server.expose()  
+CR: Documentation: Reduction to English  
+CR: Test: Intergation of the test environment  
+CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.4.0)  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

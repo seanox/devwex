@@ -37,12 +37,12 @@ decisions in the project easier to understand :-)__
   servers and modules are supported. Along with classic inheritance, 
   constructors can be chained, which enables the insertion of additional class
   loaders, for example.
-- __Central configuration__  
+- __Central Configuration__  
   The configuration is based on a central file in an extended INI format, which
   is divided into sections with keys and values, supports multiple inheritance
   in the sections, dynamic values and access to system and environment
   variables.
-- __Web Server implementation / Hypertext Transfer Protocol__  
+- __Web Server Implementation / Hypertext Transfer Protocol__  
   Already included is a web server implementation with the following features: 
   Virtual hosting, filters, HTTP modules, TLS/SSL, basic as well as digest 
   access authentication, XCGI/(Fast)CGI1.1, directory listing, templates with

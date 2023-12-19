@@ -662,7 +662,7 @@ class Worker implements Runnable {
                     && buffer.length() > 0
                     && reference.length() <= buffer.length()) {
 
-                // optional wird die Sperrung des Verzeichnis ermittelt
+                // Optionally, the prohibition of the directory is determined
                 forbidden = string.contains("[C]");
 
                 if (!forward) {
@@ -777,7 +777,7 @@ class Worker implements Runnable {
         boolean digest = string.contains("[d]");
         this.fields.set("auth_type", digest ? "Digest" : "Basic");
         
-        // die Werte der ACC-Optionen werden ermittelt
+        // values of the ACC options are determined
         string = string.replaceAll("\\[acc:([^\\[\\]]*?)\\]", "\00$1\01");
         string = string.replaceAll("((((^|\01).*?)\00)|(\01.*$))|(^.*$)", " ").trim();
         

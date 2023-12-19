@@ -99,111 +99,45 @@
       </article>
       <article>
         <h1>Features</h1>
-        <h2>Architecture</h2>
+        <h2>Modular Architecture</h2>
         <p>
-          Seanox Devwex is a multithreaded runtime environment for (server)
-          modules. for (server) modules, which are integrated via the provided
-          server and module and modules API provided. In addition, the
-          ClassLoader supports the loading and unloading of servers and modules
-          at runtime. at runtime.
+          Seanox Devwex is a experimental server engine with a modular
+          architecture for (web)servers and applications, which are integrated
+          via the provided Server and Module API. The own ClassLoader supports
+          the loading and unloading of servers and modules at the runtime. In
+          addition, cascaded constructors for servers and modules are supported.
+          Along with classic inheritance, constructors can be chained, which
+          enables the insertion of additional class loaders, for example.
         </p>
-        <h2>Hypertext Transfer Protocol</h2>
+        <h2>Central Configuration</h2>
         <p>
-          The HTTP server implementation supports virtual hosting, filters, HTTP
-          modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates, among
-          others.
+          The configuration is based on a central file in an extended INI
+          format, which is divided into sections with keys and values, supports
+          multiple inheritance in the sections, dynamic values and access to
+          system and environment variables.
+        </p>
+        <h2>Web Server Implementation / Hypertext Transfer Protocol</h2>
+        <p>
+          Already included is a web server implementation with the following
+          features: Virtual hosting, filters, HTTP modules, TLS/SSL, basic as
+          well as digest access authentication, XCGI/(Fast)CGI1.1, directory
+          listing, templates with support for CGI environment variables and
+          more. In accordance with specification HTTP 1.0, GET, POST and HEAD as
+          well OPTIONS, PUT and DELETE are supported by HTTP 1.1 and other
+          methods can be provided via HTTP modules (XAPI+), XCGI and (Fast)CGI. 
         </p>
         <h2>Remote Control</h2>
         <p>
           The included remote access supports a telnet-based control of the
-          runtime environment (restart and stop) and queries about the operating
-          status of running servers and modules. In addition to the server
-          implementation, a client implementation is also included.
+          server engine (restart and stop) and queries about the operating
+          status of running servers and modules. It includes a server and a
+          client component. 
         </p>
-        <h2>Configuration</h2>
+        <h2>Expandability and Customization</h2>
         <p>
-          The configuration uses a central file in an advanced INI format,
-          divided into sections with keys and values, which supports multiple
-          inheritance in the sections, dynamic values, and access to system and
-          environment variables.
-        </p>
-        <h2>Interfaces</h2>
-        <h3>Server API (SAPI)</h3>
-        <p>
-          The Server API integrates implementations that provide physical access
-          to the network for a protocol at one address and one port, allowing
-          existing server and network functionalities to be changed or new ones
-          to be deployed.
-        </p>
-        <h3>Module API (XAPI)</h3>
-        <p>
-          The Module API integrates implementations that act in the background
-          and do not provide direct external functions.
-        </p>
-        <h3>HTTP</h3>
-        <p>
-          In accordance with specification 1.0, GET, POST and HEAD as well as
-          OPTIONS PUT and DELETE are supported by HTTP 1.1 and other methods can
-          be provided via HTTP modules, XCGI and CGI.
-        </p>
-        <h3>HTTP Module API (XAPI+)</h3>
-        <p>
-          The HTTP Module API is an extension of the Module API for the HTTP
-          server to implement filter and service functions that run in the
-          context of the server.
-        </p>
-        <h3>(Fast)CGI</h3>
-        <p>
-          For data exchange as well as for connecting external runtime
-          environments and applications, the specification 1.1 of the Common
-          Gateway Interface and thus PHP, Perl, Python and others are supported.
-          FastCGI is also available as an option.
-        </p>
-        <h3>XCGI</h3>
-        <p>
-          The XCGI is an interface based on the CGI and has the same basic
-          principle to communicate via the standard I/O, but also transmits
-          server-relevant information and environment variables in this way, so
-          that applications can also be used which do not have an exclusive
-          environment or do not have access to the environment variables of the
-          operating system. 
-        </p>
-        <h3>Telnet</h3>
-        <p>
-          The runtime container can be controlled via Telnet (restart and stop)
-          and the operating status to the running servers and modules can be
-          queried. In addition to the implementation of the server, a client is
-          also included.
-        </p>
-        <h2>Security</h2>
-        <p>
-          Transport Layer Security (TLS) and Secure Socket Layer (SSL) with
-          server and client certificates are supported for secure data transfer,
-          allowing certificates to be assigned to each physical host
-          individually, by inheritance in groups or globally.
-        </p>
-        <p>
-          Access to directories and files can be provided with basic as well as
-          digest access authentication, which supports groups and can be
-          controlled by filters that support freely definable rules, individual
-          error pages, automatic redirections and modules.
-        </p>
-        <h2>Virtualization</h2>
-        <p>
-          The HTTP server supports virtual hosting and aliasing for virtual
-          paths.
-        </p>
-        <h2>Individuality</h2>
-        <p>
-          HTTP servers and virtual hosts use customizable templates for the
-          error pages and list view of the directories (directory listing). With
-          support for CGI environment variables, the content can be designed
-          dynamically.
-        </p>
-        <h2>Expandability</h2>
-        <p>
-          The modular architecture and many interfaces allow the modification,
-          extension and addition of functionalities.
+          The modular architecture and many interfaces (SAPI, XAPI, XAPI+,
+          (Fast)CGI, XCGI) allow the modification, extension and addition of
+          functionalities.
         </p>
       </article>
       <article>
@@ -2622,15 +2556,16 @@
         <h1>Control and Monitoring</h1>
         <p>
           Restart, stop and request of operating status are accessible via
-          Telnet-based remote access.<br>
-          Most operating systems contain a corresponding client that can be used
-          via the console (shell/prompt).<br>
-          Seanox Devwex contains the required server and an alternative client
-          component. 
+          Telnet-based remote access. Most operating systems contain a
+          corresponding client. Seanox Devwex itself also contains a suitable
+          client component.
+        </p>
+        <p>
+          The Telnet request only expects the command to be executed, whereby
+          upper and lower case letters can be ignored.
         </p>
         <header>
-          Overview of available Telnet commands:<br>
-          Upper and lower case letters are ignored in the commands.
+          Overview of available Telnet commands:
         </header>
         <table>
           <tr>
@@ -2686,7 +2621,7 @@
           <tr>
             <td>VERS</td>
             <td>
-              version information
+              Version information
             </td>
           </tr>
           <tr>
@@ -2762,6 +2697,13 @@
         </p>
         <h2>Architecture</h2>
         <table class="architecture">
+          <tr>
+            <td>
+              <span>Components</span>,
+              <span>Interfaces</span>,
+              <span>Functions</span>
+            </td>
+          </tr>  
           <tr>
             <td class="float">
               <table class="composite list">

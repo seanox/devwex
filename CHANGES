@@ -10,7 +10,8 @@ CR: SAPI: Change method String Server.explain() to String Server.expose()
 CR: Documentation: Reduction to English
 CR: Test: Intergation of the test environment
     The independent devwex-test project is obsolete.
-CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.4.0)    
+CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.4.0)
+CR: Windows: Optimization of JRE determination
 
 5.5.0 20221007
 BF: Review: Optimization and corrections (without functional impact)

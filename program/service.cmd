@@ -80,19 +80,28 @@
 
   rem --------------------------------------------------------------------------
  
+  rem Automatic determination of the Java runtime environment:
+  rem - in the work directory ..\runtime\java
+  rem - else if JAVA_HOME is set
+  rem - else Java runtime in the PATH variable
+
   if "%java%" == "" (
     if exist "%home%\..\runtime\java" set java=%home%\..\runtime\java
   )
   if "%java%" == "" (
-    if not "%java_home%" == "" set java=%java_home%
-  )
-  if "%java%" == "" (
-    for %%i in ("%path%") do (
-      if exist %%i\java.exe set java=%%i\..
+    if not "%JAVA_HOME%" == "" (
+      if exist "%JAVA_HOME%\bin\java.exe" set java=%JAVA_HOME%\bin
     )
   )
-  if not "%java%" == "" (
-    for %%i in ("%java%") do set java=%%~fi
+  if "%java%" == "" (
+    for %%i in ("%PATH:;=";"%") do (
+      if exist "%%i\java.exe" set java=%%i
+    )
+  )
+
+  if not exist "%JAVAPATH%\java.exe" (
+    echo Java runtime environment was not found!
+    goto :EOF
   )
 
   if "%1" == "install"   goto install

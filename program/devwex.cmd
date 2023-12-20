@@ -35,7 +35,35 @@ set LIBRARIESPATH=
 set OPTIONS=
 set SYSTEMPATH=%PATH%
 
+rem Automatic determination of the Java runtime environment:
+rem - in the work directory ..\runtime\java
+rem - else if JAVA_HOME is set
+rem - else Java runtime in the PATH variable
+
+if "%JAVAPATH%" == "" (
+  if exist "%cd%\..\runtime\java" set JAVAPATH=%cd%\..\runtime\java
+)
+if "%JAVAPATH%" == "" (
+  if not "%JAVA_HOME%" == "" (
+    if exist "%JAVA_HOME%\bin\java.exe" set JAVAPATH=%JAVA_HOME%\bin
+  )
+)
+if "%JAVAPATH%" == "" (
+  for %%i in ("%PATH:;=";"%") do (
+    if exist "%%i\java.exe" set JAVAPATH=%%i
+  )
+)
+
 for %%f in (../runtime/scripts/*.bat ../runtime/scripts/*.cmd) do call ../runtime/scripts/%%f
+
+if not exist "%JAVAPATH%\java.exe" (
+  echo Seanox Devwex Service 0.0.0 00000000
+  echo Copyright ^(C^) 0000 Seanox Software Solutions
+  echo Experimental Server Engine
+  echo. 
+  echo Java runtime environment was not found!
+  goto :EOF
+)
 
 set OPTIONS=%OPTIONS% -Dpath="%SYSTEMPATH%;"
 set OPTIONS=%OPTIONS% -Dsystemdrive=%SYSTEMDRIVE%

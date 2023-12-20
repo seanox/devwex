@@ -61,7 +61,7 @@ if not exist "%JAVAPATH%\java.exe" (
   echo Copyright ^(C^) 0000 Seanox Software Solutions
   echo Experimental Server Engine
   echo. 
-  echo Java runtime environment was not found!
+  echo ERROR: Java Runtime Environment not found
   goto :EOF
 )
 

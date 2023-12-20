@@ -100,7 +100,7 @@
   )
 
   if not exist "%JAVAPATH%\java.exe" (
-    echo Java runtime environment was not found!
+    echo ERROR: Java Runtime Environment not found
     goto :EOF
   )
 

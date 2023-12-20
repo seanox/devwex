@@ -86,20 +86,20 @@
   rem - else Java runtime in the PATH variable
 
   if "%java%" == "" (
-    if exist "%home%\..\runtime\java\bin\java.exe" set java=%home%\..\runtime\java\bin
+    if exist "%home%\..\runtime\java\bin\java.exe" set java="%home%\..\runtime\java"
   )
   if "%java%" == "" (
     if not "%JAVA_HOME%" == "" (
-      if exist "%JAVA_HOME%\bin\java.exe" set java=%JAVA_HOME%\bin
+      if exist "%JAVA_HOME%\bin\java.exe" set java="%JAVA_HOME%"
     )
   )
   if "%java%" == "" (
     for %%i in ("%PATH:;=";"%") do (
-      if exist "%%i\java.exe" set java=%%i
+      if exist "%%i\java.exe" set java="%%i"
     )
   )
 
-  if not exist "%JAVAPATH%\java.exe" (
+  if not exist "%java%\bin\java.exe" (
     echo ERROR: Java Runtime Environment not found
     goto :EOF
   )

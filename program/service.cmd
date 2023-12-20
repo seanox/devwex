@@ -86,7 +86,7 @@
   rem - else Java runtime in the PATH variable
 
   if "%java%" == "" (
-    if exist "%home%\..\runtime\java" set java=%home%\..\runtime\java
+    if exist "%home%\..\runtime\java\bin\java.exe" set java=%home%\..\runtime\java\bin
   )
   if "%java%" == "" (
     if not "%JAVA_HOME%" == "" (

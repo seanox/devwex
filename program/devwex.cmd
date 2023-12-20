@@ -41,7 +41,7 @@ rem - else if JAVA_HOME is set
 rem - else Java runtime in the PATH variable
 
 if "%JAVAPATH%" == "" (
-  if exist "%cd%\..\runtime\java" set JAVAPATH=%cd%\..\runtime\java
+  if exist "%cd%\..\runtime\java\bin\java.exe" set JAVAPATH=%cd%\..\runtime\java\bin
 )
 if "%JAVAPATH%" == "" (
   if not "%JAVA_HOME%" == "" (
@@ -70,4 +70,4 @@ set OPTIONS=%OPTIONS% -Dsystemdrive=%SYSTEMDRIVE%
 set OPTIONS=%OPTIONS% -Dsystemroot="%SYSTEMROOT%"
 set OPTIONS=%OPTIONS% -Dlibraries="..\libraries;%LIBRARIESPATH%;"
 
-%JAVAPATH%java -cp "devwex.jar;%CLASSPATH%" %OPTIONS% com.seanox.devwex.Service %1
+"%JAVAPATH\%java.exe" -cp "devwex.jar;%CLASSPATH%" %OPTIONS% com.seanox.devwex.Service %1

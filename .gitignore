@@ -1,6 +1,16 @@
-/.idea/
-/program/classes/
-/release/
-/storage/
-/*/keystore
-/*/*.jar
+# IntelliJ
+/**/.idea
+/**/*.iml
+
+# Main Project
+/build
+/development/keystore
+/program/keystore
+/program/classes
+/program/*.jar
+/release
+/storage
+
+# Test Environment
+/test/classes
+/test/stage

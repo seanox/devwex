@@ -104,6 +104,7 @@ CR: SAPI: Change method String Server.explain() to String Server.expose()
 CR: Documentation: Reduction to English  
 CR: Test: Intergation of the test environment  
 CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.4.0)  
+CR: Windows: Optimization of JRE determination  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

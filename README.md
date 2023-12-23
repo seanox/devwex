@@ -23,7 +23,7 @@ Additional servers, modules and applications can be integrated via the available
 APIs. 
 
 __The size of the Devwex binary is limited to a maximum of 30kB. There is no
-technical reason for this, it is rather the more than 20 years old quirk and
+technical reason for this, it is rather the more than 20 years old quirk and fun
 question -- Why are web servers so big? This should make some unconventional
 decisions in the project easier to understand :-)__
 

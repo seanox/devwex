@@ -37,7 +37,7 @@ import java.util.zip.ZipFile;
  * the loaded libraries are not locked and can be changed at runtime.
  *
  * @author  Seanox Software Solutions
- * @version 5.0.1 20220910
+ * @version 5.6.0 20231223
  */
 public class Loader extends URLClassLoader {
     
@@ -184,9 +184,12 @@ public class Loader extends URLClassLoader {
             if (super.getPackage(packet) == null)
                 super.definePackage(packet, null, null, null, null, null, null, null);
 
-        } catch (SecurityException exception) {
+        } catch (RuntimeException exception) {
             if (this.loader == null)
                 throw exception;
+        } catch (Error error) {
+            if (this.loader == null)
+                throw error;
         }
 
         // Attempts to load the class from the parent ClassLoader.
@@ -198,8 +201,10 @@ public class Loader extends URLClassLoader {
                     super.resolveClass(source);
                 return source;
             }
-        } catch (SecurityException exception) {
+        } catch (RuntimeException exception) {
             throw exception;
+        } catch (Error error) {
+            throw error;
         } catch (Throwable throwable) {
         }
 
@@ -219,8 +224,10 @@ public class Loader extends URLClassLoader {
                     super.resolveClass(source);
                 return source;
             }
-        } catch (SecurityException exception) {
+        } catch (RuntimeException exception) {
             throw exception;
+        } catch (Error error) {
+            throw error;
         } catch (Throwable throwable) {
         }
 

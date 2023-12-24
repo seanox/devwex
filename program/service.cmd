@@ -104,14 +104,14 @@
     goto :EOF
   )
 
-  if "%1" == "install"   goto install
-  if "%1" == "update"    goto install
-  if "%1" == "uninstall" goto uninstall
+  if /I "%1" == "install"   goto install
+  if /I "%1" == "update"    goto install
+  if /I "%1" == "uninstall" goto uninstall
  
-  if "%1" == "start"   goto start
-  if "%1" == "restart" goto restart
-  if "%1" == "stop"    goto stop
-  if "%1" == "status"  goto status
+  if /I "%1" == "start"   goto start
+  if /I "%1" == "restart" goto restart
+  if /I "%1" == "stop"    goto stop
+  if /I "%1" == "status"  goto status
 
   echo usage: %~nx0 [command]
   echo.
@@ -135,7 +135,7 @@
 :install
 
   set label=INSTALL
-  if "%1" == "update" set label=UPDATE
+  if /I "%1" == "update" set label=UPDATE
 
   echo %label%: Detection of Java runtime environment
   set jvm=

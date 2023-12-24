@@ -66,7 +66,7 @@
           included server instances support HTTP with virtual hosting, filters,
           modules, SSL/TLS, XCGI/CGI1.1, directory listing, templates and a
           Telnet-base remote control the server engine. Additional servers,
-          modules and applications can be integrated via the available APIs. 
+          modules and applications can be integrated via the available APIs.
         </p>
       </article>
       <article>
@@ -148,34 +148,31 @@
       </article>
       <article>
         <h1>Installation</h1>
+        <h2>Java Binary</h2>
         <p>
           Seanox Devwex is delivered as a ZIP archive that is unpacked at any
           location in the file system.
         </p>
         <h2>Windows Service</h2>
         <p>
-          For Windows, a distribution of Seanox Devwex with <a target="_extern"
-              href="https://commons.apache.org/daemon/procrun.html">Procrun</a>
-          is available, which installs Seanox Devwex in Windows as a service.
-          The distribution is based on the Java version and contains in
-          additional additionally the service runners for 32 and 64 bit as well
-          the batch file <code>service.cmd</code> for easy usage of the service.
+          To install as a Windows service, a package with <a target="_extern"
+              href="https://commons.apache.org/daemon/procrun.html">Apache
+          Procrun</a> is available based on the Java binary, which also contains
+          service runners for 32 and 64 bit, as well as the batch file
+          <code>service.cmd</code> for easy use of the service.
         </p>
         <p>
-          Also the Windows distribution is unpacked at an arbitrary place in the
-          file system. Because the service should run with a Windows service
-          account and appropriate access rights, a place outside the user
-          profiles is recommended for unpacking and installation.
+          Also the Windows package is unpacked at an arbitrary place in the file
+          system. Because the service should run with a Windows service account
+          and appropriate access rights, a place outside the user profiles is
+          recommended for unpacking and installation. By default, the Windows
+          service account <code>NetworkService</code> is used, which can be
+          changed in <code>service.cmd</code>. The required access rights for
+          the program directory are set automatically during installation. 
         </p>
         <p>
-          By default, the service is installed with the Windows service account
-          <code>NetworkService</code>, but other service accounts can also be
-          used. The access rights required for the program directory are set
-          during installation.
-        </p>
-        <p>
-          The parameters to configure the service have been bundled in the batch
-          file and are easily accessible.
+          The parameters for configuring the service are centralized in the
+          batch file and easily accessible. 
         </p>        
         <p>
           To install the service, the batch file <code>service.cmd</code> is
@@ -188,9 +185,7 @@
           usage: service.cmd [command]
         </code>
         <header>
-          Overview of available commands:<br>
-          The letter case (upper and lower case) is to be respected for the
-          commands.
+          Overview of available commands:
         </header>
         <table>
           <tr>
@@ -200,59 +195,65 @@
           <tr>
             <td>install</td>
             <td>
-              Installs the service.
+              Installs the service
             </td>
           </tr>
           <tr>
             <td>update</td>
             <td>
-              Removes the service and reinstalls it with updated configuration.
+              Removes the service and reinstalls it with updated configuration
             </td>
           </tr>
           <tr>
             <td>uninstall</td>
             <td>
-              Removes the service.
+              Removes the service
             </td>
           </tr>
           <tr>
             <td>start</td>
             <td>
-              Starts the service.
+              Starts the service
             </td>
           </tr>
           <tr>
             <td>status</td>
             <td>
-              Output of the status of the running service.
+              Output of the status of the running service
             </td>
           </tr>
           <tr>
             <td>restart</td>
             <td>
-              Stops the service and restarts it.
+              Stops the service and restarts it
             </td>
           </tr>
           <tr>
             <td>stop</td>
             <td>
-              Stops the service.
+              Stops the service
             </td>
           </tr>
         </table>
         <section>
-          <b>Hint</b>
+          <b>Note</b>
           <p>
-            The distribution does not contain a JRE.
-          </p>
-          <p>
-            If an already installed or in the system available one should be
-            used, the Java home can be specified in <code>service.cmd</code>
-            with the variable <code>java</code>. Alternatively, the JRE can also
-            be placed in <code>./runtime/java</code>. In this case the batch
-            script will find the JRE automatically.
+            The package does not contain a JRE. If one is already installed.
+            This must be found via the environment variables <code>PATH</code>
+            and/or <code>JAVA_HOME</code>. Alternatively, the JRE can also be
+            placed in <code>./runtime/java</code> so that the batch script finds
+            the JRE automatically. Or use the variable <code>java</code> in
+            <code>service.cmd</code> to specify the JRE bin directory.
           </p>
         </section>
+        <h2>Linux Service</h2>
+        <p>
+          TODO:    
+        </p>        
+        <h2>MacOS Service</h2>
+        <p>
+          TODO:    
+        </p>        
       </article>
       <article>
         <h1>Configuration</h1>
@@ -2559,10 +2560,6 @@
           Telnet-based remote access. Most operating systems contain a
           corresponding client. Seanox Devwex itself also contains a suitable
           client component.
-        </p>
-        <p>
-          The Telnet request only expects the command to be executed, whereby
-          upper and lower case letters can be ignored.
         </p>
         <header>
           Overview of available Telnet commands:

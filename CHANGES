@@ -7,6 +7,8 @@ BF: HTML: Cleanup of the obsolete type attribute in the style tag
 BF: Project: Update of slogan (Experimental Server Engine)
 BF: (Class)Loader: Optimization and corrections of error handling
     Important errors such as UnsupportedClassVersionError are no longer swallowed.
+BR: Windows: Optimization and corrections for case insensitive commands
+    concerning service.cmd    
 CR: XAPI: Change method String Module.explain() to String Module.expose()
 CR: SAPI: Change method String Server.explain() to String Server.expose()
 CR: Documentation: Reduction to English

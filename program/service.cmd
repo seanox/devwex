@@ -86,11 +86,11 @@
   rem - else Java runtime in the PATH variable
 
   if "%java%" == "" (
-    if exist "%home%\..\runtime\java\bin\java.exe" set java="%home%\..\runtime\java"
+    if exist "%home%\..\runtime\java\bin\java.exe" set java=%home%\..\runtime\java
   )
   if "%java%" == "" (
     if not "%JAVA_HOME%" == "" (
-      if exist "%JAVA_HOME%\bin\java.exe" set java="%JAVA_HOME%"
+      if exist "%JAVA_HOME%\bin\java.exe" set java=%JAVA_HOME%
     )
   )
   if "%java%" == "" (
@@ -332,15 +332,6 @@ rem ----------------------------------------------------------------------------
   
 :error
 
-  echo.
-  echo ERROR: An unexpected error occurred.
-  echo ERROR: The script was canceled.
-
-  if not exist %~n0.log goto exit
-
-  echo.
-  type %~n0.log
-  goto exit
 
 
 

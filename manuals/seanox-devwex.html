@@ -2484,7 +2484,7 @@
         <section>
           <pre>telnet 127.0.0.1 25000<br/>&lt;command&gt;</pre>
           <p>
-            Telnet
+            Telnet from the operating system
           </p>
         </section>
         <header>
@@ -2666,37 +2666,33 @@
             </td>
           </tr>
         </table>
-        <header>
-          Examples of the Telnet call:
-        </header>
-        <pre>
-          telnet 127.0.0.1 25000
-          status
-        </pre>
+        <section>
+          <pre>telnet 127.0.0.1 25000<br/>status</pre>
+          <p>
+            Telnet from the operating system
+          </p>
+        </section>
         <p>
-          Using the operating system's Telnet client
-        </p>
-        <p>
-          When using Seanox Devwex as a Telnet client, the connection data is
-          determined from the server configuration <code>devwex.ini</code>,
-          which must be in the working directory.
+          When using the Telnet client included in Seanox Devwex, the connection
+          data from the server configuration <code>devwex.ini</code>, which must
+          be located in the working directory, is used.
         </p>
         <section>
           <pre>devwex.cmd status</pre>
           <p>
-            Using the Seanox Devwex client via the startup script under Windows
+            Batch script in Windows
           </p>
         </section>
         <section>
           <pre>devwex.sh status</pre>
           <p>
-            Using the Seanox Devwex client via the Unix/Linux startup script
+            Shell script in Unix/Linux/MacOS
           </p>
         </section>
         <section>
           <pre>java -cp devwex.jar com.seanox.devwex.Service status</pre>
           <p>
-            Direct Java call from the Seanox Devwex client
+            Java binary
           </p>
         </section>
       </article>

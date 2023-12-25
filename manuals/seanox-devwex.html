@@ -2729,10 +2729,10 @@
       <article>
         <h1>Development</h1>
         <p>
-          The extensibility of Seanox Devwex is a key feature. The
-          implementation of the runtime container and the server is a challenge
-          to achieve maximum functionality with minimal resources and to
-          maintain a clean architecture. 
+          The extensibility of Seanox Devwex is a key feature. Implementing the
+          server engine and its components is a challenge to achieve maximum
+          functionality with minimum resources and maintain a
+          clean architecture.
         </p>
         <h2>Architecture</h2>
         <table class="architecture">
@@ -2873,9 +2873,9 @@
         </table>
         <h2>Sequences</h2>
         <p>
-          Starting, restarting and terminating the servers as well as loading,
-          requesting and unloading modules are fixed sequences of the runtime
-          container.
+          Start, restart and stop of the servers as well as the loading,
+          requesting and unloading of modules are fixed sequences of the server
+          engine.
         </p>
         <h3>Start</h3>
         <ul>
@@ -2916,7 +2916,7 @@
         <h3>Restart</h3>
         <p>
           The sequence corresponds to the combination of
-          [#DevelopmentSequencesTermination] and [#DevelopmentSequencesStart].
+          [#DevelopmentSequencesStop] and [#DevelopmentSequencesStart].
         </p>
         <ul>
           <li>
@@ -2955,7 +2955,7 @@
             and can start its work in method <code>Server.run()</code>.
           </li>
         </ul>
-        <h3>Termination</h3>
+        <h3>Stop</h3>
         <ul>
           <li>
             All registered server instances are prompted to quit using the
@@ -2975,24 +2975,22 @@
         </ul>
         <h2>Expansion</h2>
         <p>
-          The extension of Seanox Devwex is possible in several ways.
+          The extension of Seanox Devwex is possible in several ways. The server
+          engine provides a Server API, Module API, and HTTP Module API. Special
+          interfaces and abstractions are not included in the service itself,
+          which uses them and controls all servers and modules via reflections 
+          and silent standards/interfaces, which may require detailed knowledge
+          of the components and operation of Seanox Devwex. The implementation
+          with Seanox Commons as part of the Seanox Devwex SDK (for Seanox
+          Devwex 5.x in development) is easier and more convenient. It contains
+          the necessary interfaces and abstractions and provides additional
+          ClassLoader layers.
         </p>
         <p>
-          The service provides a Server API, Module API, and HTTP Module API.
-          Special interfaces and abstractions are not included in the service
-          itself, which uses them and controls all servers and modules via
-          reflections and silent standards/interfaces, which may require
-          detailed knowledge of the components and operation of Seanox Devwex.
-        </p>
-        <p>
-          The implementation with Seanox Commons as part of the Seanox Devwex
-          SDK (for Seanox Devwex 5.x in development) is easier and more
-          convenient. It contains the necessary interfaces and abstractions and
-          provides additional ClassLoader layers.
-        </p>
-        <p>
+            <b>
           The following describes only the Server API, Module API, and HTTP
-          Module API contained in the service.
+          Module API contained in the server engine.
+          </b>
         </p>
         <h2>Server</h2>
         <p>
@@ -3008,12 +3006,11 @@
           <code>Server(String name, Initialize initialize)</code> or 
           <code>Server(String name, Object initialize)</code>. The order of
           initialization is determined by the order of the server configurations
-          in the configuration file.<br>
-          The created server instances are started by the runtime container
-          (service) with the method <code>Server.run()</code> and are requested
-          to terminate by <code>Service.destroy()</code>. Both methods are
-          called asynchronously. If the termination is delayed, the runtime
-          container waits for all registered server instances to finish.
+          in the configuration file. The created server instances are started by
+          the server engine (service) with the method <code>Server.run()</code>
+          and are requested to terminate by <code>Service.destroy()</code>. Both
+          methods are called asynchronously. If the termination is delayed, the
+          server engine waits for all registered server instances to finish.
           Optionally, the implementation of the <code>Server.expose()</code>
           method for querying general information, such as protocol and network
           connection, is supported. 
@@ -3038,12 +3035,11 @@
               public String expose() {
                   ...
 
-                  This method is optional and returns general information about
-                  the server in the following format:
-                  &lt;PROTOCOL HOST-NAME:PORT&gt; or
-                  &lt;PROTOCOL HOST-ADDRESS:PORT&gt;, which should be set
-                  statically or with initialization.
-              }
+                  The optional method returns informations about the server in
+                  the following format: &lt;PROTOCOL HOST-NAME:PORT&gt; or
+                  &lt;PROTOCOL HOST-ADDRESS:PORT&gt;. This informations should
+                  be static or set during initialization.
+              }              
 
               public void run() {
                   ...
@@ -3068,10 +3064,10 @@
           loaded, initialized, and configured when starting or restarting from
           the service or at runtime in servers and modules via the
           Application-ClassLoader. Modules are global extensions that are
-          provided once instantiated to all components.<br>
-          Optionally, it is possible to use the context class loader from the
-          Seanox Devwex SDK, so that modules can also be used in several
-          independent instances with their own class loader.
+          provided once instantiated to all components. Optionally, it is
+          possible to use the context class loader from the Seanox Devwex SDK,
+          so that modules can also be used in several independent instances with
+          their own class loader.
         </p>
         <h3>API (XAPI)</h3>
         <p>
@@ -3107,19 +3103,16 @@
               public String expose() {
                   ...
 
-                  This method is optional and returns general information about
-                  the module in the following format:
-                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
-                  statically or with initialization.
+                  The optional method returns informations about the module in
+                  the following format: &lt;PRODUCER-MODULE/VERSION&gt;. This
+                  informations should be static or set during initialization.
               }
 
               public void destroy() {
                   ...
 
-                  The module is requested to close before being unloaded by the
-                  service and ClassLoader. The resources, data streams and
-                  processes initiated or used by the module should be closed or
-                  terminated with this call.
+                  The module is requested to close all resources, data streams
+                  and processes initiated or used by it.
               }
           }
         </pre>
@@ -3127,24 +3120,20 @@
         <p>
           HTTP Modules are an extension of the Seanox Devwex Module API
           specifically designed for filtering, accepting and processing HTTP
-          requests that run in the context of the server.
-        </p>
-        <p>
-          HTTP modules allow you to implement filter and service
-          functionalities, which is described in detail below, based on
-          individual implementations that can also be combined in an HTTP
-          module.
+          requests that run in the context of the server. HTTP modules allow you
+          to implement filter and service functionalities, which is described in
+          detail below, based on individual implementations that can also be
+          combined in an HTTP module.
         </p>
         <h3>Filters</h3>
         <p>
           Access to the physical and virtual hosts can be controlled by
           specially defined rules: In addition to forwarding and responding to
           requests with a defined server status, processing can also be passed
-          to a filter.<br>
-          Filters are intended for checking specific requests and, if necessary,
-          manipulating incoming requests; they should only have access to the
-          request header if the request is not completely processed by the
-          filter.
+          to a filter. Filters are intended for checking specific requests and,
+          if necessary, manipulating incoming requests; they should only have
+          access to the request header if the request is not completely
+          processed by the filter.
         </p>
         <h4>API (XAPI+)</h4>
         <p>
@@ -3172,10 +3161,9 @@
               public String expose() {
                   ...
 
-                  This method is optional and returns general information about
-                  the module in the following format:
-                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
-                  statically or with initialization.
+                  The optional method returns informations about the module in
+                  the following format: &lt;PRODUCER-MODULE/VERSION&gt;. This
+                  informations should be static or set during initialization.
               }
 
               public void filter(Worker worker, String options) {
@@ -3192,10 +3180,8 @@
               public void destroy() {
                   ...
 
-                  The module is requested to close before being unloaded by the
-                  service and ClassLoader. The resources, data streams and
-                  processes initiated or used by the module should be closed or
-                  terminated with this call.
+                  The module is requested to close all resources, data streams
+                  and processes initiated or used by it.
               }
           }
         </pre>
@@ -3203,9 +3189,9 @@
         <p>
           The target of an HTTP request these are directories, files and dynamic
           content from external CGI and XCGI applications that are requested via
-          virtual paths.<br>
-          Services provide another form of dynamic content. These take over the
-          complete processing of incoming requests and have unrestricted access.
+          virtual paths. Services provide another form of dynamic content. These
+          take over the complete processing of incoming requests and have
+          unrestricted access.
         </p>
         <h4>API (XAPI+)</h4>
         <p>
@@ -3233,29 +3219,26 @@
               public String expose() {
                   ...
 
-                  This method is optional and returns general information about
-                  the module in the following format:
-                  &lt;PRODUCER-MODULE/VERSION&gt;, which should be set
-                  statically or with initialization.
+                  The optional method returns informations about the module in
+                  the following format: &lt;PRODUCER-MODULE/VERSION&gt;. This
+                  informations should be static or set during initialization.
               }
 
               public void service(Worker worker, String options) {
                   ...
 
                   This method takes over the complete processing of the request
-                  and answers it. If the request is to be answered with a server
-                  status only, the service method can set this status and does
-                  not have to answer the request itself. In this case, the
-                  answer is provided by the initial worker implementation.
+                  and answers it. If the request is only to be answered with a
+                  server status, the service method can set this status and does
+                  not have to respond to the request itself. Instead, the worker
+                  implementation responds.
               }
 
               public void destroy() {
                   ...
 
-                  The module is requested to close before being unloaded by the
-                  service and ClassLoader. The resources, data streams and
-                  processes initiated or used by the module should be closed or
-                  terminated with this call.
+                  The module is requested to close all resources, data streams
+                  and processes initiated or used by it.
               }
           }
         </pre>
@@ -3263,29 +3246,28 @@
         <p>
           The binding of components is based on the concatenation of calls
           instead of inheritance. This allows e.g. the use of different
-          constructors and the insertion of additional ClassLoader.<br>
-          Inheritance can still be used, even in combination.
+          constructors and the insertion of additional ClassLoader. Inheritance
+          can still be used, even in combination.
         </p>
         <p>
           The function is available for modules (XAPI) and servers (SAPI) and is
           defined directly with the configuration of the extension.<br>
-          The cascade is described separately by the arrow symbol.   
         </p>
-        <pre>package.Delegate > package.another.Delegate > ... > package.Target</pre>
+        <section>
+          <pre>package.Delegate > package.another.Delegate > ... > package.Target</pre>
+          <p>
+            The cascade is described separately by the arrow symbol.   
+          </p>          
+        </section>
         <h2>Development Environment (SDK)</h2>
         <p>
-          For development and experimenting with Seanox Devwex, a special
+          For development and experimentation with Seanox Devwex, a special
           development environment (SDK) is available (for Seanox Devwex 5.x in
-          development). The completely pre-configured project for the Eclipse
-          IDE includes Seanox Devwex, Seanox Devwex Test, Seanox Commons and
-          Seanox Devwex WebSocket.
-        </p>
-        <p>
-          In addition to a comprehensive API, including the necessary interfaces
-          as well as abstractions and additional ClassLoader layers for the
-          development with Seanox Devwex, many functional examples are also
-          included. Detailed documentation is included with the development
-          environment.
+          development). The completely preconfigured project for the Eclipse IDE
+          includes Seanox Devwex, Seanox Commons and Seanox Devwex WebSocket. In
+          addition to an extensive API with detailed documentation, the
+          necessary interfaces as well as abstractions, additional ClassLoader
+          layers for development and many functional examples are included.
         </p>
       </article>
     </main>

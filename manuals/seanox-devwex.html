@@ -2577,8 +2577,38 @@
           corresponding client. Seanox Devwex itself also contains a suitable
           client component.
         </p>
+        <section>
+          <pre>telnet 127.0.0.1 25000<br/>&lt;command&gt;</pre>
+          <p>
+            Telnet from the operating system
+          </p>
+        </section>
+        <p>
+          Seanox Devwex itself also contains a suitable client component. If
+          this is used, the connection data from the server configuration
+          <code>devwex.ini</code>, which must be located in the working
+          directory, is used.
+        </p>
+        <section>
+          <pre>java -cp devwex.jar com.seanox.devwex.Service &lt;command&gt;</pre>
+          <p>
+            Java binary
+          </p>
+        </section>
+        <section>
+          <pre>devwex.cmd &lt;command&gt;</pre>
+          <p>
+            Batch script in Windows
+          </p>
+        </section>
+        <section>
+          <pre>devwex.sh &lt;command&gt;</pre>
+          <p>
+            Shell script in Unix/Linux/MacOS
+          </p>
+        </section>
         <header>
-          Overview of available Telnet commands:
+          Overview of available commands:
         </header>
         <table>
           <tr>
@@ -2678,6 +2708,12 @@
           be located in the working directory, is used.
         </p>
         <section>
+          <pre>java -cp devwex.jar com.seanox.devwex.Service status</pre>
+          <p>
+            Java binary
+          </p>
+        </section>
+        <section>
           <pre>devwex.cmd status</pre>
           <p>
             Batch script in Windows
@@ -2687,12 +2723,6 @@
           <pre>devwex.sh status</pre>
           <p>
             Shell script in Unix/Linux/MacOS
-          </p>
-        </section>
-        <section>
-          <pre>java -cp devwex.jar com.seanox.devwex.Service status</pre>
-          <p>
-            Java binary
           </p>
         </section>
       </article>

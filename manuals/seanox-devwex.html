@@ -103,7 +103,7 @@
         <p>
           Seanox Devwex is a experimental server engine with a modular
           architecture for (web)servers and applications, which are integrated
-          via the provided Server and Module API. The own ClassLoader supports
+          via the provided Server and Module API. The own class loader supports
           the loading and unloading of servers and modules at the runtime. In
           addition, cascaded constructors for servers and modules are supported.
           Along with classic inheritance, constructors can be chained, which
@@ -445,32 +445,31 @@
           <tr>
             <td>[REMOTE]</td>
             <td>
-              Configuration area of the remote access to control the runtime 
-              container
+              Configuration area of the remote control of the server engine.
             </td>
           </tr>
           <tr>
             <td>[SERVER]</td>
             <td>
-              Configuration area of the HTTP server
+              Configuration area of the HTTP server.
             </td>
           </tr>
           <tr>
             <td>[VIRTUAL]</td>
             <td>
-              Configuration area of the virtual hosts for HTTP servers
+              Configuration area of the virtual hosts for HTTP servers.
             </td>
           </tr>
           <tr>
             <td>[STATUSCODES]</td>
             <td>
-              HTTP server status codes
+              HTTP server status codes.
             </td>
           </tr>
           <tr>
             <td>[MEDIATYPES]</td>
             <td>
-              Assignment of media and data types
+              Assignment of media and data types.
             </td>
           </tr>
         </table>
@@ -479,8 +478,8 @@
         </p>
         <h2>General Application Configuration</h2>
         <p>
-          General and globally available options for containers, servers, hosts
-          and modules are defined here.
+          General and globally available options for server engine, servers,
+          hosts and modules are defined here.
         </p>
         <header>
           Overview of the available configuration:
@@ -545,7 +544,7 @@
           one successfully established server instance to run.<br>
           During initialization, all sections ending in <code>INI</code> are
           considered and searched for a matching implementation in the Seanox
-          Devwex ClassPath, the class name of the implementation is the first
+          Devwex class path, the class name of the implementation is the first
           part of the section name before the first colon.
         </p>
         <pre>
@@ -590,13 +589,12 @@
         <h3>Remote Control</h3>
         <p>
           The included remote access supports a telnet-based control of the
-          runtime container (restart and stop) and queries about the operating
-          status of running servers and modules.<br>
-          Alternatively, Seanox Devwex includes a compatible client
-          implementation in addition to the server. The client implementation is
-          configured in the command line with program arguments. For the server,
-          the configuration is done in the <code>[REMOTE:INI]</code> section of
-          the configuration file. 
+          server engine (restart and stop) and queries about the operating
+          status of running servers and modules. Alternatively, Seanox Devwex
+          includes a compatible client implementation in addition to the server.
+          The client implementation is configured in the command line with
+          program arguments. For the server, the configuration is done in the
+          section <code>[REMOTE:INI]</code> of the configuration file. 
         </p>
         <header>
           Overview of the available configuration:
@@ -1633,7 +1631,7 @@
         <section>
           <pre>DIRECTION-C = /test &gt; http://www.xxx.zzz [R]</pre>
           <p>
-            Requests from path <code>/test</code> will be answered with a
+            Requests from path <code>/test</code> will be responded with a
             forward to <code>http://www.xxx.zzz</code>.
           </p>
         </section>
@@ -2102,7 +2100,7 @@
           Unlike XCGI and CGI, modules are not loaded as external applications,
           but are executed directly in the runtime environment of the server via
           the Module API (XAPI), which provides very fast access times and
-          direct access to the components from the runtime container.
+          direct access to the components from the server engine.
         </p>
         <header>
           Example of how to set up modules:
@@ -2384,7 +2382,7 @@
         </section>
         <h2>Status Codes</h2>
         <p>
-          The server answers all HTTP requests with a status code and informs
+          The server responds all HTTP requests with a status code and informs
           the client about the processing of the requests.Primary the server
           status is a numeric value with an optional message.<br>
           Status codes are global and are used by all servers and virtual hosts.
@@ -2559,7 +2557,7 @@
         <section>
           <pre>java -cp devwex.jar -Dlibraries="../libraries" com.seanox.devwex.Service start</pre>
           <p>
-            Extension of ClassPath with the program start
+            Extension of class path with the program start
           </p>
           <p>
             With the argument <code>-Dlibraries</code>, the class path is
@@ -2928,11 +2926,11 @@
             <code>Module.destroy()</code>.
           </li>
           <li>
-            The runtime container waits for the end of all registered servers.
+            The server engine waits for the end of all registered servers.
           </li>
           <li>
             All modules and servers are unloaded by discarding the currently
-            used ClassLoader.
+            used class loader.
           </li>
           <li>
             The class path is extended to include all files of the directories
@@ -2966,11 +2964,11 @@
             <code>Module.destroy()</code>.
           </li>
           <li>
-            The runtime container waits for the end of all registered servers.
+            The server engine waits for the end of all registered servers.
           </li>
           <li>
             All modules and servers are unloaded by discarding the currently
-            used ClassLoader.
+            used class loader.
           </li>
         </ul>
         <h2>Expansion</h2>
@@ -2984,7 +2982,7 @@
           with Seanox Commons as part of the Seanox Devwex SDK (for Seanox
           Devwex 5.x in development) is easier and more convenient. It contains
           the necessary interfaces and abstractions and provides additional
-          ClassLoader layers.
+          class loader layers.
         </p>
         <p>
             <b>
@@ -3051,7 +3049,7 @@
                   ...
 
                   The server is requested to close before being unloaded by the
-                  service and ClassLoader. The resources, data streams and
+                  service and class loader. The resources, data streams and
                   processes initiated or used by the module should be closed or
                   terminated with this call.
               }
@@ -3059,32 +3057,30 @@
         </pre>
         <h2>Modules</h2>
         <p>
-          The extensions intended for background activities do not provide any
-          direct external functions; they are identified by the class and
-          loaded, initialized, and configured when starting or restarting from
-          the service or at runtime in servers and modules via the
-          Application-ClassLoader. Modules are global extensions that are
-          provided once instantiated to all components. Optionally, it is
-          possible to use the context class loader from the Seanox Devwex SDK,
-          so that modules can also be used in several independent instances with
-          their own class loader.
+          Modules are extensions intended for background activities. They are
+          identified by the class and are loaded, initialized and configured by
+          the server engine (Service) at startup or restart or at runtime in
+          servers and modules via the application class loader. Modules are
+          global extensions that are available to all components once
+          instantiated. Optionally, it is possible to use the context class
+          loader from the Seanox Devwex SDK, so that modules can also be used in
+          several independent instances with their own class loader.
         </p>
         <h3>API (XAPI)</h3>
         <p>
-          The Module API only includes the initialization and termination of
-          modules. The initialization is carried out via the constructor
-          initially with the start of the runtime container (Service), whereby
-          the sequence in the configuration file is determined with the sequence
-          of the modules within the <code>INITIALIZE</code> section, or the
-          initialization is carried out with the first request of a module at
-          runtime. The configuration is only transferred to a module if it is
-          initially loaded via the <code>INITIALIZE</code> section. The exit
-          request is made using the method <code>Module.destroy()</code>. The
-          runtime container does not actively monitor the termination and
-          discards the modules by unloading them from the ClassLoader.
-          Optionally, the implementation of the method
-          <code>Module.expose()</code> for request general information, such
-          as manufacturer and version, is supported. 
+          The module API includes the initialization and termination of modules.
+          Initialization is based on section <code>INITIALIZE</code> of the
+          configuration file <code>devwex.ini</code> when the server engine
+          (Service) is started or with the first programmatic request of a
+          module at runtime. In all cases, modules are initiated via the
+          constructor to which the configuration is passed. Runtime behavior and
+          health are not actively monitored by the server engine, only whether a
+          module has been loaded is relevant here. Modules are requested for
+          termination via the destroy method. Termination is also not actively
+          monitored by the server engine; it discards the modules by unloading
+          them from the class loader. Optionally, the implementation of an
+          expose method is recommended, which returns general information such
+          as manufacturer and version. 
         </p>
         <h3>Implementation</h3>
         <pre>
@@ -3096,7 +3092,7 @@
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
                   and is not loaded. The configuration is optional and will only
-                  be transferred from the[INITIALIZE] section if initiated
+                  be transferred from the section [INITIALIZE] if initiated
                   centrally.
               }
 
@@ -3128,11 +3124,11 @@
         <h3>Filters</h3>
         <p>
           Access to the physical and virtual hosts can be controlled by
-          specially defined rules: In addition to forwarding and responding to
+          specially defined rules. In addition to forwarding and responding to
           requests with a defined server status, processing can also be passed
-          to a filter. Filters are intended for checking specific requests and,
-          if necessary, manipulating incoming requests; they should only have
-          access to the request header if the request is not completely
+          to a filter. HTTP filters are intended for checking specific requests
+          and, if necessary, manipulating incoming requests; they should only
+          have access to the request header if the request is not completely
           processed by the filter.
         </p>
         <h4>API (XAPI+)</h4>
@@ -3154,7 +3150,7 @@
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
                   and is not loaded. The configuration is optional and will only
-                  be transferred from the[INITIALIZE] section if initiated
+                  be transferred from the section [INITIALIZE] if initiated
                   centrally.
               }
 
@@ -3170,11 +3166,11 @@
                   ...
 
                   This method takes over the check and, if necessary, the
-                  manipulation of the request or processes and completely
-                  answers it. If the request is to be answered with a server
-                  status only, the filter method can set it and does not have to
-                  answer the request itself. In this case, the answer is
-                  provided by the initial worker implementation.
+                  manipulation of the request or processes and responds it
+                  completely. If the request is only to be responded with a
+                  server status, the service method can set this status and does
+                  not have to respond to the request itself. Instead, the worker
+                  implementation responds.
               }
 
               public void destroy() {
@@ -3189,8 +3185,8 @@
         <p>
           The target of an HTTP request these are directories, files and dynamic
           content from external CGI and XCGI applications that are requested via
-          virtual paths. Services provide another form of dynamic content. These
-          take over the complete processing of incoming requests and have
+          virtual paths. HTTP services provide another form of dynamic content.
+          These take over the complete processing of incoming requests and have
           unrestricted access.
         </p>
         <h4>API (XAPI+)</h4>
@@ -3212,7 +3208,7 @@
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
                   and is not loaded. The configuration is optional and will only
-                  be transferred from the[INITIALIZE] section if initiated
+                  be transferred from the section [INITIALIZE] if initiated
                   centrally.
               }
 
@@ -3228,7 +3224,7 @@
                   ...
 
                   This method takes over the complete processing of the request
-                  and answers it. If the request is only to be answered with a
+                  and responds it. If the request is only to be responded with a
                   server status, the service method can set this status and does
                   not have to respond to the request itself. Instead, the worker
                   implementation responds.
@@ -3246,7 +3242,7 @@
         <p>
           The binding of components is based on the concatenation of calls
           instead of inheritance. This allows e.g. the use of different
-          constructors and the insertion of additional ClassLoader. Inheritance
+          constructors and the insertion of additional class loader. Inheritance
           can still be used, even in combination.
         </p>
         <p>
@@ -3266,7 +3262,7 @@
           development). The completely preconfigured project for the Eclipse IDE
           includes Seanox Devwex, Seanox Commons and Seanox Devwex WebSocket. In
           addition to an extensive API with detailed documentation, the
-          necessary interfaces as well as abstractions, additional ClassLoader
+          necessary interfaces as well as abstractions, additional class loader
           layers for development and many functional examples are included.
         </p>
       </article>

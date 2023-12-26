@@ -54,7 +54,7 @@ decisions in the project easier to understand :-)__
   The included remote access supports a telnet-based control of the server
   engine (restart and stop) and queries about the operating status of running
   servers and modules. It includes a server and a client component. 
-- __Expandability and Customization__  
+- __Extensibility and Customization__  
   The modular architecture and many interfaces (SAPI, XAPI, XAPI+, (Fast)CGI,
   XCGI) allow the modification, extension and addition of functionalities.
  

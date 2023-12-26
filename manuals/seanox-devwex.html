@@ -133,7 +133,7 @@
           status of running servers and modules. It includes a server and a
           client component. 
         </p>
-        <h2>Expandability and Customization</h2>
+        <h2>Extensibility and Customization</h2>
         <p>
           The modular architecture and many interfaces (SAPI, XAPI, XAPI+,
           (Fast)CGI, XCGI) allow the modification, extension and addition of
@@ -296,7 +296,7 @@
           Sections can be inherited in the extension, followed by the keyword
           <code>EXTENDS</code> followed by the names of the referenced sections,
           so that the section takes over all keys and values of the referenced
-          sections and can expand or overwrite them.
+          sections and can extended or overwrite them.
         </p>
         <p>
           Assigning values to keys in a section is done with the equal sign.
@@ -2971,7 +2971,7 @@
             used class loader.
           </li>
         </ul>
-        <h2>Expansion</h2>
+        <h2>Extensibility</h2>
         <p>
           The extension of Seanox Devwex is possible in several ways. The server
           engine provides a Server API, Module API, and HTTP Module API. Special
@@ -2999,19 +2999,19 @@
         </p>
         <h3>API (SAPI)</h3>
         <p>
-          The Server API is based on the implementation of the Runnable
-          interface. The initialization takes place via the constructor
-          <code>Server(String name, Initialize initialize)</code> or 
-          <code>Server(String name, Object initialize)</code>. The order of
-          initialization is determined by the order of the server configurations
-          in the configuration file. The created server instances are started by
-          the server engine (service) with the method <code>Server.run()</code>
-          and are requested to terminate by <code>Service.destroy()</code>. Both
-          methods are called asynchronously. If the termination is delayed, the
-          server engine waits for all registered server instances to finish.
-          Optionally, the implementation of the <code>Server.expose()</code>
-          method for querying general information, such as protocol and network
-          connection, is supported. 
+          The server API includes the initialization and termination of server
+          and is based on the implementation of the <b>Runnable interface</b>. 
+          The order of initialization is determined by the order of the server
+          configurations in the configuration file <code>devwex.ini</code>.
+          Server instances are created via their <b>constructor</b>. If this
+          does not exist, this will cause an error. Created server instances are
+          started by the server engine (Service) by the <b>run method</b> of the
+          Runnable interface and are requested to terminate by <b>destroy
+              method</b>. Both methods are called asynchronously. If the
+          termination is delayed, the server engine waits for all registered
+          server instances to finish. Optionally, the implementation of an
+          <b>expose method</b> is recommended, which returns general information
+          such as protocol and network connection. 
         </p>
         <h3>Implementation</h3>
         <pre>
@@ -3048,10 +3048,8 @@
               public void destroy {
                   ...
 
-                  The server is requested to close before being unloaded by the
-                  service and class loader. The resources, data streams and
-                  processes initiated or used by the module should be closed or
-                  terminated with this call.
+                  The server is requested to close all resources, data streams
+                  and processes initiated or used by it.
               }
           }
         </pre>
@@ -3073,14 +3071,15 @@
           configuration file <code>devwex.ini</code> when the server engine
           (Service) is started or with the first programmatic request of a
           module at runtime. In all cases, modules are initiated via the
-          constructor to which the configuration is passed. Runtime behavior and
-          health are not actively monitored by the server engine, only whether a
-          module has been loaded is relevant here. Modules are requested for
-          termination via the destroy method. Termination is also not actively
-          monitored by the server engine; it discards the modules by unloading
-          them from the class loader. Optionally, the implementation of an
-          expose method is recommended, which returns general information such
-          as manufacturer and version. 
+          <b>constructor</b> to which the configuration is passed. If this
+          constructor does not exist, this will cause an error. Runtime behavior
+          and health are not actively monitored by the server engine, only
+          whether a module has been loaded is relevant here. Modules are
+          requested for termination via the <b>destroy method</b>. Termination
+          is also not actively monitored by the server engine; it discards the
+          modules by unloading them from the class loader. Optionally, the
+          implementation of an <b>expose method</b> is recommended, which
+          returns general information such as manufacturer and version. 
         </p>
         <h3>Implementation</h3>
         <pre>
@@ -3091,9 +3090,9 @@
 
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
-                  and is not loaded. The configuration is optional and will only
-                  be transferred from the section [INITIALIZE] if initiated
-                  centrally.
+                  and is not loaded. The configuration is optional and is only
+                  taken from the section [INITIALIZE] if it is initiated
+                  centrally. 
               }
 
               public String expose() {
@@ -3149,8 +3148,8 @@
 
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
-                  and is not loaded. The configuration is optional and will only
-                  be transferred from the section [INITIALIZE] if initiated
+                  and is not loaded. The configuration is optional and is only
+                  taken from the section [INITIALIZE] if it is initiated
                   centrally.
               }
 
@@ -3207,8 +3206,8 @@
 
                   The module is initiated via this constructor. If this is not
                   available, the module is considered incompatible with the API
-                  and is not loaded. The configuration is optional and will only
-                  be transferred from the section [INITIALIZE] if initiated
+                  and is not loaded. The configuration is optional and is only
+                  taken from the section [INITIALIZE] if it is initiated
                   centrally.
               }
 

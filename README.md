@@ -30,11 +30,11 @@ decisions in the project easier to understand :-)__
 
 # Features
 - __Modular Architecture__  
-  Seanox Devwex is a experimental server engine with a modular architecture for
-  (web)servers and applications, which are integrated via the provided Server
-  and Module API. The own ClassLoader supports the loading and unloading of
+  The experimental server engine supports a modular architecture for
+  (web)servers and applications that are integrated via the server and module
+  API provided. The own class loader supports the loading and unloading of
   servers and modules at the runtime. In addition, cascaded constructors for
-  servers and modules are supported. Along with classic inheritance, 
+  servers and modules are supported. Along with classic inheritance,
   constructors can be chained, which enables the insertion of additional class
   loaders, for example.
 - __Central Configuration__  

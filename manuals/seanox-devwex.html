@@ -101,13 +101,13 @@
         <h1>Features</h1>
         <h2>Modular Architecture</h2>
         <p>
-          Seanox Devwex is a experimental server engine with a modular
-          architecture for (web)servers and applications, which are integrated
-          via the provided Server and Module API. The own class loader supports
-          the loading and unloading of servers and modules at the runtime. In
-          addition, cascaded constructors for servers and modules are supported.
-          Along with classic inheritance, constructors can be chained, which
-          enables the insertion of additional class loaders, for example.
+          The experimental server engine supports a modular architecture for
+          (web)servers and applications that are integrated via the server and
+          module API provided. The own class loader supports the loading and
+          unloading of servers and modules at the runtime. In addition, cascaded
+          constructors for servers and modules are supported. Along with classic
+          inheritance, constructors can be chained, which enables the insertion
+          of additional class loaders, for example.
         </p>
         <h2>Central Configuration</h2>
         <p>
@@ -204,7 +204,7 @@
           usage: service.cmd [command]
         </code>
         <header>
-          Overview of available commands:
+          Overview of commands:
         </header>
         <table>
           <tr>
@@ -277,44 +277,38 @@
       <article>
         <h1>Configuration</h1>
         <p>
-          Seanox Devwex uses a central configuration in the current working
-          directory, which is pre-configured with the installation and stored in
-          the program directory <code>./devwex/program</code> in the file
-          <code>devwex.ini</code>. The configuration is divided into sections
-          with keys and values, which also supports dynamic values and access to
-          system and environment variables.
+          Seanox Devwex uses a central preconfigured configuration
+          <code>devwex.ini</code> which is located in the current working
+          directory <code>./devwex/program</code>. The configuration is divided
+          into sections with keys and values, which also supports dynamic values
+          and access to system and environment variables.
         </p>
         <h2>Configuration File</h2>
         <p>
-          The INI format used is a compliant extension to the classic format,
-          which is also line-based and uses sections where keys with values are
-          stored, ignoring upper and lower case letters in the name of the
-          section and key. Declarations of the same name cause the overriding of
-          sections and keys.
+          The configuration uses an extended INI format which, like the original
+          format, is line-based and uses sections with keys with values, whereby
+          sections and keys are case-insensitive and declarations with the same
+          name cause sections and keys to be overwritten. One extensions is that
+          sections can use multiple inheritance by using the keyword
+          <code>EXTENDS</code> followed by the names of the referenced sections.
+          In this way, all keys and values of the referenced sections are
+          adopted as the basis and can then be overwritten in the section.
         </p>
-        <p>
-          Sections can be inherited in the extension, followed by the keyword
-          <code>EXTENDS</code> followed by the names of the referenced sections,
-          so that the section takes over all keys and values of the referenced
-          sections and can extended or overwrite them.
-        </p>
-        <p>
-          Assigning values to keys in a section is done with the equal sign.
-          Unlike to the original format, the assignment can be continued in the
-          next line without having to repeat the key by using the plus sign.
-          Values can also be fixed, variable and optionally assigned.<br>
+        <p>  
+          The values are assigned to the keys with an equals sign. This 
+          assignment can be continued in the next line if this starts with a
+          plus sign. Values can also be fixed, variable and optionally assigned.
           With the option <code>[?]</code> at the end of a key, the system
           searches for a key with the same name in the system properties of the
-          Java runtime environment. If none can be determined, the optionally
-          specified value is used. Without a value, such a key is not specified
-          and is ignored. 
+          Java runtime environment. If no suitable value is found, an optionally
+          specified value is used. Without a value, these keys are interpreted
+          as non-existent and ignored.
         </p>
         <p>
           Comments begin with a semicolon, are optional and can be used anywhere
           in a line, so the following characters are not part of section, key or
-          value.<br>
-          With the option <code>[+]</code> at the end of a key, the use of
-          comments for that key can be disabled and the semicolon used in the
+          value. With the option <code>[+]</code> at the end of a key, the use
+          of comments for that key can be disabled and the semicolon used in the
           value.
         </p>
         <p>
@@ -388,14 +382,13 @@
             environment are searched for the key <code>PARAM-C</code> of the
             same name, ignoring upper and lower case. The key must be part of
             the runtime environment or can be set as VM argument (property) at
-            the program start in the form <code>-Dkey=value</code>.<br>
-            If the system properties of the Java runtime environment do not
-            contain a corresponding key, <code>VALUE-6; VALUE-7</code> is used
-            as the value.<br>
-            By combining it with the <code>[+]</code> option at the end of the
-            key, the line comment is disabled and all characters are used for
-            the value assignment. It is not possible to enter a comment in this
-            line. 
+            the program start in the form <code>-Dkey=value</code>. If the
+            system properties of the Java runtime environment do not contain a
+            corresponding key, <code>VALUE-6; VALUE-7</code> is used as the
+            value. By combining it with the <code>[+]</code> option at the end
+            of the key, the line comment is disabled and all characters are used
+            for the value assignment. It is not possible to enter a comment in
+            this line. 
           </p>
         </section>
         <section>
@@ -406,10 +399,9 @@
             environment are searched for the key of the same name, ignoring
             upper and lower case. The key must be part of the runtime
             environment or can be set as VM argument (property) at the program
-            start in the form <code>-Dkey=value</code>.<br>
-            If the system properties of the Java runtime environment do not
-            contain a corresponding key, this key is ignored because no
-            alternative value has been specified.<br>
+            start in the form <code>-Dkey=value</code>. If the system properties
+            of the Java runtime environment do not contain a corresponding key,
+            this key is ignored because no alternative value has been specified.
             Comments are supported in this line.
           </p>
         </section>
@@ -432,7 +424,7 @@
           <tr>
             <td>[COMMON]</td>
             <td>
-              General application configuration
+              General application configuration.
             </td>
           </tr>
           <tr>
@@ -482,7 +474,7 @@
           hosts and modules are defined here.
         </p>
         <header>
-          Overview of the available configuration:
+          Overview of configuration:
         </header>
         <table>
           <tr>
@@ -510,12 +502,8 @@
         </table>
         <h2>Initialisation</h2>
         <p>
-          With the start and restart of Seanox Devwex, a general initialization
-          of components is provided with the section
-          <code>[INITIALIZE]</code>.<br>
-          The components/extensions/modules entered here are initialized with
-          the start or restart of the service and are informed about certain
-          service events at runtime.
+          The section <code>[INITIALIZE]</code> is intended for global modules
+          that are initiated when the server engine is started and restarted.
         </p>
         <header>
           Scheme for formulating the initialization:
@@ -533,18 +521,17 @@
                     + [connection:127.0.0.1:8139] [*]
         </pre>
         <p>
-          With the option <code>[*]</code> a module can be marked as
-          optional.<br>
+          With the option <code>[*]</code> a module can be marked as optional.
           If the module is not present during initialization, this option does
           not cause to an error output.
         </p>
         <h2>Server</h2>
         <p>
-          Servers are an essential part of Seanox Devwex and requires at least
-          one successfully established server instance to run.<br>
-          During initialization, all sections ending in <code>INI</code> are
-          considered and searched for a matching implementation in the Seanox
-          Devwex class path, the class name of the implementation is the first
+          Servers are an essential part of the server engine and it requires at
+          least one successfully set up server instance to run. During
+          initialization, all sections that end with <code>INI</code> and for
+          which a suitable implementation is searched for in the class path are
+          taken into account. The class name of the implementation is the first
           part of the section name before the first colon.
         </p>
         <pre>
@@ -565,12 +552,12 @@
             ...
         </pre>
         <p>
-          Optionally, the SCOPE key can be used to specify the package in which
-          the class is located or the fully qualified class. Without this key,
-          the default package com.seanox.devewx is used and the class name is
-          derived from the section name.<br>
-          If no implementation is found for a section ending on INI, it will be
-          ignored without an error message.
+          Optionally, the key <code>SCOPE</code> can be used to specify the
+          package in which the class is located or the fully qualified class.
+          Without this key, the default package </code>com.seanox.devewx</code>
+          is used and the class name is derived from the section name. If no
+          implementation is found for a section ending on <code>INI</code>, it
+          will be ignored without an error message.
         </p>
         <pre>
           [CLASS:INI]
@@ -581,23 +568,17 @@
             SCOPE = package.of.class
             ...
         </pre>
-        <p>
-          Seanox Devwex already has an HTTP server and Telnet-based remote
-          control implemented, the configuration and function of which are
-          described in the following sections.
-        </p>
         <h3>Remote Control</h3>
         <p>
-          The included remote access supports a telnet-based control of the
+          The included remote access supports a Telnet-based control of the
           server engine (restart and stop) and queries about the operating
-          status of running servers and modules. Alternatively, Seanox Devwex
-          includes a compatible client implementation in addition to the server.
-          The client implementation is configured in the command line with
-          program arguments. For the server, the configuration is done in the
-          section <code>[REMOTE:INI]</code> of the configuration file. 
+          status of the running servers and modules. In addition to the server
+          implementation, Seanox Devwex also includes a compatible client
+          implementation. Both use the <code>[REMOTE:INI]</code> section in the
+          configuration file for configuration.
         </p>
         <header>
-          Overview of the available configuration:
+          Overview of configuration:
         </header>
         <table>
           <tr>
@@ -630,7 +611,7 @@
           but differ in the section identifier at the end. 
         </p>
         <header>
-          Overview of the sections:
+          Overview of sections:
         </header>
         <table>
           <tr>
@@ -684,7 +665,7 @@
           In addition to the network connection, HTTP is also configured here.
         </p>
         <header>
-          Overview of the available server configuration:
+          Overview of server configuration:
         </header>
         <table>
           <thead>
@@ -738,7 +719,7 @@
           </tbody>
         </table>
         <header>
-          Overview of the available HTTP configuration:
+          Overview of HTTP configuration:
         </header>
         <table>
           <thead>
@@ -892,7 +873,7 @@
           </strong>
         </p>
         <header>
-          Overview of the available configuration:
+          Overview of configuration:
         </header>
         <table>
           <tr>
@@ -1189,7 +1170,7 @@
           of a reference is optional.
         </p>
         <header>
-          Overview of the elements of the filter printout:
+          Overview of elements of the filter syntax:
         </header>
         <table>
           <tr>
@@ -1333,7 +1314,7 @@
           the HTTP method <code>POST</code> are not available.
         </p>
         <header>
-          Overview of available variables (selection):
+          Overview of variables (selection):
         </header>
         <table>
           <tr>
@@ -1983,7 +1964,7 @@
         </header>
         <pre>FILE EXTENSION = METHODS &gt; APPLICATION [OPTION]</pre>
         <header>
-          Overview of available options:
+          Overview of options:
         </header>
         <table>
           <tr>
@@ -2113,7 +2094,7 @@
           </p>
         </section>
         <header>
-          Overview of provided environment variables (selection):
+          Overview of environment variables (selection):
         </header>
         <table>
           <tr>
@@ -2404,7 +2385,7 @@
           HTTP/1.0 404 Document Not Found
         </code>
         <header>
-          Overview of available options:
+          Overview of options:
         </header>
         <table>
           <tr>
@@ -2486,7 +2467,7 @@
           </p>
         </section>
         <header>
-          Overview of available commands:<br>
+          Overview of commands:<br>
         </header>
         <table>
           <tr>
@@ -2606,7 +2587,7 @@
           </p>
         </section>
         <header>
-          Overview of available commands:
+          Overview of commands:
         </header>
         <table>
           <tr>
@@ -3024,7 +3005,7 @@
               public Server(String name, Object initialize) {
                   ...
 
-                  The server is initiated by Seanox Devwex via the constructor.
+                  The server is initiated by server engine via the constructor.
                   If the constructor is not available, the server is considered
                   incompatible and is not loaded. The configuration is passed
                   next to the name as an Initialize object.

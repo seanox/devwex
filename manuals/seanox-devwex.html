@@ -1113,8 +1113,8 @@
           <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code> and
           <code>MAXACCESS</code> are omitted. Virtual hosts are independent
           configurations that can be used by all servers. Using the key
-          <code>SERVER</code> in section <code>VIRTUAL:INI</code> the use of the
-          configuration can be restricted to certain servers.
+          <code>SERVER</code> in section <code>[VIRTUAL:INI]</code> the use of
+          the configuration can be restricted to certain servers.
         </p>
         <header>
           Example of restriction to individual servers:
@@ -1604,10 +1604,10 @@
           Basic Access Authentication (BAA) and Digest Access Authentication
           (DAA) are two of the different methods by which a user can
           authenticate himself or herself against a web server or a web
-          application, and the use of Digest Access Authentication is
-          recommended here, since unlike Basic Access Authentication, this does
-          not require a password to be entered directly, but only in the form of
-          a checksum or a password to protect against reconstruction.
+          application, whereby the use of Digest Access Authentication is
+          recommended here, because here checksums are transmitted instead of
+          credentials, which is intended to protect against the reconstruction
+          of credentials.          
         </p>
         <p>
           The configuration of the Basic / Digest Access Authentication consists
@@ -1615,13 +1615,11 @@
           or <code>[VIRTUAL:REF]</code> in combination with the option
           <code>[acc:...]</code> as reference to the permissions and optionally
           with the options <code>[realm:...]</code> for the description of the
-          area and <code>[D]</code> for the use of Digest Access
-          Authentication.<br>
+          area and <code>[D]</code> for the use of Digest Access Authentication.
           With <code>[acc:none]</code>, the parent authorization for the
           specified path and all subordinate paths can be cancelled and, if
           necessary, further authorizations in deeper sub-directories can be
-          used again.<br>
-          The permissions are defined in the independent section
+          used again. The permissions are defined in the independent section
           <code>[SERVER:ACC]</code> or <code>[VIRTUAL:ACC]</code> and consist of
           one or more groups with individual permissions, consisting of user and
           password. 
@@ -1639,7 +1637,7 @@
             ACCESS-X = /access/example... &gt; ... [acc:...] [acc:...] ... [realm:...] [...
         </pre>
         <header>
-          Examples of Digest-Access-Authentication:<br>
+          Examples of Digest-Access-Authentication:
           The option <code>[D]</code> makes the difference.
         </header>
         <pre>
@@ -1721,22 +1719,19 @@
         </section>
         <h3>Directory Listing</h3>
         <p>
-        
           The content of directory listings is based on the template file
-          <code>./devwex/system/index.html</code>.<br>
-          Through the configuration of <code>SYSROOT</code>, the directory and
-          thus the template can be individually defined for servers and virtual
-          hosts.<br>
-          The template is pure HTML combined with placeholders for the template
-          generator. The syntax of the placeholders <code>#[...]</code> is
-          case-insensitive, must begin with a letter and is limited to the
-          following characters: <code>a-z A-Z 0-9 _-</code>.<br>
-          Placeholders can be used for single values and segments.<br>
-          Segments are partial structures that can be nested. The placeholders
-          of segments are retained after filling and can be reused
-          iteratively.<br>
-          As values for segments, collections and maps are expected. Both create
-          deep, complex and possibly repetitive recursive structures.
+          <code>./devwex/system/index.html</code>. Through the configuration of
+          <code>SYSROOT</code>, the directory and thus the template can be
+          individually defined for servers and virtual hosts. The template is
+          pure HTML combined with placeholders for the template generator. The
+          syntax of the placeholders <code>#[...]</code> is case-insensitive,
+          must begin with a letter and is limited to the following characters:
+          <code>a-z A-Z 0-9 _-</code>. Placeholders can be used for single
+          values and segments. Segments are partial structures that can be
+          nested. The placeholders of segments are retained after filling and
+          can be reused iteratively. As values for segments, collections and
+          maps are expected. Both create deep, complex and possibly repetitive
+          recursive structures.
         </p>
         <header>
           Structure and description of the placeholders:
@@ -1834,12 +1829,10 @@
         <p>
           With environment variables, the operating system and runtime
           environment provide an application with essential and additional
-          system and runtime information.
-        </p>
-        <p>
-          As an extension of the environment variables from the operating system
-          and the runtime environment, additional environment variables required
-          for the CGI and XCGI are defined in this section.
+          system and runtime information. As an extension of the environment
+          variables from the operating system and the runtime environment,
+          additional environment variables required for the CGI and XCGI are
+          defined in this section.
         </p>
         <header>
           Scheme for environment variables:
@@ -1885,11 +1878,11 @@
           With the XCGI, another interface similar to the CGI is available. The
           basic principle and method of operation are the same as for CGI. The
           XCGI also communicates via the standard I/O and the server-relevant
-          information is transmitted as environment variables. Here, however,
-          the form of transmission differs. The environment variables for the
-          CGI are provided via the runtime environment and for the XCGI via the
-          data stream. Similar to the CGI, the XCGI transfers the request body
-          via standard I/O. In the XCGI, the environment variables precede the
+          information is transmitted as environment variables. However, the form
+          of transmission differs. The environment variables for the CGI are
+          provided via the runtime environment and for the XCGI via the data
+          stream. Similar to the CGI, the XCGI transfers the request body via
+          standard I/O. In the XCGI, the environment variables precede the
           request body. The structure is similar to that of the HTTP request.
           The data stream begins line by line with the environment variables,
           followed by the character string <code>[CRLFCRLF]</code> and then the
@@ -2046,11 +2039,11 @@
         </section>
         <p>
           In addition to XCGI and CGI, modules can also be set up via the
-          gateway.<br>
-          Unlike XCGI and CGI, modules are not loaded as external applications,
-          but are executed directly in the runtime environment of the server via
-          the Module API (XAPI), which provides very fast access times and
-          direct access to the components from the server engine.
+          gateway. Unlike XCGI and CGI, modules are not loaded as external
+          applications, but are executed directly in the runtime environment of
+          the server via the Module API (XAPI), which provides very fast access
+          times and direct access to the components from the server and the
+          server engine.
         </p>
         <header>
           Example of how to set up modules:
@@ -2334,8 +2327,8 @@
         <p>
           The server responds all HTTP requests with a status code and informs
           the client about the processing of the requests.Primary the server
-          status is a numeric value with an optional message.<br>
-          Status codes are global and are used by all servers and virtual hosts.
+          status is a numeric value with an optional message. Status codes are
+          global and are used by all servers and virtual hosts.
         </p>
         <header>
           Scheme for status code:
@@ -2376,9 +2369,8 @@
           The media type, also known as Internet Media Type, Content Type and
           Multipurpose Internet Mail Extensions (MIME Type), classifies the data
           transmitted with the server response by assigning media types and
-          subtypes.<br>
-          In the configuration, the media types are assigned a list of file
-          extensions separated by spaces, which is global and shared by all
+          subtypes. In the configuration, the media types are assigned a list of
+          file extensions separated by spaces, which is global and shared by all
           servers and virtual hosts.
         </p>
         <header>

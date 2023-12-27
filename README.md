@@ -84,8 +84,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox Devwex 5.5.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.5.0.zip)  
-[Seanox Devwex 5.5.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.5.0-win.zip)  
+[Seanox Devwex 5.6.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.6.0.zip)  
+[Seanox Devwex 5.6.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.6.0-win.zip)  
 
 
 # Installation
@@ -94,12 +94,14 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes
-## 5.6.0 2023xxxx (upcoming version)  
+## 5.6.0 20231227  
 BF: Review: Optimization and corrections  
 BF: Worker: Correction of the unwanted SocketException on stop and restart  
+BF: Worker: Correction of logging if the client closes the connection unexpectedly  
 BF: HTML: Cleanup of the obsolete type attribute in the style tag  
 BF: Project: Update of slogan (Experimental Server Engine)  
 BF: (Class)Loader: Optimization and corrections of error handling  
+BR: Windows: Optimization and corrections for case insensitive commands  
 CR: XAPI: Change method String Module.explain() to String Module.expose()  
 CR: SAPI: Change method String Server.explain() to String Server.expose()  
 CR: Documentation: Reduction to English  

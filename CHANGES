@@ -1,4 +1,4 @@
-5.6.0 2023xxxx
+5.6.0 20231227
 BF: Review: Optimization and corrections
     And the binary becomes a bit smaller again :-)
 BF: Worker: Correction of the unwanted SocketException on stop and restart

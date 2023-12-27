@@ -63,7 +63,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.5.1 20221008
+ * @version 5.6.0 20231227
  */
 class Worker implements Runnable {
   
@@ -2511,6 +2511,9 @@ class Worker implements Runnable {
         this.environment.set("remote_host", string);
         this.environment.set("response_length", String.valueOf(this.volume));
         this.environment.set("response_status", String.valueOf(this.status == 0 ? 500 : this.status));
+        
+        if (!this.environment.contains("http_host"))
+            this.environment.set("http_host", this.accept.getInetAddress().getHostAddress());
 
         synchronized (Worker.class) {
             

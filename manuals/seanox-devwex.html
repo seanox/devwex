@@ -849,8 +849,8 @@
           <strong>
             With Seanox Devwex, this distinction is no longer necessary and so
             only one keystore is used for both. The use of aliases in the
-            keystore is possible, but is not supported by Seanox Devwex, because
-            certificates are always determined based on the host.
+            keystore is possible, but is not supported, because certificates are
+            always determined based on the host.
           </strong>
         </p>
         <header>
@@ -2438,7 +2438,7 @@
           <tr>
             <td>start</td>
             <td>
-              Starts Seanox Devwex according to the current configuration.
+              Starts the server engine according to the current configuration.
             </td>
           </tr>
           <tr>
@@ -2451,16 +2451,17 @@
           <tr>
             <td>restart</td>
             <td>
-              Stops Seanox Devwex including all active modules and servers and
-              restarts with reloaded configuration.<br>
-              If the new configuration contains any malfunctioning errors, the
-              last used configuration will be reused.
+              Stops the server engine including all active modules and servers
+              and restarts with reloaded configuration. If the new configuration
+              contains any malfunctioning errors, the last running configuration
+              will be reused.
             </td>
           </tr>
           <tr>
             <td>stop</td>
             <td>
-              Terminates Seanox Devwex including all active modules and servers.
+              Terminates the server engine including all active modules and
+              servers.
             </td>
           </tr>
         </table>
@@ -2565,16 +2566,17 @@
           <tr>
             <td>restart</td>
             <td>
-              Stops Seanox Devwex including all active modules and servers and
-              restarts with reloaded configuration.<br>
-              If the new configuration contains any malfunctioning errors, the
-              last used configuration will be reused.
+              Stops the server engine including all active modules and servers
+              and restarts with reloaded configuration. If the new configuration
+              contains any malfunctioning errors, the last running configuration
+              will be reused.
             </td>
           </tr>
           <tr>
             <td>stop</td>
             <td>
-              Terminates Seanox Devwex including all active modules and servers.
+              Terminates the server engine including all active modules and
+              servers.
             </td>
           </tr>
         </table>
@@ -2920,11 +2922,11 @@
           interfaces and abstractions are not included in the service itself,
           which uses them and controls all servers and modules via reflections 
           and silent standards/interfaces, which may require detailed knowledge
-          of the components and operation of Seanox Devwex. The implementation
-          with Seanox Commons as part of the Seanox Devwex SDK (for Seanox
-          Devwex 5.x in development) is easier and more convenient. It contains
-          the necessary interfaces and abstractions and provides additional
-          class loader layers.
+          of the components and operation of the server engine. The
+          implementation with Seanox Commons as part of the Seanox Devwex SDK
+          (for Seanox Devwex 5.x in development) is easier and more convenient.
+          It contains the necessary interfaces and abstractions and provides
+          additional class loader layers.
         </p>
         <p>
             <b>
@@ -3055,7 +3057,7 @@
         </pre>
         <h2>HTTP Modules</h2>
         <p>
-          HTTP Modules are an extension of the Seanox Devwex Module API
+          HTTP Modules are an extension of the server engine Module API
           specifically designed for filtering, accepting and processing HTTP
           requests that run in the context of the server. HTTP modules allow you
           to implement filter and service functionalities, which is described in

@@ -1072,11 +1072,11 @@
         </pre>
         <h3>Virtual Hosts / Virtual Hosting</h3>
         <p>
-          In virtual hosting, a server handles requests for different domains
-          and/or hosts, with the server having a basic configuration that
-          dynamically adapts to the request for a domain or host, changing the
-          behavior of the server as if the request is received from a
-          self-configured server.
+            
+          With virtual hosting, a server processes requests for different host
+          names, domains or DNS aliases. For this purpose, the server uses the
+          network configuration of a physical host and then applies the
+          configuration to the requested host.
         </p>
         <header>
           Example of a request for a virtual host:
@@ -1108,17 +1108,13 @@
             ...
         </pre>
         <p>
-          The configuration of virtual hosts is the same as for HTTP
-          servers.<br>
-          The keys specific for network connections are: <code>ADDRESS</code>,
-          <code>PORT</code>, <code>BACKLOG</code> and <code>MAXACCESS</code> are
-          omitted here.
-        </p>
-        <p>
-          Virtual hosts are stand-alone configurations that are primarily
-          available to all servers.<br>
-          With <code>[VIRTUAL:INI] SERVER</code> the usage of the configuration
-          can be limited to certain servers.
+          The configuration of the virtual hosts is the same as for HTTP
+          servers, whereby the specific keys for network connections:
+          <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code> and
+          <code>MAXACCESS</code> are omitted. Virtual hosts are independent
+          configurations that can be used by all servers. Using the key
+          <code>SERVER</code> in section <code>VIRTUAL:INI</code> the use of the
+          configuration can be restricted to certain servers.
         </p>
         <header>
           Example of restriction to individual servers:
@@ -1130,20 +1126,20 @@
         </pre>
         <h3>Filters</h3>
         <p>
-          The access to servers and virtual hosts can be controlled by
-          individual rules, for which the incoming requests are checked against
-          these rules before processing, and individual error pages, automatic
-          redirections and modules are supported.
+          Access to servers and virtual hosts can be controlled by individual
+          rules, whereby incoming requests are checked against these rules
+          before processing. Filters support individual error pages, automatic
+          redirects and modules.
         </p>
         <header>
           Scheme for filters:
         </header>
         <pre>NAME = METHOD CONDITION FUNCTION VARIABLE VALUE [+] ... &gt; REFERENCE [R]</pre>
         <p>
-          Filters are provided with all CGI environment variables and their
-          values, if necessary in coded and decoded form. Upper and lower case
-          is ignored for the variables as well as the values. The specification
-          of a reference is optional.
+          Filters can use all CGI environment variables, which includes the
+          system environment variables. Variables and values are
+          case-insensitive and the values are in transmitted raw format. The
+          specification of a reference is optional.
         </p>
         <header>
           Overview of elements of the filter syntax:

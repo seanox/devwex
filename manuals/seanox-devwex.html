@@ -606,9 +606,9 @@
         <h3>Hypertext Transfer Protocol</h3>
         <p>
           The server and the protocol have many configuration options, which are
-          divided into separate sub-sections, whose position and sequence is
-          arbitrary. The sub-sections have the same name as the server section,
-          but differ in the section identifier at the end. 
+          divided into different sections, whose order is arbitrary. All the
+          sections have the same name as the server section, but differ in the
+          section identifier at the end.
         </p>
         <header>
           Overview of sections:
@@ -621,8 +621,7 @@
           <tr>
             <td>[SERVER:X:INI]</td>
             <td>
-              Server configuration<br>
-              Network and runtime behavior
+              Server configuration, network and runtime behavior
             </td>
           </tr>
           <tr>
@@ -631,7 +630,7 @@
           </tr>
           <tr>
             <td>[SERVER:X:REF]</td>
-            <td>virtual paths</td>
+            <td>Virtual paths</td>
           </tr>
           <tr>
             <td>[SERVER:X:ACC]</td>
@@ -643,26 +642,26 @@
           </tr>
           <tr>
             <td>[SERVER:X:ENV]</td>
-            <td>environmental variables</td>
+            <td>Environmental variables</td>
           </tr>
           <tr>
             <td>[SERVER:X:FLT]</td>
-            <td>filter configuration</td>
+            <td>Filter configuration</td>
           </tr>
         </table>
         <h3>Server</h3>
         <p>
           This section contains the configuration for HTTP servers and their
-          associated virtual hosts.<br>
-          The configurations for HTTP servers and virtual hosts is the same,
-          except for the network specific keys: <code>ADDRESS</code>,
-          <code>PORT</code>, <code>BACKLOG</code> and <code>MAXACCESS</code>
-          which are omitted for virtual hosts, since they are configured only
-          HTTP specific.
+          associated virtual hosts. The configurations for HTTP servers and
+          virtual hosts is the same, except for the network specific keys:
+          <code>ADDRESS</code>, <code>PORT</code>, <code>BACKLOG</code> and
+          <code>MAXACCESS</code> which are omitted for virtual hosts, since they
+          are configured only server specific.
         </p>
         <p>
-          The server configuration consists of two parts.<br>
-          In addition to the network connection, HTTP is also configured here.
+          The server configuration consists of two parts: Network connection and
+          HTTP. For virtual hosts, the configuration of the network connection
+          is not required.
         </p>
         <header>
           Overview of server configuration:
@@ -837,39 +836,21 @@
         <h3>Transport Layer Security / Secure Socket Layer</h3>
         <p>
           Transport Layer Security (TLS) and Secure Socket Layer (SSL) are
-          supported for secure data transmission.<br>
-          Both procedures are based on the use of certificates that are assigned
-          to each physical host individually and shared.
+          supported for secure data transmission. Both are part of the
+          connection setup with Java and use certificates that are assigned to
+          each host individually.
         </p>
         <p>
-          For the management of public and private key, as well as all
-          certificates required to map a chain of trust and determine the
-          trustworthiness of certificates, Java supports file-based keystores as
-          key and certificate stores, among other things.
+          Java uses Keystores and Truststores for the management of key and
+          certificates. Keystore, for private keys and certificates, and the
+          Truststore, for CA certificates of trusted certification authorities.
         </p>
         <p>
           <strong>
-            Java distinguishes between the Keystrore, for private keys and
-            certificates, and the Truststore, for CA certificates of trusted
-            certification authorities.<br>
             With Seanox Devwex, this distinction is no longer necessary and so
-            only one keystore is used for both.
-          </strong>
-        </p>
-        <p>
-          <strong>
-            The use of aliases in the keystore is possible, but is not supported
-            by Seanox Devwex. Therefore, we recommend configuring dedicated
-            keystores.
-          </strong>
-        </p>
-        <p>
-          <strong>
-            TLS and SSL are part of the connection setup with Java and are
-            therefore bound to physical hosts. The use of certificates for
-            virtual hosts is thus made more difficult and works with
-            certificates that have the virtual host entered as an alternative
-            applicant name (DNS name).
+            only one keystore is used for both. The use of aliases in the
+            keystore is possible, but is not supported by Seanox Devwex, because
+            certificates are always determined based on the host.
           </strong>
         </p>
         <header>
@@ -940,9 +921,8 @@
           </tr>
         </table>
         <p>
-          The configuration of the certificates, if the keystore is located in
-          the working directory <code>./devwex/program</code>.<br>
-          The port is freely selectable; by default, HTTPS uses port 443.
+          HTTPS uses  by default port 443 and for the keystore the working
+          directory <code>./devwex/program</code> which can be customized.
         </p>
         <pre>
           [SERVER:X:INI]
@@ -973,11 +953,10 @@
             PASSWORD   = changeIt
         </pre>
         <p>
-          To create and manage keys and certificates, Oracle provides the
-          Keytool utility.<br>
-          Below, only the simple creation of self-created server certificates
-          is described, for details on the utility, please refer to the
-          documentation for the JRE used.
+          To create and manage keys and certificates, the JRE contains the
+          Keytool utility. In the following, the creation of self-created server
+          certificates is described. For details on the utility program, please
+          refer to the documentation of the JRE used.
         </p>
         <header>
           Example of how to create a server certificate in the keystore:
@@ -993,33 +972,31 @@
           file in the user directory. depending on the operating system,
           different user directories are used, e. g. with Windows this can be
           <code>C:\Users\&lt;User&gt;\.keystore</code> or with Unix-based
-          system <code>/home/&lt;user&gt;/.keystore</code>.<br>
-          The created keystore file can be renamed arbitrarily and moved in the
-          file system.
+          system <code>/home/&lt;user&gt;/.keystore</code>. The created keystore
+          file can be renamed arbitrarily and moved in the file system.
         </p>
         <h3>Client Authentication / Mutual Authentication</h3>
         <p>
           This type of authorization, which is activated via
           <code>CLIENTAUTH</code> is based on certificates. server and client
           negotiate the exchange of certificates during connection setup,
-          accepting only certificates known to them.<br>
-          The behavior of the server and the establishment of the connection can
-          be set up here by <code>ON</code> strictly and with <code>AUTO</code>
-          tolerant.<br>
-          In case of strict conduct, the transmission of a valid certificate is
+          accepting only certificates known to them. The behavior of the server
+          and the establishment of the connection can be set up here by
+          <code>ON</code> strictly and with <code>AUTO</code> tolerant. In case
+          of strict conduct, the transmission of a valid certificate is 
           required. Without it, the connection is closed without a response from
-          the server.<br>
-          In tolerant behavior, the connection is always established. In this
-          case, it is up to the server configuration how the server behaves when
-          no or no appropriate certificate is transmitted. Without further
-          server configuration, the behaviour corresponds to the configuration
-          <code>CLIENTAUTH = OFF</code>. However, the server can react to
-          missing or unsuitable certificates via filters. If a client
-          authenticates itself with a known certificate, the environment
-          variable <code>AUTH_CERT</code> is provided with the certificate
-          attributes. If the environment variable <code>AUTH_CERT</code> is not
-          set or empty, a request without an appropriate certificate can be
-          assumed and an error page can be sent to the client. 
+          the server. In tolerant behavior, the connection is always
+          established. In this case, it is up to the server configuration how
+          the server behaves when no or no appropriate certificate is
+          transmitted. Without further server configuration, the behaviour
+          corresponds to the configuration <code>CLIENTAUTH = OFF</code>.
+          However, the server can react to missing or unsuitable certificates
+          via filters. If a client authenticates itself with a known
+          certificate, the environment variable <code>AUTH_CERT</code> is
+          provided with the certificate attributes. If the environment variable
+          <code>AUTH_CERT</code> is not set or empty, a request without an
+          appropriate certificate can be assumed and an error page can be sent
+          to the client. 
         </p>
         <header>
           Example of a filter for checking for valid certificates:
@@ -1046,10 +1023,9 @@
         </pre>
         <p>
           The keystore for the client is created and the public client
-          certificate is exported.<br>
-          Both are temporary in this example and will be needed later on for the
-          creation of the server keystore and the export of the client
-          certificate.
+          certificate is exported. Both are temporary in this example and will
+          be needed later on for the creation of the server keystore and the
+          export of the client certificate.
         </p>
         <pre>
           ./java/bin/keytool -genkeypair -alias Client -dname 'CN=Client' -validity 365 
@@ -1061,8 +1037,8 @@
                              -keystore client.keystore -storepass changeIt
         </pre>
         <p>
-          The keystores of the server and client are migrated to each other.<br>
-          Thus only the server keystore is needed.
+          The keystores of the server and the client are migrated into each
+          other, because the server only requires the keystore.
         </p>
         <pre>
           ./java/bin/keytool -importcert -alias Client -file client.cer
@@ -1076,9 +1052,9 @@
         </pre>
         <p>
           Finally, the server and client certificates are exported as
-          <code>PKCS12</code>.<br>
-          The file <code>client.p12</code> is needed later for the client to
-          authorize the server and the server certificate can be ignored.
+          <code>PKCS12</code>. The file <code>client.p12</code> is needed later
+          for the client to authorize the server and the server certificate can
+          be ignored.
         </p>
         <pre>
           ./java/bin/keytool -importkeystore

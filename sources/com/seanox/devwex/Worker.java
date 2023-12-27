@@ -2513,7 +2513,7 @@ class Worker implements Runnable {
         this.environment.set("response_status", String.valueOf(this.status == 0 ? 500 : this.status));
         
         if (!this.environment.contains("http_host"))
-            this.environment.set("http_host", this.accept.getInetAddress().getHostAddress());
+            this.environment.set("http_host", this.accept.getLocalAddress().getHostAddress());
 
         synchronized (Worker.class) {
             

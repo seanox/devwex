@@ -2661,7 +2661,7 @@ class Worker implements Runnable {
             } catch (InterruptedIOException exception) {
                 continue;
             } catch (SocketException exception) {
-                  break;  
+                break;  
             } catch (Throwable throwable) {
                 Service.print(throwable);
                 break;

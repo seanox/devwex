@@ -1,3 +1,11 @@
+5.7.0 2024xxxx
+??: Telnet (status/restart/stop) with optional host + port / ini / default 127.0.0.1:25000
+??: Documentation: Switch to Markdown (challenge of an architectural image)
+??: Status / Index / Templates: Facelift 
+??: Automation (build, test, release) via GitHub actions
+??: Bash: Script for Unix/Linux/MacOS with JRE detection
+??: Bash: Script for Unix/Linux/MacOS with JRE detection
+
 5.6.0 20231227
 BF: Review: Optimization and corrections
     And the binary becomes a bit smaller again :-)

@@ -5,6 +5,10 @@
 ??: Automation (build, test, release) via GitHub actions
 ??: Bash: Script for Unix/Linux/MacOS with JRE detection
 ??: Bash: Script for Unix/Linux/MacOS with JRE detection
+CR: Windows: Optimization of JRE determination in the runtime directory
+CR: Windows: Change/Optimization to automatic script integration
+    The ./runtime/scripts directory is omitted, the bat and cmd files are
+    searched in the root of the ./runtime directory.
 
 5.6.0 20231227
 BF: Review: Optimization and corrections

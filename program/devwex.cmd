@@ -35,26 +35,13 @@ set OPTIONS=
 set SYSTEMPATH=%PATH%
 
 rem Automatic determination of the Java runtime environment:
-rem - in the work directory ..\runtime\java
+rem - in the runtime sub-directories ..\runtime
 rem - else if JAVA_HOME is set
 rem - else Java runtime in the PATH variable
 
 SET RUNTIME=..\runtime
 
 SetLocal EnableDelayedExpansion
-
-if "%JAVAPATH%" == "" (
-  if not "%JAVA_HOME%" == "" (
-    if exist "%JAVA_HOME%\bin\java.exe"^
-        set JAVAPATH=%JAVA_HOME%\bin
-  )
-)
-if "%JAVAPATH%" == "" (
-  for %%i in ("%PATH:;=";"%") do (
-    if exist "%%i\java.exe"^
-        set JAVAPATH=%%i
-  )
-)
 
 for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
   set DIRECTORY=%cd%\%RUNTIME%\%%d
@@ -66,6 +53,19 @@ for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
   if exist "!DIRECTORY!\bin\java.exe"^
      if exist "!DIRECTORY!\bin\java.exe"^
          set JAVAPATH=!DIRECTORY!\bin
+  )
+)
+
+if "%JAVAPATH%" == "" (
+  if not "%JAVA_HOME%" == "" (
+    if exist "%JAVA_HOME%\bin\java.exe"^
+        set JAVAPATH=%JAVA_HOME%\bin
+  )
+)
+if "%JAVAPATH%" == "" (
+  for %%i in ("%PATH:;=";"%") do (
+    if exist "%%i\java.exe"^
+        set JAVAPATH=%%i
   )
 )
 

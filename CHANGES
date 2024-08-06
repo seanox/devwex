@@ -10,7 +10,7 @@ CR: Windows: Optimization of JRE determination in the runtime directory
 CR: Windows: Optimization when including the runtime sub-directories
     The runtime directories and, if available, the bin subdirectory are added
     the PATH variable.
-CR: Windows: Change/Optimization to automatic script integration
+CR: Windows: Change/Optimization of the automatic runtime-script integration
     The .\runtime\scripts directory is omitted, the bat and cmd files are
     searched in the root of the .\runtime directory.
 

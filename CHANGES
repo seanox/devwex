@@ -5,14 +5,15 @@
 ??: Automation (build, test, release) via GitHub actions
 ??: Bash: Script for Unix/Linux/MacOS with JRE detection
 ??: Bash: Script for Unix/Linux/MacOS with JRE detection
-CR: Windows: Optimization of JRE determination in the runtime directory
-    The directory name does not matter, it is searched for .\bin\java.exe.
-CR: Windows: Optimization when including the runtime sub-directories
-    The runtime directories and, if available, the bin subdirectory are added
-    the PATH variable.
-CR: Windows: Change/Optimization of the automatic runtime-script integration
-    The .\runtime\scripts directory is omitted, the bat and cmd files are
-    searched in the root of the .\runtime directory.
+CR: Windows: Optimization of Batch scripts and runtime directory handling
+    - Optimization of JRE determination in the runtime directory
+      The directory name does not matter, it is searched for .\bin\java.exe.
+    - Optimization when including the runtime sub-directories
+      The runtime directories and, if available, the bin subdirectory are added
+      to the PATH variable.
+    - Change/Optimization of the automatic runtime-script integration
+      The .\runtime\scripts directory is omitted, the bat and cmd files are
+      searched in the root of the .\runtime directory.
 
 5.6.0 20231227
 BF: Review: Optimization and corrections

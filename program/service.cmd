@@ -27,10 +27,16 @@
   rem this will be resolved automatically. The declaration of both values is
   rem optional.
 
-  echo Seanox Devwex Service 0.0.0 00000000
+  echo Seanox Devwex Service [0.0.0 00000000]
   echo Copyright (C) 0000 Seanox Software Solutions
   echo Experimental Server Engine
   echo.
+
+  net session >nul 2>&1
+  if not %errorLevel% == 0 (
+    echo This script must run as Administrator.
+    goto exit
+  )
 
   cd /D "%~dp0"
 
@@ -58,7 +64,6 @@
   set Startup=auto
   set ServiceAccount=NetworkService
 
-  set Jvm=%jvm%
   set Classpath=devwex.jar
 
   set LogPrefix=service
@@ -79,23 +84,38 @@
   set StopParams=stop
 
   rem --------------------------------------------------------------------------
- 
+
   rem Automatic determination of the Java runtime environment:
-  rem - in the work directory ..\runtime\java
+  rem - in the runtime sub-directories ..\runtime
   rem - else if JAVA_HOME is set
   rem - else Java runtime in the PATH variable
 
-  if "%java%" == "" (
-    if exist "%home%\..\runtime\java\bin\java.exe" set java=%home%\..\runtime\java
+  SET RUNTIME=..\runtime
+
+  for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
+    set DIRECTORY=%home%\%RUNTIME%\%%i
+    set DIRECTORY=!DIRECTORY:\\=\!
+    set PATH=!DIRECTORY!;!PATH!
+    if exist "!DIRECTORY!\bin"^
+        set PATH=!DIRECTORY!\bin;!PATH!
+    if "!java!" == "" (
+      if "%JAVA_HOME%" == "" (
+        if exist "!DIRECTORY!\bin\java.exe"^
+            set java=!DIRECTORY!
+      )
+    )
   )
+
   if "%java%" == "" (
     if not "%JAVA_HOME%" == "" (
-      if exist "%JAVA_HOME%\bin\java.exe" set java=%JAVA_HOME%
+      if exist "%JAVA_HOME%\bin\java.exe"^
+          set java=%JAVA_HOME%
     )
   )
   if "%java%" == "" (
     for %%i in ("%PATH:;=";"%") do (
-      if exist "%%i\java.exe" set java="%%i"
+      if exist "%%i\bin\java.exe"^
+          set java=%%i
     )
   )
 
@@ -123,11 +143,6 @@
   echo    restart
   echo    stop
   
-  net session >nul 2>&1
-  if not %errorLevel% == 0 (
-    echo.
-    echo This script must run as Administrator.
-  )
   goto exit
 
 
@@ -185,15 +200,6 @@ rem ----------------------------------------------------------------------------
   set SystemDrive=%SystemDrive%
   set SystemRoot=%SystemRoot%
   set SystemPath=%path%
-
-  set extensions=false
-  echo %label%: Search for runtime extensions
-  for %%i in (../runtime/*.bat ../runtime/*.cmd) do (
-    set extensions=true
-    echo    %%~fi
-    call ../runtime/%%i
-  )
-  if "%extensions%" == "false" echo    nothing found
 
 rem ----------------------------------------------------------------------------
 

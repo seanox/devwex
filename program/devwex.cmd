@@ -51,9 +51,8 @@ for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
       set PATH=!DIRECTORY!\bin;!PATH!
   if "!JAVAPATH!" == "" (
     if "%JAVA_HOME%" == "" (
-      if exist "!DIRECTORY!\bin\java.exe" (
-        set JAVAPATH=!DIRECTORY!\bin
-      )
+      if exist "!DIRECTORY!\bin\java.exe"^
+          set JAVAPATH=!DIRECTORY!\bin
     )
   ) 
 )
@@ -72,7 +71,7 @@ if "%JAVAPATH%" == "" (
 )
 
 if not exist "%JAVAPATH%\java.exe" (
-  echo Seanox Devwex Service 0.0.0 00000000
+  echo Seanox Devwex Service [0.0.0 00000000]
   echo Copyright ^(C^) 0000 Seanox Software Solutions
   echo Experimental Server Engine
   echo.

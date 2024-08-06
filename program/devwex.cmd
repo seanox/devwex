@@ -50,26 +50,26 @@ for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
   if exist "!DIRECTORY!\bin"^
       set PATH=!DIRECTORY!\bin;!PATH!
   if "!JAVAPATH!" == "" (
-  if exist "!DIRECTORY!\bin\java.exe"^
-     if exist "!DIRECTORY!\bin\java.exe"^
-         set JAVAPATH=!DIRECTORY!\bin
-  )
+    if "%JAVA_HOME%" == "" (
+      if exist "!DIRECTORY!\bin\java.exe" (
+        set JAVAPATH=!DIRECTORY!\bin
+      )
+    )
+  ) 
 )
 
 if "%JAVAPATH%" == "" (
-  if not "%JAVA_HOME%" == "" (
-    if exist "%JAVA_HOME%\bin\java.exe"^
-        set JAVAPATH=%JAVA_HOME%\bin
+    if not "%JAVA_HOME%" == "" (
+        if exist "%JAVA_HOME%\bin\java.exe"^
+            set JAVAPATH=%JAVA_HOME%\bin
   )
 )
 if "%JAVAPATH%" == "" (
-  for %%i in ("%PATH:;=";"%") do (
-    if exist "%%i\java.exe"^
-        set JAVAPATH=%%i
-  )
+    for %%i in ("%PATH:;=";"%") do (
+      if exist "%%i\java.exe"^
+          set JAVAPATH=%%i
+    )
 )
-
-for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
 if not exist "%JAVAPATH%\java.exe" (
   echo Seanox Devwex Service 0.0.0 00000000
@@ -79,6 +79,8 @@ if not exist "%JAVAPATH%\java.exe" (
   echo ERROR: Java Runtime Environment not found
   goto :EOF
 )
+
+for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
 set OPTIONS=%OPTIONS% -Dpath="%SYSTEMPATH%;"
 set OPTIONS=%OPTIONS% -Dsystemdrive=%SYSTEMDRIVE%

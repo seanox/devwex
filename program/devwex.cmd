@@ -16,9 +16,6 @@ rem
 rem   SYSTEMDRIVE   standard variable SYSTEMDRIVE of Windows, this is used of
 rem                 some CGI application to find systems components
 rem
-rem   SYSTEMPATH    based on standard variable PATH of Windows, this is used of
-rem                 some CGI application to find systems components
-rem
 rem   SYSTEMROOT    standard variable SYSTEMROOT of Windows, this is used of
 rem                 some CGI application to find systems components
 rem
@@ -32,7 +29,6 @@ set CLASSPATH=
 set JAVAPATH=
 set LIBRARIESPATH=
 set OPTIONS=
-set SYSTEMPATH=%PATH%
 
 rem Automatic determination of the Java runtime environment:
 rem - in the runtime sub-directories ..\runtime
@@ -87,9 +83,9 @@ if not exist "%JAVAPATH%\java.exe" (
 
 for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
-set OPTIONS=%OPTIONS% -Dpath="%SYSTEMPATH%;"
 set OPTIONS=%OPTIONS% -Dsystemdrive=%SYSTEMDRIVE%
 set OPTIONS=%OPTIONS% -Dsystemroot="%SYSTEMROOT%"
+set OPTIONS=%OPTIONS% -Dpath="%PATH%"
 set OPTIONS=%OPTIONS% -Dlibraries="..\libraries;%LIBRARIESPATH%;"
 
 "%JAVAPATH%\java.exe" -cp "devwex.jar;%CLASSPATH%" %OPTIONS% com.seanox.devwex.Service %1

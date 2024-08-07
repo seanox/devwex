@@ -200,11 +200,6 @@ rem ----------------------------------------------------------------------------
     %service% //DS//%ServiceName%
   )
 
-  set ServiceLibrariesPath=
-  set SystemDrive=%SystemDrive%
-  set SystemRoot=%SystemRoot%
-  set SystemPath=%path%
-
 rem ----------------------------------------------------------------------------
 
   set init=--DisplayName        "%DisplayName%"
@@ -242,10 +237,10 @@ rem ----------------------------------------------------------------------------
   if not "%errorLevel%" == "%lastError%" goto error
 
   echo %label%: Service will be final configured
-  %service% //US/%ServiceName% ++JvmOptions='-Dpath="%SystemPath%;"'
   %service% //US/%ServiceName% ++JvmOptions='-Dsystemdrive=%SystemDrive%'
   %service% //US/%ServiceName% ++JvmOptions='-Dsystemroot=%SystemRoot%'
-  %service% //US/%ServiceName% ++JvmOptions='-Dlibraries="..\libraries;%ServiceLibrariesPath%;"'
+  %service% //US/%ServiceName% ++JvmOptions='-Dpath="%path%"'
+  %service% //US/%ServiceName% ++JvmOptions='-Dlibraries="..\libraries"'
   %service% //US/%ServiceName% ++JvmOptions='-Dlibraries=true
 
   if not "%jdwp%" == "" (

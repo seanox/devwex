@@ -13,7 +13,7 @@
   rem
   rem     jvmx  Maximum memory pool size in MB
   rem
-  rem     home  Working path (optional)
+  rem     work  Working path (optional)
   rem
   rem     java  Java environment path (optional)
   rem
@@ -23,7 +23,7 @@
   rem     https://commons.apache.org/daemon/procrun.html
   rem     https://commons.apache.org/proper/commons-daemon/procrun.html
   rem
-  rem NOTE - If environment variables "home" and "java" empty or not defined,
+  rem NOTE - If environment variables "work" and "java" empty or not defined,
   rem this will be resolved automatically. The declaration of both values is
   rem optional.
 
@@ -48,16 +48,16 @@
   set text=Seanox Devwex
   set note=Seanox Experimental Server Engine
 
-  set home=%cd%
+  set work=%cd%
   set java=
 
-  rem set home=C:\Program Files\Devwex\program
+  rem set work=C:\Program Files\Devwex\program
   rem set java=C:\Program Files\Java
   rem set jdwp=dt_socket,server=y,suspend=n,address=8000
   rem set jvms=256
   rem set jvmx=512
 
-  set ServiceHome=%home%
+  set ServiceHome=%work%
   set ServiceName=%name%
   set DisplayName=%text%
   set Description=%note%
@@ -67,7 +67,7 @@
   set Classpath=devwex.jar
 
   set LogPrefix=service
-  set LogPath=%home%/../storage
+  set LogPath=%work%/../storage
   set StdOutput=%LogPath%/output.log
   set StdError=%LogPath%/error.log
 
@@ -92,34 +92,40 @@
 
   SET RUNTIME=..\runtime
 
-  for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
-    set DIRECTORY=%home%\%RUNTIME%\%%i
-    set DIRECTORY=!DIRECTORY:\\=\!
-    set PATH=!DIRECTORY!;!PATH!
-    if exist "!DIRECTORY!\bin"^
-        set PATH=!DIRECTORY!\bin;!PATH!
-    if "!java!" == "" (
-      if "%JAVA_HOME%" == "" (
+  if exist "%RUNTIME%" (
+    for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
+      set DIRECTORY=%work%\%RUNTIME%\%%i
+      set DIRECTORY=!DIRECTORY:\\=\!
+      set PATH=!DIRECTORY!;!PATH!
+      if exist "!DIRECTORY!\bin"^
+          set PATH=!DIRECTORY!\bin;!PATH!
+      if exist "!DIRECTORY!\jre\bin\java.exe"^
+          set PATH=!DIRECTORY!\jre\bin;!PATH!
+      if "!java!" == "" (
         if exist "!DIRECTORY!\bin\java.exe"^
+            set java=!DIRECTORY!\bin
+        if exist "!DIRECTORY!\jre\bin\java.exe"^
+            set java=!DIRECTORY!\jre\bin
+        if exist "!DIRECTORY!\java.exe"^
             set java=!DIRECTORY!
       )
     )
   )
 
   if "%java%" == "" (
+    for %%i in ("%PATH:;=";"%") do (
+      if exist "%%i\java.exe"^
+          set java=%%i
+    )
     if not "%JAVA_HOME%" == "" (
       if exist "%JAVA_HOME%\bin\java.exe"^
-          set java=%JAVA_HOME%
-    )
-  )
-  if "%java%" == "" (
-    for %%i in ("%PATH:;=";"%") do (
-      if exist "%%i\bin\java.exe"^
-          set java=%%i
+          set java=%JAVA_HOME%\bin
+      if exist "%JAVA_HOME%\jre\bin\java.exe"^
+          set java=%JAVA_HOME%\jre\bin
     )
   )
 
-  if not exist "%java%\bin\java.exe" (
+  if not exist "%java%\java.exe" (
     echo ERROR: Java Runtime Environment not found
     goto :EOF
   )
@@ -154,10 +160,8 @@
 
   echo %label%: Detection of Java runtime environment
   set jvm=
-  if exist "%java%\bin\client\jvm.dll" set jvm=%java%\bin\client\jvm.dll
-  if exist "%java%\bin\server\jvm.dll" set jvm=%java%\bin\server\jvm.dll
-  if exist "%java%\jre\bin\client\jvm.dll" set jvm=%java%\jre\bin\client\jvm.dll
-  if exist "%java%\jre\bin\server\jvm.dll" set jvm=%java%\jre\bin\server\jvm.dll
+  if exist "%java%\client\jvm.dll" set jvm=%java%\client\jvm.dll
+  if exist "%java%\server\jvm.dll" set jvm=%java%\server\jvm.dll
   if not exist "%jvm%" (
     echo.
     echo ERROR: Java Runtime Environment not found
@@ -170,12 +174,12 @@
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
       set service=service-64.exe
   )
-  if not exist "%home%\%service%" (
+  if not exist "%work%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
     goto exit
   )
-  for %%i in ("%home%\%service%") do echo    %%~fi
+  for %%i in ("%work%\%service%") do echo    %%~fi
 
 rem ----------------------------------------------------------------------------
 
@@ -186,8 +190,8 @@ rem ----------------------------------------------------------------------------
   rem Here no directory of a user should be used, because it is not clear
   rem whether the directory is accessible without the login.
   echo %label%: Grant all privileges for %ServiceAccount% to the app AppDirectory
-  for %%i in ("%home%\..") do echo    %%~fi
-  icacls.exe "%home%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q >%~n0.log 2>&1
+  for %%i in ("%work%\..") do echo    %%~fi
+  icacls.exe "%work%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q >%~n0.log 2>&1
   if not "%lastError%" == "%errorLevel%" goto error
 
   sc query %ServiceName% >nul 2>&1
@@ -206,7 +210,7 @@ rem ----------------------------------------------------------------------------
   set init=--DisplayName        "%DisplayName%"
   set init=%init% --Description "%Description%"
   set init=%init% --Startup     "%Startup%"
-  set init=%init% --Install     "%home%\%service%"
+  set init=%init% --Install     "%work%\%service%"
 
   set init=%init% --Jvm         "%Jvm%"
   set init=%init% --Classpath   "%Classpath%"
@@ -265,12 +269,12 @@ rem ----------------------------------------------------------------------------
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
       set service=service-64.exe
   )
-  if not exist "%home%\%service%" (
+  if not exist "%work%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
     goto exit
   )
-  for %%i in ("%home%\%service%") do echo    %%~fi
+  for %%i in ("%work%\%service%") do echo    %%~fi
 
   sc query %ServiceName% >nul 2>&1
   if "%errorLevel%" == "0" (
@@ -327,17 +331,16 @@ rem ----------------------------------------------------------------------------
     echo ERROR: Service is not present
     goto exit
   )
-  if not exist "%java%\bin\java.exe" (
+  if not exist "%java%\java.exe" (
     echo ERROR: Java Runtime Environment not found
   ) else (
-    "%java%\bin\java.exe" -cp "%Classpath%" com.seanox.devwex.Service status
+    "%java%\java.exe" -cp "%Classpath%" com.seanox.devwex.Service status
   )
   goto exit
 
   
   
 :error
-
 
 
 

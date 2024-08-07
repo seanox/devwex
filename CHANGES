@@ -1,18 +1,32 @@
+5.9.0 2026xxxx
+??: Facelift: Status / Index / Templates
+
+5.8.0 2025xxxx
+??: ???
+
 5.7.0 2024xxxx
 ??: Telnet (status/restart/stop) with optional host + port / ini / default 127.0.0.1:25000
 ??: Documentation: Switch to Markdown (challenge of an architectural image)
-??: Status / Index / Templates: Facelift 
 ??: Automation (build, test, release) via GitHub actions
-??: Bash: Script for Unix/Linux/MacOS with JRE detection
-??: Bash: Script for Unix/Linux/MacOS with JRE detection
-CR: Windows: Optimization of Batch scripts and runtime directory handling
+??: Unix/Linux: Optimization of bash scripts and runtime directory handling
     - Optimization of JRE determination in the runtime directory
-      The directory name does not matter, it is searched for .\bin\java.exe.
+      The Directory name does not matter, it is searched for files ./java,
+      .\jre\bin\java and .\bin\java.
     - Optimization when including the runtime sub-directories
       The runtime directories and, if available, the bin subdirectory are added
       to the PATH variable.
-    - Change/Optimization of the automatic runtime-script integration
-      The .\runtime\scripts directory is omitted, the bat and cmd files are
+    - Change of the automatic runtime-script integration
+      The ./runtime/scripts directory is omitted, the *.sh files are searched
+      in the root of the ./runtime directory.
+CR: Windows: Optimization of batch scripts and runtime directory handling
+    - Optimization of JRE determination in the runtime directory
+      The Directory name does not matter, it is searched for files .\java.exe,
+      .\jre\bin\java.exe and .\bin\java.exe.
+    - Optimization when including the runtime sub-directories
+      The runtime directories and, if available, the bin subdirectory are added
+      to the PATH variable.
+    - Change of the automatic runtime-script integration
+      The .\runtime\scripts directory is omitted, the *.bat and *.cmd files are
       searched in the root of the .\runtime directory.
 
 5.6.0 20231227

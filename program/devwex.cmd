@@ -43,31 +43,37 @@ SET RUNTIME=..\runtime
 
 SetLocal EnableDelayedExpansion
 
-for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
-  set DIRECTORY=%cd%\%RUNTIME%\%%d
-  set DIRECTORY=!DIRECTORY:\\=\!
-  set PATH=!DIRECTORY!;!PATH!
-  if exist "!DIRECTORY!\bin"^
-      set PATH=!DIRECTORY!\bin;!PATH!
-  if "!JAVAPATH!" == "" (
-    if "%JAVA_HOME%" == "" (
+if exist "%RUNTIME%" (
+  for /f "delims=: " %%d in ('dir /AD /B %RUNTIME%') do (
+    set DIRECTORY=%cd%\%RUNTIME%\%%d
+    set DIRECTORY=!DIRECTORY:\\=\!
+    set PATH=!DIRECTORY!;!PATH!
+    if exist "!DIRECTORY!\bin"^
+        set PATH=!DIRECTORY!\bin;!PATH!
+    if exist "!DIRECTORY!\jre\bin\java.exe"^
+        set PATH=!DIRECTORY!\jre\bin;!PATH!
+    if "!JAVAPATH!" == "" (
       if exist "!DIRECTORY!\bin\java.exe"^
           set JAVAPATH=!DIRECTORY!\bin
+      if exist "!DIRECTORY!\jre\bin\java.exe"^
+          set JAVAPATH=!DIRECTORY!\jre\bin
+      if exist "!DIRECTORY!\java.exe"^
+          set JAVAPATH=!DIRECTORY!
     )
-  ) 
+  )
 )
 
 if "%JAVAPATH%" == "" (
-    if not "%JAVA_HOME%" == "" (
-        if exist "%JAVA_HOME%\bin\java.exe"^
-            set JAVAPATH=%JAVA_HOME%\bin
+  for %%d in ("%PATH:;=";"%") do (
+    if exist "%%d\java.exe"^
+        set JAVAPATH=%%d
   )
-)
-if "%JAVAPATH%" == "" (
-    for %%i in ("%PATH:;=";"%") do (
-      if exist "%%i\java.exe"^
-          set JAVAPATH=%%i
-    )
+  if not "%JAVA_HOME%" == "" (
+    if exist "%JAVA_HOME%\bin\java.exe"^
+        set JAVAPATH=%JAVA_HOME%\bin
+    if exist "%JAVA_HOME%\jre\bin\java.exe"^
+        set JAVAPATH=%JAVA_HOME%\jre\bin
+  )
 )
 
 if not exist "%JAVAPATH%\java.exe" (

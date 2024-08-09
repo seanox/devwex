@@ -1,155 +1,155 @@
-  @echo off
+@echo off
 
-  rem Seanox Devwex is started from working directory ./devwex/program.
-  rem Following variables are used:
-  rem
-  rem     name  Service name (spaces/special characters are not allowed)
-  rem
-  rem     text  Service display name (maximum 1024 characters)
-  rem
-  rem     note  Service description (maximum 1024 characters)
-  rem
-  rem     jvms  Initial memory pool size in MB
-  rem
-  rem     jvmx  Maximum memory pool size in MB
-  rem
-  rem     work  Working path (optional)
-  rem
-  rem     java  Java environment path (optional)
-  rem
-  rem     jdwp  Options for remote debugging (optional)
-  rem
-  rem Link(s) to used prunsrv.exe (alias service-32.exe/service-64.exe):
-  rem     https://commons.apache.org/daemon/procrun.html
-  rem     https://commons.apache.org/proper/commons-daemon/procrun.html
-  rem
-  rem NOTE - If environment variables "work" and "java" empty or not defined,
-  rem this will be resolved automatically. The declaration of both values is
-  rem optional.
+rem Seanox Devwex is started from working directory ./devwex/program.
+rem Following variables are used:
+rem
+rem   name  Service name (spaces/special characters are not allowed)
+rem
+rem   text  Service display name (maximum 1024 characters)
+rem
+rem   note  Service description (maximum 1024 characters)
+rem
+rem   jvms  Initial memory pool size in MB
+rem
+rem   jvmx  Maximum memory pool size in MB
+rem
+rem   work  Working path (optional)
+rem
+rem   java  Java environment path (optional)
+rem
+rem   jdwp  Options for remote debugging (optional)
+rem
+rem Link(s) to used prunsrv.exe (alias service-32.exe/service-64.exe):
+rem   https://commons.apache.org/daemon/procrun.html
+rem   https://commons.apache.org/proper/commons-daemon/procrun.html
+rem
+rem NOTE - If environment variables "work" and "java" empty or not defined,
+rem this will be resolved automatically. The declaration of both values is
+rem optional.
 
-  echo Seanox Devwex Service [0.0.0 00000000]
-  echo Copyright (C) 0000 Seanox Software Solutions
-  echo Experimental Server Engine
-  echo.
+echo Seanox Devwex Service [0.0.0 00000000]
+echo Copyright (C) 0000 Seanox Software Solutions
+echo Experimental Server Engine
+echo.
 
-  net session >nul 2>&1
-  if not %errorLevel% == 0 (
-    echo This script must run as Administrator.
-    goto exit
-  )
-
-  cd /D "%~dp0"
-
-  SetLocal EnableDelayedExpansion
-
-  rem -- CONFIGURATION ---------------------------------------------------------
-
-  set name=Devwex
-  set text=Seanox Devwex
-  set note=Seanox Experimental Server Engine
-
-  set work=%cd%
-  set java=
-
-  rem set work=C:\Program Files\Devwex\program
-  rem set java=C:\Program Files\Java
-  rem set jdwp=dt_socket,server=y,suspend=n,address=8000
-  rem set jvms=256
-  rem set jvmx=512
-
-  set ServiceHome=%work%
-  set ServiceName=%name%
-  set DisplayName=%text%
-  set Description=%note%
-  set Startup=auto
-  set ServiceAccount=NetworkService
-
-  set Classpath=devwex.jar
-
-  set LogPrefix=service
-  set LogPath=%work%/../storage
-  set StdOutput=%LogPath%/output.log
-  set StdError=%LogPath%/error.log
-
-  set StartPath=%ServiceHome%
-  set StartMode=jvm
-  set StartClass=com.seanox.devwex.Service
-  set StartMethod=main
-  set StartParams=start
-
-  set StopPath=%ServiceHome%
-  set StopMode=jvm
-  set StopClass=com.seanox.devwex.Service
-  set StopMethod=main
-  set StopParams=stop
-
-  rem --------------------------------------------------------------------------
-
-  rem Automatic determination of the Java runtime environment:
-  rem - in the runtime sub-directories ..\runtime
-  rem - else if JAVA_HOME is set
-  rem - else Java runtime in the PATH variable
-
-  SET RUNTIME=..\runtime
-
-  if exist "%RUNTIME%" (
-    for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
-      set DIRECTORY=%work%\%RUNTIME%\%%i
-      set DIRECTORY=!DIRECTORY:\\=\!
-      set PATH=!DIRECTORY!;!PATH!
-      if exist "!DIRECTORY!\bin"^
-          set PATH=!DIRECTORY!\bin;!PATH!
-      if exist "!DIRECTORY!\jre\bin\java.exe"^
-          set PATH=!DIRECTORY!\jre\bin;!PATH!
-      if "!java!" == "" (
-        if exist "!DIRECTORY!\bin\java.exe"^
-            set java=!DIRECTORY!\bin
-        if exist "!DIRECTORY!\jre\bin\java.exe"^
-            set java=!DIRECTORY!\jre\bin
-        if exist "!DIRECTORY!\java.exe"^
-            set java=!DIRECTORY!
-      )
-    )
-  )
-
-  if "%java%" == "" (
-    for %%i in ("%PATH:;=";"%") do (
-      if exist "%%i\java.exe"^
-          set java=%%i
-    )
-    if not "%JAVA_HOME%" == "" (
-      if exist "%JAVA_HOME%\bin\java.exe"^
-          set java=%JAVA_HOME%\bin
-      if exist "%JAVA_HOME%\jre\bin\java.exe"^
-          set java=%JAVA_HOME%\jre\bin
-    )
-  )
-
-  if not exist "%java%\java.exe" (
-    echo ERROR: Java Runtime Environment not found
-    goto :EOF
-  )
-
-  if /I "%1" == "install"   goto install
-  if /I "%1" == "update"    goto install
-  if /I "%1" == "uninstall" goto uninstall
- 
-  if /I "%1" == "start"   goto start
-  if /I "%1" == "restart" goto restart
-  if /I "%1" == "stop"    goto stop
-  if /I "%1" == "status"  goto status
-
-  echo usage: %~nx0 [command]
-  echo.
-  echo    install
-  echo    update
-  echo    uninstall
-  echo.
-  echo    start
-  echo    restart
-  echo    stop
-  
+net session >nul 2>&1
+if not %errorLevel% == 0 (
+  echo This script must run as Administrator.
   goto exit
+)
+
+cd /D "%~dp0"
+
+SetLocal EnableDelayedExpansion
+
+rem -- CONFIGURATION -----------------------------------------------------------
+
+set name=Devwex
+set text=Seanox Devwex
+set note=Seanox Experimental Server Engine
+
+set work=%cd%
+set java=
+
+rem set work=C:\Program Files\Devwex\program
+rem set java=C:\Program Files\Java
+rem set jdwp=dt_socket,server=y,suspend=n,address=8000
+rem set jvms=256
+rem set jvmx=512
+
+set ServiceHome=%work%
+set ServiceName=%name%
+set DisplayName=%text%
+set Description=%note%
+set Startup=auto
+set ServiceAccount=NetworkService
+
+set Classpath=devwex.jar
+
+set LogPrefix=service
+set LogPath=%work%/../storage
+set StdOutput=%LogPath%/output.log
+set StdError=%LogPath%/error.log
+
+set StartPath=%ServiceHome%
+set StartMode=jvm
+set StartClass=com.seanox.devwex.Service
+set StartMethod=main
+set StartParams=start
+
+set StopPath=%ServiceHome%
+set StopMode=jvm
+set StopClass=com.seanox.devwex.Service
+set StopMethod=main
+set StopParams=stop
+
+rem ----------------------------------------------------------------------------
+
+rem Automatic determination of the Java runtime environment:
+rem - in the runtime sub-directories ..\runtime
+rem - else if JAVA_HOME is set
+rem - else Java runtime in the PATH variable
+
+SET RUNTIME=..\runtime
+
+if exist "%RUNTIME%" (
+  for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
+    set DIRECTORY=%work%\%RUNTIME%\%%i
+    set DIRECTORY=!DIRECTORY:\\=\!
+    set PATH=!DIRECTORY!;!PATH!
+    if exist "!DIRECTORY!\bin"^
+        set PATH=!DIRECTORY!\bin;!PATH!
+    if exist "!DIRECTORY!\jre\bin\java.exe"^
+        set PATH=!DIRECTORY!\jre\bin;!PATH!
+    if "!java!" == "" (
+      if exist "!DIRECTORY!\bin\java.exe"^
+          set java=!DIRECTORY!\bin
+      if exist "!DIRECTORY!\jre\bin\java.exe"^
+          set java=!DIRECTORY!\jre\bin
+      if exist "!DIRECTORY!\java.exe"^
+          set java=!DIRECTORY!
+    )
+  )
+)
+
+if "%java%" == "" (
+  for %%i in ("%PATH:;=";"%") do (
+    if exist "%%i\java.exe"^
+        set java=%%i
+  )
+  if not "%JAVA_HOME%" == "" (
+    if exist "%JAVA_HOME%\bin\java.exe"^
+        set java=%JAVA_HOME%\bin
+    if exist "%JAVA_HOME%\jre\bin\java.exe"^
+        set java=%JAVA_HOME%\jre\bin
+  )
+)
+
+if not exist "%java%\java.exe" (
+  echo ERROR: Java Runtime Environment not found
+  goto :EOF
+)
+
+if /I "%1" == "install"   goto install
+if /I "%1" == "update"    goto install
+if /I "%1" == "uninstall" goto uninstall
+ 
+if /I "%1" == "start"   goto start
+if /I "%1" == "restart" goto restart
+if /I "%1" == "stop"    goto stop
+if /I "%1" == "status"  goto status
+
+echo usage: %~nx0 [command]
+echo.
+echo   install
+echo   update
+echo   uninstall
+echo.
+echo   start
+echo   restart
+echo   stop
+  
+goto exit
 
 
 

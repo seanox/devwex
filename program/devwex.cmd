@@ -3,21 +3,21 @@
 rem Seanox Devwex is started from working directory .\devwex\program.
 rem Here, following variables are used:
 rem
-rem   CLASSPATH     path of java resources
+rem   CLASSPATH      path of java resources
 rem
-rem   JAVAPATH      path of java runtime environment
+rem   JAVAPATH       path of java runtime environment
 rem
-rem   LIBRARIESPATH semicolon separate paths, from which the server invites
-rem                 startup modules
+rem   LIBRARIESPATH  semicolon separate paths, from which the server invites
+rem                  startup modules
 rem
-rem   OPTIONS       spaces separated arguments for the java virtual machin,
-rem                 in format -Dname=value;...
+rem   OPTIONS        spaces separated arguments for the java virtual machine, in
+rem                  format -Dname=value;...
 rem
-rem   SYSTEMDRIVE   standard variable SYSTEMDRIVE of Windows, this is used of
-rem                 some CGI application to find systems components
+rem   SYSTEMDRIVE    standard variable SYSTEMDRIVE of Windows, this is used of
+rem                  some CGI application to find systems components
 rem
-rem   SYSTEMROOT    standard variable SYSTEMROOT of Windows, this is used of
-rem                 some CGI application to find systems components
+rem   SYSTEMROOT     standard variable SYSTEMROOT of Windows, this is used of
+rem                  some CGI application to find systems components
 rem
 rem With startup all batch scripts are loaded from path ..\runtime.
 rem Please note, that scripts to extend of runtime environment are relative to

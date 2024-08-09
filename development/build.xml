@@ -359,6 +359,7 @@
     <copy todir="${build}/release">
       <fileset refid="fileset.release"/>
     </copy>
+    <fixcrlf srcdir="${build}/release" includes="**/*.sh" eol="lf" eof="remove"/>
     <copy file="${workspace}/program/${ant.project.name}.jar" todir="${build}/release/program"/>
     <copy file="${workspace}/program/keystore" todir="${build}/release/program"/>
     <mkdir dir="${build}/release/storage"/>
@@ -373,11 +374,14 @@
     
     <copy todir="${build}/release">
       <fileset refid="fileset.release.windows"/>
-    </copy>    
+    </copy>
+    <delete>
+      <fileset  dir="${build}/release" includes="**/*.sh"/>
+    </delete>
     <release-insert/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
-    </touch>      
+    </touch>
     <delete file="${workspace.release}/seanox-${ant.project.name}-${release.version}-win.zip"/>
     <zip destfile="${workspace.release}/seanox-${ant.project.name}-${release.version}-win.zip"
         basedir="${build}/release" compress="true" level="9" filesonly="false" defaultexcludes="false"/>
@@ -385,7 +389,6 @@
         file="${workspace.release}/seanox-${ant.project.name}-${release.version}-win.zip"/>    
 
     <delete dir="${build}"/>
-
     <replaceregexp file="${workspace}/README.md"
         match="(Seanox Devwex )\d+(\.\d+)*" flags="g" byline="false"
         replace="\1${release.version}"/>

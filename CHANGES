@@ -2,16 +2,15 @@
 ??: Facelift: Status / Index / Templates
 
 5.8.0 2025xxxx
-??: ???
+??: Telnet (status/restart/stop) with optional host + port / ini / default 127.0.0.1:25000
 
 5.7.0 2024xxxx
-??: Telnet (status/restart/stop) with optional host + port / ini / default 127.0.0.1:25000
 ??: Documentation: Switch to Markdown (challenge of an architectural image)
 ??: Automation (build, test, release) via GitHub actions
-??: Unix/Linux: Optimization of bash scripts and runtime directory handling
+CR: Unix/Linux: Optimization of bash scripts and runtime directory handling
     - Optimization of JRE determination in the runtime directory
       The Directory name does not matter, it is searched for files ./java,
-      .\jre\bin\java and .\bin\java.
+      ./jre/bin/java and ./bin/java.
     - Optimization when including the runtime sub-directories
       The runtime directories and, if available, the bin subdirectory are added
       to the PATH variable.

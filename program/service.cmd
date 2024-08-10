@@ -13,19 +13,11 @@ rem   jvms  Initial memory pool size in MB
 rem
 rem   jvmx  Maximum memory pool size in MB
 rem
-rem   work  Working path (optional)
-rem
-rem   java  Java environment path (optional)
-rem
 rem   jdwp  Options for remote debugging (optional)
 rem
 rem Link(s) to used prunsrv.exe (alias service-32.exe/service-64.exe):
 rem   https://commons.apache.org/daemon/procrun.html
 rem   https://commons.apache.org/proper/commons-daemon/procrun.html
-rem
-rem NOTE - If environment variables "work" and "java" empty or not defined,
-rem this will be resolved automatically. The declaration of both values is
-rem optional.
 
 echo Seanox Devwex Service [0.0.0 00000000]
 echo Copyright (C) 0000 Seanox Software Solutions
@@ -48,16 +40,13 @@ set name=Devwex
 set text=Seanox Devwex
 set note=Seanox Experimental Server Engine
 
-set work=%cd%
-set java=
-
 rem set work=C:\Program Files\Devwex\program
 rem set java=C:\Program Files\Java
 rem set jdwp=dt_socket,server=y,suspend=n,address=8000
 rem set jvms=256
 rem set jvmx=512
 
-set ServiceHome=%work%
+set ServiceHome=%cd%
 set ServiceName=%name%
 set DisplayName=%text%
 set Description=%note%
@@ -67,7 +56,7 @@ set ServiceAccount=NetworkService
 set Classpath=devwex.jar
 
 set LogPrefix=service
-set LogPath=%work%/../storage
+set LogPath=%ServiceHome%/../storage
 set StdOutput=%LogPath%/output.log
 set StdError=%LogPath%/error.log
 
@@ -90,28 +79,22 @@ rem - in the runtime sub-directories ..\runtime
 rem - else if JAVA_HOME is set
 rem - else Java runtime in the PATH variable
 
-SET RUNTIME=..\runtime
-
-if exist "%RUNTIME%" (
-  for /f "delims=: " %%i in ('dir /AD /B %RUNTIME%') do (
-    set DIRECTORY=%work%\%RUNTIME%\%%i
-    set DIRECTORY=!DIRECTORY:\\=\!
-    set PATH=!DIRECTORY!;!PATH!
-    if exist "!DIRECTORY!\bin"^
-        set PATH=!DIRECTORY!\bin;!PATH!
-    if exist "!DIRECTORY!\jre\bin\java.exe"^
-        set PATH=!DIRECTORY!\jre\bin;!PATH!
+set java=
+set runtime=..\runtime
+if exist "%runtime%" (
+  for /f "delims=: " %%i in ('dir /AD /B %runtime%') do (
+    set directory=%ServiceHome%\%runtime%\%%i
+    set directory=!directory:\\=\!
     if "!java!" == "" (
-      if exist "!DIRECTORY!\bin\java.exe"^
-          set java=!DIRECTORY!\bin
-      if exist "!DIRECTORY!\jre\bin\java.exe"^
-          set java=!DIRECTORY!\jre\bin
-      if exist "!DIRECTORY!\java.exe"^
-          set java=!DIRECTORY!
+      if exist "!directory!\bin\java.exe"^
+          set java=!directory!\bin
+      if exist "!directory!\jre\bin\java.exe"^
+          set java=!directory!\jre\bin
+      if exist "!directory!\java.exe"^
+          set java=!directory!
     )
   )
 )
-
 if "%java%" == "" (
   for %%i in ("%PATH:;=";"%") do (
     if exist "%%i\java.exe"^
@@ -174,12 +157,12 @@ goto exit
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
       set service=service-64.exe
   )
-  if not exist "%work%\%service%" (
+  if not exist "%ServiceHome%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
     goto exit
   )
-  for %%i in ("%work%\%service%") do echo    %%~fi
+  for %%i in ("%ServiceHome%\%service%") do echo    %%~fi
 
 rem ----------------------------------------------------------------------------
 
@@ -190,8 +173,8 @@ rem ----------------------------------------------------------------------------
   rem Here no directory of a user should be used, because it is not clear
   rem whether the directory is accessible without the login.
   echo %label%: Grant all privileges for %ServiceAccount% to the app AppDirectory
-  for %%i in ("%work%\..") do echo    %%~fi
-  icacls.exe "%work%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q >%~n0.log 2>&1
+  for %%i in ("%ServiceHome%\..") do echo    %%~fi
+  icacls.exe "%ServiceHome%\.." /grant %ServiceAccount%:(OI)(CI)F /T /Q >%~n0.log 2>&1
   if not "%lastError%" == "%errorLevel%" goto error
 
   sc query %ServiceName% >nul 2>&1
@@ -205,7 +188,7 @@ rem ----------------------------------------------------------------------------
   set init=--DisplayName        "%DisplayName%"
   set init=%init% --Description "%Description%"
   set init=%init% --Startup     "%Startup%"
-  set init=%init% --Install     "%work%\%service%"
+  set init=%init% --Install     "%ServiceHome%\%service%"
 
   set init=%init% --Jvm         "%Jvm%"
   set init=%init% --Classpath   "%Classpath%"
@@ -264,12 +247,12 @@ rem ----------------------------------------------------------------------------
   if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
       set service=service-64.exe
   )
-  if not exist "%work%\%service%" (
+  if not exist "%ServiceHome%\%service%" (
     echo.
     echo ERROR: Service runner ^(%service%^) not found
     goto exit
   )
-  for %%i in ("%work%\%service%") do echo    %%~fi
+  for %%i in ("%ServiceHome%\%service%") do echo    %%~fi
 
   sc query %ServiceName% >nul 2>&1
   if "%errorLevel%" == "0" (

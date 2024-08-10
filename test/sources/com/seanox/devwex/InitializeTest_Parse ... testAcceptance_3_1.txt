@@ -1,0 +1,15 @@
+
+ [sec-A]     ; comment
+a = 1
+  [sec-B]    ;  comment
+b = 2
+   [sec-C]   ;   comment
+c = 3
+     [sec-D] ;    comment
+d = 4
+
+[sec-D] extends SEC-B SEC-X SEC-D SEC-C SEC-E
+d = 5
+[sec-E] extends sec-E
+e = 6
+

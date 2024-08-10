@@ -1,0 +1,13 @@
+12345        = xxx
+0x31325B355D = xxx
+0x31205B355D = xxx
+0x31325B3334 = xxx
+0x313233345D = xxx
+0x31323D3334 = xxx
+0x31323B3334 = xxx
+0x31203D2032 = xxx
+1 + 2        = xxx
+0x3D203241   = xxx
+0x2B203242   = xxx
+0x3243203D   = xxx
+2D +         = xxx

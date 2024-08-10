@@ -1,0 +1,27 @@
+
+Line: #[missing] #[path[[aaa#[base]bbb#[name]ccc]]]
+
+Container: #[sort]
+  Iteration:
+    #[file[[
+    Row: #[cAse] #[tYpe] #[mIme]
+      Cell1: #[case] #[type] #[mime] #[name]
+      Cell2: #[mime]
+      Cell3: #[type] #[size]
+      Cell4: #[date]
+    ]]]
+
+Decode:
+  #[0x53454354494F4E2D41]
+  #[0x53454354494F4E2DY1]
+  #[0X53454354494F4E2D41]
+  #[0X53454354494F4E2D4]
+  #[0X53]
+  #[0X53]
+  #[0X5]
+  #[0X]
+  #[0x53]
+  #[0x5]
+  #[0x]
+
+End:

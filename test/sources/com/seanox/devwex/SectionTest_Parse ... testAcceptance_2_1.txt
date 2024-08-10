@@ -1,0 +1,15 @@
+                          + invalid
+ PARAM-A                  = 0x574552542D31 ;comment
+   0x504152414D2D42       = ValuE-2        ;comment
+0x504152414D2D43      [+] = 0x574552542D33
+  PARAM-D                 = 0x574552542D34
+                          + 0x0000
+                          +       
+                          + 0x0000 
+                          + 0x574552542D35
+    PARAM-E        [?][+] = 0x574552542D363B20574552542D37
+  0x504152414D2D45 [?]                     ;comment
+  0x504152414D2D4         = aaa            ;invalid key
+  0x504152414D2           = 0x504152414D2  ;invalid key and value
+  xxx                     = 0x504152414D2  ;invalid value
+  0x50415241XD2D43        = 0x504152414X2D43  ;invalid key and value

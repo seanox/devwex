@@ -1,0 +1,21 @@
+  A AA xx1
+  -A-xx1-A-  
+    B 
+  -A-xx1-E-     
+  AA xx2
+  -A-xx2-A-  
+    B 
+  -A-xx2-E-     
+  AA xx3
+  -A-xx3-A-  
+    B 
+  -A-xx3-E-     
+  AA xx4
+  -A-xx4-A-  
+    B 
+  -A-xx4-E-     
+  AA xx5
+  -A-xx5-A-  
+    B 
+  -A-xx5-E-     
+   E

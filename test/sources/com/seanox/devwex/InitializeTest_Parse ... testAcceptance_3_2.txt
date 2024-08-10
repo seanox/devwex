@@ -1,0 +1,16 @@
+[SEC-A]
+A = 1
+
+[SEC-B]
+B = 2
+
+[SEC-C]
+C = 3
+
+[SEC-D]
+B = 2
+C = 3
+D = 5
+
+[SEC-E]
+E = 6

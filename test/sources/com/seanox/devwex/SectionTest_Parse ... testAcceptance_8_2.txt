@@ -1,0 +1,2 @@
+REDIRECT = /redirect > http://www.xXx.zzz/?a=2 [r]
+MODULE   = /test.module > test.Connector001 [v:xx=123] [m]

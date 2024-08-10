@@ -16,7 +16,7 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>sources/main</name>
+			<name>sources-main</name>
 			<type>2</type>
 			<locationURI>WORKSPACE_LOC/devwex/sources</locationURI>
 		</link>

@@ -1,7 +1,0 @@
-X                   = xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-XXXX                = xxxx xxxx
-XXXX XXXX           = xxxx xxxx xxxx
-XXXX XXXX XXXX XXXX = xxxx xxxx
-XXXX XXXX XXXX  [+] = xxxx;xxxx
-ZZZZ
-ZZZZ ZZZZ           = zzzz zzzz zzzz

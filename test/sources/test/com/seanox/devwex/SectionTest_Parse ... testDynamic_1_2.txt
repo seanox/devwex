@@ -1,7 +1,0 @@
-SYSTEMDRIVE = C:
-SYSTEMROOT  = C:\Windows
-A
-B           = b
-C           = c
-D       [+] = d;123
-E       [+] = e;123

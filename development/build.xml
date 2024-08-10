@@ -45,9 +45,10 @@
 
   <fileset id="release.sources.fileset" dir="${build}">
     <include name="**/*.cmd"/>
-    <include name="**/*.java"/>
     <include name="**/*.html"/>
-  </fileset>  
+    <include name="**/*.java"/>
+    <include name="**/*.sh"/>
+  </fileset>
 
   <macrodef name="release-insert">
     <sequential>

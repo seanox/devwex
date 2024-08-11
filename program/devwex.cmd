@@ -46,15 +46,21 @@ if exist "%RUNTIME%" (
   )
 )
 
-for %%d in ("%PATH:;=";"%") do (
-  if exist "%%d\java.exe"^
-      set JAVA=%%d
-)
-if not "%JAVA_HOME%" == "" (
-  if exist "%JAVA_HOME%\bin\java.exe"^
-      set JAVA=%JAVA_HOME%\bin
-  if exist "%JAVA_HOME%\jre\bin\java.exe"^
-      set JAVA=%JAVA_HOME%\jre\bin
+if "%JAVA%" == "" (
+  for %%d in ("%PATH:;=";"%") do (
+    set DIRECTORY=%%d
+    set DIRECTORY=!DIRECTORY:"=!
+    if not "!DIRECTORY!" == "" (
+      if exist "!DIRECTORY!\java.exe"^
+          set JAVA=!DIRECTORY!
+    ) 
+  )
+  if not "%JAVA_HOME%" == "" (
+    if exist "%JAVA_HOME%\bin\java.exe"^
+         set JAVA=%JAVA_HOME%\bin
+    if exist "%JAVA_HOME%\jre\bin\java.exe"^
+         set JAVA=%JAVA_HOME%\jre\bin
+  )
 )
 
 if not exist "%JAVA%\java.exe" (

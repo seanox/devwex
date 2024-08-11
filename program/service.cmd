@@ -97,8 +97,12 @@ if exist "%runtime%" (
 )
 if "%java%" == "" (
   for %%i in ("%PATH:;=";"%") do (
-    if exist "%%i\java.exe"^
-        set java=%%i
+    set directory=%%i
+    set directory=!directory:"=!
+    if not "!directory!" == "" (
+      if exist "!directory!\java.exe"^
+          set java=!directory!
+    )
   )
   if not "%JAVA_HOME%" == "" (
     if exist "%JAVA_HOME%\bin\java.exe"^

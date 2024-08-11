@@ -264,8 +264,10 @@ abstract class AbstractStage {
             return;
         AbstractStage.lock = Math.max(1, AbstractStage.lock);
 
-        if (!Charset.defaultCharset().name().equals("ISO-8859-1"))
-            throw new RuntimeException("Character encoding ISO-8859-1 required");
+        final String defaultCharsetName = Charset.defaultCharset().name();
+        if (!defaultCharsetName.equalsIgnoreCase("ISO-8859-1")
+                && !defaultCharsetName.equalsIgnoreCase("Windows-1252"))
+            throw new RuntimeException("Character encoding ISO-8859-1 or Windows-1252 required");
 
         final String version = System.getProperty("java.version");
         if (!version.matches("^1\\.8\\..*$"))

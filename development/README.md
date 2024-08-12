@@ -8,10 +8,10 @@ __Each decision always considers the size of the binary.__
 
 
 # List of peculiarities
-- Use Java-5 as compiler setting for source and target  
+- Use Java 5 as compiler setting for source and target  
   This creates the smaller binary, later versions will always be larger.
 - Use the language features of Java 5 and 6 but no generics
-- Use functionally the API and the JDK of 1.8.x  
+- Use functionally the API of JDK of 1.8.x  
   Later versions do not support the Java 5 binary format.  
 - Write the code so that it finds more patterns for compression in zip format  
   This sounds strange, but it is possible, if similar code passages have a
@@ -45,3 +45,26 @@ __Each decision always considers the size of the binary.__
 
 In general, these quirks and peculiarities apply only to Devwex, everything that
 arises around it uses modern and well-known standards and recommendations.
+
+
+# Project Setup
+
+## Eclipse
+TODO:
+
+## IntelliJ
+- Clone: https://github.com/seanox/devwex.git
+- Project Structure: 
+  - Project Settings
+    - Project
+      - SDK: _Java-8_
+      - Language Level: _8 - Lambdas, type, annotations etc._
+      - Compiler Output: `B:\Documents\Projects\devwex\program\classes`
+    - Modules:
+      - Sources: `B:\Documents\Projects\devwex\sources`
+      - Tests: `B:\Documents\Projects\devwex\test\sources`
+      - Dependencies: (JARs or Directorires) `B:\Documents\Projects\devwex\test\libraries`
+- Settings
+  - Editor
+    - File Encoding
+      - Project Encoding: _ISO-8859-1_ or _Windows 1252_

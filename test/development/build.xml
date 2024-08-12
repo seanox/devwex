@@ -1,13 +1,24 @@
 <?xml version="1.0" ?>
-<project name="devwex-test" default="compile" basedir="..">
+<project name="devwex-test" default="xcompile" basedir="${ant.file}/../..">
+
+  <property name="parent" value=".."/>
+  <property name="parent.development" value="${parent}/development"/>
+  <property name="parent.program" value="${parent}/program"/>
   
   <property name="workspace" value="${basedir}"/>
+  <property name="workspace.classes" value="${workspace}/classes"/>
+  <property name="workspace.libraries" value="${workspace}/libraries"/>
   <property name="workspace.resources" value="${workspace}/resources"/>  
   <property name="workspace.resources.libraries" value="${workspace.resources}/libraries"/>
   <property name="workspace.resources.certificates" value="${workspace.resources}/certificates"/>
+  <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="compiler.level" value="8"/>
   
   <target name="compile">
+    <ant antfile="build.xml" target="compile"
+        dir="${parent.development}" useNativeBasedir="true"
+        inheritAll="false" inheritRefs="true"/>
+
     <delete>
       <fileset dir="${workspace.resources.libraries}">
         <include name="**/*.class"/>
@@ -185,7 +196,22 @@
       <fileset dir="${workspace.resources.libraries}">
         <include name="**/*.class"/>
       </fileset>
-    </delete>   
+    </delete>
+
+    <delete dir="${workspace.classes}"/>
+    <mkdir dir="${workspace.classes}"/>
+    <javac srcdir="${workspace.sources}" destdir="${workspace.classes}"
+           source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true">
+      <classpath>
+        <fileset dir="${workspace.libraries}" includes="*.jar"/>
+        <fileset dir="${parent.program}" includes="*.jar"/>
+      </classpath>
+    </javac>
+    <copy todir="${workspace.classes}/com/seanox/devwex">
+      <fileset dir="${workspace.sources}/com/seanox/devwex" includes="*.txt"/>
+    </copy>
+    <jar destfile="${parent.program}/devwex-test.jar" basedir="${workspace.classes}"/>
+    <delete dir="${workspace.classes}"/>
   </target>
   
   <target name="keystore">
@@ -292,5 +318,15 @@
           -srckeystore ${workspace.resources.certificates}/client.keystore -srcstorepass changeIt
           -destkeystore ${workspace.resources.certificates}/client_x.p12 -deststoretype PKCS12 -keypass changeIt -storepass changeIt -noprompt"/>
     </exec>
+  </target>
+
+  <target name="unit-test" depends="compile">
+    <java classname="org.junit.runner.JUnitCore" fork="true" failonerror="true">
+      <arg value="com.seanox.devwex.Test"/>
+      <classpath>
+        <fileset dir="${workspace.libraries}" includes="*.jar"/>
+        <fileset dir="${parent.program}" includes="*.jar"/>
+      </classpath>
+    </java>
   </target>
 </project>

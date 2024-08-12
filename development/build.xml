@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="devwex" default="usage" basedir="..">
+<project name="devwex" default="usage" basedir="${ant.file}/../..">
   <target name="usage">
     <echo>Following targets are available:                               </echo>
     <echo>                                                               </echo>
@@ -212,6 +212,10 @@
   </target>
   
   <target name="compile">
+    <condition property="java.version.validation">
+      <matches pattern="^1\.8\..*$" string="${java.version}"/>
+    </condition>
+    <fail unless="java.version.validation" message="Java 8 is required!"/>
     <release-locate/>
     <delete dir="${build}"/> 
     <mkdir dir="${build.sources}"/>    

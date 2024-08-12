@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="devwex-test" default="xcompile" basedir="${ant.file}/../..">
+<project name="devwex-test" default="compile" basedir="${ant.file}/../..">
 
   <property name="parent" value=".."/>
   <property name="parent.development" value="${parent}/development"/>

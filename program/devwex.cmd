@@ -76,6 +76,6 @@ for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
 set OPTIONS=%OPTIONS% -Dlibraries=%LIBRARIES%
 
-"%JAVA%\java.exe" -cp devwex.jar %OPTIONS% com.seanox.devwex.Service %1
+"%JAVA%\java.exe" -cp devwex.jar %OPTIONS% com.seanox.devwex.Service %1 %2
 
 ENDLOCAL

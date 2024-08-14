@@ -80,7 +80,7 @@ then
 fi
 
 OPTIONS="-Dlibraries=\"$LIBRARIES\" $OPTIONS"
-OPTIONS="-cp devwex.jar $OPTIONS com.seanox.devwex.Service $1"
+OPTIONS="-cp devwex.jar $OPTIONS com.seanox.devwex.Service $1 $2"
 
 readarray -t -d '' arguments < <(xargs printf '%s\0' <<< "$OPTIONS")
 "$JAVA/java" "${arguments[@]}"

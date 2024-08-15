@@ -7,6 +7,8 @@
 5.7.0 2024xxxx
 ??: Documentation: Switch to Markdown (challenge of an architectural image)
 ??: Automation (build, test, release) via GitHub actions
+BF: Unix/Linux: Correction of the missing second start parameter in the bash script
+BF: Windows: Correction of the missing second start parameter in the batch script
 CR: Unix/Linux: Optimization of bash scripts and runtime directory handling
     - Optimization of JRE determination in the runtime directory
       The Directory name does not matter, it is searched for files ./java,

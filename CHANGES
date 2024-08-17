@@ -29,6 +29,7 @@ CR: Windows: Optimization of batch scripts and runtime directory handling
     - Change of the automatic runtime-script integration
       The .\runtime\scripts directory is omitted, the *.bat and *.cmd files are
       searched in the root of the .\runtime directory.
+CR: HTTP(S): Optimization of the composition of the unique ID
 
 5.6.0 20231227
 BF: Review: Optimization and corrections

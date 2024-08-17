@@ -1255,10 +1255,10 @@ class Worker implements Runnable {
         this.environment.set("remote_addr", this.accept.getInetAddress().getHostAddress());
         this.environment.set("remote_port", String.valueOf(this.accept.getPort()));
 
-        // the unique id is determined from the hash code of the socket, the
-        // milliseconds and the port number used, the length is variable
-        String unique = Long.toString(Math.abs(this.accept.hashCode()), 36);
-        unique = unique.concat(Long.toString(((Math.abs(System.currentTimeMillis()) *100000) +this.accept.getPort()), 36));
+        // Unique is composed of: socket hash code, accept port and the current
+        // time in milliseconds, the length is variable
+        String unique = Long.toString((Math.abs(this.accept.hashCode()) *100000L) +this.accept.getPort(), 36);
+        unique = unique.concat(Long.toString(System.currentTimeMillis(), 36));
         this.environment.set("unique_id", unique.toUpperCase());
 
         // die resource-related environment variables are set

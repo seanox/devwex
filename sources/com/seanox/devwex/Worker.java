@@ -63,7 +63,7 @@ import javax.net.ssl.SSLSocket;
  * controlled, it is completely aborted.
  *
  * @author  Seanox Software Solutions
- * @version 5.6.0 20231227
+ * @version 5.7.0 20240818
  */
 class Worker implements Runnable {
   
@@ -1255,11 +1255,11 @@ class Worker implements Runnable {
         this.environment.set("remote_addr", this.accept.getInetAddress().getHostAddress());
         this.environment.set("remote_port", String.valueOf(this.accept.getPort()));
 
-        // Unique is composed of: socket hash code, accept port and the current
-        // time in milliseconds, the length is variable
-        String unique = Long.toString((Math.abs(this.accept.hashCode()) *100000L) +this.accept.getPort(), 36);
-        unique = unique.concat(Long.toString(System.currentTimeMillis(), 36));
-        this.environment.set("unique_id", unique.toUpperCase());
+        // Unique is composed of: accept socket hash code, accept port and the
+        // current time in milliseconds, the length is variable
+        this.environment.set("unique_id", Long.toString((Math.abs(this.accept.hashCode()) *100000L) +this.accept.getPort(), 36)
+                .concat(Long.toString(Math.abs(System.currentTimeMillis()), 36))
+                .toUpperCase());
 
         // die resource-related environment variables are set
         this.environment.set("path_url", path);

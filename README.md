@@ -1,14 +1,14 @@
 <p>
   <a href="https://github.com/seanox/devwex/pulls"
-      title="Development is waiting for new issues / requests / ideas">
-    <img src="https://img.shields.io/badge/development-passive-blue?style=for-the-badge">
-  </a>
-  <a href="https://github.com/seanox/devwex/issues">
-    <img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge">
-  </a>
-  <a href="http://seanox.de/contact">
-    <img src="https://img.shields.io/badge/support-active-green?style=for-the-badge">
-  </a>
+      title="Development is waiting for new issues / requests / ideas"
+    ><img src="https://img.shields.io/badge/development-passive-blue?style=for-the-badge"
+  ></a>
+  <a href="https://github.com/seanox/devwex/issues"
+    ><img src="https://img.shields.io/badge/maintenance-active-green?style=for-the-badge"
+  ></a>
+  <a href="http://seanox.de/contact"
+    ><img src="https://img.shields.io/badge/support-active-green?style=for-the-badge"
+  ></a>
 </p>
 
 
@@ -115,4 +115,4 @@ CR: Windows: Optimization of JRE determination
 # Contact
 [Issues](https://github.com/seanox/devwex/issues)  
 [Requests](https://github.com/seanox/devwex/pulls)  
-[Mail](http://seanox.de/contact)
+[Mail](https://seanox.com/contact)

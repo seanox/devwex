@@ -713,7 +713,7 @@ CR: HTTP Request: Optimierung der UTF-8 Dekodierung
 CR: HTTP Directory Index: Optimierung
     - Tag files:arts geaendert in files:base
       Aenderung der Sortierung von a/A in b/B
-Die Module Compress und Symbols muessen aktualisiert werden.
+    Die Module Compress und Symbols muessen aktualisiert werden.
 CR: HTTP DCGI/CGI: Optimierung/Erweiterung
     - Begrenzung vom Response-Header auf 65535 Bytes
       ein Ueberlauf fuehrt zum Status 500 (laut RFC sind nur 32768 Bytes moeglich)

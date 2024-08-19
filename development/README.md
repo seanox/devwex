@@ -15,10 +15,10 @@ __Each decision always considers the size of the binary.__
   Later versions do not support the Java 5 binary format.  
 - Write the code so that it finds more patterns for compression in zip format  
   This sounds strange, but it is possible, if similar code passages have a
-  comparable structure, it can be compressed better.  
-  as an example: `a <= 0` has no advantage for length and size, but uses a
-  general pattern for values smaller than 0, which then frequently used, improve
-  the compression rate, albeit very slightly -- but it adds up.  
+  comparable structure, it can be compressed better. As an example: `a <= 0` has
+  no advantage for length and size, but uses a general pattern for values
+  smaller than 0, which then frequently used, improve the compression rate,
+  albeit very slightly -- but it adds up.  
   Similar effect, have code passages that are always structured the same way.
 - Each import and method costs space, so always think carefully
 - Use as many board means of API as possible, but only official java (and javax)
@@ -37,7 +37,7 @@ __Each decision always considers the size of the binary.__
   Safety in data types is a win, but creates a larger binary and up until Java
   4 you could handle it just fine. In general, many views are based on Java 4.
 - Java | Error handling | Catch block may ignore exception  
-  Comment mainly on the why. The how can be seen in the code. However, this
+  Comment mainly on the _why_. The _how_ can be seen in the code. However, this
   decision was made later in the project. But an empty catch block "can be
   ignored" was kind of like boilerplate.
 - Java | Java language level migration aids | Java 5 | Raw use of parameterized class  

@@ -3,7 +3,6 @@
 - - -
 
 # Description
-
 Seanox Devwex is a experimental server engine with a modular architecture for
 (web)servers and applications, which can be used with a appropriate Java runtime
 environment on many operating systems. The included server instances support

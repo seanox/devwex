@@ -4,6 +4,7 @@
 
 5.7.1 2025xxxx
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
+??: Documentation: Update for Unix and Linux
 
 5.7.0 2024xxxx
 ??: Automation (build, test, release) via GitHub actions

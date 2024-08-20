@@ -3,7 +3,7 @@
 Machine translation with [DeepL](https://deepl.com).
 
 
-## Table Of Contents
+## Table of Contents
 - [Description](description.md)
 - [License Terms](license-terms.md)
 - [Features](features.md)

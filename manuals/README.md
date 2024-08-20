@@ -1,0 +1,67 @@
+# Manual
+
+Machine translation with [DeepL](https://deepl.com).
+
+
+## Table Of Contents
+- [Description](description.md)
+- [License Terms](license-terms.md)
+- [Features](features.md)
+  - Modular Architecture
+  - Central Configuration
+  - Web Server Implementation / Hypertext Transfer Protocol
+  - Remote Control
+  - Extensibility and Customization
+- [System Requirement](system-requirement.md)
+- [Installation](installation.md)
+  - Java Binary
+  - Java Runtime Environment
+  - Windows Service
+  - Linux Service
+  - MacOS Service
+- [Configuration](configuration.md)
+  - Configuration File
+  - Configuration Structure
+  - General Application Configuration
+  - Initialisation
+  - Server
+    - Remote Control
+    - Hypertext Transfer Protocol
+    - Server
+    - Transport Layer Security / Secure Socket Layer
+    - Client Authentication / Mutual Authentication
+    - Virtual Hosts / Virtual Hosting
+    - Filters
+    - Virtual Paths (Aliasing and Redirection)
+    - Basic Access Authentication / Digest Access Authentication
+    - Directory Listing
+    - Environment Variables
+    - Common Gateway Interface
+  - Status Codes
+  - Media Types
+- [Starting and Stopping](starting-and-stopping.md)
+  - Passing parameters with the start
+- [Control and Monitoring](control-and-monitoring.md)
+- [Development](development.md)
+  - Architecture
+  - Sequences
+    - Start
+    - Module Call
+    - Restart
+    - Stop
+  - Extensibility
+  - Server
+    - API (SAPI)
+    - Implementation
+  - Modules
+    - API (XAPI)
+    - Implementation
+  - HTTP Modules
+    - Filters
+      - API (XAPI+)
+      - Implementation
+    - Service
+      - API (XAPI+)
+      - Implementation
+  - Cascaded Components
+  - Development Environment (SDK)

@@ -45,7 +45,7 @@ Overview of the directory structure
     - service.cmd                       Service batch script for Windows
     - service-32.exe                    Service runner for Windows 32 Bit
     - service-32.license
-    - service-64.exee                   Service runner for Windows 64 Bit
+    - service-64.exe                    Service runner for Windows 64 Bit
     - service-64.license
   + runtime                             Directory for runtime environments and extensions
   + storage                             Directory for data storage incl. log files

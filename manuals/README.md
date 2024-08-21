@@ -7,18 +7,18 @@ Machine translation with [DeepL](https://deepl.com).
 - [Description](description.md)
 - [License Terms](license-terms.md)
 - [Features](features.md)
-  - Modular Architecture
-  - Central Configuration
-  - Web Server Implementation / Hypertext Transfer Protocol
-  - Remote Control
-  - Extensibility and Customization
+  - [Modular Architecture](features.md#modular-architecture)
+  - [Central Configuration](features.md#central-configuration)
+  - [Web Server Implementation / Hypertext Transfer Protocol](features.md#web-server-implementation--hypertext-transfer-protocol)
+  - [Remote Control](features.md#remote-control)
+  - [Extensibility and Customization](features.md#extensibility-and-customization)
 - [System Requirement](system-requirement.md)
 - [Installation](installation.md)
-  - Java Binary
-  - Java Runtime Environment
-  - Windows Service
-  - Linux Service
-  - MacOS Service
+  - [Java Binary](installation.md#java-binary)
+  - [Java Runtime Environment](installation.md#java-runtime-environment)
+  - [Windows Service](installation.md#windows-service)
+  - [Linux Service](installation.md#linux-service)
+  - [MacOS Service](installation.md#macos-service)
 - [Configuration](configuration.md)
   - Configuration File
   - Configuration Structure

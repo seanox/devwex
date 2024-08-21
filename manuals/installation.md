@@ -21,7 +21,7 @@ the file system.
 Overview of the directory structure
 
 ```
-+ devwex                                Home directory of the application 
++ devwex                                Home directory of Seanox Devwex
   + documents                           Document root for web content
     - index.html
   + manuals                             Directory for manuals, modularly organized in subdirectories

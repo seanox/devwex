@@ -148,8 +148,8 @@ import java.util.Vector;
  *     {@code Server(String name, Object initialize)}. To do this, each server
  *     is given the name of the detected section and a complete copy of the
  *     central configuration as an initialize object. After successful
- *     initialization, the server is started as a (Daemon)thread and can start
- *     its work in method {@code Server.run()}.
+ *     initialization, the server is started as a thread and can start its work
+ *     in method {@code Server.run()}.
  *   </li>
  * </ul>
  * 
@@ -200,8 +200,8 @@ import java.util.Vector;
  *         Server(String name, Object initialize)}. To do this, each server is
  *     given the name of the detected section and a complete copy of the central
  *     configuration as an initialize object. After successful initialization,
- *     the server is started as a (Daemon)thread and can start its work in
- *     method {@code Server.run()}.
+ *     the server is started as a thread and can start its work in method {@code
+ *         Server.run()}.
  *   </li>
  * </ul>
  * 
@@ -791,7 +791,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         // unknown commands output the command list
         if (!string.matches("^start|restart|status|stop$")) {
-            Service.print(("usage: devwex [start] [ini file]\r\n")
+            Service.print(("usage: devwex [start] [file]\r\n")
                     .concat("       devwex [restart|status|stop] [address:port]"), true);
             return;
         }

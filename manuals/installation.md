@@ -18,6 +18,51 @@
 Seanox Devwex is delivered as a ZIP archive that is unpacked at any location in
 the file system.
 
+```
++ devwex                                Home directory of the application 
+  + documents                           Document root for web content
+    - index.html
+  + manuals                             Directory for manuals, modularly organized in subdirectories
+    + seanox-devwex                     Manual for Seanox Devwex  
+      - configuration.md
+      - control-and-monitoring.md
+      - description.md
+      - development.md
+      - features.md
+      - installation.md
+      - license-terms.md
+      - README.md                       Main page with table of contents
+      - starting-and-stopping.md        
+      - system-requirement.md
+  + program                             Program and working directory of Seanox Devwex
+    - devwex.cmd                        Batch script for Windows
+    - devwex.sh                         Shell script for Unix/Linux
+    - devwex.ini                        Seanox Devwex configuration   
+    - devwex.jar                        Seanox Devwex binary
+    . keystore                          Key and truststore
+    - service.cmd                       Service batch script for Windows
+    - service-32.exe                    Service runner for Windows 32 Bit
+    - service-32.license                Service runner for Windows 32 Bit license
+    - service-64.exee                   Service runner for Windows 64 Bit
+    - service-64.license                Service runner for Windows 64 Bit license
+  + runtime                             Directory for runtime environments and extensions
+  + storage                             Directory for data storage incl. log files
+  + system                              Directory for system files incl. templates
+    - index.html                        Template for the directory listing
+    - status-2xx.html                   Template for error pages of class 2xx
+    - status-3xx.html                   Template for error pages of class 3xx
+    - status-4xx.html                   Template for error pages of class 4xx
+    - status-5xx.html                   Template for error pages of class 5xx
+  - CHNAGES                             Change log
+  - LICENSE                             License      
+```
+
+> [!NOTE]
+> The package does not contain a JRE. If one is already installed. This must be
+> found via the environment variables `PATH` and/or `JAVA_HOME`. Alternatively,
+> the JRE can also be placed in `./runtime/java` so that the batch script finds
+> the JRE automatically.
+
 
 ## Java Runtime Environment
 The Java runtime environment can be downloaded here:
@@ -108,12 +153,6 @@ directory `./devwex/program` and call the batch file with the desired function.
     </td>
   </tr>
 </table>
-
-> [!NOTE]
-> The package does not contain a JRE. If one is already installed. This must be
-> found via the environment variables `PATH` and/or `JAVA_HOME`. Alternatively,
-> the JRE can also be placed in `./runtime/java` so that the batch script finds
-> the JRE automatically.
 
 
 ## Linux Service

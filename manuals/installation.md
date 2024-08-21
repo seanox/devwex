@@ -44,17 +44,17 @@ Overview of the directory structure
     . keystore                          Key and truststore
     - service.cmd                       Service batch script for Windows
     - service-32.exe                    Service runner for Windows 32 Bit
-    - service-32.license                Service runner for Windows 32 Bit license
+    - service-32.license
     - service-64.exee                   Service runner for Windows 64 Bit
-    - service-64.license                Service runner for Windows 64 Bit license
+    - service-64.license
   + runtime                             Directory for runtime environments and extensions
   + storage                             Directory for data storage incl. log files
   + system                              Directory for system files incl. templates
     - index.html                        Template for the directory listing
-    - status-2xx.html                   Template for error pages of class 2xx
-    - status-3xx.html                   Template for error pages of class 3xx
-    - status-4xx.html                   Template for error pages of class 4xx
-    - status-5xx.html                   Template for error pages of class 5xx
+    - status-2xx.html                   Template for error pages of HTTP status class 2xx
+    - status-3xx.html                   Template for error pages of HTTP status class 3xx
+    - status-4xx.html                   Template for error pages of HTTP status class 4xx
+    - status-5xx.html                   Template for error pages of HTTP status class 5xx
   - CHNAGES                             Change log
   - LICENSE                             License      
 ```

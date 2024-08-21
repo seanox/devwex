@@ -18,6 +18,8 @@
 Seanox Devwex is delivered as a ZIP archive that is unpacked at any location in
 the file system.
 
+Overview of the directory structure
+
 ```
 + devwex                                Home directory of the application 
   + documents                           Document root for web content
@@ -102,9 +104,8 @@ directory `./devwex/program` and call the batch file with the desired function.
 
 `usage: service.cmd [command]`
 
-<header>
-  Overview of commands:
-</header>
+Overview of commands
+
 <table>
   <tr>
     <th>Command</th>

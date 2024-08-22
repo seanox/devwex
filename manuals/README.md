@@ -40,28 +40,28 @@ Machine translation with [DeepL](https://deepl.com).
   - Status Codes
   - Media Types
 - [Starting and Stopping](starting-and-stopping.md)
-  - Passing parameters with the start
+  - [Passing parameters with the start](starting-and-stopping.md#passing-parameters-with-the-start)
 - [Control and Monitoring](control-and-monitoring.md)
 - [Development](development.md)
-  - Architecture
-  - Sequences
-    - Start
-    - Module Call
-    - Restart
-    - Stop
-  - Extensibility
-  - Server
-    - API (SAPI)
-    - Implementation
-  - Modules
-    - API (XAPI)
-    - Implementation
-  - HTTP Modules
-    - Filters
-      - API (XAPI+)
-      - Implementation
-    - Service
-      - API (XAPI+)
-      - Implementation
-  - Cascaded Components
-  - Development Environment (SDK)
+  - [Architecture](development.md#architect-ure)
+  - [Sequences](development.md#sequences)
+    - [Start](development.md#start)
+    - [Module Call](development.md#module-call)
+    - [Restart](development.md#restart)
+    - [Stop](development.md#stop)
+  - [Extensibility](development.md#extensibility)
+  - [Server](development.md#server)
+    - [API (SAPI)](development.md#api-sapi)
+    - [Implementation](development.md#implementation)
+  - [Modules](development.md#modules)
+    - [API (XAPI)](development.md#api-xapi)
+    - [Implementation](development.md#implementation-1)
+  - [HTTP Modules](development.md#http-modules)
+    - [Filters](development.md#filters)
+      - [API (XAPI+)](development.md#api-xapi-1)
+      - [Implementation](development.md#implementation-2)
+    - [Service](development.md#service)
+      - [API (XAPI+)](development.md#api-xapi-2)
+      - [Implementation](development.md#implementation-3)
+  - [Cascaded Components](development.md#cascaded-components)
+  - [Development Environment (SDK)](development.md#development-environment-sdk)

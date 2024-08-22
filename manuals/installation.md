@@ -18,8 +18,7 @@
 Seanox Devwex is delivered as a ZIP archive that is unpacked at any location in
 the file system.
 
-Overview of the directory structure
-
+_Overview of directory structure_
 ```
 + devwex                                Home directory of Seanox Devwex
   + documents                           Document root for web content
@@ -41,7 +40,7 @@ Overview of the directory structure
     - devwex.sh                         Shell script for Unix/Linux
     - devwex.ini                        Seanox Devwex configuration   
     - devwex.jar                        Seanox Devwex binary
-    . keystore                          Key and truststore
+    - keystore                          Key and truststore
     - service.cmd                       Service batch script for Windows
     - service-32.exe                    Service runner for Windows 32 Bit
     - service-32.license
@@ -102,10 +101,11 @@ To install the service, the batch file `service.cmd`is used. To do this, open
 the console (shell/command prompt) as administrator and change to the program
 directory `./devwex/program` and call the batch file with the desired function.
 
-`usage: service.cmd [command]`
+```
+usage: service.cmd [command]
+```
 
-Overview of commands
-
+_Overview of commands_
 <table>
   <tr>
     <th>Command</th>

@@ -137,10 +137,6 @@ which returns general information such as protocol and network connection.
 public class Server implements Runnable {
 
     public Server(String name, Initialize initialize) {
-    
-        or 
-    
-    public Server(String name, Object initialize) {
 
         // A server is initiated by server engine via the constructor. If the
         // constructor is not available, the server is considered incompatible
@@ -160,7 +156,7 @@ public class Server implements Runnable {
         // The server will be started as a thread.
     }
 
-    public void destroy {
+    public void destroy() {
 
         // The server is requested to close all resources, data streams and
         // processes initiated or used by it.

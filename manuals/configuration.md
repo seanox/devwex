@@ -23,8 +23,8 @@ values and access to system and environment variables.
   - [Client Authentication / Mutual Authentication](#client-authentication--mutual-authentication)
   - [Virtual Hosts / Virtual Hosting](#virtual-hosts--virtual-hosting)
   - [Filters](#filters)
-  - [Virtual Paths (Aliasing and Redirection)]()
-  - [Basic Access Authentication / Digest Access Authentication]()
+  - [Virtual Paths (Aliasing and Redirection)](#virtual-paths-aliasing-and-redirection)
+  - [Basic Access Authentication / Digest Access Authentication](#basic-access-authentication--digest-access-authentication)
   - [Directory Listing]()
   - [Environment Variables]()
   - [Common Gateway Interface]()
@@ -1133,6 +1133,218 @@ redirections are also supported as targets.
 > [!IMPORTANT]
 > If the target is a relative path in the local file system, the path always
 > refers to the working directory of the server.
+
+> __Scheme for virtual paths__
+> ```
+> NAME = VIRTUAL PATH &gt; TARGET [OPTION]
+> ```
+> The specification of a target is mandatory only for modules and redirections.
+> Real paths to which only additional options are assigned can be used without
+> targets.
+
+> __Example__
+> ```
+> EXAMPLE-LONG  = /directory/file.txt > ./documents/directory/file.txt [C]
+> EXAMPLE-SHORT = /directory/file.txt [C]
+> ```
+
+_Overview of options_
+<table>
+  <tr>
+    <th>Option</th>
+    <th>Role</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>[A]</td>
+    <td>Absolute</td>
+    <td>
+      Defines a virtual sub-path that points to physical directories or files;
+      if the path of a request starts with this virtual sub-path, the resource
+      defined in this way is used; if a script or module is referenced, it can
+      evaluate and apply the additional path information. If other more
+      qualified paths exist for an absolute path, these are used. Absolute paths
+      cover a wide range of paths, but this can be explicitly suppressed in
+      detail.
+    </td>
+  </tr>
+  <tr>
+    <td>[C]</td>
+    <td>Forbidden</td>
+    <td>
+      This option blocks access to virtual and physical paths, and locks
+      directories primarily affect the directory itself and all subdirectories.
+    </td>
+  </tr>
+  <tr>
+    <td>[R]</td>
+    <td>Redirect</td>
+    <td>
+      This option sets up automatic forwarding to a specified address for
+      virtual and physical directories and files.
+    </td>
+  </tr>
+  <tr>
+    <td>[M]</td>
+    <td>Module</td>
+    <td>
+      If the path of a request starts with this virtual sub-path, the module
+      defined in this way is used, which integrates HTTP modules as a web
+      application, and modules can evaluate and apply the additional path
+      information.
+    </td>
+  </tr>
+  <tr>
+    <td>[X]</td>
+    <td>Method Extension</td>
+    <td>
+      Only in conjunction with option <code>[M]</code>, the additional option
+      <code>[X]</code> opens the constraint by <code>[SERVER:INI] METHODS</code>,
+      so that all requested HTTP methods are passed to a module via the virtual
+      path.
+    </td>
+  </tr>
+  <tr>
+    <td>[D]</td>
+    <td>Digest Access Authentication</td>
+    <td>
+      Only in conjunction with the option <code>[ACC]</code>, the additional
+      option <code>[D]</code> activates the use of Digest Access Authentication.
+    </td>
+  </tr>
+  <tr>
+    <td>[ACC:...]</td>
+    <td>Authentication</td>
+    <td>
+      Optionally, Digest Access Authentication can be activated in combination
+      with the option <code>[D]</code> Digest Access Authentication. In both
+      cases, authorization against the Access Control List is performed in
+      section <code>[SERVER:ACC]</code> / <code>[VIRTUAL:ACC]</code>.
+    </td>
+  </tr>
+</table>
+
+_Examples of using virtual paths_
+
+> ```
+> DIRECTION-A = /system > ../system
+> ```
+> The physical directory `../system` is used for queries  with the path
+> `/system`.
+
+> ```
+> DIRECTION-A = /system/test.xml > ../system/test.php
+> ```
+> Physical `../system/test.php` is used for requests with the path
+> `/system/test.xml`.
+
+> ```
+> DIRECTION-B = /doc >; ../documents [A]
+> ```
+> The path `/doc` has been defined as absolute, so for all requests starting
+> with `/doc` like `/documents`, `/documentation` or `/doc/test.cgi?cmd=123`,
+> then the physical directory `../documents` is used.
+
+> ```
+> DIRECTION-C = /test &gt; http://www.xxx.zzz [R]
+> ```
+> Requests from path `/test` will be responded with a forward to
+> `http://www.xxx.zzz`.
+
+> ```
+> DIRECTION-D = /control &gt; example.Connector [M]
+> ```
+> Path `/control` refers to the module class `Connector` from package `example`
+> which must be in the class path of the server.
+
+> ```
+> DIRECTION-E = /program [C]
+> ```
+> Access to the directory `/program` is prohibited.
+
+
+### Basic Access Authentication / Digest Access Authentication
+Basic Access Authentication (BAA) and Digest Access Authentication (DAA) are two
+of the different methods by which a user can authenticate himself or herself
+against a web server or a web application, whereby the use of Digest Access
+Authentication is recommended here, because here checksums are transmitted
+instead of credentials, which is intended to protect against the reconstruction
+of credentials.          
+
+The configuration of the Basic / Digest Access Authentication consists of a
+virtual or physical path in the section `[SERVER:REF]` or `[VIRTUAL:REF]` in
+combination with the option `[acc:...]` as reference to the permissions and
+optionally with the options `[realm:...]` for the description of the area and
+`[D]` for the use of Digest Access Authentication. With `[acc:none]`, the parent
+authorization for the specified path and all subordinate paths can be cancelled
+and, if necessary, further authorizations in deeper sub-directories can be used
+again. The permissions are defined in the independent section `[SERVER:ACC]` or
+`[VIRTUAL:ACC]` and consist of one or more groups with individual permissions,
+consisting of user and password. 
+
+> __Examples of basic access authentication__
+> ```
+> [SERVER:X:REF]
+>   ACCESS-A = /access                     [acc:group-a] [realm:Section-A]
+>   ACCESS-B = /access/section             [acc:group-b] [realm:Section-B]
+>   ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C]
+>   ACCESS-N = /access/public              [acc:none]
+> 
+>   ACCESS-X = /access/example... > ... [acc:...] [acc:...] ... [realm:...] [...
+> ```
+
+> __Examples of Digest-Access-Authentication: The option `[D]` makes the
+> difference.__
+> ```
+> [SERVER:X:REF]
+>   ACCESS-A = /access                     [acc:group-a] [realm:Section-A] [D]
+>   ACCESS-B = /access/section             [acc:group-b] [realm:Section-B] [D]
+>   ACCESS-C = /access/section/protected   [acc:group-c] [realm:Section-C] [D]
+>   ACCESS-N = /access/public              [acc:none]
+>
+>   ACCESS-X = /access/example... > ... [acc:...] [acc:...] ... [realm:...] [D] [...
+> ```
+
+> __Examples for the definition of access data__
+> ```
+> [SERVER:X:ACC]
+>   GROUP-A = ua:pa ub:pb uc:pc
+>   GROUP-B = ua:pa ub:pbb
+>   GROUP-C = uc:pcc
+>
+>   GROUP-X = user:password user:password ...
+> ```
+
+The directory `/access` with all subdirectories is only accessible to
+authorized users and with password, except for the directory `/access/public`
+and its subdirectories.
+
+> __ACCESS-A__  
+> The directory `/access` can only be accessed by the users `ua` and the
+> password `pa`, `ub` and the password `pb` and `uc` with the password `pc`.
+> Also access to all subdirectories, with the exception of `/access/section`
+> and `/access/section/protected`, is only possible for these users.
+
+> __ACCESS-B__  
+> The directory `/access/section` with all subdirectories can be used by users
+> `ua` with the password `pa` and `ub` with the password `pbb`.
+
+> __ACCESS-C__  
+> Access to the directory `/access/section/protected` is only possible for the
+> user `uc` with the password `pcc`.
+
+> __ACCESS-N__  
+> For the directory `/access/public` the basic / digest access authentication is
+> removed and can be used without login and password and subdirectories can be
+> provided with basic access authentication again.
+
+> [!TIP]
+> Users and passwords are case-sensitive, using colons and spaces is not
+> possible.
+
+> [!TIP]
+> Basic / Digest Access Authentication can be used except for files, but some
+> browsers will ask you again at directory level.
 
 TODO:
 

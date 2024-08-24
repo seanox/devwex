@@ -15,8 +15,8 @@ values and access to system and environment variables.
 - [Configuration Structure](#configuration-structure)
 - [General Application Configuration](#general-application-configuration)
 - [Initialisation](#initialisation)
+- [Remote Control](#remote-control)
 - [Server](#server)
-  - [Remote Control](#remote-control)
   - [Hypertext Transfer Protocol](#hypertext-transfer-protocol)
   - [Server](#server)
   - [Transport Layer Security / Secure Socket Layer](#transport-layer-security--secure-socket-layer)
@@ -265,6 +265,46 @@ With the option `[*]` a module can be marked as optional. If the module is not
 present during initialization, this option does not cause to an error output.
 
 
+## Remote Control
+The included remote control supports a Telnet-based access of the server engine
+(restart and stop) and queries about the operating status of the running servers
+and modules. The server component of the remote control is a typical [servers](
+    #server) configuration, except that it is an integral part of the
+implementation and uses the fixed name `REMOTE` in the configuration.
+
+> __Example of configuration__
+> ```
+> [REMOTE:INI]
+>   ADDRESS = 127.0.0.1
+>   PORT    = 25000
+> ```
+
+_Overview of configuration_
+<table>
+  <tr>
+    <th>Key</th>
+    <th>Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>ADDRESS</td>
+    <td>AUTO|IP|NAME</td>
+    <td>
+      Local address or name of the server in the network.<br>
+      `AUTO` corresponds to 0.0.0.0 and uses all IP addresses available in the
+      system.
+    </td>
+  </tr>
+  <tr>
+    <td>PORT</td>
+    <td>...</td>
+    <td>
+      Local port of the server.
+    </td>
+  </tr>
+</table>
+
+
 ## Server
 Servers are an essential part of the server engine and it requires at least one
 successfully set up server instance to run. During initialization, all sections
@@ -307,39 +347,6 @@ will be ignored without an error message.
 >   SCOPE = package.of.class
 >   ...
 > ```
-
-
-### Remote Control
-The included remote access supports a Telnet-based control of the server engine
-(restart and stop) and queries about the operating status of the running servers
-and modules. In addition to the server implementation, Seanox Devwex also
-includes a compatible client implementation. Both use the `[REMOTE:INI]` section
-in the configuration file for configuration.
-
-_Overview of configuration_
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Value</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>ADDRESS</td>
-    <td>AUTO|IP|NAME</td>
-    <td>
-      Local address or name of the server in the network.<br>
-      `AUTO` corresponds to 0.0.0.0 and uses all IP addresses available in the
-       system.
-    </td>
-  </tr>
-  <tr>
-    <td>PORT</td>
-    <td>...</td>
-    <td>
-      Local port of the server.
-    </td>
-  </tr>
-</table>
 
 
 ### Hypertext Transfer Protocol

@@ -24,8 +24,8 @@ Machine translation with [DeepL](https://deepl.com).
   - Configuration Structure
   - General Application Configuration
   - Initialisation
+  - Remote Control
   - Server
-    - Remote Control
     - Hypertext Transfer Protocol
     - Server
     - Transport Layer Security / Secure Socket Layer

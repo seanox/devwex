@@ -1,10 +1,11 @@
-5.8.0 2026xxxx
+5.9.0 2026xxxx
 ??: Facelift: Status / Index / Templates
 ??: Review: Optimization and corrections
 
-5.7.1 2025xxxx
+5.8.0 2025xxxx
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
 ??: Documentation: Update for Unix and Linux
+??: Service: devwex start [directory] (<<read all ini files from directory)
 
 5.7.0 2024xxxx
 ??: Automation (build, test, release) via GitHub actions

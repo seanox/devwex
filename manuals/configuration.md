@@ -1125,7 +1125,7 @@ redirections are also supported as targets.
 
 > [!IMPORTANT]
 > If the target is a relative path in the local file system, the path always
-> refers to the execution directory of the server.
+> refers to the working directory of the server.
 
 TODO:
 

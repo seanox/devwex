@@ -93,15 +93,15 @@ Go to the program directory and start the program directly or by script.
 
 
 # Manual
-- [Description](description.md)
-- [License Terms](license-terms.md)
-- [Features](features.md)
-- [System Requirement](system-requirement.md)
-- [Installation](installation.md)
-- [Configuration](configuration.md)
-- [Starting and Stopping](starting-and-stopping.md)
-- [Control and Monitoring](control-and-monitoring.md)
-- [Development](development.md)
+- [Description](manual/description.md)
+- [License Terms](manual/license-terms.md)
+- [Features](manual/features.md)
+- [System Requirement](manual/system-requirement.md)
+- [Installation](manual/installation.md)
+- [Configuration](manual/configuration.md)
+- [Starting and Stopping](manual/starting-and-stopping.md)
+- [Control and Monitoring](manual/control-and-monitoring.md)
+- [Development](manual/development.md)
 
 
 # Changes

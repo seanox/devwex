@@ -18,18 +18,18 @@ values and access to system and environment variables.
 - [Server](#server)
 - [Remote Control Server](#remote-control-server)
 - [HTTP / HTTPS Server](#http--https-server)
-  - [Server](#server)
+  - [Server](#server-1)
   - [Transport Layer Security / Secure Socket Layer](#transport-layer-security--secure-socket-layer)
   - [Client Authentication / Mutual Authentication](#client-authentication--mutual-authentication)
   - [Virtual Hosts / Virtual Hosting](#virtual-hosts--virtual-hosting)
   - [Filters](#filters)
   - [Virtual Paths (Aliasing and Redirection)](#virtual-paths-aliasing-and-redirection)
   - [Basic Access Authentication / Digest Access Authentication](#basic-access-authentication--digest-access-authentication)
-  - [Directory Listing]()
-  - [Environment Variables]()
-  - [Common Gateway Interface]()
-- [Status Codes]()
-- [Media Types]()
+  - [Directory Listing](#directory-listing)
+  - [Environment Variables](#environmental-variables)
+  - [Common Gateway Interface](#common-gateway-interface)
+- [Status Codes](#status-codes)
+- [Media Types](#media-types)
 
 
 ## Configuration File
@@ -174,8 +174,8 @@ _Sections of the base configuration_
   <tr>
     <td>[INITIALIZE]</td>
     <td>
-      Central module configuration.<br>
-      Initialization with the (re)start of the service.
+      Central module configuration. Initialization with the (re)start of the
+      service.
     </td>
   </tr>
   <tr>
@@ -228,9 +228,8 @@ _Overview of configuration_
     <td>CLEANUP</td>
     <td>ON|OFF</td>
     <td>
-      Option for intelligent resource cleanup.<br>
-      The Java garbage collector is triggered if released resources are
-      expected.
+      Option for intelligent resource cleanup. The Java garbage collector is
+      triggered if released resources are expected.
     </td>
   </tr>
   <tr>
@@ -266,7 +265,7 @@ present during initialization, this option does not cause to an error output.
 
 
 ## Server
-Servers are an essential part of the server engine and it requires at least one
+Servers are an essential part of the server engine, and it requires at least one
 successfully set up server instance to run. During initialization, all sections
 that end with `INI` and for which a suitable implementation is searched for in
 the class path are taken into account. The class name of the implementation is
@@ -334,9 +333,9 @@ _Overview of configuration_
     <td>ADDRESS</td>
     <td>AUTO|IP|NAME</td>
     <td>
-      Local address or name of the server in the network.<br>
-      `AUTO` corresponds to 0.0.0.0 and uses all IP addresses available in the
-      system.
+      Local address or name of the server in the network. <code>AUTO</code>
+      corresponds to <code>0.0.0.0</code> and uses all IP addresses available in
+      the system.
     </td>
   </tr>
   <tr>
@@ -418,9 +417,9 @@ _Overview of server configuration_
       <td>ADDRESS</td>
       <td>AUTO|IP|NAME</td>
       <td>
-        Local address or name of the server in the network.<br>
-        <code>AUTO</code> corresponds to 0.0.0.0 and uses all IP addresses
-        available in the system.
+        Local address or name of the server in the network. <code>AUTO</code>
+        corresponds to 0.0.0.0 and uses all IP addresses available in the
+        system.
       </td>
     </tr>
     <tr>
@@ -471,15 +470,14 @@ _Overview of HTTP configuration_
       <td>ACCESSLOG</td>
       <td>... &gt; ../system/access.log</td>
       <td>
-        Format and path of the log file for logging accesses.<br>
-        Without path the Standard I/O is used, <code>OFF</code> disables
-        logging.<br>
-        Format and Path supports a print formatted syntax, with which CGI
-        environment variables in the format <code>%[...]</code>> and symbols of
-        date and time in the format <code>%t...</code> can be used.<br>
-        The date/time symbols are based on the <a target="_extern"
+        Format and path of the log file for logging accesses. Without path the
+        Standard I/O is used, <code>OFF</code> disables logging. Format and path
+        supports a print formatted syntax, with which CGI environment variables
+        in the format <code>%[...]</code>> and symbols of date and time in the
+        format <code>%t...</code> can be used. The date/time symbols are based
+        on the <a target="_extern"
             href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#dt">
-          Date/Time Conversions</a> of the formatter class.<br>
+        Date/Time Conversions</a> of the formatter class.
       </td>
     </tr>
     <tr>
@@ -519,19 +517,18 @@ _Overview of HTTP configuration_
       <td>ON|OFF</td>
       <td>
         Option for displaying directories as a navigable list view (Directory
-        Listing).<br>
-        With the addition <code>[S]</code>> hidden entries of the file system
-        can be suppressed for display.
+        Listing). With the addition <code>[S]</code>> hidden entries of the file
+        system can be suppressed for display.
       </td>
     </tr>
     <tr>
       <td>INTERRUPT</td>
       <td>10</td>
       <td>
-        Interruption for system processes in milliseconds.<br>
-        This setting minimizes the CPU utilization of labor-intensive processes,
-        in which they do without a portion of their execution time and thus
-        leave time slots/time slices to other processes. 
+        Interruption for system processes in milliseconds. This setting
+        minimizes the CPU utilization of load-intensive processes, in which they
+        do without a portion of their execution time and thus leave time
+        slots/time slices to other processes. 
       </td>
     </tr>
     <tr>
@@ -598,21 +595,19 @@ _Overview of configuration_
     </td>
     <td>
       Protocol: <code>TLS</code> (Transport Layer Security), <code>SSL</code>
-      (Secure Socket Layer).<br>
-      Default value: <code>TLS</code> (if not specified)
+      (Secure Socket Layer). Default value: <code>TLS</code> (if not specified)
     </td>
   </tr>
   <tr>
     <td>CLIENTAUTH</td>
     <td>OFF|ON|AUTO</td>
     <td>
-      (De)activation of the client authorization<br>
-      <code>ON</code> requires mandatory client authorization, without which the
-      connection to the client is terminated.<br>
-      <code>AUTO</code> requires an optional client authorization and leaves the
-      authorization decision to the client and the server establishes the
-      connection even if the client does not provide authorization.<br>
-      Default value: <code>OFF</code> (if not specified)
+      (De)activation of the client authorization. <code>ON</code> requires
+      mandatory client authorization, without which the connection to the client
+      is terminated. <code>AUTO</code> requires an optional client authorization
+      and leaves the authorization decision to the client and the server
+      establishes the connection even if the client does not provide
+      authorization. Default value: <code>OFF</code> (if not specified)
     </td>
   </tr>
   <tr>
@@ -626,17 +621,16 @@ _Overview of configuration_
     <td>TYPE</td>
     <td>JCEKS|JKS|DKS|PKCS11|PKCS12|...</td>
     <td>
-      Type of used keystore.<br>
-      Default value from the JDK: <code>PKCS12</code> (if not specified)
+      Type of used keystore. Default value from the JDK: <code>PKCS12</code> (if
+      not specified)
     </td>
   </tr>
   <tr>
     <td>ALGORITHM</td>
     <td>SunX509|PKIX|...</td>
     <td>
-      Algorithm of encryption from keystore.<br>
-      Default value from the JDK: <code>SunX509</code> / <code>PKIX</code> (if
-      not specified)
+      Algorithm of encryption from keystore. Default value from the JDK:
+      <code>SunX509</code> / <code>PKIX</code> (if not specified)
     </td>
   </tr>
   <tr>
@@ -743,7 +737,7 @@ The keystore for the client is created and the public client certificate is
 exported. Both are temporary in this example and will be needed later on for the
 creation of the server keystore and the export of the client certificate.
 
-> __TODO: Example of the export__
+> __Example for the export__
 > ```
 > ./java/bin/keytool -genkeypair -alias Client -dname 'CN=Client' -validity 365
 >     -keystore client.keystore -keyalg RSA -keysize 2048 -keypass changeIt
@@ -754,7 +748,7 @@ creation of the server keystore and the export of the client certificate.
 >     -keystore client.keystore -storepass changeIt
 > ```
 
-The keystores of the server and the client are migrated into each other, because
+The keystore of the server and the client are migrated into each other, because
 the server only requires one keystore.
 
 > ```
@@ -886,9 +880,8 @@ _Overview of elements of the filter syntax_
     <td></td>
     <td>ALWAYS</td>
     <td>
-      The filter always responds.<br>
-      The specification of function and value is not required for this
-      condition.
+      The filter always responds. The specification of function and value is not
+      required for this condition.
     </td>
   </tr>
   <tr>
@@ -922,9 +915,8 @@ _Overview of elements of the filter syntax_
     <td></td>
     <td>EMPTY</td>
     <td>
-      The value of the variables is empty or does not exist.<br>
-      The specification of function and value is not required for this
-      condition.
+      The value of the variables is empty or does not exist. The specification
+      of function and value is not required for this condition.
     </td>
   </tr>
   <tr>
@@ -966,14 +958,12 @@ _Overview of elements of the filter syntax_
     <td></td>
     <td>[M]</td>
     <td>
-      Reference to the use of a HTTP module.<br>
-      Addressing the module is not a final step, but terminating the filter
-      sequence only occurs if a module changes the response status and/or sends
-      data to the client.
+      Reference to the use of an HTTP module. Addressing the module is not a
+      final step, but terminating the filter sequence only occurs if a module
+      changes the response status and/or sends data to the client.
     </td>
   </tr>
 </table>
-
 
 > __Example of a request__
 > ```
@@ -1051,7 +1041,6 @@ _Overview of variables (selection)_
 </table>
 
 _Examples of filters_
-
 > ```
 > FILTER-A = GET NOT EQUALS HTTP_ACCEPT_LANGUAGE EN
 > ```
@@ -1136,7 +1125,7 @@ redirections are also supported as targets.
 
 > __Scheme for virtual paths__
 > ```
-> NAME = VIRTUAL PATH &gt; TARGET [OPTION]
+> NAME = VIRTUAL PATH > TARGET [OPTION]
 > ```
 > The specification of a target is mandatory only for modules and redirections.
 > Real paths to which only additional options are assigned can be used without
@@ -1225,7 +1214,6 @@ _Overview of options_
 </table>
 
 _Examples of using virtual paths_
-
 > ```
 > DIRECTION-A = /system > ../system
 > ```
@@ -1246,13 +1234,13 @@ _Examples of using virtual paths_
 > then the physical directory `../documents` is used.
 
 > ```
-> DIRECTION-C = /test &gt; http://www.xxx.zzz [R]
+> DIRECTION-C = /test > http://www.xxx.zzz [R]
 > ```
 > Requests from path `/test` will be responded with a forward to
 > `http://www.xxx.zzz`.
 
 > ```
-> DIRECTION-D = /control &gt; example.Connector [M]
+> DIRECTION-D = /control > example.Connector [M]
 > ```
 > Path `/control` refers to the module class `Connector` from package `example`
 > which must be in the class path of the server.
@@ -1294,7 +1282,7 @@ consisting of user and password.
 > ```
 
 > __Examples of Digest-Access-Authentication: The option `[D]` makes the
-> difference.__
+> difference__
 > ```
 > [SERVER:X:REF]
 >   ACCESS-A = /access                     [acc:group-a] [realm:Section-A] [D]
@@ -1346,8 +1334,587 @@ and its subdirectories.
 > Basic / Digest Access Authentication can be used except for files, but some
 > browsers will ask you again at directory level.
 
-TODO:
 
+### Directory Listing
+The content of directory listings is based on the template file
+`./devwex/system/index.html`. Through the configuration of `SYSROOT`, the
+directory and thus the template can be individually defined for servers and
+virtual hosts. The template is pure HTML combined with placeholders for the
+template generator. The syntax of the placeholders `#[...]` is case-insensitive,
+must begin with a letter and is limited to the following characters: `a-z A-Z
+    0-9 _-`. Placeholders can be used for single values and segments. Segments
+are partial structures that can be nested. The placeholders of segments are
+retained after filling and can be reused iteratively. As values for segments,
+collections and maps are expected. Both create deep, complex and possibly
+repetitive recursive structures.
+
+_Structure and description of the placeholders_
+<table>
+  <tr>
+    <th>Syntax</th>
+    <th>Description</th>
+  </tr>        
+  <tr>
+    <td nowrap="nowrap">
+      #[value]
+    </td>
+    <td>
+      Inserts the value for `value` and removes the placeholder.
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap">
+      #[segment[[...]]]
+    </td>
+    <td>
+      Defines a segment. The nesting and use of further segments is possible.
+      Because the placeholders of segments are retained, they can be used to
+      generate lists.
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap">
+      #[0x0A]<br>
+      #[0x4578616D706C6521]
+    </td>
+    <td>
+      Escaping one or more characters. The conversion only takes place when the
+      template is generated.
+    </td>
+  </tr>
+</table>
+
+_The following placeholders are available for the directory listing_
+<table>
+  <tr>
+    <th>Placeholder</th>
+    <th>Description</th>
+  </tr>        
+  <tr>
+    <td nowrap="nowrap">
+      #[location[[<br>
+      &nbsp;&nbsp;#[path]<br>
+      &nbsp;&nbsp;#[name]<br>
+      ]]]
+    </td>
+    <td>
+      Iteration over the components path and name of the location (URL).
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap">
+      #[sort]
+    </td>
+    <td>
+      Indicator of sorting, which can be used for CSS, among other things.
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap">
+      #[file[[<br>
+      &nbsp;&nbsp;#[case]<br>
+      &nbsp;&nbsp;#[mime]<br>
+      &nbsp;&nbsp;#[name]<br>
+      &nbsp;&nbsp;#[type]<br>
+      &nbsp;&nbsp;#[size]<br>
+      &nbsp;&nbsp;#[date]<br>
+      ]]]
+    </td>
+    <td>
+      Iteration over the file list.
+    </td>
+  </tr>
+  <tr>
+    <td nowrap="nowrap">
+      #[HTTP_...]
+    </td>
+    <td>
+      Placeholder for the environment variables / CGI variables which are
+      available with the request
+    </td>
+  </tr>          
+</table>                
+
+
+### Environmental Variables
+With environment variables, the operating system and runtime environment provide
+an application with essential and additional system and runtime information. As
+an extension of the environment variables from the operating system and the
+runtime environment, additional environment variables required for the CGI and
+XCGI are defined in this section.
+
+> __Scheme for environment variables__
+> ```
+> VARIABLE = VALUE
+> ```
+
+> __Example for setting up an environment variable__
+> ```
+> WEBSERVER = DEVWEX
+> ```
+> The environment variable `WEBSERVER` is defined with the value `DEVWEX`.
+
+> [!NOTE]
+> XCGI/CGI applications determine system and runtime information about the
+> environment variables, so essential environment variables such as
+> `SYSTEMDRIVE`, `SYSTEMROOT`, `PATH` and for PHP `REDIRECT_STATUS = 302` should
+> be set in the configuration file `devwex.ini`.
+
+> [!TIP]
+> The option `[?]` at the end of a key identifies it as dynamic by specifying
+> the key with its value at program startup as a VM argument or in the
+> environment variables, system variables such as `PATH` and for Windows
+> `SYSTEMDRIVE` and `SYSTEMROOT` can be passed by this way, see section
+> [Configuration File](#configuration-file) for more information.
+
+
+### Common Gateway Interface
+For data exchange as well as for connecting external runtime environments and
+applications, the specification 1.1 of the Common Gateway Interface and thus
+PHP, Perl, Python and others are supported. FastCGI is also available as an
+option.
+
+With the XCGI, another interface similar to the CGI is available. The basic
+principle and method of operation are the same as for CGI. The XCGI also
+communicates via the standard I/O and the server-relevant information is
+transmitted as environment variables. However, the form of transmission differs.
+The environment variables for the CGI are provided via the runtime environment
+and for the XCGI via the data stream. Similar to the CGI, the XCGI transfers the
+request body via standard I/O. In the XCGI, the environment variables precede
+the request body. The structure is similar to that of the HTTP request. The data
+stream begins line by line with the environment variables, followed by the 
+character string `[CRLFCRLF]` and then the request body.
+
+> Example of an XCGI request
+> ```
+> SERVER_PORT=80
+> SERVER_PROTOCOL=HTTP/1.0
+> CONTENT_LENGTH=25
+> CONTENT_TYPE=application/x-www-form-urlencoded
+> REQUEST=POST /example.xcgi HTTP/1.1
+> REQUEST_METHOD=POST
+> REMOTE_ADDR=127.0.0.1
+> REMOTE_PORT=64638
+> UNIQUE_ID=MHU014XLD048AN1A
+> SCRIPT_NAME=/example.xcgi
+> SCRIPT_URL=/example.xcgi
+> HTTP_HOST=127.0.0.1
+> HTTP_USER_AGENT=Mozilla/5.0
+> HTTP_CONTENT_TYPE=application/x-www-form-urlencoded
+> HTTP_CONTENT_LENGTH=25
+> SCRIPT_URI=http://127.0.0.1/example.xcgi
+> SCRIPT_FILENAME=c:/xcgi/example.xcgi
+> PATH_TRANSLATED=c:/xcgi/example.xcgi
+> REQUEST_URI=/example.xcgi
+> GATEWAY_INTERFACE=CGI/1.1
+>
+> Content of Request(-Body)
+> ```
+
+The advantage of the XCGI is the simple transmission of the environment
+variables, which means that applications can also be used that do not have an
+exclusive environment or do not have access to the environment variables of the
+operating system.
+
+> __Scheme for Common Gateway Interface__
+> ```
+> FILE EXTENSION = METHODS > APPLICATION [OPTION]
+> ```
+
+_Overview of options_
+<table>
+  <tr>
+    <th>Option</th>
+    <th>Example Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>[C]</td>
+    <td>.../application/test.cgi</td>
+    <td>full path incl. filename and file extension</td>
+  </tr>
+  <tr>
+    <td>[D]</td>
+    <td>.../application/</td>
+    <td>directory</td>
+  </tr>
+  <tr>
+    <td>[N]</td>
+    <td>test</td>
+    <td>File name without extension</td>
+  </tr>
+  <tr>
+    <td>[X]</td>
+    <td></td>
+    <td>Using the XCGI</td>
+  </tr>
+  <tr>
+    <td>[M]</td>
+    <td></td>
+    <td>Use as module</td>
+  </tr>
+</table>
+
+_Examples of Common Gateway Interface setup_
+
+> ```
+> CGI = POST GET > c:/cgi/bin/example.exe
+> ```
+> The file extension `cgi` is assigned to the application _example.exe_, which
+> is started in case of requests with the file extension `cgi` in the path: The
+> path to the script file is passed here via the environment variables
+> `SCRIPT_FILENAME` and `PATH_TRANSLATED`.
+
+> ```
+> CGI = POST GET > c:/cgi/bin/example.exe [C]
+> ```
+> The file extension `cgi` is assigned to the application _example.exe_, which
+> is started with the file extension `cgi` in the path, where the path to the
+> script file is passed to the application as a start argument.
+
+> ```
+> CGI = POST GET > c:/cgi/bin/example.exe [X]
+> ```
+> The file extension `cgi` is assigned to the application _example.exe_, which
+> is started in case of requests with the file extension `cgi` in the path using
+> XCGI. The path to the script file is also passed here via the environment
+> variables `SCRIPT_FILENAME` and `PATH_TRANSLATED`.
+
+> __Example of using PHP, Perl, Java and native web applications__
+> ```
+> PHP = POST GET > c:/php/php.exe
+> ```
+> The file extension `php` is assigned php.exe as a CGI application.
+>
+> ```
+> CGI = POST GET > c:/perl/bin/perl.exe [C]
+> ```
+> The file extension `cgi` is assigned to perl.exe as a CGI application.
+>
+> ```
+> JAR = POST GET > java -jar [C] [X]
+> ```
+> The file extension `jar` is assigned to java.exe as an XCGI application.
+> 
+> ```
+> EXE = POST GET > [C]
+> ```
+> With the file extension `exe` each Windows application runs as a CGI
+> application.
+> 
+> ```
+> EXE = POST GET > [C] [X]
+> ```
+> With the file extension `exe` each Windows application runs as an XCGI
+> application.
+> 
+> ```
+> CMD = POST GET > [C]
+> ```
+> The file extension `cmd` executes each batch script as a CGI application.
+
+In addition to XCGI and CGI, modules can also be set up via the gateway. Unlike
+XCGI and CGI, modules are not loaded as external applications, but are executed
+directly in the runtime environment of the server via the Module API (XAPI),
+which provides very fast access times and direct access to the components from
+the server and the server engine.
+
+_Example of how to set up modules_
+> ```
+> SSX = POST GET > com.seanox.ssx.Connector [M]
+> ```
+> The file extension `ssx` is assigned to module `com.seanox.ssx.Connector` in
+> the class path.
+
+_Overview of environment variables (selection)_
+<table>
+  <tr>
+    <th>Environment Variable</th>
+    <th>Example Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>CONTENT_LENGTH</td>
+    <td>1000</td>
+    <td>Length of the transferred request body in bytes</td>
+  </tr>
+  <tr>
+    <td>CONTENT_TYPE</td>
+    <td>text/plain</td>
+    <td>Media type of the data transferred with the request</td>
+  </tr>
+  <tr>
+    <td>DOCUMENT_ROOT</td>
+    <td>.../devwex/documents</td>
+    <td>Physical path from the root directory of the Web documents</td>
+  </tr>
+  <tr>
+    <td>GATEWAY_INTERFACE</td>
+    <td>CGI/1.1</td>
+    <td>Version of the CGI interface supported by the server</td>
+  </tr>
+  <tr>
+    <td>HTTP_ACCEPT</td>
+    <td>*/*</td>
+    <td>List of media types supported by the client</td>
+  </tr>
+  <tr>
+    <td>HTTP_ACCEPT_ENCODING</td>
+    <td>gzip, deflate</td>
+    <td>List of encoding methods supported by the client</td>
+  </tr>
+  <tr>
+    <td>HTTP_ACCEPT_LANGUAGE</td>
+    <td>de</td>
+    <td>List of languages supported by the client</td>
+  </tr>
+  <tr>
+    <td>HTTP_CONNECTION</td>
+    <td>Keep-Alive</td>
+    <td>Status of the HTTP connection between server and client</td>
+  </tr>
+  <tr>
+    <td>HTTP_HOST</td>
+    <td>seanox.local</td>
+    <td>
+      Domain name or IP address of the target address requested by the client
+    </td>
+  </tr>
+  <tr>
+    <td>HTTP_USER_AGENT</td>
+    <td>Mozilla/4.0 (compatible; ...)</td>
+    <td>Client product and version information</td>
+  </tr>
+  <tr>
+    <td>MODULE_OPTS</td>
+    <td>...ssi.Connector [allow:all] [M]</td>
+    <td>Module call with all parameters</td>
+  </tr>
+  <tr>
+    <td>PATH</td>
+    <td>...</td>
+    <td>
+      List of paths for searching for resources and applications, optionally set
+      by <code>[SERVER:ENV]</code>
+    </td>
+  </tr>
+  <tr>
+    <td>PATH_CONTEXT</td>
+    <td>/example.ssi</td>
+    <td>real path specification of the URL for absolute paths</td>
+  </tr>
+  <tr>
+    <td>PATH_INFO</td>
+    <td>/folder/...</td>
+    <td>extended path specification of the URL for absolute paths</td>
+  </tr>          
+  <tr>
+    <td>PATH_URL</td>
+    <td>/example.ssi/folder/...</td>
+    <td>Complete path specification of the URL</td>
+  </tr>
+  <tr>
+    <td>PATH_TRANSLATED</td>
+    <td>.../devwex/documents/example.ssi</td>
+    <td>Physical path of the called resource in the file system</td>
+  </tr>
+  <tr>
+    <td>QUERY_STRING</td>
+    <td>parameter1=value1&amp;parameter2=value2&amp;...</td>
+    <td>
+      Query string passed with the request URI with parameters and values
+    </td>
+  </tr>
+  <tr>
+    <td>REMOTE_ADDR</td>
+    <td>sirius.seanox.com</td>
+    <td>Name or IP address of the client</td>
+  </tr>
+  <tr>
+    <td>REMOTE_PORT</td>
+    <td>1573</td>
+    <td>Port from client</td>
+  </tr>
+  <tr>
+    <td>REQUEST_METHOD</td>
+    <td>POST</td>
+    <td>HTTP request method</td>
+  </tr>
+  <tr>
+    <td>REQUEST_URI</td>
+    <td>/example.ssi/...?parameter=value</td>
+    <td>Path of HTTP request including passed parameters</td>
+  </tr>
+  <tr>
+    <td>SCRIPT_FILENAME</td>
+    <td>.../devwex/documents/example.ssi</td>
+    <td>Physical path of the called resource in the file system</td>
+  </tr>
+  <tr>
+    <td>SCRIPT_NAME</td>
+    <td>/example.ssi/...</td>
+    <td>HTTP path of the called resource</td>
+  </tr>
+  <tr>
+    <td>SCRIPT_URI</td>
+    <td>http://...seanox.com/example.ssi/...</td>
+    <td>Complete HTTP path of the called resource</td>
+  </tr>
+  <tr>
+    <td>SCRIPT_URL</td>
+    <td>/example.ssi</td>
+    <td>Relative path in the HTTP request to the requested resource</td>
+  </tr>
+  <tr>
+    <td>SERVER_NAME</td>
+    <td>seanox.local</td>
+    <td>Name or IP address of the server in the network</td>
+  </tr>
+  <tr>
+    <td>SERVER_PORT</td>
+    <td>80</td>
+    <td>Port of the called server</td>
+  </tr>
+  <tr>
+    <td>SERVER_PROTOCOL</td>
+    <td>HTTP/1.0</td>
+    <td>Version of the HTTP protocol supported by the server</td>
+  </tr>
+  <tr>
+    <td>SERVER_SOFTWARE</td>
+    <td>Seanox-Devwex/...</td>
+    <td>Product name of the installed server software</td>
+  </tr>
+  <tr>
+    <td>SYSTEMDRIVE</td>
+    <td>C:</td>
+    <td>
+      drive of the operating system, is optionally set for Microsoft Windows via
+      <code>[SERVER:ENV]</code>
+    </td>
+  </tr>
+  <tr>
+    <td>SYSTEMROOT</td>
+    <td>C:\Windows</td>
+    <td>
+      Path from the operating system, is optionally set for Microsoft Windows
+      via <code>[SERVER:ENV]</code>
+    </td>
+  </tr>
+  <tr>
+    <td>UNIQUE_ID</td>
+    <td>FEK2VFTY26DHI584C5</td>
+    <td>unique identification number related to the request</td>
+  </tr>
+</table>
+
+> [!TIP]
+> If a key in the configuration ends with the '[+]' option, the line comment is
+> deactivated and the complete value including the semicolon is used.
+> ```
+> PATH [+] = ./documents;./libraries;./system
+> ```
+
+> [!IMPORTANT]
+> The working directory of the CGI applications is the working directory of
+> Seanox Devwex, i.e. the directory in which the server was started. This must
+> be taken into account when configuring the CGI applications, e.g. if paths for
+> resources and configuration files need to be defined, as is the case with PHP
+> for 'php.ini'.
+
+> [!IMPORTANT]
+> With the installation of PHP, the configuration file `php.ini` must be placed
+> in the working directory of Seanox Devwex or the path with the parameter `-c`
+> must be communicated to PHP.
+
+> [!IMPORTANT]
+> In PHP, configuration of parameter `cgi.rfc2616_headers = 1` is required for
+> the correct function of PHP function `header();`, for the security of
+> execution `cgi.force_redirect = 0` and those and
+> `cgi.redirect_status_env = 302`.
+> ```
+> cgi.force_redirect      = 0
+> cgi.redirect_status_env = 302
+> cgi.rfc2616_headers     = 1
+> ```
+> The latter can alternatively be set in section `[SERVER:ENV]` of the
+> configuration file `devwex.ini` by `REDIRECT_STATUS = 302`.
+
+> [!TIP]
+> XCGI/CGI applications and scripts can be used in all directories of the
+> `DOCROOT`. A special `CGI-BIN` is not provided.
+
+> [!TIP]
+> Executable Windows applications (`*.exe`, `*.com`) can also be used under
+> Windows with an alternative file extension, e.g. XCGI/CGI can be used as
+> Windows applications (`*.exe` or `*.com`) for which any file extension can be
+> used, e.g. the file `example.exe` can be renamed and used as `example.cgi`.
+> ```
+> CGI = POST GET > [C]
+> ```
+> In this way, not all Windows applications are executed via the HTTP request.
+
+> [!TIP]
+> The method alias `ALL` passes all incoming HTTP methods to the CGI, but the
+> alias does not bypass the restriction of `[SERVER:INI] METHODS`.
+
+
+## Status Codes
+The server responds all HTTP requests with a status code and informs the client
+about the processing of the requests.Primary the server status is a numeric
+value with an optional message. Status codes are global and are used by all
+servers and virtual hosts.
+
+> __Scheme for status code__
+> ```
+> CODE = TEXT [OPTION]
+> ```
+
+> __Examples of status codes__
+> ```
+> 404 = Document Not Found
+> ```
+> Resulting response header
+> ```
+> HTTP/1.0 404 Document Not Found
+> ```
+
+_Overview of options_
+<table>
+  <tr>
+    <th>Option</th>
+    <th>Example Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>[H]</td>
+    <td>Header Only</td>
+    <td>
+      Responses with a status code that uses this option contain only a header
+      and no content.
+    </td>
+  </tr>
+</table>
+
+
+## Media Types
+The media type, also known as Internet Media Type, Content Type and Multipurpose
+Internet Mail Extensions (MIME Type), classifies the data transmitted with the
+server response by assigning media types and subtypes. In the configuration, the
+media types are assigned a list of file extensions separated by spaces, which is
+global and shared by all servers and virtual hosts.
+
+> __Scheme for media types__
+> ```
+> MediaType = file extension file extension ...
+> ```
+
+> __Example of MediaType assignment__
+> ```
+> text/html = html htm shtml
+> ```
+> The media type `text/html` is assigned to the file extension `*.html`, `*.htm`
+> and `*.shtml`.
 
 
 - - -

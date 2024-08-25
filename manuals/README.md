@@ -20,25 +20,25 @@ Machine translation with [DeepL](https://deepl.com).
   - [Linux Service](installation.md#linux-service)
   - [MacOS Service](installation.md#macos-service)
 - [Configuration](configuration.md)
-  - Configuration File
-  - Configuration Structure
-  - General Application Configuration
-  - Initialisation
-  - Remote Control
-  - Server
-    - Hypertext Transfer Protocol
-    - Server
-    - Transport Layer Security / Secure Socket Layer
-    - Client Authentication / Mutual Authentication
-    - Virtual Hosts / Virtual Hosting
-    - Filters
-    - Virtual Paths (Aliasing and Redirection)
-    - Basic Access Authentication / Digest Access Authentication
-    - Directory Listing
-    - Environment Variables
-    - Common Gateway Interface
-  - Status Codes
-  - Media Types
+  - [Configuration File](configuration.md#configuration-file)
+  - [Configuration Structure](configuration.md#configuration-structure)
+  - [General Application Configuration](configuration.md#general-application-configuration)
+  - [Initialisation](configuration.md#initialisation)
+  - [Server](configuration.md#server)
+  - [Remote Control Server](configuration.md#remote-control-server)
+  - [HTTP / HTTPS Server](configuration.md#http--https-server)
+    - [Server](configuration.md#server-1)
+    - [Transport Layer Security / Secure Socket Layer](configuration.md#transport-layer-security--secure-socket-layer)
+    - [Client Authentication / Mutual Authentication](configuration.md#client-authentication--mutual-authentication)
+    - [Virtual Hosts / Virtual Hosting](configuration.md#virtual-hosts--virtual-hosting)
+    - [Filters](configuration.md#filters)
+    - [Virtual Paths (Aliasing and Redirection)](configuration.md#virtual-paths-aliasing-and-redirection)
+    - [Basic Access Authentication / Digest Access Authentication](configuration.md#basic-access-authentication--digest-access-authentication)
+    - [Directory Listing](configuration.md#directory-listing)
+    - [Environment Variables](configuration.md#environmental-variables)
+    - [Common Gateway Interface](configuration.md#common-gateway-interface)
+  - [Status Codes](configuration.md#status-codes)
+  - [Media Types](configuration.md#media-types)
 - [Starting and Stopping](starting-and-stopping.md)
   - [Passing parameters with the start](starting-and-stopping.md#passing-parameters-with-the-start)
 - [Control and Monitoring](control-and-monitoring.md)

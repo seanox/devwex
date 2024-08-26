@@ -112,43 +112,43 @@ _Overview of commands_
     <th>Description</th>
   </tr>
   <tr>
-    <td>install</td>
+    <td><code>install</code></td>
     <td>
       Installs the service
     </td>
   </tr>
   <tr>
-    <td>update</td>
+    <td><code>update</code></td>
     <td>
       Removes the service and reinstalls it with updated configuration
     </td>
   </tr>
   <tr>
-    <td>uninstall</td>
+    <td><code>uninstall</code></td>
     <td>
       Removes the service
     </td>
   </tr>
   <tr>
-    <td>start</td>
+    <td><code>start</code></td>
     <td>
       Starts the service
     </td>
   </tr>
   <tr>
-    <td>status</td>
+    <td><code>status</code></td>
     <td>
       Output of the status of the running service
     </td>
   </tr>
   <tr>
-    <td>restart</td>
+    <td><code>restart</code></td>
     <td>
       Stops the service and restarts it
     </td>
   </tr>
   <tr>
-    <td>stop</td>
+    <td><code>stop</code></td>
     <td>
       Stops the service
     </td>

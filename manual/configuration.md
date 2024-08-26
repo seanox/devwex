@@ -166,44 +166,44 @@ _Sections of the base configuration_
     <th>Description</th>
   </tr>
   <tr>
-    <td>[COMMON]</td>
+    <td><code>[COMMON]</code></td>
     <td>
       General application configuration.
     </td>
   </tr>
   <tr>
-    <td>[INITIALIZE]</td>
+    <td><code>[INITIALIZE]</code></td>
     <td>
       Central module configuration. Initialization with the (re)start of the
       service.
     </td>
   </tr>
   <tr>
-    <td>[REMOTE]</td>
+    <td><code>[REMOTE]</code></td>
     <td>
       Configuration area of the remote control of the server engine.
     </td>
   </tr>
   <tr>
-    <td>[SERVER]</td>
+    <td><code>[SERVER]</code></td>
     <td>
       Configuration area of the HTTP server.
     </td>
   </tr>
   <tr>
-    <td>[VIRTUAL]</td>
+    <td><code>[VIRTUAL]</code></td>
     <td>
       Configuration area of the virtual hosts for HTTP servers.
     </td>
   </tr>
   <tr>
-    <td>[STATUSCODES]</td>
+    <td><code>[STATUSCODES]</code></td>
     <td>
       HTTP server status codes.
     </td>
   </tr>
   <tr>
-    <td>[MEDIATYPES]</td>
+    <td><code>[MEDIATYPES]</code></td>
     <td>
       Assignment of media and data types.
     </td>
@@ -225,16 +225,16 @@ _Overview of configuration_
     <th>Description</th>
   </tr>
   <tr>
-    <td>CLEANUP</td>
-    <td>ON|OFF</td>
+    <td><code>CLEANUP</code></td>
+    <td><code>ON|OFF</code></td>
     <td>
       Option for intelligent resource cleanup. The Java garbage collector is
       triggered if released resources are expected.
     </td>
   </tr>
   <tr>
-    <td>RELOAD</td>
-    <td>ON|OFF</td>
+    <td><code>RELOAD</code></td>
+    <td><code>ON|OFF</code></td>
     <td>
       Option to monitor the configuration file and automatically reload and
       restart it when changes are made.
@@ -330,8 +330,8 @@ _Overview of configuration_
     <th>Description</th>
   </tr>
   <tr>
-    <td>ADDRESS</td>
-    <td>AUTO|IP|NAME</td>
+    <td><code>ADDRESS</code></td>
+    <td><code>AUTO|IP|NAME</code></td>
     <td>
       Local address or name of the server in the network. <code>AUTO</code>
       corresponds to <code>0.0.0.0</code> and uses all IP addresses available in
@@ -339,8 +339,8 @@ _Overview of configuration_
     </td>
   </tr>
   <tr>
-    <td>PORT</td>
-    <td>...</td>
+    <td><code>PORT</code></td>
+    <td><code>...</code></td>
     <td>
       Local port of the server.
     </td>
@@ -361,33 +361,33 @@ _Overview of sections_
     <th>Description</th>
   </tr>
   <tr>
-    <td>[SERVER:X:INI]</td>
+    <td><code>[SERVER:X:INI]</code></td>
     <td>
       Server configuration, network and runtime behavior
     </td>
   </tr>
   <tr>
-    <td>[SERVER:X:SSL]</td>
+    <td><code>[SERVER:X:SSL]</code></td>
     <td>TLS/SSL configuration</td>
   </tr>
   <tr>
-    <td>[SERVER:X:REF]</td>
+    <td><code>[SERVER:X:REF]</code></td>
     <td>Virtual paths</td>
   </tr>
   <tr>
-    <td>[SERVER:X:ACC]</td>
+    <td><code>[SERVER:X:ACC]</code></td>
     <td>Access control (Access Control List)</td>
   </tr>
   <tr>
-    <td>[SERVER:X:CGI]</td>
+    <td><code>[SERVER:X:CGI]</code></td>
     <td>XCGI/CGI assignment and configuration</td>
   </tr>
   <tr>
-    <td>[SERVER:X:ENV]</td>
+    <td><code>[SERVER:X:ENV]</code></td>
     <td>Environment variables</td>
   </tr>
   <tr>
-    <td>[SERVER:X:FLT]</td>
+    <td><code>[SERVER:X:FLT]</code></td>
     <td>Filter configuration</td>
   </tr>
 </table>
@@ -414,25 +414,25 @@ _Overview of server configuration_
   </thead>
   <tbody>
     <tr>
-      <td>ADDRESS</td>
-      <td>AUTO|IP|NAME</td>
+      <td><code>ADDRESS</code></td>
+      <td><code>AUTO|IP|NAME</code></td>
       <td>
         Local address or name of the server in the network. <code>AUTO</code>
-        corresponds to 0.0.0.0 and uses all IP addresses available in the
-        system.
+        corresponds to <code>0.0.0.0</code> and uses all IP addresses available
+        in the system.
       </td>
     </tr>
     <tr>
-      <td>BACKLOG</td>
-      <td>500</td>
+      <td><code>BACKLOG</code></td>
+      <td><code>500</code></td>
       <td>
         Maximum number of disconnected connections when the number of
         simultaneous connections is exhausted.
       </td>
     </tr>
     <tr>
-      <td>ISOLATION</td>
-      <td>300000</td>
+      <td><code>ISOLATION</code></td>
+      <td><code>300000</code></td>
       <td>
         Maximum runtime of XCGI/CGI processes in milliseconds. If exceeded, the
         process is terminated by the server. The value <code>0</code> or less
@@ -440,15 +440,15 @@ _Overview of server configuration_
       </td>
     </tr>
     <tr>
-      <td>MAXACCESS</td>
-      <td>100</td>
+      <td><code>MAXACCESS</code></td>
+      <td><code>100</code></td>
       <td>
         Maximum number of simultaneous connections.
       </td>
     </tr>
     <tr>
-      <td>PORT</td>
-      <td>...</td>
+      <td><code>PORT</code></td>
+      <td><code>...</code></td>
       <td>
         Local port of the server.
       </td>
@@ -467,8 +467,8 @@ _Overview of HTTP configuration_
   </thead>
   <tbody>
     <tr>
-      <td>ACCESSLOG</td>
-      <td>... &gt; ../system/access.log</td>
+      <td><code>ACCESSLOG</code></td>
+      <td><code>... &gt; ../system/access.log</code></td>
       <td>
         Format and path of the log file for logging accesses. Without path the
         Standard I/O is used, <code>OFF</code> disables logging. Format and path
@@ -481,15 +481,15 @@ _Overview of HTTP configuration_
       </td>
     </tr>
     <tr>
-      <td>BLOCKSIZE</td>
-      <td>65535</td>
+      <td><code>BLOCKSIZE</code></td>
+      <td><code>65535</code></td>
       <td>
         Maximum size of the data blocks during data transfer in bytes.
       </td>
     </tr>
     <tr>
-      <td>DEFAULT</td>
-      <td>index.htm index.html ...</td>
+      <td><code>DEFAULT</code></td>
+      <td><code>index.htm index.html ...</code></td>
       <td>
         A list of standard documents, separated by spaces, to be displayed when
         directories are called, using the first existing document in the list,
@@ -498,23 +498,23 @@ _Overview of HTTP configuration_
       </td>
     </tr>
     <tr>
-      <td>DOCROOT</td>
-      <td>../documents</td>
+      <td><code>DOCROOT</code></td>
+      <td><code>../documents</code></td>
       <td>
         Path from the document directory.
       </td>
     </tr>
     <tr>
-      <td>IDENTITY</td>
-      <td>ON|OFF</td>
+      <td><code>IDENTITY</code></td>
+      <td><code>ON|OFF</code></td>
       <td>
         Option to transfer the server name with the XCGI/CGI environment
         variable and the HTTP response.
       </td>
     </tr>
     <tr>
-      <td>INDEX</td>
-      <td>ON|OFF</td>
+      <td><code>INDEX</code></td>
+      <td><code>ON|OFF</code></td>
       <td>
         Option for displaying directories as a navigable list view (Directory
         Listing). With the addition <code>[S]</code>> hidden entries of the file
@@ -522,8 +522,8 @@ _Overview of HTTP configuration_
       </td>
     </tr>
     <tr>
-      <td>INTERRUPT</td>
-      <td>10</td>
+      <td><code>INTERRUPT</code></td>
+      <td><code>10</code></td>
       <td>
         Interruption for system processes in milliseconds. This setting
         minimizes the CPU utilization of load-intensive processes, in which they
@@ -532,31 +532,31 @@ _Overview of HTTP configuration_
       </td>
     </tr>
     <tr>
-      <td>MEDIATYPE</td>
-      <td>application/octet-stream</td>
+      <td><code>MEDIATYPE</code></td>
+      <td><code>application/octet-stream</code></td>
       <td>
         Standard media type that is used when the requested media type is not
         included in the list of media types (section <code>[MEDIATYPES]</code>).
       </td>
     </tr>
     <tr>
-      <td>METHODS</td>
-      <td>GET POST HEAD OPTIONS PUT DELETE ...</td>
+      <td><code>METHODS</code></td>
+      <td><code>GET POST HEAD OPTIONS PUT DELETE ...</code></td>
       <td>
         List of methods that the server is allowed to process, separated by
         spaces.
       </td>
     </tr>
     <tr>
-      <td>SYSROOT</td>
-      <td>../system</td>
+      <td><code>SYSROOT</code></td>
+      <td><code>../system</code></td>
       <td>
         Path from the directory of the system files.
       </td>
     </tr>
     <tr>
-      <td>TIMEOUT</td>
-      <td>30000</td>
+      <td><code>TIMEOUT</code></td>
+      <td><code>30000</code></td>
       <td>
         Maximum idle time of inbound sockets and streams and maximum time for
         outbound blocked streams. Exceeding it will terminate the request by
@@ -588,10 +588,12 @@ _Overview of configuration_
     <th>Description</th>
   </tr>
   <tr>
-    <td>PROTOCOL</td>
+    <td><code>PROTOCOL</code></td>
     <td>
-      TLS|TLSv1|TLSv1.1|TLSv1.2|...<br>
-      SSL|SSLv2|SSLv3|...
+      <code> 
+        TLS|TLSv1|TLSv1.1|TLSv1.2|...<br>
+        SSL|SSLv2|SSLv3|...
+      </code>
     </td>
     <td>
       Protocol: <code>TLS</code> (Transport Layer Security), <code>SSL</code>
@@ -599,8 +601,8 @@ _Overview of configuration_
     </td>
   </tr>
   <tr>
-    <td>CLIENTAUTH</td>
-    <td>OFF|ON|AUTO</td>
+    <td><code>CLIENTAUTH</code></td>
+    <td><code>OFF|ON|AUTO</code></td>
     <td>
       (De)activation of the client authorization. <code>ON</code> requires
       mandatory client authorization, without which the connection to the client
@@ -611,31 +613,31 @@ _Overview of configuration_
     </td>
   </tr>
   <tr>
-    <td>KEYSTORE</td>
-    <td>...</td>
+    <td><code>KEYSTORE</code></td>
+    <td><code>...</code></td>
     <td>
       Path of the keystore file
     </td>
   </tr>
   <tr>
-    <td>TYPE</td>
-    <td>JCEKS|JKS|DKS|PKCS11|PKCS12|...</td>
+    <td><code>TYPE</code></td>
+    <td><code>JCEKS|JKS|DKS|PKCS11|PKCS12|...</code></td>
     <td>
       Type of used keystore. Default value from the JDK: <code>PKCS12</code> (if
       not specified)
     </td>
   </tr>
   <tr>
-    <td>ALGORITHM</td>
-    <td>SunX509|PKIX|...</td>
+    <td><code>ALGORITHM</code></td>
+    <td><code>SunX509|PKIX|...</code></td>
     <td>
       Algorithm of encryption from keystore. Default value from the JDK:
       <code>SunX509</code> / <code>PKIX</code> (if not specified)
     </td>
   </tr>
   <tr>
-    <td>PASSWORD</td>
-    <td>...</td>
+    <td><code>PASSWORD</code></td>
+    <td><code>...</code></td>
     <td>
       Password for the keystore.
     </td>
@@ -850,70 +852,70 @@ _Overview of elements of the filter syntax_
     <th>Description</th>
   </tr>
   <tr>
-    <td>NAME</td>
-    <td>...</td>
+    <td><code>NAME</code></td>
+    <td><code>...</code></td>
     <td>freely selectable</td>
   </tr>
   <tr>
-    <td>METHOD</td>
-    <td>GET|POST|PUT|ALL|...</td>
+    <td><code>METHOD</code></td>
+    <td><code>GET|POST|PUT|ALL|...</code></td>
     <td>HTTP method to be reacted to</td>
   </tr>
   <tr>
-    <td>CONDITION</td>
-    <td>IS|NOT|ALWAYS</td>
+    <td><code>CONDITION</code></td>
+    <td><code>IS|NOT|ALWAYS</code></td>
     <td>stipulation</td>
   </tr>
   <tr>
     <td></td>
-    <td>IS</td>
+    <td><code>IS</code></td>
     <td>The filter responds when the condition is fulfilled.</td>
   </tr>
   <tr>
     <td></td>
-    <td>NOT</td>
+    <td><code>NOT</code></td>
     <td>
       The filter responds if the condition is not fulfilled.
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>ALWAYS</td>
+    <td><code>ALWAYS</code></td>
     <td>
       The filter always responds. The specification of function and value is not
       required for this condition.
     </td>
   </tr>
   <tr>
-    <td>FUNCTION</td>
-    <td>STARTS|EQUALS|CONTAINS|ENDS|EMPTY</td>
+    <td><code>FUNCTION</code></td>
+    <td><code>STARTS|EQUALS|CONTAINS|ENDS|EMPTY</code></td>
     <td>Type of comparison</td>
   </tr>
   <tr>
     <td></td>
-    <td>STARTS</td>
+    <td><code>STARTS</code></td>
     <td>The value of the variable starts with the comparison value.</td>
   </tr>
   <tr>
     <td></td>
-    <td>EQUALS</td>
+    <td><code>EQUALS</code></td>
     <td>
       The value of the variable corresponds to the comparison value.
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>CONTAINS</td>
+    <td><code>CONTAINS</code></td>
     <td>The value of the variable contains the comparison value.</td>
   </tr>
   <tr>
     <td></td>
-    <td>ENDS</td>
+    <td><code>ENDS</code></td>
     <td>The value of the variable ends with the comparison value.</td>
   </tr>
   <tr>
     <td></td>
-    <td>EMPTY</td>
+    <td><code>EMPTY</code></td>
     <td>
       The value of the variables is empty or does not exist. The specification
       of function and value is not required for this condition.
@@ -921,42 +923,42 @@ _Overview of elements of the filter syntax_
   </tr>
   <tr>
     <td></td>
-    <td>MATCH</td>
+    <td><code>MATCH</code></td>
     <td>
       The value of the variable corresponds to the comparison value as a regular
       expression.
     </td>
   </tr>
   <tr>
-    <td>VARIABLE</td>
-    <td>...</td>
+    <td><code>VARIABLE</code></td>
+    <td><code>...</code></td>
     <td>
       All environment variables / CGI variables are available to the filter.
     </td>
   </tr>
   <tr>
-    <td>VALUE</td>
-    <td>...</td>
+    <td><code>VALUE</code></td>
+    <td><code>...</code></td>
     <td>comparative value</td>
   </tr>
   <tr>
-    <td>OPTION</td>
-    <td>[+] [R] [M]</td>
+    <td><code>OPTION</code></td>
+    <td><code>[+] [R] [M]</code></td>
     <td>Additional filter control options</td>
   </tr>
   <tr>
     <td></td>
-    <td>[+]</td>
+    <td><code>[+]</code></td>
     <td>Logical AND operation of several conditions.</td>
   </tr>
   <tr>
     <td></td>
-    <td>[R]</td>
+    <td><code>[R]</code></td>
     <td>Reference for forwarding (redirect).</td>
   </tr>
   <tr>
     <td></td>
-    <td>[M]</td>
+    <td><code>[M]</code></td>
     <td>
       Reference to the use of an HTTP module. Addressing the module is not a
       final step, but terminating the filter sequence only occurs if a module
@@ -989,53 +991,53 @@ _Overview of variables (selection)_
     <th>Description</th>
   </tr>
   <tr>
-    <td>Request</td>
-    <td>REQUEST_METHOD</td>
-    <td>GET</td>
+    <td><code>Request</code></td>
+    <td><code>REQUEST_METHOD</code></td>
+    <td><code>GET</code></td>
     <td>HTTP request methods</td>
   </tr>
   <tr>
-    <td>Request</td>
-    <td>REQUEST_URI</td>
-    <td>/directory/file.cgi?value=123</td>
+    <td><code>Request</code></td>
+    <td><code>REQUEST_URI</code></td>
+    <td><code>/directory/file.cgi?value=123</code></td>
     <td>Path of HTTP request including passed parameters</td>
   </tr>
   <tr>
-    <td>Request</td>
-    <td>QUERY_STRING</td>
-    <td>value=123</td>
+    <td><code>Request</code></td>
+    <td><code>QUERY_STRING</code></td>
+    <td><code>value=123</code></td>
     <td>List of parameters passed with the request URI</td>
   </tr>
   <tr>
-    <td>Host</td>
-    <td>HTTP_HOST</td>
-    <td>www.xxx.zzz</td>
+    <td><code>Host</code></td>
+    <td><code>HTTP_HOST</code></td>
+    <td><code>www.xxx.zzz</code></td>
     <td>
       Domain name or IP address of the target address requested by the client
     </td>
   </tr>
   <tr>
-    <td>Accept-Encoding</td>
-    <td>HTTP_ACCEPT_ENCODING</td>
-    <td>gzip, deflate</td>
+    <td><code>Accept-Encoding</code></td>
+    <td><code>HTTP_ACCEPT_ENCODING</code></td>
+    <td><code>gzip, deflate</code></td>
     <td>List of encoding methods supported by the client</td>
   </tr>
   <tr>
-    <td>Accept-Language</td>
-    <td>HTTP_ACCEPT_LANGUAGE</td>
-    <td>de</td>
+    <td><code>Accept-Language</code></td>
+    <td><code>HTTP_ACCEPT_LANGUAGE</code></td>
+    <td><code>en</code></td>
     <td>List of languages supported by the client</td>
   </tr>
   <tr>
-    <td>Accept</td>
-    <td>HTTP_ACCEPT</td>
-    <td>*/*</td>
+    <td><code>Accept</code></td>
+    <td><code>HTTP_ACCEPT</code></td>
+    <td><code>*/*</code></td>
     <td>List of media types supported by the client</td>
   </tr>
   <tr>
-    <td>User-Agent</td>
-    <td>HTTP_USER_AGENT</td>
-    <td>Browser</td>
+    <td><code>User-Agent</code></td>
+    <td><code>HTTP_USER_AGENT</code></td>
+    <td><code>Browser</code></td>
     <td>Client product and version information</td>
   </tr>
 </table>
@@ -1145,7 +1147,7 @@ _Overview of options_
     <th>Description</th>
   </tr>
   <tr>
-    <td>[A]</td>
+    <td><code>[A]</code></td>
     <td>Absolute</td>
     <td>
       Defines a virtual sub-path that points to physical directories or files;
@@ -1158,7 +1160,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[C]</td>
+    <td><code>[C]</code></td>
     <td>Forbidden</td>
     <td>
       This option blocks access to virtual and physical paths, and locks
@@ -1166,7 +1168,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[R]</td>
+    <td><code>[R]</code></td>
     <td>Redirect</td>
     <td>
       This option sets up automatic forwarding to a specified address for
@@ -1174,7 +1176,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[M]</td>
+    <td><code>[M]</code></td>
     <td>Module</td>
     <td>
       If the path of a request starts with this virtual sub-path, the module
@@ -1184,7 +1186,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[X]</td>
+    <td><code>[X]</code></td>
     <td>Method Extension</td>
     <td>
       Only in conjunction with option <code>[M]</code>, the additional option
@@ -1194,7 +1196,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[D]</td>
+    <td><code>[D]</code></td>
     <td>Digest Access Authentication</td>
     <td>
       Only in conjunction with the option <code>[ACC]</code>, the additional
@@ -1202,7 +1204,7 @@ _Overview of options_
     </td>
   </tr>
   <tr>
-    <td>[ACC:...]</td>
+    <td><code>[ACC:...]</code></td>
     <td>Authentication</td>
     <td>
       Optionally, Digest Access Authentication can be activated in combination
@@ -1356,7 +1358,7 @@ _Structure and description of the placeholders_
   </tr>        
   <tr>
     <td nowrap="nowrap">
-      #[value]
+      <code>#[value]</code>
     </td>
     <td>
       Inserts the value for `value` and removes the placeholder.
@@ -1364,7 +1366,7 @@ _Structure and description of the placeholders_
   </tr>
   <tr>
     <td nowrap="nowrap">
-      #[segment[[...]]]
+      <code>#[segment[[...]]]</code>
     </td>
     <td>
       Defines a segment. The nesting and use of further segments is possible.
@@ -1374,8 +1376,8 @@ _Structure and description of the placeholders_
   </tr>
   <tr>
     <td nowrap="nowrap">
-      #[0x0A]<br>
-      #[0x4578616D706C6521]
+      <code>#[0x0A]</code><br>
+      <code>#[0x4578616D706C6521]</code>
     </td>
     <td>
       Escaping one or more characters. The conversion only takes place when the
@@ -1392,10 +1394,10 @@ _The following placeholders are available for the directory listing_
   </tr>        
   <tr>
     <td nowrap="nowrap">
-      #[location[[<br>
-      &nbsp;&nbsp;#[path]<br>
-      &nbsp;&nbsp;#[name]<br>
-      ]]]
+      <code>#[location[[</code><br>
+      <code>&nbsp;&nbsp;#[path]</code><br>
+      <code>&nbsp;&nbsp;#[name]</code><br>
+      <code>]]]</code>
     </td>
     <td>
       Iteration over the components path and name of the location (URL).
@@ -1403,7 +1405,7 @@ _The following placeholders are available for the directory listing_
   </tr>
   <tr>
     <td nowrap="nowrap">
-      #[sort]
+      <code>#[sort]</code>
     </td>
     <td>
       Indicator of sorting, which can be used for CSS, among other things.
@@ -1411,14 +1413,14 @@ _The following placeholders are available for the directory listing_
   </tr>
   <tr>
     <td nowrap="nowrap">
-      #[file[[<br>
-      &nbsp;&nbsp;#[case]<br>
-      &nbsp;&nbsp;#[mime]<br>
-      &nbsp;&nbsp;#[name]<br>
-      &nbsp;&nbsp;#[type]<br>
-      &nbsp;&nbsp;#[size]<br>
-      &nbsp;&nbsp;#[date]<br>
-      ]]]
+      <code>#[file[[</code><br>
+      <code>&nbsp;&nbsp;#[case]</code><br>
+      <code>&nbsp;&nbsp;#[mime]</code><br>
+      <code>&nbsp;&nbsp;#[name]</code><br>
+      <code>&nbsp;&nbsp;#[type]</code><br>
+      <code>&nbsp;&nbsp;#[size]</code><br>
+      <code>&nbsp;&nbsp;#[date]</code><br>
+      <code>]]]</code>
     </td>
     <td>
       Iteration over the file list.
@@ -1426,7 +1428,7 @@ _The following placeholders are available for the directory listing_
   </tr>
   <tr>
     <td nowrap="nowrap">
-      #[HTTP_...]
+      <code>#[HTTP_...]</code>
     </td>
     <td>
       Placeholder for the environment variables / CGI variables which are
@@ -1529,34 +1531,33 @@ _Overview of options_
     <th>Description</th>
   </tr>
   <tr>
-    <td>[C]</td>
-    <td>.../application/test.cgi</td>
+    <td><code>[C]</code></td>
+    <td><code>.../application/test.cgi</code></td>
     <td>full path incl. filename and file extension</td>
   </tr>
   <tr>
-    <td>[D]</td>
-    <td>.../application/</td>
+    <td><code>[D]</code></td>
+    <td><code>.../application</code>/</td>
     <td>directory</td>
   </tr>
   <tr>
-    <td>[N]</td>
-    <td>test</td>
+    <td><code>[N]</code></td>
+    <td><code>test</code></td>
     <td>File name without extension</td>
   </tr>
   <tr>
-    <td>[X]</td>
+    <td><code>[X]</code></td>
     <td></td>
     <td>Using the XCGI</td>
   </tr>
   <tr>
-    <td>[M]</td>
+    <td><code>[M]</code></td>
     <td></td>
     <td>Use as module</td>
   </tr>
 </table>
 
 _Examples of Common Gateway Interface setup_
-
 > ```
 > CGI = POST GET > c:/cgi/bin/example.exe
 > ```
@@ -1634,176 +1635,176 @@ _Overview of environment variables (selection)_
     <th>Description</th>
   </tr>
   <tr>
-    <td>CONTENT_LENGTH</td>
-    <td>1000</td>
+    <td><code>CONTENT_LENGTH</code></td>
+    <td><code>1000</code></td>
     <td>Length of the transferred request body in bytes</td>
   </tr>
   <tr>
-    <td>CONTENT_TYPE</td>
-    <td>text/plain</td>
+    <td><code>CONTENT_TYPE</code></td>
+    <td><code>text/plain</code></td>
     <td>Media type of the data transferred with the request</td>
   </tr>
   <tr>
-    <td>DOCUMENT_ROOT</td>
-    <td>.../devwex/documents</td>
+    <td><code>DOCUMENT_ROOT</code></td>
+    <td><code>.../devwex/documents</code></td>
     <td>Physical path from the root directory of the Web documents</td>
   </tr>
   <tr>
-    <td>GATEWAY_INTERFACE</td>
-    <td>CGI/1.1</td>
+    <td><code>GATEWAY_INTERFACE</code></td>
+    <td><code>CGI/1.1</code></td>
     <td>Version of the CGI interface supported by the server</td>
   </tr>
   <tr>
-    <td>HTTP_ACCEPT</td>
-    <td>*/*</td>
+    <td><code>HTTP_ACCEPT</code></td>
+    <td><code>*/*</code></td>
     <td>List of media types supported by the client</td>
   </tr>
   <tr>
-    <td>HTTP_ACCEPT_ENCODING</td>
-    <td>gzip, deflate</td>
+    <td><code>HTTP_ACCEPT_ENCODING</code></td>
+    <td><code>gzip, deflate</code></td>
     <td>List of encoding methods supported by the client</td>
   </tr>
   <tr>
-    <td>HTTP_ACCEPT_LANGUAGE</td>
-    <td>de</td>
+    <td><code>HTTP_ACCEPT_LANGUAGE</code></td>
+    <td><code>en</code></td>
     <td>List of languages supported by the client</td>
   </tr>
   <tr>
-    <td>HTTP_CONNECTION</td>
-    <td>Keep-Alive</td>
+    <td><code>HTTP_CONNECTION</code></td>
+    <td><code>Keep-Alive</code></td>
     <td>Status of the HTTP connection between server and client</td>
   </tr>
   <tr>
-    <td>HTTP_HOST</td>
-    <td>seanox.local</td>
+    <td><code>HTTP_HOST</code></td>
+    <td><code>seanox.local</code></td>
     <td>
       Domain name or IP address of the target address requested by the client
     </td>
   </tr>
   <tr>
-    <td>HTTP_USER_AGENT</td>
-    <td>Mozilla/4.0 (compatible; ...)</td>
+    <td><code>HTTP_USER_AGENT</code></td>
+    <td><code>Mozilla/4.0 (compatible; ...)</code></td>
     <td>Client product and version information</td>
   </tr>
   <tr>
-    <td>MODULE_OPTS</td>
-    <td>...ssi.Connector [allow:all] [M]</td>
+    <td><code>MODULE_OPTS</code></td>
+    <td><code>...ssi.Connector [allow:all] [M]</code></td>
     <td>Module call with all parameters</td>
   </tr>
   <tr>
-    <td>PATH</td>
-    <td>...</td>
+    <td><code>PATH</code></td>
+    <td><code>...</code></td>
     <td>
       List of paths for searching for resources and applications, optionally set
       by <code>[SERVER:ENV]</code>
     </td>
   </tr>
   <tr>
-    <td>PATH_CONTEXT</td>
-    <td>/example.ssi</td>
+    <td><code>PATH_CONTEXT</code></td>
+    <td><code>/example.ssi</code></td>
     <td>real path specification of the URL for absolute paths</td>
   </tr>
   <tr>
-    <td>PATH_INFO</td>
-    <td>/folder/...</td>
+    <td><code>PATH_INFO</code></td>
+    <td><code>/folder/...</code></td>
     <td>extended path specification of the URL for absolute paths</td>
   </tr>          
   <tr>
-    <td>PATH_URL</td>
-    <td>/example.ssi/folder/...</td>
+    <td><code>PATH_URL</code></td>
+    <td><code>/example.ssi/folder/...</code></td>
     <td>Complete path specification of the URL</td>
   </tr>
   <tr>
-    <td>PATH_TRANSLATED</td>
-    <td>.../devwex/documents/example.ssi</td>
+    <td><code>PATH_TRANSLATED</code></td>
+    <td><code>.../devwex/documents/example.ssi</code></td>
     <td>Physical path of the called resource in the file system</td>
   </tr>
   <tr>
-    <td>QUERY_STRING</td>
-    <td>parameter1=value1&amp;parameter2=value2&amp;...</td>
+    <td><code>QUERY_STRING</code></td>
+    <td><code>parameter1=value1&amp;parameter2=value2&amp;...</code></td>
     <td>
       Query string passed with the request URI with parameters and values
     </td>
   </tr>
   <tr>
-    <td>REMOTE_ADDR</td>
-    <td>sirius.seanox.com</td>
+    <td><code>REMOTE_ADDR</code></td>
+    <td><code>sirius.seanox.com</code></td>
     <td>Name or IP address of the client</td>
   </tr>
   <tr>
-    <td>REMOTE_PORT</td>
-    <td>1573</td>
+    <td><code>REMOTE_PORT</code></td>
+    <td><code>1573</code></td>
     <td>Port from client</td>
   </tr>
   <tr>
-    <td>REQUEST_METHOD</td>
-    <td>POST</td>
+    <td><code>REQUEST_METHOD</code></td>
+    <td><code>POST</code></td>
     <td>HTTP request method</td>
   </tr>
   <tr>
-    <td>REQUEST_URI</td>
-    <td>/example.ssi/...?parameter=value</td>
+    <td><code>REQUEST_URI</code></td>
+    <td><code>/example.ssi/...?parameter=value</code></td>
     <td>Path of HTTP request including passed parameters</td>
   </tr>
   <tr>
-    <td>SCRIPT_FILENAME</td>
-    <td>.../devwex/documents/example.ssi</td>
+    <td><code>SCRIPT_FILENAME</code></td>
+    <td><code>.../devwex/documents/example.ssi</code></td>
     <td>Physical path of the called resource in the file system</td>
   </tr>
   <tr>
-    <td>SCRIPT_NAME</td>
-    <td>/example.ssi/...</td>
+    <td><code>SCRIPT_NAME</code></td>
+    <td><code>/example.ssi/...</code></td>
     <td>HTTP path of the called resource</td>
   </tr>
   <tr>
-    <td>SCRIPT_URI</td>
-    <td>http://...seanox.com/example.ssi/...</td>
+    <td><code>SCRIPT_URI</code></td>
+    <td><code>http://...seanox.com/example.ssi/...</code></td>
     <td>Complete HTTP path of the called resource</td>
   </tr>
   <tr>
-    <td>SCRIPT_URL</td>
-    <td>/example.ssi</td>
+    <td><code>SCRIPT_URL</code></td>
+    <td><code>/example.ssi</code></td>
     <td>Relative path in the HTTP request to the requested resource</td>
   </tr>
   <tr>
-    <td>SERVER_NAME</td>
-    <td>seanox.local</td>
+    <td><code>SERVER_NAME</code></td>
+    <td><code>seanox.local</code></td>
     <td>Name or IP address of the server in the network</td>
   </tr>
   <tr>
-    <td>SERVER_PORT</td>
-    <td>80</td>
+    <td><code>SERVER_PORT</code></td>
+    <td><code>80</code></td>
     <td>Port of the called server</td>
   </tr>
   <tr>
-    <td>SERVER_PROTOCOL</td>
-    <td>HTTP/1.0</td>
+    <td><code>SERVER_PROTOCOL</code></td>
+    <td><code>HTTP/1.0</code></td>
     <td>Version of the HTTP protocol supported by the server</td>
   </tr>
   <tr>
-    <td>SERVER_SOFTWARE</td>
-    <td>Seanox-Devwex/...</td>
+    <td><code>SERVER_SOFTWARE</code></td>
+    <td><code>Seanox-Devwex/...</code></td>
     <td>Product name of the installed server software</td>
   </tr>
   <tr>
-    <td>SYSTEMDRIVE</td>
-    <td>C:</td>
+    <td><code>SYSTEMDRIVE</code></td>
+    <td><code>C:</code></td>
     <td>
       drive of the operating system, is optionally set for Microsoft Windows via
       <code>[SERVER:ENV]</code>
     </td>
   </tr>
   <tr>
-    <td>SYSTEMROOT</td>
-    <td>C:\Windows</td>
+    <td><code>SYSTEMROOT</code></td>
+    <td><code>C:\Windows</code></td>
     <td>
       Path from the operating system, is optionally set for Microsoft Windows
       via <code>[SERVER:ENV]</code>
     </td>
   </tr>
   <tr>
-    <td>UNIQUE_ID</td>
-    <td>FEK2VFTY26DHI584C5</td>
+    <td><code>UNIQUE_ID</code></td>
+    <td><code>FEK2VFTY26DHI584C5</code></td>
     <td>unique identification number related to the request</td>
   </tr>
 </table>
@@ -1883,12 +1884,10 @@ _Overview of options_
 <table>
   <tr>
     <th>Option</th>
-    <th>Example Value</th>
     <th>Description</th>
   </tr>
   <tr>
-    <td>[H]</td>
-    <td>Header Only</td>
+    <td><code>[H]</code></td>
     <td>
       Responses with a status code that uses this option contain only a header
       and no content.

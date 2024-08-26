@@ -45,20 +45,20 @@ _Overview of commands_
     <th>Description</th>
   </tr>
   <tr>
-    <td>start</td>
+    <td><code>start</code></td>
     <td>
       Starts the server engine according to the current configuration.
     </td>
   </tr>
   <tr>
-    <td>status</td>
+    <td><code>status</code></td>
     <td>
       Shows information about the version, start and system time as well as the
       loaded modules and servers.
     </td>
   </tr>
   <tr>
-    <td>restart</td>
+    <td><code>restart</code></td>
     <td>
       Stops the server engine including all active modules and servers and
       restarts with reloaded configuration. If the new configuration contains
@@ -66,7 +66,7 @@ _Overview of commands_
     </td>
   </tr>
   <tr>
-    <td>stop</td>
+    <td><code>stop</code></td>
     <td>
       Terminates the server engine including all active modules and servers.
     </td>

@@ -3,14 +3,14 @@
   <target name="usage">
     <echo>Following targets are available:                               </echo>
     <echo>                                                               </echo>
-    <echo>   compile   Compile and build classes                         </echo>
+    <echo>  compile    Compile and build classes                         </echo>
     <echo>                                                               </echo>
-    <echo>   release   Compile, build classes and make releases          </echo>
+    <echo>  release    Compile, build classes and make releases          </echo>
     <echo>             for distribution and development                  </echo>
     <echo>                                                               </echo>
-    <echo>   keystore  Creates a new keystore                            </echo>
+    <echo>  keystore   Creates a new keystore                            </echo>
     <echo>                                                               </echo>
-    <echo>   changes   Synchronizes README.md with CHANGES               </echo>
+    <echo>  changes    Synchronizes README.md with CHANGES               </echo>
   </target>
     
   <property name="workspace" value="${basedir}"/>
@@ -47,6 +47,7 @@
     <include name="**/*.cmd"/>
     <include name="**/*.html"/>
     <include name="**/*.java"/>
+    <include name="**/*.md"/>
     <include name="**/*.sh"/>
   </fileset>
 
@@ -95,9 +96,7 @@
     <attribute name="file"/>
     <sequential>
       <echo>Compressing: @{file}</echo> 
-      <compress-markup-insert file="@{file}" context="manuals" content="seanox-devwex.js"/>     
-      <compress-markup-insert file="@{file}" context="manuals" content="seanox-devwex.css"/>
-      <compress-markup-insert file="@{file}" context="system" content="common.css"/>     
+      <compress-markup-insert file="@{file}" context="system" content="common.css"/>
       <compress-markup-insert file="@{file}" context="system" content="media.css"/>     
       <compress-markup-insert file="@{file}" context="system" content="index.css"/>          
       <compress-markup-insert file="@{file}" context="system" content="status.css"/>  
@@ -105,29 +104,6 @@
       <compress-markup-clean file="@{file}"/>
       <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
       <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>      
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-javascript">
-    <attribute name="file"/>
-    <attribute name="context"/>
-    <sequential>
-      <echo>Compressing: @{file}</echo> 
-      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)\/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s*//.*$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="\t" flags="g" replace=" " byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(\{)[\r\n]+\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?=\})" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ +(?!\})" flags="g" replace=" " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+ *(\})" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?i)[\r\n]+([a-z0-9_\.]+\s*[=;])" flags="g" replace=" \1" byline="false"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
-      <basename property="@{context}.@{file}" file="@{file}"/>
-      <loadfile property="file.@{context}.${@{context}.@{file}}" srcFile="@{file}"/>
-      <delete file="@{file}"/>
     </sequential>
   </macrodef>
 
@@ -260,17 +236,23 @@
   
   <fileset id="fileset.sources" dir="${workspace}">
     <include name=".settings/org.eclipse.jdt.core.prefs"/> 
-    <include name="development/extras/compress.zip"/> 
+    <include name="development/extras/compress.zip"/>
     <include name="development/mediatypes/* File/* File.*"/>
     <include name="development/mediatypes/icons.html"/>
     <include name="development/build.xml"/>
     <include name="development/devwex.ini"/>
     <include name="documents/index.css"/>
     <include name="documents/index.html"/>
-    <include name="manuals/seanox-icons.zip"/>
-    <include name="manuals/seanox-devwex.html"/>
-    <include name="manuals/seanox-devwex.css"/>  
-    <include name="manuals/seanox-devwex.js"/>
+    <include name="manual/configuration.md"/>
+    <include name="manual/control-and-monitoring.md"/>
+    <include name="manual/description.md"/>
+    <include name="manual/development.md"/>
+    <include name="manual/features.md"/>
+    <include name="manual/installation.md"/>
+    <include name="manual/license-terms.md"/>
+    <include name="manual/README.md"/>
+    <include name="manual/starting-and-stopping.md"/>
+    <include name="manual/system-requirement.md"/>
     <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.sh"/>
@@ -306,7 +288,16 @@
   
   <fileset id="fileset.release" dir="${build}/sources">
     <include name="documents/index.html"/>
-    <include name="manuals/seanox-devwex.html"/> 
+    <include name="manuals/seanox-devwex/configuration.md"/>
+    <include name="manuals/seanox-devwex/control-and-monitoring.md"/>
+    <include name="manuals/seanox-devwex/description.md"/>
+    <include name="manuals/seanox-devwex/development.md"/>
+    <include name="manuals/seanox-devwex/features.md"/>
+    <include name="manuals/seanox-devwex/installation.md"/>
+    <include name="manuals/seanox-devwex/license-terms.md"/>
+    <include name="manuals/seanox-devwex/README.md"/>
+    <include name="manuals/seanox-devwex/starting-and-stopping.md"/>
+    <include name="manuals/seanox-devwex/system-requirement.md"/>
     <include name="program/devwex.cmd"/>
     <include name="program/devwex.ini"/>
     <include name="program/devwex.jar"/>
@@ -336,30 +327,29 @@
     <copy todir="${build}/sources">
       <fileset refid="fileset.sources"/>
     </copy>
+    <mkdir dir="${build}/sources/manuals"/>
+    <move todir="${build}/sources/manuals/seanox-devwex">
+      <fileset dir="${build}/sources/manual"/>
+    </move>
+
     <touch datetime="${release.date}" pattern="yyyyMMdd">
       <fileset dir="${build}"/>
-    </touch>  
-    <delete file="${workspace.release}/seanox-${ant.project.name}-${release.version}-src.zip"/>
-    <zip destfile="${workspace.release}/seanox-${ant.project.name}-${release.version}-src.zip"
-        basedir="${build}/sources" compress="true" filesonly="false" defaultexcludes="false"/> 
-    <touch datetime="${release.date}" pattern="yyyyMMdd"
-        file="${workspace.release}/seanox-${ant.project.name}-${release.version}-src.zip"/>
+    </touch>
 
     <compress-stylesheet context="documents" file="${build}/sources/documents/index.css"/>
-    <compress-javascript context="manuals" file="${build}/sources/manuals/seanox-devwex.js"/>
-    <compress-stylesheet context="manuals" file="${build}/sources/manuals/seanox-devwex.css"/>  
     <compress-stylesheet context="system" file="${build}/sources/system/common.css"/>
     <compress-stylesheet context="system" file="${build}/sources/system/media.css"/>
     <compress-stylesheet context="system" file="${build}/sources/system/index.css"/>
     <compress-stylesheet context="system" file="${build}/sources/system/status.css"/>
     <compress-markup file="${build}/sources/documents/index.html"/>
-    <compress-markup file="${build}/sources/manuals/seanox-devwex.html"/>    
     <compress-markup file="${build}/sources/system/index.html"/>
     <compress-markup file="${build}/sources/system/status-2xx.html"/>
     <compress-markup file="${build}/sources/system/status-3xx.html"/>
     <compress-markup file="${build}/sources/system/status-4xx.html"/>
     <compress-markup file="${build}/sources/system/status-5xx.html"/>   
     <release-insert/>
+
+
     <mkdir dir="${build}/release"/>
     <copy todir="${build}/release">
       <fileset refid="fileset.release"/>

@@ -33,9 +33,7 @@ CR: Windows: Optimization of batch scripts and runtime directory handling
       searched in the root of the .\runtime directory.
 CR: HTTP(S): Optimization of the composition of the UNIQUE_ID
 CR: Documentation: Switch to Markdown
-   TODO: architectural image
-   TODO: build (sources + manuals/*** -> manuals/seanox-devwex/***)
-   TODO: HTML tables: Check possible use of code format
+    TODO: architectural image
 
 5.6.0 20231227
 BF: Review: Optimization and corrections

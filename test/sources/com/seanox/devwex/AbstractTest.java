@@ -20,6 +20,11 @@
  */
 package com.seanox.devwex;
 
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+
 /**
  * Abstract class to implement a test.
  *
@@ -27,4 +32,11 @@ package com.seanox.devwex;
  * @version 5.5.0 20220831
  */
 abstract class AbstractTest {
+
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        protected void starting(final Description description) {
+            System.out.printf("%n%s:%s%n", description.getClassName(), description.getMethodName());
+        }
+    };
 }

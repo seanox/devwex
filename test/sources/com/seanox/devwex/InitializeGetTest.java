@@ -29,7 +29,7 @@ import org.junit.Test;
  * @author  Seanox Software Solutions
  * @version 5.5.0 20220911
  */
-public class InitializeTest_Get extends AbstractTest {
+public class InitializeGetTest extends AbstractTest {
     
     @Test
     public void testAcceptance_01() {

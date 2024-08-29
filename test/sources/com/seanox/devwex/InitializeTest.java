@@ -36,9 +36,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    InitializeTest_Contains.class,
-    InitializeTest_Get.class,
-    InitializeTest_Parse.class,
+    InitializeContainsTest.class,
+    InitializeGetTest.class,
+    InitializeParseTest.class,
     InitializeTest_Set.class,
     InitializeTest_ToString.class
 })

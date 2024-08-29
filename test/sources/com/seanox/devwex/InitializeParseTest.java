@@ -31,7 +31,7 @@ import com.seanox.test.MockUtils;
  * @author  Seanox Software Solutions
  * @version 5.5.0 20220827
  */
-public class InitializeTest_Parse extends AbstractTest {
+public class InitializeParseTest extends AbstractTest {
     
     @Test
     public void testAcceptance_1()

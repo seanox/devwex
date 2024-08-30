@@ -28,12 +28,7 @@ import java.util.Map;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Initialize}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220828
- */
+/** TestSuite for {@link com.seanox.devwex.Initialize}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     InitializeContainsTest.class,

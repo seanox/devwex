@@ -23,12 +23,7 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Remote}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
+/** TestSuite for {@link com.seanox.devwex.Remote}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     RemoteTest_Invalid.class,

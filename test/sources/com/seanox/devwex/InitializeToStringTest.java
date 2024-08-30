@@ -25,12 +25,7 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Initialize}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220826
- */
+/** Test cases for {@link com.seanox.devwex.Initialize}. */
 public class InitializeToStringTest extends AbstractTest {
     
     @Test

@@ -25,12 +25,7 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Initialize#parse(String)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220827
- */
+/** Test cases for {@link com.seanox.devwex.Initialize#parse(String)}. */
 public class InitializeParseTest extends AbstractTest {
     
     @Test

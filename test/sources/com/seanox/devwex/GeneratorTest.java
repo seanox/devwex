@@ -32,12 +32,7 @@ import org.junit.Test;
 import com.seanox.test.MockUtils;
 import com.seanox.test.Timing;
 
-/**
- * Test cases for {@link com.seanox.devwex.Generator}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220908
- */
+/** Test cases for {@link com.seanox.devwex.Generator}. */
 public class GeneratorTest extends AbstractTest {
     
     @Test

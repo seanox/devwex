@@ -23,12 +23,7 @@ package com.seanox.devwex;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Initialize#contains(String)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220911
- */
+/** Test cases for {@link com.seanox.devwex.Initialize#contains(String)}. */
 public class InitializeContainsTest extends AbstractTest {
     
     @Test

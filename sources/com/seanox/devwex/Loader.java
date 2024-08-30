@@ -35,9 +35,6 @@ import java.util.zip.ZipFile;
 /**
  * Loader, provides functions for loading libraries and classes. The files of
  * the loaded libraries are not locked and can be changed at runtime.
- *
- * @author  Seanox Software Solutions
- * @version 5.6.0 20231223
  */
 public class Loader extends URLClassLoader {
     

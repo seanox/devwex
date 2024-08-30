@@ -31,9 +31,6 @@ import java.net.SocketException;
 /**
  * Remote, provides Telnet based client and server functionality for remote
  * control of the service for status requests, restart and stop.
- *
- * @author  Seanox Software Solutions
- * @version 5.6.0 20231209
  */
 public class Remote implements Runnable {
 

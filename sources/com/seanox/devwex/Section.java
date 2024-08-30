@@ -128,9 +128,6 @@ import java.util.StringTokenizer;
  * <h4>Line 8 - 15</h4>
  * Like the examples from <i>lines 1 - 6</i>, the hexadecimal notation is used
  * for sections, keys and values.
- *
- * @author  Seanox Software Solutions
- * @version 5.1.0 20220911
  */
 public class Section implements Cloneable {
 

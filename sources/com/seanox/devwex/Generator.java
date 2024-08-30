@@ -129,9 +129,6 @@ import java.util.Map;
  * exclusive structures, which are partially filled and prepared. Both methods
  * produce final results that correspond to the call of {@link #set(Map)} in
  * combination with {@link #extract()}, but focus on only one structure.
- *
- * @author  Seanox Software Solutions
- * @version 5.2.2 20220907
  */
 public class Generator {
 

@@ -223,9 +223,6 @@ import java.util.Vector;
  *     ClassLoader.
  *   </li>
  * </ul>
- *
- * @author  Seanox Software Solutions
- * @version 5.6.0 20231209
  */
 public class Service implements Runnable, UncaughtExceptionHandler {
 

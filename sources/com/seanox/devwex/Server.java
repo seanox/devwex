@@ -37,9 +37,6 @@ import javax.net.ssl.TrustManagerFactory;
  * address at a special port. With the start of {@link Service} all servers
  * which are defined in the configuration file will be started and their socket
  * will be accessed directly.
- *
- * @author  Seanox Software Solutions
- * @version 5.6.0 20231209
  */
 public class Server implements Runnable {
 

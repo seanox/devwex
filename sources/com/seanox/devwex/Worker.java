@@ -61,9 +61,6 @@ import javax.net.ssl.SSLSocket;
  * possible. Thus, internal errors are swallowed if possible and the request is
  * safely responded with an error status. If the request can no longer be
  * controlled, it is completely aborted.
- *
- * @author  Seanox Software Solutions
- * @version 5.7.0 20240818
  */
 class Worker implements Runnable {
   

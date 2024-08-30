@@ -25,12 +25,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-/**
- * Abstract class to implement a stage based test.
- *
- * @author  Seanox Software Solutions
- * @version 1.0.0 20220906
- */
+/** Abstract class to implement a stage based test. */
 abstract class AbstractStageTest {
     
     @BeforeClass

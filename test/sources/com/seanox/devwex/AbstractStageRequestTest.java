@@ -31,12 +31,7 @@ import java.util.UUID;
 import com.seanox.test.HttpUtils;
 import com.seanox.test.HttpUtils.Authentication;
 
-/**
- * Abstract class to implement a stage request based test.
- *
- * @author  Seanox Software Solutions
- * @version 1.0.0 20220907
- */
+/** Abstract class to implement a stage request based test. */
 abstract class AbstractStageRequestTest extends AbstractStageTest {
 
     /** duration of general breaks and interruption of tests */

@@ -20,11 +20,6 @@
  */
 package com.seanox.devwex;
 
-/**
- * Abstract class to implement a test suite.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220831
- */
+/** Abstract class to implement a test suite. */
 class AbstractTestSuite {
 }

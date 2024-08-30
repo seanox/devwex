@@ -23,12 +23,7 @@ package com.seanox.devwex;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-/**
- * Abstract class to implement a stage based test suite.
- *
- * @author  Seanox Software Solutions
- * @version 1.0.0 20220831
- */
+/** Abstract class to implement a stage based test suite. */
 class AbstractStageTestSuite {
     
     @BeforeClass

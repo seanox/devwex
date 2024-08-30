@@ -27,12 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * AbstractTestInternalAccess provides low-level access via reflections.
- *
- * @author  Seanox Software Solutions
- * @version 2.1.0 20220830
- */
+/** AbstractTestInternalAccess provides low-level access via reflections. */
 class AbstractTestInternalAccess {
 
     /**

@@ -40,12 +40,7 @@ import org.junit.BeforeClass;
 import com.seanox.test.HttpUtils.Keystore;
 import com.seanox.test.OutputMultiStream;
 
-/**
- * Implementation of the test stage.
- *
- * @author  Seanox Software Solutions
- * @version 1.0.0 20220908
- */
+/** Implementation of the test stage. */
 abstract class AbstractStage {
 
     /** path of {@code ./stage} */

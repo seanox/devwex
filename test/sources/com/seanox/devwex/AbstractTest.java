@@ -25,12 +25,7 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-/**
- * Abstract class to implement a test.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220831
- */
+/** Abstract class to implement a test. */
 abstract class AbstractTest {
 
     @Rule

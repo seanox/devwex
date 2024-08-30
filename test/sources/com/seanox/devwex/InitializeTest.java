@@ -39,8 +39,8 @@ import org.junit.runners.Suite;
     InitializeContainsTest.class,
     InitializeGetTest.class,
     InitializeParseTest.class,
-    InitializeTest_Set.class,
-    InitializeTest_ToString.class
+    InitializeSetTest.class,
+    InitializeToStringTest.class
 })
 public class InitializeTest extends AbstractTestSuite {
     

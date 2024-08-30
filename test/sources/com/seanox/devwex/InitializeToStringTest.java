@@ -31,7 +31,7 @@ import com.seanox.test.MockUtils;
  * @author  Seanox Software Solutions
  * @version 5.5.0 20220826
  */
-public class InitializeTest_ToString extends AbstractTest {
+public class InitializeToStringTest extends AbstractTest {
     
     @Test
     public void testAcceptance_1()

@@ -36,13 +36,8 @@ import com.seanox.test.HttpUtils.RequestEvent;
 import com.seanox.test.Pattern;
 import com.seanox.test.Timing;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220908
- */
-public class WorkerTest_Gateway extends AbstractStageRequestTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerGatewayTest extends AbstractStageRequestTest {
 
     /**
      * Test case for acceptance.

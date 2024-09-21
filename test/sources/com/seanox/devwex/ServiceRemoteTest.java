@@ -32,13 +32,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Service}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
-public class ServiceTest_Remote extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Service}. */
+public class ServiceRemoteTest extends AbstractStageTest {
 
     private static final int SLEEP = 25;
     
@@ -206,7 +201,7 @@ public class ServiceTest_Remote extends AbstractStageTest {
     public void testAcceptance_01_external()
             throws Exception {
         Thread.sleep(SLEEP);
-        final String output = ServiceTest_Remote.remoteCall(new String[] {"status"});
+        final String output = ServiceRemoteTest.remoteCall(new String[] {"status"});
         if (!output.contains("SAPI: TCP 127.0.0.1:25000")) {
             Assert.assertTrue(output.contains("REMOTE ACCESS FAILED"));
             Assert.assertTrue(output.contains("Connection refused: connect"));
@@ -225,7 +220,7 @@ public class ServiceTest_Remote extends AbstractStageTest {
     public void testAcceptance_02_external()
             throws Exception {
         Thread.sleep(SLEEP);
-        final String output = ServiceTest_Remote.remoteCall(new String[] {"status", "unknown_host"});
+        final String output = ServiceRemoteTest.remoteCall(new String[] {"status", "unknown_host"});
         Assert.assertTrue(output.contains("REMOTE ACCESS FAILED"));
         Assert.assertTrue(output.contains("unknown_host"));
         Assert.assertFalse(output.contains("Network is unreachable: connect"));
@@ -242,7 +237,7 @@ public class ServiceTest_Remote extends AbstractStageTest {
     public void testAcceptance_03_external()
             throws Exception {
         Thread.sleep(SLEEP);
-        final String output = ServiceTest_Remote.remoteCall(new String[] {"status", "1234"});
+        final String output = ServiceRemoteTest.remoteCall(new String[] {"status", "1234"});
         Assert.assertTrue(output.contains("REMOTE ACCESS FAILED"));
         Assert.assertTrue(output.contains("Network is unreachable: connect"));
         Assert.assertFalse(output.contains("Connection refused: connect"));
@@ -259,7 +254,7 @@ public class ServiceTest_Remote extends AbstractStageTest {
     public void testAcceptance_04_external()
             throws Exception {
         Thread.sleep(SLEEP);
-        final String output = ServiceTest_Remote.remoteCall(new String[] {"status", "127.0.0.1:18000"});
+        final String output = ServiceRemoteTest.remoteCall(new String[] {"status", "127.0.0.1:18000"});
         Assert.assertTrue(output.contains("REMOTE ACCESS FAILED"));
         Assert.assertTrue(output.contains("Connection refused: connect"));
         Assert.assertFalse(output.contains("Network is unreachable: connect"));
@@ -276,7 +271,7 @@ public class ServiceTest_Remote extends AbstractStageTest {
     public void testAcceptance_05_external()
             throws Exception {
         Thread.sleep(SLEEP);
-        final String output = ServiceTest_Remote.remoteCall(new String[] {"status", "127.0.0.1:18001"});
+        final String output = ServiceRemoteTest.remoteCall(new String[] {"status", "127.0.0.1:18001"});
         Assert.assertFalse(output.contains("REMOTE ACCESS FAILED"));
         Assert.assertFalse(output.contains("Connection refused: connect"));
         Assert.assertFalse(output.contains("Network is unreachable: connect"));

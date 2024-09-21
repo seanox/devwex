@@ -26,13 +26,8 @@ import org.junit.Test;
 import com.seanox.test.Executor;
 import com.seanox.test.Executor.Worker;
 
-/**
- * Test cases for {@link com.seanox.devwex.Service}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
-public class ServiceTest_Restart extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Service}. */
+public class ServiceRestartTest extends AbstractStageTest {
     
     /** 
      * Test case for acceptance.

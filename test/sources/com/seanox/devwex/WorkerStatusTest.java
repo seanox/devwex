@@ -26,13 +26,8 @@ import org.junit.Test;
 import com.seanox.test.HttpUtils;
 import com.seanox.test.Pattern;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
-public class WorkerTest_Status extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerStatusTest extends AbstractStageTest {
     
     /** 
      * Test case for acceptance.

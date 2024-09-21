@@ -22,12 +22,7 @@ package com.seanox.devwex;
 
 import org.junit.Test;
 
-/**
- * Runner for the test stage for com.seanox.devwex.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
+/** Runner for the test stage for com.seanox.devwex. */
 public class TestRun extends AbstractStageTest {
     
     /** 

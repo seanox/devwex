@@ -31,13 +31,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Service}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
-public class ServiceTest_Module extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Service}. */
+public class ServiceModuleTest extends AbstractStageTest {
     
     /** 
      * Preparation of the runtime environment.
@@ -106,9 +101,9 @@ public class ServiceTest_Module extends AbstractStageTest {
     
     private static String getModuleExpose(final String module)
             throws Exception {
-        if (ServiceTest_Module.getModule(module) == null)
+        if (ServiceModuleTest.getModule(module) == null)
             return null;
-        return (String)AbstractTestInternalAccess.invoke(ServiceTest_Module.getModule(module), "expose");
+        return (String)AbstractTestInternalAccess.invoke(ServiceModuleTest.getModule(module), "expose");
     }
     
     /** 
@@ -123,23 +118,23 @@ public class ServiceTest_Module extends AbstractStageTest {
         
         Object module;
         
-        Assert.assertNull(ServiceTest_Module.getModuleExpose("module.Acceptance_00"));
-        Assert.assertNull(ServiceTest_Module.getModuleExpose("module.Acceptance_15"));
-        Assert.assertEquals("123", ServiceTest_Module.getModuleExpose("module.Acceptance_16"));
-        Assert.assertEquals("[123]", ServiceTest_Module.getModuleExpose("module.Acceptance_17"));
-        Assert.assertEquals("[*]", ServiceTest_Module.getModuleExpose("module.Acceptance_18"));
-        Assert.assertEquals("[*] [*]", ServiceTest_Module.getModuleExpose("module.Acceptance_19"));
-        Assert.assertEquals("[*] 123 [*]", ServiceTest_Module.getModuleExpose("module.Acceptance_20"));
+        Assert.assertNull(ServiceModuleTest.getModuleExpose("module.Acceptance_00"));
+        Assert.assertNull(ServiceModuleTest.getModuleExpose("module.Acceptance_15"));
+        Assert.assertEquals("123", ServiceModuleTest.getModuleExpose("module.Acceptance_16"));
+        Assert.assertEquals("[123]", ServiceModuleTest.getModuleExpose("module.Acceptance_17"));
+        Assert.assertEquals("[*]", ServiceModuleTest.getModuleExpose("module.Acceptance_18"));
+        Assert.assertEquals("[*] [*]", ServiceModuleTest.getModuleExpose("module.Acceptance_19"));
+        Assert.assertEquals("[*] 123 [*]", ServiceModuleTest.getModuleExpose("module.Acceptance_20"));
 
         AbstractStage.getOutputStreamCapture().reset();
         
-        Assert.assertNull(ServiceTest_Module.getModule("module.Acceptance_21"));
+        Assert.assertNull(ServiceModuleTest.getModule("module.Acceptance_21"));
         module = Service.load("module.Acceptance_21");
         Assert.assertNotNull(module);
         module = Service.load((Class<?>)module, null);
         Assert.assertNotNull(module);
-        Assert.assertNotNull(ServiceTest_Module.getModule("module.Acceptance_21"));
-        Assert.assertNull(ServiceTest_Module.getModuleExpose("module.Acceptance_21"));
+        Assert.assertNotNull(ServiceModuleTest.getModule("module.Acceptance_21"));
+        Assert.assertNull(ServiceModuleTest.getModuleExpose("module.Acceptance_21"));
         Assert.assertTrue(AbstractStage.getOutputStreamCapture().toString().contains("SERVICE INITIATE MODULE module.Acceptance_21"));
     }
 }

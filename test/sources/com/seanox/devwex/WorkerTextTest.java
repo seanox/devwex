@@ -26,13 +26,8 @@ import org.junit.Test;
 import com.seanox.test.MockUtils;
 import com.seanox.test.TextUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
-public class WorkerTest_Text extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerTextTest extends AbstractTest {
     
     private static String textHash(final String string)
             throws Exception {
@@ -63,7 +58,7 @@ public class WorkerTest_Text extends AbstractTest {
         for (int loop = 1; loop < 2; loop += 2)
             Assert.assertEquals("#" + loop + ":", 
                     MockUtils.readTestContent(loop +1),
-                    WorkerTest_Text.textEscape(MockUtils.readTestContent(loop)));
+                    WorkerTextTest.textEscape(MockUtils.readTestContent(loop)));
     }
     
     /** 
@@ -78,7 +73,7 @@ public class WorkerTest_Text extends AbstractTest {
         final String[] lines = content.split("\\R"); 
         for (int loop = 0; loop < lines.length; loop += 2) {
             Assert.assertEquals("#" + (loop +1) + ": " + lines[loop], lines[loop +1],
-                    WorkerTest_Text.textHash(TextUtils.unescape(lines[loop])));
+                    WorkerTextTest.textHash(TextUtils.unescape(lines[loop])));
         }
     }
     
@@ -94,7 +89,7 @@ public class WorkerTest_Text extends AbstractTest {
         final String[] lines = content.split("\\R"); 
         for (int loop = 0; loop < lines.length; loop += 2) {
             Assert.assertEquals("#" + (loop +1) + ": " + lines[loop], lines[loop +1],
-                    WorkerTest_Text.textDecode(lines[loop]));
+                    WorkerTextTest.textDecode(lines[loop]));
         }
     }
     
@@ -107,6 +102,6 @@ public class WorkerTest_Text extends AbstractTest {
     public void testAcceptance_5()
             throws Exception {
         final String string = new String(("\ud801\udc00").getBytes("UTF-8"), "UTF-8");
-        Assert.assertEquals("\\uD801\\uDC00", WorkerTest_Text.textEscape(string));
+        Assert.assertEquals("\\uD801\\uDC00", WorkerTextTest.textEscape(string));
     }    
 }

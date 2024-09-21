@@ -33,13 +33,8 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Service}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
-public class ServiceTest_Server extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Service}. */
+public class ServiceServerTest extends AbstractStageTest {
     
     /** 
      * Preparation of the runtime environment.

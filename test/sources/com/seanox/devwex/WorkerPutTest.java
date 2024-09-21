@@ -33,13 +33,8 @@ import com.seanox.test.Pattern;
 import com.seanox.test.StreamUtils;
 import com.seanox.test.Timing;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20221030
- */
-public class WorkerTest_Put extends AbstractStageRequestTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerPutTest extends AbstractStageRequestTest {
     
     /** 
      * Test case for acceptance.

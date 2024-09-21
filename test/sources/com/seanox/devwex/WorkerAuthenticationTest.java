@@ -23,16 +23,11 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
+/** TestSuite for {@link com.seanox.devwex.Worker}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    WorkerTest_AuthenticationBasic.class,
-    WorkerTest_AuthenticationDigest.class
+    WorkerAuthenticationBasicTest.class,
+    WorkerAuthenticationDigestTest.class
 })
-public class WorkerTest_Authentication extends AbstractStageTestSuite {
+public class WorkerAuthenticationTest extends AbstractStageTestSuite {
 }

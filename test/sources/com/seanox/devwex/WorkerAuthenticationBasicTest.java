@@ -29,13 +29,8 @@ import com.seanox.test.HttpUtils.Authentication.Digest;
 import com.seanox.test.HttpUtils.HeaderField;
 import com.seanox.test.Pattern;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220908
- */
-public class WorkerTest_AuthenticationBasic extends AbstractStageRequestTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerAuthenticationBasicTest extends AbstractStageRequestTest {
 
     /** 
      * Test case for acceptance.

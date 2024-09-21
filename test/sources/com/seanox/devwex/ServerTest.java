@@ -23,15 +23,10 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Server}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
+/** TestSuite for {@link com.seanox.devwex.Server}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    ServerTest_Connection.class
+    ServerConnectionTest.class
 })
 public class ServerTest extends AbstractStageTestSuite {
 }

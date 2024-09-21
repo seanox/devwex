@@ -48,13 +48,8 @@ import com.seanox.test.HttpUtils;
 import com.seanox.test.MockUtils;
 import com.seanox.test.Pattern;
 
-/**
- * Test cases for {@link com.seanox.devwex.Server}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220924
- */
-public class ServerTest_Connection extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Server}. */
+public class ServerConnectionTest extends AbstractStageTest {
 
     /**
      * Test if the expected/required servers are available.
@@ -116,7 +111,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     @Test
     public void testAcceptance_02()
             throws Exception {
-        ServerTest_Connection.initHttpsUrlConnection();
+        ServerConnectionTest.initHttpsUrlConnection();
         final URL url = new URL("https://127.0.0.1:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -193,7 +188,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_05()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_a.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.1:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -209,7 +204,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_06()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_x.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.1:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -224,7 +219,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     @Test
     public void testAcceptance_07()
             throws Exception {
-        ServerTest_Connection.initHttpsUrlConnection();
+        ServerConnectionTest.initHttpsUrlConnection();
         final URL url = new URL("https://127.0.0.2:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         try {Assert.assertNotEquals(200, urlConn.getResponseCode());
@@ -249,7 +244,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_08()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_a.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.2:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -264,7 +259,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     @Test
     public void testAcceptance_09()
             throws Exception {
-        ServerTest_Connection.initHttpsUrlConnection();
+        ServerConnectionTest.initHttpsUrlConnection();
         final URL url = new URL("https://127.0.0.3:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -280,7 +275,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_10()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_a.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.3:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(200, urlConn.getResponseCode());
@@ -297,7 +292,7 @@ public class ServerTest_Connection extends AbstractStageTest {
             throws Exception {
         for (final char client : ("abcx").toCharArray()) {
             final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_" + client + ".p12");
-            ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+            ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
             final URL url = new URL("https://127.0.0.1:18443");
             final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
             Assert.assertEquals(200, urlConn.getResponseCode());
@@ -315,7 +310,7 @@ public class ServerTest_Connection extends AbstractStageTest {
             throws Exception {
         for (final char client : ("abc").toCharArray()) {
             final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_" + client + ".p12");
-            ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+            ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
             final URL url = new URL("https://127.0.0.2:18443");
             final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
             Assert.assertEquals(200, urlConn.getResponseCode());
@@ -332,7 +327,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_13()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_x.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.2:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertNotEquals(200, urlConn.getResponseCode());
@@ -350,7 +345,7 @@ public class ServerTest_Connection extends AbstractStageTest {
             throws Exception {
         for (final char client : ("abcx").toCharArray()) {
             final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_" + client + ".p12");
-            ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+            ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
             final URL url = new URL("https://127.0.0.3:18443");
             final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
             Assert.assertEquals(200, urlConn.getResponseCode());
@@ -368,7 +363,7 @@ public class ServerTest_Connection extends AbstractStageTest {
             throws Exception {
         for (final char client : ("abc").toCharArray()) {
             final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_" + client + ".p12");
-            ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+            ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
             final URL url = new URL("https://127.0.0.4:18443");
             final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
             Assert.assertEquals(200, urlConn.getResponseCode());
@@ -385,7 +380,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     public void testAcceptance_16()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_x.p12");
-        ServerTest_Connection.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
+        ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.4:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(403, urlConn.getResponseCode());
@@ -400,7 +395,7 @@ public class ServerTest_Connection extends AbstractStageTest {
     @Test
     public void testAcceptance_17()
             throws Exception {
-        ServerTest_Connection.initHttpsUrlConnection();
+        ServerConnectionTest.initHttpsUrlConnection();
         final URL url = new URL("https://127.0.0.4:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
         Assert.assertEquals(403, urlConn.getResponseCode());

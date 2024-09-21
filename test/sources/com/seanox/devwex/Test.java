@@ -23,12 +23,7 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for com.seanox.devwex.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
+/** TestSuite for com.seanox.devwex. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     GeneratorTest.class,

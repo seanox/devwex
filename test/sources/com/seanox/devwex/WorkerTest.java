@@ -23,33 +23,28 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
+/** TestSuite for {@link com.seanox.devwex.Worker}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    WorkerTest_AccessLog.class,
-    WorkerTest_Authentication.class,
-    WorkerTest_Configuration.class,
-    WorkerTest_Delete.class,
-    WorkerTest_DirectoryIndex.class,
-    WorkerTest_File.class,
-    WorkerTest_Filter.class,
-    WorkerTest_Gateway.class,
-    WorkerTest_Get.class,
-    WorkerTest_Head.class,
-    WorkerTest_Locate.class,
-    WorkerTest_MimeType.class,
-    WorkerTest_Options.class,
-    WorkerTest_Performance.class,
-    WorkerTest_Put.class,
-    WorkerTest_Request.class,
-    WorkerTest_Status.class,
-    WorkerTest_Text.class,
-    WorkerTest_VirtualHost.class
+    WorkerAccessLogTest.class,
+    WorkerAuthenticationTest.class,
+    WorkerConfigurationTest.class,
+    WorkerDeleteTest.class,
+    WorkerDirectoryIndexTest.class,
+    WorkerFileTest.class,
+    WorkerFilterTest.class,
+    WorkerGatewayTest.class,
+    WorkerGetTest.class,
+    WorkerHeadTest.class,
+    WorkerLocateTest.class,
+    WorkerMimeTypeTest.class,
+    WorkerOptionsTest.class,
+    WorkerPerformanceTest.class,
+    WorkerPutTest.class,
+    WorkerRequestTest.class,
+    WorkerStatusTest.class,
+    WorkerTextTest.class,
+    WorkerVirtualHostTest.class
 })
 public class WorkerTest extends AbstractStageTestSuite {
 }

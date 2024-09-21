@@ -30,13 +30,8 @@ import com.seanox.test.HttpUtils;
 import com.seanox.test.HttpUtils.HeaderField;
 import com.seanox.test.Pattern;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220909
- */
-public class WorkerTest_Get extends AbstractStageRequestTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerGetTest extends AbstractStageRequestTest {
     
     /** 
      * Test case for acceptance.

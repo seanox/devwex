@@ -23,20 +23,15 @@ package com.seanox.devwex;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Service}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
+/** TestSuite for {@link com.seanox.devwex.Service}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    ServiceTest_Configuration.class,
-    ServiceTest_Module.class,
-    ServiceTest_Print.class,
-    ServiceTest_Remote.class,
-    ServiceTest_Restart.class,
-    ServiceTest_Server.class
+    ServiceConfigurationTest.class,
+    ServiceModuleTest.class,
+    ServicePrintTest.class,
+    ServiceRemoteTest.class,
+    ServiceRestartTest.class,
+    ServiceServerTest.class
 })
 public class ServiceTest extends AbstractStageTestSuite {
 }

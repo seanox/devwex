@@ -25,13 +25,8 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Worker}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220827
- */
-public class WorkerTest_File extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Worker}. */
+public class WorkerFileTest extends AbstractTest {
     
     private static String fileNormalize(final String path)
             throws Exception {
@@ -51,7 +46,7 @@ public class WorkerTest_File extends AbstractTest {
         final String[] lines = content.split("\\R");
         for (int loop = 0; loop < lines.length; loop += 2) {
             final String pattern = lines[loop +1];
-            final String value = WorkerTest_File.fileNormalize(lines[loop]);
+            final String value = WorkerFileTest.fileNormalize(lines[loop]);
             Assert.assertEquals("#" + (loop +1) + ": " + lines[loop], pattern, value);
         }
     }

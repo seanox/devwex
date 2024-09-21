@@ -25,13 +25,8 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Service#print(Object)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220907
- */
-public class ServiceTest_Print extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Service#print(Object)}. */
+public class ServicePrintTest extends AbstractStageTest {
     
     private static final int SLEEP = 250;
     

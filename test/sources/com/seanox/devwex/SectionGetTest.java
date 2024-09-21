@@ -23,13 +23,8 @@ package com.seanox.devwex;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Section}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220828
- */
-public class SectionTest_Get extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Section}. */
+public class SectionGetTest extends AbstractTest {
     
     @Test
     public void testAcceptance_01() {

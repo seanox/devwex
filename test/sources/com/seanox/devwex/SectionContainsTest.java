@@ -23,13 +23,8 @@ package com.seanox.devwex;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Section#contains(String)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220911
- */
-public class SectionTest_Contains extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Section#contains(String)}. */
+public class SectionContainsTest extends AbstractTest {
     
     @Test
     public void testKeyInvalid_1() {

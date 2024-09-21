@@ -25,13 +25,8 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Section#parse(String)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220827
- */
-public class SectionTest_Parse extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Section#parse(String)}. */
+public class SectionParseTest extends AbstractTest {
     
     @Test
     public void testAcceptance_1()

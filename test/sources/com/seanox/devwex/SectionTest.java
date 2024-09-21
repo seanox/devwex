@@ -29,18 +29,13 @@ import java.util.Map;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * TestSuite for {@link com.seanox.devwex.Section}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220827
- */
+/** TestSuite for {@link com.seanox.devwex.Section}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    SectionTest_Contains.class,
-    SectionTest_Parse.class,
+    SectionContainsTest.class,
+    SectionParseTest.class,
     SectionTest_Set.class,
-    SectionTest_Get.class,
+    SectionGetTest.class,
     SectionTest_ToString.class
 })
 public class SectionTest extends AbstractTestSuite {

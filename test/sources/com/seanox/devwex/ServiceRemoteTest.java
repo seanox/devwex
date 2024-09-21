@@ -20,17 +20,21 @@
  */
 package com.seanox.devwex;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
+import com.seanox.test.StreamUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 /** Test cases for {@link com.seanox.devwex.Service}. */
 public class ServiceRemoteTest extends AbstractStageTest {
@@ -178,10 +182,18 @@ public class ServiceRemoteTest extends AbstractStageTest {
             throws IOException {
         if (options == null)
             options = new String[0];
-        String command = "java -cp ./classes com.seanox.devwex.Service";
+        final String classPath = String.join(File.pathSeparator,
+                new String[] {"./classes", "../program/classes"});
+        String command = String.format("java -cp %s com.seanox.devwex.Service", classPath);
         for (String option : options)
             command += " " + option;
         final Process process = Runtime.getRuntime().exec(command);
+        final InputStream errorStream = process.getErrorStream();
+        if (Objects.nonNull(errorStream)) {
+            final String errorOutput = new String(StreamUtils.read(errorStream)).trim();
+            if (errorOutput.length() > 0)
+                throw new IOException(errorOutput);
+        }
         final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         final StringBuilder output = new StringBuilder();
         for (String line; (line = reader.readLine()) != null;) {

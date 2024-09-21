@@ -25,13 +25,8 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Remote}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
-public class RemoteTest_Restart extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Remote}. */
+public class RemoteRestartTest extends AbstractStageTest {
     
     /** 
      * Test case for RESTART.

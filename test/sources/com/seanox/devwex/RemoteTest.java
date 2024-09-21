@@ -26,10 +26,10 @@ import org.junit.runners.Suite;
 /** TestSuite for {@link com.seanox.devwex.Remote}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    RemoteTest_Invalid.class,
-    RemoteTest_Restart.class,
-    RemoteTest_Status.class,
-    RemoteTest_Timeout.class
+    RemoteInvalidTest.class,
+    RemoteRestartTest.class,
+    RemoteStatusTest.class,
+    RemoteTimeoutTest.class
 })
 public class RemoteTest extends AbstractStageTestSuite {
 }

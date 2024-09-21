@@ -25,13 +25,8 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 
-/**
- * Test cases for {@link com.seanox.devwex.Remote}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220831
- */
-public class RemoteTest_Invalid extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Remote}. */
+public class RemoteInvalidTest extends AbstractStageTest {
     
     /** 
      * Test case for an unknown command and overlength.
@@ -42,9 +37,9 @@ public class RemoteTest_Invalid extends AbstractStageTest {
     @Test
     public void testUnknownCommand_1()
             throws Exception {
-        String command = "";
+        final StringBuilder command = new StringBuilder();
         while (command.length() < 65536)
-            command += "XXXXXXXXX";
+            command.append("XXXXXXXXX");
         final String response = new String(HttpUtils.sendRequest("127.0.0.1:18001", command + "\r\n"));
         Assert.assertEquals("UNKNOWN COMMAND\r\n", response);
     }

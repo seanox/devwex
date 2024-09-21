@@ -26,13 +26,8 @@ import org.junit.Test;
 import com.seanox.test.HttpUtils;
 import com.seanox.test.Timing;
 
-/**
- * Test cases for {@link com.seanox.devwex.Remote}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220906
- */
-public class RemoteTest_Timeout extends AbstractStageTest {
+/** Test cases for {@link com.seanox.devwex.Remote}. */
+public class RemoteTimeoutTest extends AbstractStageTest {
 
     /** 
      * Test case for timeout.

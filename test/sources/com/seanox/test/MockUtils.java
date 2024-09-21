@@ -24,12 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-/**
- * Utilities for mock data.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220826
- */
+/** Utilities for mock data. */
 public class MockUtils {
     
     private MockUtils() {
@@ -146,7 +141,7 @@ public class MockUtils {
                 .filter(fetch -> !MockUtils.class.getName().equals(fetch.getClassName()))
                 .findFirst().get();
         final String resourcePath = stackTraceElement.getClassName()
-                .replace('.', '/') + String.format(" ... %s.txt", source);
+                .replace('.', '/') + String.format("_%s.txt", source);
         final ClassLoader classLoader = Class.forName(stackTraceElement.getClassName()).getClassLoader();
         return new String(StreamUtils.read(classLoader.getResourceAsStream(resourcePath)));
     }

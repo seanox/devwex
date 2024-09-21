@@ -36,7 +36,7 @@ import org.junit.runners.Suite;
     SectionParseTest.class,
     SectionTest_Set.class,
     SectionGetTest.class,
-    SectionTest_ToString.class
+    SectionToStringTest.class
 })
 public class SectionTest extends AbstractTestSuite {
     

@@ -23,12 +23,7 @@ package com.seanox.devwex;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Test cases for {@link com.seanox.devwex.Section#set(String, String)}.
- *
- * @author  Seanox Software Solutions
- * @version 5.5.0 20220911
- */
+/** Test cases for {@link com.seanox.devwex.Section#set(String, String)}. */
 public class SectionTest_Set extends AbstractTest {
     
     @Test

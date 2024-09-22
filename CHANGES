@@ -5,10 +5,11 @@
 5.8.0 2025xxxx
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
 ??: Documentation: Update for Unix and Linux
+??: Documentation: Architecture image
 ??: Service: devwex start [directory] (read all ini files from directory)
+??: Automation (build, test, release) via GitHub actions
 
 5.7.0 2024xxxx
-??: Automation (build, test, release) via GitHub actions
 BF: Unix/Linux: Correction of the missing second start parameter in the bash script
 BF: Windows: Correction of the missing second start parameter in the batch script
 CR: Unix/Linux: Optimization of bash scripts and runtime directory handling
@@ -33,7 +34,7 @@ CR: Windows: Optimization of batch scripts and runtime directory handling
       searched in the root of the .\runtime directory.
 CR: HTTP(S): Optimization of the composition of the UNIQUE_ID
 CR: Documentation: Switch to Markdown
-    TODO: architectural image
+CR: Test: Review and Integration in build.xml (preparation for automation)
 
 5.6.0 20231227
 BF: Review: Optimization and corrections

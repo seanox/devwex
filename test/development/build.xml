@@ -31,9 +31,6 @@
     <ant antfile="build.xml" target="compile"
         dir="${parent.development}" useNativeBasedir="true"
         inheritAll="false" inheritRefs="true"/>
-    <javac srcdir="${workspace.resources.libraries}" destdir="${workspace.resources.libraries}"
-        classpath="${workspace}/../program/devwex.jar"
-        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true"/>
   </target>
 
   <target name="resources" depends="compile">
@@ -42,8 +39,8 @@
         <include name="**/*.class"/>
         <include name="**/*.jar"/>
       </fileset>
-    </delete>    
-    
+    </delete>
+
     <javac srcdir="${workspace.resources.libraries}" destdir="${workspace.resources.libraries}"
         classpath="${workspace}/../program/devwex.jar"
         source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true"/>

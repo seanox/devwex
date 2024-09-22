@@ -31,6 +31,7 @@ abstract class AbstractTest {
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(final Description description) {
+            System.out.printf("%n%s:%s%n", description.getClassName(), description.getMethodName());
         }
     };
 }

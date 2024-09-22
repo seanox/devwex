@@ -31,6 +31,16 @@
     <ant antfile="build.xml" target="compile"
         dir="${parent.development}" useNativeBasedir="true"
         inheritAll="false" inheritRefs="true"/>
+
+    <delete dir="${workspace.classes}"/>
+    <mkdir dir="${workspace.classes}"/>
+    <javac srcdir="${workspace.sources}" destdir="${workspace.classes}"
+        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true">
+      <classpath>
+        <fileset dir="${workspace.libraries}" includes="*.jar"/>
+        <fileset dir="${parent.program}" includes="*.jar"/>
+      </classpath>
+    </javac>
   </target>
 
   <target name="resources" depends="compile">
@@ -341,11 +351,12 @@
     <junit fork="on" dir="${workspace}"
         haltonfailure="on" printsummary="on" showoutput="on">
       <classpath>
+        <pathelement path="${workspace.classes}"/>
         <fileset dir="${workspace.libraries}" includes="*.jar"/>
         <fileset dir="${parent.program}" includes="*.jar"/>
       </classpath>
       <!-- static test cases -->
-      <test name="com.seanox.devwex.GeneratorTest" outfile="GeneratorTest"  
+      <test name="com.seanox.devwex.GeneratorTest" outfile="GeneratorTest"
           haltonfailure="on" todir="${workspace.reports}">
         <formatter type="plain"/>
       </test>

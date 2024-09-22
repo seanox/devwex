@@ -20,6 +20,9 @@
     <echo>                                                               </echo>
     <echo>  compile      Compiles the applications and test classes      </echo>
     <echo>                                                               </echo>
+    <echo>  resources    Compiles, creates and prepares the test         </echo>
+    <echo>               resources                                       </echo>
+    <echo>                                                               </echo>
     <echo>  unit-test    Compiles the application and test classes and   </echo>
     <echo>               then runs the unit tests                        </echo>
   </target>
@@ -28,7 +31,12 @@
     <ant antfile="build.xml" target="compile"
         dir="${parent.development}" useNativeBasedir="true"
         inheritAll="false" inheritRefs="true"/>
+    <javac srcdir="${workspace.resources.libraries}" destdir="${workspace.resources.libraries}"
+        classpath="${workspace}/../program/devwex.jar"
+        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true"/>
+  </target>
 
+  <target name="resources" depends="compile">
     <delete>
       <fileset dir="${workspace.resources.libraries}">
         <include name="**/*.class"/>
@@ -211,7 +219,7 @@
     <delete dir="${workspace.classes}"/>
     <mkdir dir="${workspace.classes}"/>
     <javac srcdir="${workspace.sources}" destdir="${workspace.classes}"
-           source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true">
+        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true">
       <classpath>
         <fileset dir="${workspace.libraries}" includes="*.jar"/>
         <fileset dir="${parent.program}" includes="*.jar"/>

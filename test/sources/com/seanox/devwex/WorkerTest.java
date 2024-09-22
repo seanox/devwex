@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
 /** TestSuite for {@link com.seanox.devwex.Worker}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    WorkerVirtualHostTest.class,
     WorkerAccessLogTest.class,
     WorkerAuthenticationTest.class,
     WorkerConfigurationTest.class,
@@ -42,8 +43,7 @@ import org.junit.runners.Suite;
     WorkerPutTest.class,
     WorkerRequestTest.class,
     WorkerStatusTest.class,
-    WorkerTextTest.class,
-    WorkerVirtualHostTest.class
+    WorkerTextTest.class
 })
 public class WorkerTest extends AbstractStageTestSuite {
 }

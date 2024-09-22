@@ -37,7 +37,7 @@ import com.seanox.test.SystemInfo;
 import com.seanox.test.Timing;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
-public class WorkerPerformanceTest extends AbstractStageRequestTest {
+public class PerformanceTest extends AbstractStageRequestTest {
     
     private static String createFailedTestWorkerInfo(final Executor executor) {
         String result = "";
@@ -66,7 +66,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         executor.execute();
         final boolean success = executor.await(5000);
         timing.assertTimeIn(750, 5000);
-        final String failedTestWorkerInfo = WorkerPerformanceTest.createFailedTestWorkerInfo(executor);
+        final String failedTestWorkerInfo = PerformanceTest.createFailedTestWorkerInfo(executor);
         Assert.assertTrue(failedTestWorkerInfo, success);
         Assert.assertFalse(failedTestWorkerInfo, executor.isFailed());
         Assert.assertFalse(failedTestWorkerInfo, executor.isInterrupted());
@@ -110,7 +110,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         executor1.execute();
         final boolean success1 = executor1.await(5000);
         timing.assertTimeIn(750, 5000);
-        final String failedTestWorkerInfo1 = WorkerPerformanceTest.createFailedTestWorkerInfo(executor1);
+        final String failedTestWorkerInfo1 = PerformanceTest.createFailedTestWorkerInfo(executor1);
         Assert.assertTrue(failedTestWorkerInfo1, success1);
         Assert.assertFalse(failedTestWorkerInfo1, executor1.isFailed());
         Assert.assertFalse(failedTestWorkerInfo1, executor1.isInterrupted());
@@ -122,7 +122,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         executor2.execute();
         final boolean success2 = executor2.await(5000); 
         timing.assertTimeIn(750, 5000);
-        final String failedTestWorkerInfo2 = WorkerPerformanceTest.createFailedTestWorkerInfo(executor2);
+        final String failedTestWorkerInfo2 = PerformanceTest.createFailedTestWorkerInfo(executor2);
         Assert.assertTrue(failedTestWorkerInfo2, success2);
         Assert.assertFalse(failedTestWorkerInfo2, executor2.isFailed());
         Assert.assertFalse(failedTestWorkerInfo2, executor2.isInterrupted());
@@ -193,7 +193,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         Service.restart();
         Thread.sleep(3000);
         
-        WorkerPerformanceTest.waitRuntimeReady();
+        PerformanceTest.waitRuntimeReady();
 
         final long threadCount1 = Thread.activeCount() /10;
         final long memoryUsage1 = SystemInfo.getSystemMemoryLoad() /1024 /1024;
@@ -206,7 +206,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         executor.execute();
         final boolean success = executor.await(5000);
         timing.assertTimeIn(750, 5000);
-        final String failedTestWorkerInfo = WorkerPerformanceTest.createFailedTestWorkerInfo(executor);
+        final String failedTestWorkerInfo = PerformanceTest.createFailedTestWorkerInfo(executor);
         Assert.assertTrue(failedTestWorkerInfo, success);
         Assert.assertFalse(failedTestWorkerInfo, executor.isFailed());
         Assert.assertFalse(failedTestWorkerInfo, executor.isInterrupted());
@@ -232,7 +232,7 @@ public class WorkerPerformanceTest extends AbstractStageRequestTest {
         }
 
         // server needs some time to clean up unused workers
-        WorkerPerformanceTest.waitRuntimeReady();
+        PerformanceTest.waitRuntimeReady();
         Thread.sleep(60000);
         final long threadCount4 = Thread.activeCount() /10;
         final long memoryUsage4 = SystemInfo.getSystemMemoryLoad() /1024 /1024;

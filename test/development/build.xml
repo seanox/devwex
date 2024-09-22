@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="devwex-test" default="compile" basedir="${ant.file}/../..">
+<project name="devwex-test" default="usage" basedir="${ant.file}/../..">
 
   <property name="parent" value=".."/>
   <property name="parent.development" value="${parent}/development"/>
@@ -8,12 +8,22 @@
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.classes" value="${workspace}/classes"/>
   <property name="workspace.libraries" value="${workspace}/libraries"/>
-  <property name="workspace.resources" value="${workspace}/resources"/>  
+  <property name="workspace.reports" value="${workspace}/reports"/>
+  <property name="workspace.resources" value="${workspace}/resources"/>
   <property name="workspace.resources.libraries" value="${workspace.resources}/libraries"/>
   <property name="workspace.resources.certificates" value="${workspace.resources}/certificates"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="compiler.level" value="8"/>
-  
+
+  <target name="usage">
+    <echo>Following targets are available:                               </echo>
+    <echo>                                                               </echo>
+    <echo>  compile      Compiles the applications and test classes      </echo>
+    <echo>                                                               </echo>
+    <echo>  unit-test    Compiles the application and test classes and   </echo>
+    <echo>               then runs the unit tests                        </echo>
+  </target>
+
   <target name="compile">
     <ant antfile="build.xml" target="compile"
         dir="${parent.development}" useNativeBasedir="true"
@@ -321,12 +331,44 @@
   </target>
 
   <target name="unit-test" depends="compile">
-    <java classname="org.junit.runner.JUnitCore" fork="true" failonerror="true">
-      <arg value="com.seanox.devwex.Test"/>
+    <delete dir="${workspace.reports}"/>
+    <mkdir dir="${workspace.reports}"/>
+    <junit fork="on" dir="${workspace}"
+        haltonfailure="on" printsummary="on" showoutput="on">
       <classpath>
         <fileset dir="${workspace.libraries}" includes="*.jar"/>
         <fileset dir="${parent.program}" includes="*.jar"/>
       </classpath>
-    </java>
+      <!-- static test cases -->
+      <test name="com.seanox.devwex.GeneratorTest" outfile="GeneratorTest"  
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <test name="com.seanox.devwex.InitializeTest" outfile="InitializeTest"  
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <test name="com.seanox.devwex.SectionTest" outfile="SectionTest"  
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <!-- dynamic stage test cases -->
+      <test name="com.seanox.devwex.RemoteTest" outfile="RemoteTest"
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <test name="com.seanox.devwex.ServerTest" outfile="ServerTest"
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <test name="com.seanox.devwex.ServiceTest" outfile="ServiceTest"
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+      <test name="com.seanox.devwex.WorkerTest" outfile="WorkerTest"
+          haltonfailure="on" todir="${workspace.reports}">
+        <formatter type="plain"/>
+      </test>
+    </junit>
   </target>
 </project>

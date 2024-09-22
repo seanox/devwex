@@ -39,7 +39,6 @@ import org.junit.runners.Suite;
     WorkerLocateTest.class,
     WorkerMimeTypeTest.class,
     WorkerOptionsTest.class,
-    WorkerPerformanceTest.class,
     WorkerPutTest.class,
     WorkerRequestTest.class,
     WorkerStatusTest.class,

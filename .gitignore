@@ -15,3 +15,4 @@
 /test/classes
 /test/stage
 /test/reports
+/test/junit*.properties

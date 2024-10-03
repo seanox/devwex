@@ -1459,8 +1459,8 @@ XCGI are defined in this section.
 > [!NOTE]
 > XCGI/CGI applications determine system and runtime information about the
 > environment variables, so essential environment variables such as
-> `SYSTEMDRIVE`, `SYSTEMROOT`, `PATH` and for PHP `REDIRECT_STATUS = 302` should
-> be set in the configuration file `devwex.ini`.
+> `SYSTEMDRIVE`, `SYSTEMROOT` and `PATH` should be set in the configuration
+> file `devwex.ini`.
 
 > [!TIP]
 > The option `[?]` at the end of a key identifies it as dynamic by specifying
@@ -1838,8 +1838,6 @@ _Overview of environment variables (selection)_
 > cgi.redirect_status_env = 302
 > cgi.rfc2616_headers     = 1
 > ```
-> The latter can alternatively be set in section `[SERVER:ENV]` of the
-> configuration file `devwex.ini` by `REDIRECT_STATUS = 302`.
 
 > [!TIP]
 > XCGI/CGI applications and scripts can be used in all directories of the

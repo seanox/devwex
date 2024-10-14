@@ -1493,11 +1493,15 @@ class Worker implements Runnable {
                         this.status = 405;
                 }
             }
+
+            return;
         }
 
         // Part 5 - Media type / Content type are determined and it is verified
-        // whether the client supports it.
-        
+        // whether the client supports it. This only makes sense if the request
+        // does not use a gateway, as otherwise the gateway has to take over
+        // this task.
+
         // media type/content type is determined
         this.mediatype = this.mediatypes.get(type);
 
@@ -1519,8 +1523,8 @@ class Worker implements Runnable {
                         break;
                     offset = this.mediatype.indexOf("/");
                     if (offset >= 0
-                            && (entry.equals(this.mediatype.substring(0, offset +1).concat("*"))
-                                    || entry.equals(("*").concat(this.mediatype.substring(offset)))))
+                            && (entry.equals(this.mediatype.substring(0, offset + 1).concat("*"))
+                            || entry.equals(("*").concat(this.mediatype.substring(offset)))))
                         break;
                 } else this.status = 406;
             }

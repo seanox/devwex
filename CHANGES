@@ -12,6 +12,9 @@
 5.7.0 2024xxxx
 BF: Unix/Linux: Correction of the missing second start parameter in the bash script
 BF: Windows: Correction of the missing second start parameter in the batch script
+BF: HTTP(S): Correction of the Accept header when using CGI
+    The server has incorrectly determined the content type for the CGI.
+    Now the CGI must take care of the Accept header, as it should.
 CR: Unix/Linux: Optimization of bash scripts and runtime directory handling
     - Optimization of JRE determination in the runtime directory
       The Directory name does not matter, it is searched for files ./java,

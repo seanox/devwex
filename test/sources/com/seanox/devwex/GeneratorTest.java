@@ -471,5 +471,12 @@ public class GeneratorTest extends AbstractTest {
         generator.set(new Hashtable<>());
         generator.set(null, null);
         generator.set("", new Hashtable<>());
-    }     
+    } 
+    
+    @Test
+    public void testUnicode_1()
+            throws Exception {
+        final Generator generator = Generator.parse(MockUtils.readTestContent(1).getBytes());
+        Assert.assertEquals(MockUtils.readTestContent(2), new String(generator.extract()));
+    } 
 }

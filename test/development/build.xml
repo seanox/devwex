@@ -41,9 +41,7 @@
         <fileset dir="${parent.program}" includes="*.jar"/>
       </classpath>
     </javac>
-  </target>
 
-  <target name="resources" depends="compile">
     <delete>
       <fileset dir="${workspace.resources.libraries}">
         <include name="**/*.class"/>

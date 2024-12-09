@@ -926,21 +926,17 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         while (this.status < Service.STOP) {
 
             Section section = this.initialize.get("common");
-            if (section.get("cleanup").toLowerCase().equals("on"))
+
+            if (section.get("cleanup").toLowerCase().equals("on")) {
                 count = Thread.activeCount();
-            
-            if (total != count)
-                delta = delta << 1;
-            if (total > count)
-                delta = delta | 1;
-
-            if ((delta & 0xFF) == 0xFF) 
-                System.gc();
-            if ((delta & 0xFF) == 0xFF)
-                delta = delta << 1;
-
-            delta = delta & 0xFF;
-            total = count;
+                if (count == total) {
+                    if (++delta >= 50)
+                        delta = 1;
+                } else delta = -1;
+                total = count;
+                if (delta == 49)
+                    System.gc();
+            }
 
             if (section.get("reload").toLowerCase().equals("on")
                     && modified != this.configuration.lastModified()) {

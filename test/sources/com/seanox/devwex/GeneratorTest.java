@@ -478,5 +478,12 @@ public class GeneratorTest extends AbstractTest {
             throws Exception {
         final Generator generator = Generator.parse(MockUtils.readTestContent(1).getBytes());
         Assert.assertEquals(MockUtils.readTestContent(2), new String(generator.extract()));
-    } 
+    }
+
+    @Test
+    public void testUnicode_2()
+            throws Exception {
+        final Generator generator = Generator.parse(MockUtils.readTestContent(1).getBytes());
+        Assert.assertEquals(MockUtils.readTestContent(2), new String(generator.extract()));
+    }
 }

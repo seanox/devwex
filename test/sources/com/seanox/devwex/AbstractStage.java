@@ -26,6 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -259,10 +260,8 @@ abstract class AbstractStage {
             return;
         AbstractStage.lock = Math.max(1, AbstractStage.lock);
 
-        final String defaultCharsetName = Charset.defaultCharset().name();
-        if (!defaultCharsetName.equalsIgnoreCase("ISO-8859-1")
-                && !defaultCharsetName.equalsIgnoreCase("Windows-1252"))
-            throw new RuntimeException("Character encoding ISO-8859-1 or Windows-1252 required");
+        if (!StandardCharsets.ISO_8859_1.equals(Charset.defaultCharset()))
+            throw new RuntimeException("Character encoding ISO-8859-1 required");
 
         final String version = System.getProperty("java.version");
         if (!version.matches("^1\\.8\\..*$"))

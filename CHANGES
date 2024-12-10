@@ -15,7 +15,10 @@ BF: Windows: Correction of the missing second start parameter in the batch scrip
 BF: HTTP(S): Correction of the Accept header when using CGI
     The server has incorrectly determined the content type for the CGI.
     Now the CGI must take care of the Accept header, as it should.
-BF: Service: Optimization of automatic resource clean-up     
+BF: Service: Optimization of automatic resource clean-up
+BF: Service: Optimization for UTF-8
+    In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit US-ASCII and in
+    extension ISO-8859-1 are supported for request and response.
 CR: Unix/Linux: Optimization of bash scripts and runtime directory handling
     - Optimization of JRE determination in the runtime directory
       The Directory name does not matter, it is searched for files ./java,

@@ -20,6 +20,7 @@
  */
 package com.seanox.devwex;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -42,8 +43,11 @@ public class ServiceModuleTest extends AbstractStageTest {
     public static void initiate()
             throws Exception {
         final String rootStageProgram = AbstractStage.getRootStageProgram().toString();
+        final long lastModified = new File(rootStageProgram, "devwex.ini").lastModified();
         Files.copy(Paths.get(rootStageProgram, "devwex.ini"), Paths.get(rootStageProgram, "devwex.ini_"), StandardCopyOption.REPLACE_EXISTING); 
         Files.copy(Paths.get(rootStageProgram, "devwex.xapi"), Paths.get(rootStageProgram, "devwex.ini"), StandardCopyOption.REPLACE_EXISTING);
+        if (new File(rootStageProgram, "devwex.ini").lastModified() <= lastModified)
+            new File(rootStageProgram, "devwex.ini").setLastModified(lastModified +1);
         Thread.sleep(250);
         AbstractStage.await();
     }

@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -257,9 +256,7 @@ abstract class AbstractStage {
     static void prepareStage()
             throws Exception {
         
-        final Field defaultCharset = Charset.class.getDeclaredField("defaultCharset");
-        defaultCharset.setAccessible(true);
-        defaultCharset.set(null, StandardCharsets.ISO_8859_1);
+        System.setProperty("file.encoding", StandardCharsets.ISO_8859_1.name());
 
         if (AbstractStage.lock++ > 0)
             return;

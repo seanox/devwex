@@ -25,9 +25,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Date;
 import java.util.Enumeration;
@@ -764,13 +762,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         // In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit US-ASCII
         // and in extension ISO-8859-1 are supported. DefaultCharset is set via
         // reflections to overwrite the VM argument -Dfile.encoding if necessary.
-
-        try {
-            Field charset = Charset.class.getDeclaredField("defaultCharset");
-            charset.setAccessible(true);
-            charset.set(null, Charset.forName("ISO-8859-1"));
-        } catch (Throwable throwable) {
-        }
+        
+        System.setProperty("file.encoding", "ISO-8859-1");
 
         if (options == null
                 || options.length < 1)

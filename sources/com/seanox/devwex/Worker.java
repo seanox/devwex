@@ -1523,7 +1523,7 @@ class Worker implements Runnable {
                         break;
                     offset = this.mediatype.indexOf("/");
                     if (offset >= 0
-                            && (entry.equals(this.mediatype.substring(0, offset + 1).concat("*"))
+                            && (entry.equals(this.mediatype.substring(0, offset +1).concat("*"))
                                     || entry.equals(("*").concat(this.mediatype.substring(offset)))))
                         break;
                 } else this.status = 406;

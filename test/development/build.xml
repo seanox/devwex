@@ -353,6 +353,7 @@
         <fileset dir="${workspace.libraries}" includes="*.jar"/>
         <fileset dir="${parent.program}" includes="*.jar"/>
       </classpath>
+      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <!-- static test cases -->
       <test name="com.seanox.devwex.GeneratorTest" outfile="GeneratorTest"
           haltonfailure="on" todir="${workspace.reports}">

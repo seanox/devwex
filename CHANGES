@@ -9,7 +9,7 @@
 ??: Service: devwex start [directory] (read all ini files from directory)
 ??: Automation (build, test, release) via GitHub actions
 
-5.7.0 2024xxxx
+5.7.0 20241213
 BF: Unix/Linux: Correction of the missing second start parameter in the bash script
 BF: Windows: Correction of the missing second start parameter in the batch script
 BF: HTTP(S): Correction of the Accept header when using CGI

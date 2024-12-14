@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Date;
 import java.util.Enumeration;
@@ -761,7 +762,17 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
         // In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit US-ASCII
         // and in extension ISO-8859-1 are supported. DefaultCharset is set via
-        // reflections to overwrite the VM argument -Dfile.encoding if necessary.
+        // reflections to overwrite the VM argument -Dfile.encoding if
+        // necessary.
+        
+        // Starting with Java 18, internal setting no longer works and must be
+        // set as a VM argument. Setting via reflections is also no longer
+        // permitted. Complete conversion to UTF-8 is possible. However, there
+        // are numerous special features with regard to modules. It should
+        // always be noted that network communication uses ISO-8859-1 and the
+        // module logic, as well as the API, uses UTF-8. It becomes complicated
+        // if, for example, URL-encoded strings contain ISO-8859-1 and UTF-8 in
+        // the. Therefore the decision: ISO-8859-1 for everything! 
         
         System.setProperty("file.encoding", "ISO-8859-1");
 
@@ -799,6 +810,16 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             return;
         }
 
+        // In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit US-ASCII
+        // and in extension ISO-8859-1/Windows-1252/CP-1252 are supported.
+        // Therefore DefaultCharset must be ISO-8859-1 compatible! Windows-1252
+        // and CP-1252 are only required for development. A clean solution is to
+        // decouple the web server logic and the network communication.
+        if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$")) {
+            Service.print("ISO-8859-1 is required as standard encoding.", true);
+            return;
+        }
+        
         // START - start the server services
         if (string.matches("start")) {
             Service.initiate(Service.START, options[1]);

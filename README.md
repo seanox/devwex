@@ -64,7 +64,7 @@ Folgenden Seanox Software Solutions oder kurz Seanox genannt.
 
 Diese Software unterliegt der Version 2 der Apache License.
 
-Copyright (C) 2023 Seanox Software Solutions
+Copyright (C) 2024 Seanox Software Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -83,8 +83,8 @@ specific language governing permissions and limitations under the License.
 
 
 # Downloads
-[Seanox Devwex 5.6.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.6.0.zip)  
-[Seanox Devwex 5.6.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.6.0-win.zip)  
+[Seanox Devwex 5.7.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0.zip)  
+[Seanox Devwex 5.7.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0-win.zip)  
 
 
 # Installation
@@ -105,20 +105,18 @@ Go to the program directory and start the program directly or by script.
 
 
 # Changes
-## 5.6.0 20231227  
-BF: Review: Optimization and corrections  
-BF: Worker: Correction of the unwanted SocketException on stop and restart  
-BF: Worker: Correction of logging if the client closes the connection unexpectedly  
-BF: HTML: Cleanup of the obsolete type attribute in the style tag  
-BF: Project: Update of slogan (Experimental Server Engine)  
-BF: (Class)Loader: Optimization and corrections of error handling  
-BR: Windows: Optimization and corrections for case insensitive commands  
-CR: XAPI: Change method String Module.explain() to String Module.expose()  
-CR: SAPI: Change method String Server.explain() to String Server.expose()  
-CR: Documentation: Reduction to English  
-CR: Test: Integration of the test environment  
-CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.3.4.0)  
-CR: Windows: Optimization of JRE determination  
+## 5.7.0 20241214  
+BF: Unix/Linux: Correction of the missing second start parameter in the bash script  
+BF: Windows: Correction of the missing second start parameter in the batch script  
+BF: HTTP(S): Correction of the Accept header when using CGI  
+BF: Service: Optimization of automatic resource clean-up  
+BF: Service: Optimization for UTF-8  
+CR: Unix/Linux: Optimization of bash scripts and runtime directory handling  
+CR: Windows: Optimization of batch scripts and runtime directory handling  
+CR: HTTP(S): Optimization of the composition of the UNIQUE_ID  
+CR: Documentation: Switch to Markdown  
+CR: Test: Review and Integration in build.xml (preparation for automation)  
+CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.0.0)  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

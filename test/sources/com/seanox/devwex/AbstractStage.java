@@ -25,8 +25,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -256,18 +254,9 @@ abstract class AbstractStage {
     static void prepareStage()
             throws Exception {
         
-        System.setProperty("file.encoding", StandardCharsets.ISO_8859_1.name());
-
         if (AbstractStage.lock++ > 0)
             return;
         AbstractStage.lock = Math.max(1, AbstractStage.lock);
-
-        if (!StandardCharsets.ISO_8859_1.equals(Charset.defaultCharset()))
-            throw new RuntimeException("Character encoding ISO-8859-1 required");
-
-        final String version = System.getProperty("java.version");
-        if (!version.matches("^1\\.8\\..*$"))
-            throw new RuntimeException("Java 1.8.x is required");
 
         final File rootStage = AbstractStage.getRootStage();
         if (Files.exists(rootStage.toPath()))

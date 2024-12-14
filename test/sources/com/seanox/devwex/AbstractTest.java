@@ -20,6 +20,10 @@
  */
 package com.seanox.devwex;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -27,6 +31,18 @@ import org.junit.runner.Description;
 
 /** Abstract class to implement a test. */
 abstract class AbstractTest {
+    
+    @BeforeClass
+    public static void prepare() {
+        
+        System.setProperty("file.encoding", StandardCharsets.ISO_8859_1.name());
+        if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$"))
+            throw new RuntimeException("Character encoding ISO-8859-1 required");
+
+        final String version = System.getProperty("java.version");
+        if (!version.matches("^1\\.8\\..*$"))
+            throw new RuntimeException("Java 1.8.x is required");
+    }
 
     @Rule
     public TestRule watcher = new TestWatcher() {

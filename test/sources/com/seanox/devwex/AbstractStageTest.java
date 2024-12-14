@@ -26,7 +26,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 /** Abstract class to implement a stage based test. */
-abstract class AbstractStageTest {
+abstract class AbstractStageTest extends AbstractTest {
     
     @BeforeClass
     public static void prepareStage()

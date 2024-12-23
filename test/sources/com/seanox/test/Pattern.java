@@ -76,9 +76,9 @@ public class Pattern {
     
     /** Pattern for an access log entry with status 408 */
     public static final String ACCESS_LOG_STATUS_408 = ACCESS_LOG_STATUS("408");
-    
-    /** Pattern for an access log entry with status 424 */
-    public static final String ACCESS_LOG_STATUS_424 = ACCESS_LOG_STATUS("424");
+
+    /** Pattern for an access log entry with status 500 */
+    public static final String ACCESS_LOG_STATUS_500 = ACCESS_LOG_STATUS("500");
 
     /** Pattern for an access log entry with status 501 */
     public static final String ACCESS_LOG_STATUS_501 = ACCESS_LOG_STATUS("501");
@@ -323,10 +323,10 @@ public class Pattern {
     
     /** Pattern for a http response header with status 416 */
     public static final String HTTP_RESPONSE_STATUS_416 = HTTP_RESPONSE_STATUS("416");
-    
-    /** Pattern for a http response header with status 424 */
-    public static final String HTTP_RESPONSE_STATUS_424 = HTTP_RESPONSE_STATUS("424");
-    
+
+    /** Pattern for a http response header with status 500 */
+    public static final String HTTP_RESPONSE_STATUS_500 = HTTP_RESPONSE_STATUS("500");
+
     /** Pattern for a http response header with status 501 */
     public static final String HTTP_RESPONSE_STATUS_501 = HTTP_RESPONSE_STATUS("501");
 

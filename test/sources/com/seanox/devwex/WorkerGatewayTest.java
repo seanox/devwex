@@ -373,7 +373,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
                 + "\r\n";
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
         
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS("401 Authorization Required")));
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS("401 Unauthorized")));
         Assert.assertFalse(response.matches("(?s)^.*\r\nHTTP/1\\.0 401.*$"));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE_DIFFUSE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_LENGTH_DIFFUSE));
@@ -388,7 +388,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
      * Test case for acceptance.
      * The CGI script responds the request with {@code HTTP/1.1 401 Test ...}.
      * The status text is individual but is responded with the server standard
-     * {@code HTTP/1.0 401 Authorization Required}.
+     * {@code HTTP/1.0 401 Unauthorized}.
      * @throws Exception
      */    
     @Test
@@ -400,7 +400,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
                 + "\r\n";
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
         
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS("401 Authorization Required")));
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS("401 Unauthorized")));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE_DIFFUSE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_LENGTH_DIFFUSE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));

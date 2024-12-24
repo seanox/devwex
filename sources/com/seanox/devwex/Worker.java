@@ -2203,10 +2203,10 @@ class Worker implements Runnable {
         if (!this.fields.contains("http_content_length")) {
             // directory structure is created
             // if successful STATUS 201 is set
-            // in case of errors STATUS 424 is set
+            // in case of errors STATUS 500 is set
             if (!file.isDirectory()
                     && !file.mkdirs())
-                this.status = 424;
+                this.status = 500;
             if (this.status == 200
                     || this.status == 404) {
                 this.fields.set("req_location", this.environment.get("script_uri"));
@@ -2250,10 +2250,12 @@ class Worker implements Runnable {
             }
             
             // if the file cannot be created or can only be created incompletely
-            // due to timeout, STATUS 424 is set
+            // due to timeout, STATUS 400 is set
             if (length > 0)
-                this.status = 424;
+                this.status = 400;
 
+        } catch (IOException exception) {
+            this.status = 400;
         } finally {
             try {output.close();
             } catch (Throwable throwable) {
@@ -2271,11 +2273,11 @@ class Worker implements Runnable {
     private void doDelete() {
         
         // requested resource is completely deleted,
-        // if an error occurs STATUS 424 is set.
+        // if an error occurs STATUS 500 is set.
         if (Worker.fileDelete(new File(this.resource)))
             return;
         
-        this.status = 424;
+        this.status = 500;
     }
 
     private void doStatus()
@@ -2467,7 +2469,7 @@ class Worker implements Runnable {
                             && method.equals("put"))
                         try {this.doPut();
                         } catch (Exception exception) {
-                            this.status = 424;
+                            this.status = 500;
                             throw exception;
                         }                    
                     
@@ -2475,7 +2477,7 @@ class Worker implements Runnable {
                             && method.equals("delete"))
                         try {this.doDelete();
                         } catch (Exception exception) {
-                            this.status = 424;
+                            this.status = 500;
                             throw exception;
                         }    
                 }

@@ -116,7 +116,7 @@ public class WorkerPutTest extends AbstractStageRequestTest {
     /** 
      * Test case for acceptance.
      * The creation of directories with invalid characters in the name is
-     * responded with status 424.
+     * responded with status 500.
      * @throws Exception
      */      
     @Test
@@ -127,10 +127,10 @@ public class WorkerPutTest extends AbstractStageRequestTest {
                 + "Host: vHa\r\n"
                 + "\r\n";
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18185", request);
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_424));
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_500));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
-        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_424)); 
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_500));
     }
     
     /** 
@@ -704,7 +704,8 @@ public class WorkerPutTest extends AbstractStageRequestTest {
      * Test case for acceptance.
      * For PUT requests, the number of bytes is written, which is specified with
      * Content-Length. If fewer bytes are present, the server waits until the
-     * timeout (TIMEOUT = 15000). In this case the request is responded with status 424.
+     * timeout (TIMEOUT = 15000). In this case the request is responded with
+     * status 400.
      * @throws Exception
      */      
     @Test
@@ -722,10 +723,10 @@ public class WorkerPutTest extends AbstractStageRequestTest {
         timing.assertTimeIn(16000);
         timing.assertTimeOut(15000);
 
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_424));
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_400));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
-        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_424));
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_400));
     } 
     
     /** 

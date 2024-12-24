@@ -6,14 +6,14 @@
     the 10 disks for free.
 
 5.8.0 2025xxxx
+BF: HTTP(S): Update / standardization of HTTP status messages
+BF: HTTP(S): Omission of status 424, which was simply incorrect
+    Status 400 and 500 are now used correctly.
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
 ??: Documentation: Update for Unix and Linux
 ??: Documentation: Architecture image
 ??: Service: devwex start [directory] (read all ini files from directory)
 ??: Automation (build, test, release) via GitHub actions
-BF: HTTP(S): Update / standardization of HTTP status messages
-BF: HTTP(S): Omission of status 424, which was simply incorrect
-    Status 400 and 500 are now used correctly.
 
 5.7.0 20241214
 BF: Unix/Linux: Correction of the missing second start parameter in the bash script

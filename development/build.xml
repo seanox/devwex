@@ -15,6 +15,7 @@
     
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
+  <property name="workspace.test" value="${workspace}/test"/>
   <property name="workspace.program" value="${workspace}/program"/>
   <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.extras" value="${workspace.development}/extras"/>
@@ -326,6 +327,7 @@
         match="Copyright \(C\) [1-9]\d{3}\b" flags="g" byline="false"
         replace="Copyright (C) ${release.year}">
       <fileset dir="${workspace.sources}" includes="**/*"/>
+      <fileset dir="${workspace.test}" includes="**/*"/>
     </replaceregexp>
     <delete dir="${build}"/>
     <mkdir dir="${build}/sources"/>

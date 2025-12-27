@@ -322,6 +322,11 @@
   </fileset>  
   
   <target name="release" depends="compile,keystore,changes">
+    <replaceregexp
+        match="Copyright \(C\) [1-9]\d{3}\b" flags="g" byline="false"
+        replace="Copyright (C) ${release.year}">
+      <fileset dir="${workspace.sources}" includes="**/*"/>
+    </replaceregexp>
     <delete dir="${build}"/>
     <mkdir dir="${build}/sources"/>
     <copy todir="${build}/sources">
@@ -348,7 +353,6 @@
     <compress-markup file="${build}/sources/system/status-4xx.html"/>
     <compress-markup file="${build}/sources/system/status-5xx.html"/>   
     <release-insert/>
-
 
     <mkdir dir="${build}/release"/>
     <copy todir="${build}/release">

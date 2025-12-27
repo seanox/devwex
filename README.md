@@ -58,13 +58,13 @@ decisions in the project easier to understand :-)__
   XCGI) allow the modification, extension and addition of functionalities.
  
 
-# Licence Agreement
-LIZENZBEDINGUNGEN - Seanox Software Solutions ist ein Open-Source-Projekt, im
-Folgenden Seanox Software Solutions oder kurz Seanox genannt.
+# License Terms
+Seanox Software Solutions is an open-source project, hereinafter referred to as
+__Seanox__.
 
-Diese Software unterliegt der Version 2 der Apache License.
+This software is licensed under the __Apache License, Version 2.0__.
 
-Copyright (C) 2024 Seanox Software Solutions
+__Copyright (C) 2025 Seanox Software Solutions__
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the

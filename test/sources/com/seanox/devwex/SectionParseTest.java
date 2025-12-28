@@ -29,69 +29,69 @@ public class SectionParseTest extends AbstractTest {
             throws Exception {
         System.setProperty("param-c", "p_c");
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
 
     @Test
     public void testAcceptance_2()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
     
     @Test
     public void testAcceptance_3()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }    
     
     @Test
     public void testAcceptance_4()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     } 
     
     @Test
     public void testAcceptance_5()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
 
     @Test
     public void testAcceptance_6()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
 
     @Test
     public void testAcceptance_7()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
     
     @Test
     public void testAcceptance_8()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }    
     
     @Test
     public void testOverride_1()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), SectionTest.toString(section));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
     }
 
     @Test
     public void testDynamic_1()
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2).toLowerCase(), SectionTest.toString(section).toLowerCase());
+        Assert.assertEquals(MockUtils.readTestContent(2).toLowerCase(), SectionTestSuite.toString(section).toLowerCase());
     }
 }

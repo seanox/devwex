@@ -25,5 +25,5 @@ import org.junit.runners.Suite;
     WorkerAuthenticationBasicTest.class,
     WorkerAuthenticationDigestTest.class
 })
-public class WorkerAuthenticationTest extends AbstractStageTestSuite {
+public class WorkerAuthenticationTestSuite extends AbstractStageTestSuite {
 }

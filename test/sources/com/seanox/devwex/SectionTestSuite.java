@@ -34,7 +34,7 @@ import org.junit.runners.Suite;
     SectionGetTest.class,
     SectionToStringTest.class
 })
-public class SectionTest extends AbstractTestSuite {
+public class SectionTestSuite extends AbstractTestSuite {
     
     @SuppressWarnings("unchecked")
     static String toString(final Section section) {

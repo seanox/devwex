@@ -33,7 +33,7 @@ import org.junit.runners.Suite;
     InitializeSetTest.class,
     InitializeToStringTest.class
 })
-public class InitializeTest extends AbstractTestSuite {
+public class InitializeTestSuite extends AbstractTestSuite {
     
     @SuppressWarnings("unchecked")
     static String toString(final Initialize initialize) {
@@ -53,7 +53,7 @@ public class InitializeTest extends AbstractTestSuite {
             if (key.trim().isEmpty())
                 continue;
             
-            final String section = SectionTest.toString(entries.get(key)).trim();
+            final String section = SectionTestSuite.toString(entries.get(key)).trim();
             
             // the key is coded when:
             //   - contains ;[] < 0x1F

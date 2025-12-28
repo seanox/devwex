@@ -27,5 +27,5 @@ import org.junit.runners.Suite;
     RemoteStatusTest.class,
     RemoteTimeoutTest.class
 })
-public class RemoteTest extends AbstractStageTestSuite {
+public class RemoteTestSuite extends AbstractStageTestSuite {
 }

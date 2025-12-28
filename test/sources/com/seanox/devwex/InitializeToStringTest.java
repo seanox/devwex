@@ -28,27 +28,27 @@ public class InitializeToStringTest extends AbstractTest {
     public void testAcceptance_1()
             throws Exception {
         final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTest.toString(initialize));
+        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
     }
     
     @Test
     public void testAcceptance_2()
             throws Exception {
         final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTest.toString(initialize));
+        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
     }
     
     @Test
     public void testAcceptance_3()
             throws Exception {
         final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTest.toString(initialize));
+        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
     }
     
     @Test
     public void testAcceptance_4()
             throws Exception {
         final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTest.toString(initialize));
+        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
     }
 }

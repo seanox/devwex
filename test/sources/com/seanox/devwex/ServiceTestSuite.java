@@ -29,5 +29,5 @@ import org.junit.runners.Suite;
     ServiceRestartTest.class,
     ServiceServerTest.class
 })
-public class ServiceTest extends AbstractStageTestSuite {
+public class ServiceTestSuite extends AbstractStageTestSuite {
 }

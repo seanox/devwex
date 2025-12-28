@@ -24,5 +24,5 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     ServerConnectionTest.class
 })
-public class ServerTest extends AbstractStageTestSuite {
+public class ServerTestSuite extends AbstractStageTestSuite {
 }

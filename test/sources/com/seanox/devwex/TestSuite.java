@@ -23,12 +23,12 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     GeneratorTest.class,
-    InitializeTest.class,
-    RemoteTest.class,
-    SectionTest.class,
-    ServerTest.class,
-    ServiceTest.class,
-    WorkerTest.class
+    InitializeTestSuite.class,
+    RemoteTestSuite.class,
+    SectionTestSuite.class,
+    ServerTestSuite.class,
+    ServiceTestSuite.class,
+    WorkerTestSuite.class
 })
-public class Test extends AbstractStageTestSuite {
+public class TestSuite extends AbstractStageTestSuite {
 }

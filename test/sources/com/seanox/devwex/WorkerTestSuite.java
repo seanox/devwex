@@ -23,7 +23,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     WorkerAccessLogTest.class,
-    WorkerAuthenticationTest.class,
+    WorkerAuthenticationTestSuite.class,
     WorkerConfigurationTest.class,
     WorkerDeleteTest.class,
     WorkerDirectoryIndexTest.class,
@@ -41,5 +41,5 @@ import org.junit.runners.Suite;
     WorkerTextTest.class,
     WorkerVirtualHostTest.class
 })
-public class WorkerTest extends AbstractStageTestSuite {
+public class WorkerTestSuite extends AbstractStageTestSuite {
 }

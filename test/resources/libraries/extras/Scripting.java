@@ -40,8 +40,7 @@ public class Scripting {
             final ScriptEngine engine = factory.getEngineByName("JavaScript");
             engine.eval(Files.newBufferedReader(pathTranslated));            
         } catch (Exception exception) {
-            System.out.print("\r\n\r\n");
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 }

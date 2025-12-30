@@ -1,30 +1,30 @@
-[COMMON]                                                        ;basic configuration of service
-  CLEANUP                     = ON                              ;automatic smart clean up of resources
-  RELOAD                      = ON                              ;automatic reload and restart on changes of configuration
+[COMMON]                                                       ;basic configuration of service
+CLEANUP                     = ON                               ;automatic smart clean up of resources
+RELOAD                      = ON                               ;automatic reload and restart on changes of configuration
 
 [INITIALIZE]
-  MODULE-ACCEPTANCE_00        = module.Acceptance_00 [*]
-  MODULE-ACCEPTANCE_01        = module.Acceptance_01
-  MODULE-ACCEPTANCE_02        = module.Acceptance_02
-  MODULE-ACCEPTANCE_03        = module.Acceptance_03
-  MODULE-ACCEPTANCE_04        = module.Acceptance_04
-  MODULE-ACCEPTANCE_05        = module.Acceptance_05
-  MODULE-ACCEPTANCE_06        = module.Acceptance_06
-  MODULE-ACCEPTANCE_07        = module.Acceptance_07
-  MODULE-ACCEPTANCE_08        = module.Acceptance_08
-  MODULE-ACCEPTANCE_09        = module.Acceptance_09
-  MODULE-ACCEPTANCE_10        = module.Acceptance_10
-  MODULE-ACCEPTANCE_11        = module.Acceptance_11
-  MODULE-ACCEPTANCE_12        = module.Acceptance_12
-  MODULE-ACCEPTANCE_13        = module.Acceptance_13
-  MODULE-ACCEPTANCE_14        = module.Acceptance_14
-  Module-ACCEPTANCE_15        = module.Acceptance_15
-  Module-ACCEPTANCE_16        = module.Acceptance_16 123   
-  Module-ACCEPTANCE_17        = module.Acceptance_17 [123]
-  Module-ACCEPTANCE_18        = module.Acceptance_18 [*]
-  Module-ACCEPTANCE_19        = module.Acceptance_19 [*] [*]
-  Module-ACCEPTANCE_20        = module.Acceptance_20 [*] 123 [*]
+MODULE-ACCEPTANCE_00        = module.Acceptance_00 [*]
+MODULE-ACCEPTANCE_01        = module.Acceptance_01
+MODULE-ACCEPTANCE_02        = module.Acceptance_02
+MODULE-ACCEPTANCE_03        = module.Acceptance_03
+MODULE-ACCEPTANCE_04        = module.Acceptance_04
+MODULE-ACCEPTANCE_05        = module.Acceptance_05
+MODULE-ACCEPTANCE_06        = module.Acceptance_06
+MODULE-ACCEPTANCE_07        = module.Acceptance_07
+MODULE-ACCEPTANCE_08        = module.Acceptance_08
+MODULE-ACCEPTANCE_09        = module.Acceptance_09
+MODULE-ACCEPTANCE_10        = module.Acceptance_10
+MODULE-ACCEPTANCE_11        = module.Acceptance_11
+MODULE-ACCEPTANCE_12        = module.Acceptance_12
+MODULE-ACCEPTANCE_13        = module.Acceptance_13
+MODULE-ACCEPTANCE_14        = module.Acceptance_14
+Module-ACCEPTANCE_15        = module.Acceptance_15
+Module-ACCEPTANCE_16        = module.Acceptance_16 123   
+Module-ACCEPTANCE_17        = module.Acceptance_17 [123]
+Module-ACCEPTANCE_18        = module.Acceptance_18 [*]
+Module-ACCEPTANCE_19        = module.Acceptance_19 [*] [*]
+Module-ACCEPTANCE_20        = module.Acceptance_20 [*] 123 [*]
 
-[REMOTE:INI]                                                    ;basic configuration of remote servers
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18001                           ;local port of server
+[REMOTE:INI]                                                   ;basic configuration of remote servers
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18001                            ;local port of server

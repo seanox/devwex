@@ -1,228 +1,228 @@
-[COMMON]                                                        ;basic configuration of service
-  CLEANUP                     = ON                              ;automatic smart clean up of resources
-  RELOAD                      = ON                              ;automatic reload and restart on changes of configuration
+[COMMON]                                                       ;basic configuration of service
+CLEANUP                     = ON                               ;automatic smart clean up of resources
+RELOAD                      = ON                               ;automatic reload and restart on changes of configuration
 
-[REMOTE:INI]                                                    ;basic configuration of the remote server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18001                           ;local port of server
+[REMOTE:INI]                                                   ;basic configuration of the remote server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18001                            ;local port of server
   
-[REMOTE:A:INI]                                                  ;basic configuration of the remote server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18002                           ;local port of server  
+[REMOTE:A:INI]                                                 ;basic configuration of the remote server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18002                            ;local port of server  
 
-[REMOTE:B:INI]                                                  ;basic configuration of the remote server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18003                           ;local port of server  
+[REMOTE:B:INI]                                                 ;basic configuration of the remote server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18003                            ;local port of server  
 
-[REMOTE::INI]                                                   ;basic configuration of the remote server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18004                           ;local port of server  
+[REMOTE::INI]                                                  ;basic configuration of the remote server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18004                            ;local port of server  
 
 [COUNT:INI]
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18201                           ;local port of server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18201                            ;local port of server
 
 [COUNT:A:INI]
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18202                           ;local port of server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18202                            ;local port of server
   
 [COUNT:B1:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18203                           ;local port of server  
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18203                            ;local port of server  
 
 [COUNT:B2:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18204                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18204                            ;local port of server
   
 [COUNT:C:INI]
-  SCOPE                       = server-x
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18205                           ;local port of server   
+SCOPE                       = server-x
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18205                            ;local port of server   
   
 [ACCEPTANCE_01:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18206                           ;local port of server   
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18206                            ;local port of server   
 
 [ACCEPTANCE_02:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18207                           ;local port of server   
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18207                            ;local port of server   
 
 [ACCEPTANCE_03:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18208                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18208                            ;local port of server
   
 [ACCEPTANCE_11:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18211                           ;local port of server     
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18211                            ;local port of server     
 
 [ACCEPTANCE_12:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18212                           ;local port of server     
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18212                            ;local port of server     
   
 [ACCEPTANCE_13:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18213                           ;local port of server     
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18213                            ;local port of server     
   
 [ACCEPTANCE_14:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18214                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18214                            ;local port of server
   
 [ACCEPTANCE_15:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18215                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18215                            ;local port of server
   
 [ACCEPTANCE_16:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18216                           ;local port of server     
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18216                            ;local port of server     
        
 [ACCEPTANCE_17:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18217                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18217                            ;local port of server
   
 [ACCEPTANCE_18:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18218                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18218                            ;local port of server
   
 [ACCEPTANCE_19:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18219                           ;local port of server   
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18219                            ;local port of server   
   
 [ACCEPTANCE_20:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18220                           ;local port of server
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18220                            ;local port of server
   
 [ACCEPTANCE_21:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18221                           ;local port of server      
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18221                            ;local port of server      
 
 [ACCEPTANCE_22:INI]
-  SCOPE                       = server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18222                           ;local port of server   
+SCOPE                       = server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18222                            ;local port of server   
 
 [ACCEPTANCE_3x:INI]
-  SCOPE                       = server.Acceptance_30
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18230                           ;local port of server
+SCOPE                       = server.Acceptance_30
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18230                            ;local port of server
   
 [ACCEPTANCE_31:INI]
-  SCOPE                       = server.Acceptance_31x
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18231                           ;local port of server      
+SCOPE                       = server.Acceptance_31x
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18231                            ;local port of server      
 
 [ACCEPTANCE_32:INI]
-  SCOPE                       = server.
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18232                           ;local port of server   
+SCOPE                       = server.
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18232                            ;local port of server   
   
-[VIRTUAL:EXA1:INI]                                              ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18301                           ;local port of server    
+[VIRTUAL:EXA1:INI]                                             ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18301                            ;local port of server    
  
-[VIRTUAL :EXA2:INI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18302                           ;local port of server    
+[VIRTUAL :EXA2:INI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18302                            ;local port of server    
   
-[VIRTUAL : EXA3:INI]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18303                           ;local port of server    
+[VIRTUAL : EXA3:INI]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18303                            ;local port of server    
   
-[VIRTUAL:EXB1:INIX]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18304                           ;local port of server    
+[VIRTUAL:EXB1:INIX]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18304                            ;local port of server    
  
-[VIRTUAL :EXB2:INIX]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18305                           ;local port of server    
+[VIRTUAL :EXB2:INIX]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18305                            ;local port of server    
   
-[VIRTUAL : EXB3:INIX]                                           ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18306                           ;local port of server    
+[VIRTUAL : EXB3:INIX]                                          ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18306                            ;local port of server    
 
-[VIRTUAL:EXC1:XINI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18307                           ;local port of server    
+[VIRTUAL:EXC1:XINI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18307                            ;local port of server    
  
-[VIRTUAL :EXC2:XINI]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18308                           ;local port of server    
+[VIRTUAL :EXC2:XINI]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18308                            ;local port of server    
   
-[VIRTUAL : EXC3:XINI]                                           ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18309                           ;local port of server    
+[VIRTUAL : EXC3:XINI]                                          ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18309                            ;local port of server    
 
-[VIRTUAL:EXD1: INI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18310                           ;local port of server    
+[VIRTUAL:EXD1: INI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18310                            ;local port of server    
  
-[VIRTUAL :EXD2: INI]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18311                           ;local port of server    
+[VIRTUAL :EXD2: INI]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18311                            ;local port of server    
   
-[VIRTUAL : EXD3: INI]                                           ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18312                           ;local port of server   
+[VIRTUAL : EXD3: INI]                                          ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18312                            ;local port of server   
   
-[SERVER:EXE1:INI]                                               ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18313                           ;local port of server      
+[SERVER:EXE1:INI]                                              ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18313                            ;local port of server      
   
-[SERVER :EXE2:INI]                                              ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18314                           ;local port of server    
+[SERVER :EXE2:INI]                                             ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18314                            ;local port of server    
   
-[SERVER : EXE3:INI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18315                           ;local port of server    
+[SERVER : EXE3:INI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18315                            ;local port of server    
   
-[SERVER:EXF1:INIX]                                              ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18316                           ;local port of server    
+[SERVER:EXF1:INIX]                                             ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18316                            ;local port of server    
  
-[SERVER :EXF2:INIX]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18317                           ;local port of server    
+[SERVER :EXF2:INIX]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18317                            ;local port of server    
   
-[SERVER : EXF3:INIX]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18318                           ;local port of server    
+[SERVER : EXF3:INIX]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18318                            ;local port of server    
 
-[SERVER:EXG1:XINI]                                              ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18319                           ;local port of server    
+[SERVER:EXG1:XINI]                                             ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18319                            ;local port of server    
  
-[SERVER :EXG2:XINI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18320                           ;local port of server    
+[SERVER :EXG2:XINI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18320                            ;local port of server    
   
-[SERVER : EXG3:XINI]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18321                           ;local port of server    
+[SERVER : EXG3:XINI]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18321                            ;local port of server    
 
-[SERVER:EXH1: INI]                                              ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18322                           ;local port of server    
+[SERVER:EXH1: INI]                                             ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18322                            ;local port of server    
  
-[SERVER :EXH2: INI]                                             ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18323                           ;local port of server    
+[SERVER :EXH2: INI]                                            ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18323                            ;local port of server    
   
-[SERVER : EXH3: INI]                                            ;basic configuration of the virtual server
-  ADDRESS                     = 127.0.0.1                       ;local address of server [AUTO|LOCALHOST|IP|NAME]
-  PORT                        = 18324                           ;local port of server     
+[SERVER : EXH3: INI]                                           ;basic configuration of the virtual server
+ADDRESS                     = 127.0.0.1                        ;local address of server [AUTO|LOCALHOST|IP|NAME]
+PORT                        = 18324                            ;local port of server     

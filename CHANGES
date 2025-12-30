@@ -6,6 +6,11 @@
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
 ??: Documentation: Update for Unix and Linux
 ??: Documentation: Architecture image
+??: CGI: Watchdog for blocking processes/stdin/stdout
+    - WorkerGatewayTest.testAcceptance_16()
+    - test/resources/documents_vh_A/cgi_read_blocking.jsx
+    - test/resources/documents_vh_A/cgi_read_slow.jsx
+??: Configuration: Add # as optional/alternavtive comment symbols
 
 5.8.0 20251231
 NT: Competition: 25 years Devwex -- raffle 10x 3.5" disks.

@@ -4,10 +4,10 @@
 - - -
 
 # License Terms
-Seanox Software Solutions ist ein Open-Source-Projekt, im Folgenden Seanox
-Software Solutions oder kurz Seanox genannt.
+Seanox Software Solutions is an open-source project, hereinafter referred to as
+__Seanox__.
 
-Diese Software unterliegt der Version 2 der Apache License.
+This software is licensed under the __Apache License, Version 2.0__.
 
 Copyright (C) 0000 Seanox Software Solutions
 

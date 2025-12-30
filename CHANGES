@@ -1,19 +1,22 @@
 5.9.0 20260411
 ??: Facelift: Status / Index / Templates
 ??: Review: Optimization and corrections
-??: Competition: 25 years Devwex, raffle 10x 3.5" disk with Seanox Devwex
-    Send an e-mail to devwex@seanox.com by 06/21/2026 and you could win one of
-    the 10 disks for free.
-
-5.8.0 2025xxxx
-BF: HTTP(S): Update / standardization of HTTP status messages
-BF: HTTP(S): Omission of status 424, which was simply incorrect
-    Status 400 and 500 are now used correctly.
+??: Service: devwex start [directory] (read all ini files from directory)
+??: Automation (build, test, release) via GitHub actions
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
 ??: Documentation: Update for Unix and Linux
 ??: Documentation: Architecture image
-??: Service: devwex start [directory] (read all ini files from directory)
-??: Automation (build, test, release) via GitHub actions
+
+5.8.0 20251231
+NT: Competition: 25 years Devwex -- raffle 10x 3.5" disks.
+    Send an e-mail to devwex@seanox.com by 04/11/2026.
+    Limit: 1 disk per e-mail.
+BF: Review: Optimization and corrections
+BF: HTTP(S): Update / standardization of HTTP status messages
+BF: HTTP(S): Omission of status 424, which was simply incorrect
+    Status 400 and 500 are now used correctly.
+CR: Test: Integration of JaCoCo (Java Code Coverage)
+CR: Service: Optimization of logging output
 
 5.7.0 20241214
 BF: Unix/Linux: Correction of the missing second start parameter in the bash script

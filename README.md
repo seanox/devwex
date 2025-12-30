@@ -32,7 +32,6 @@ technical reason for this, it is rather the more than 20 years old quirk and fun
 question -- Why are web servers so big? This should make some unconventional
 decisions in the project easier to understand :-)__
 
-
 # Features
 - __Modular Architecture__  
   The experimental server engine supports a modular architecture for
@@ -63,7 +62,6 @@ decisions in the project easier to understand :-)__
   The modular architecture and many interfaces (SAPI, XAPI, XAPI+, (Fast)CGI,
   XCGI) allow the modification, extension and addition of functionalities.
  
-
 # License Terms
 Seanox Software Solutions is an open-source project, hereinafter referred to as
 __Seanox__.
@@ -83,20 +81,16 @@ under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
-
 # System Requirement
 - Java Runtime 8.x or higher
-
 
 # Downloads
 [Seanox Devwex 5.7.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0.zip)  
 [Seanox Devwex 5.7.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0-win.zip)  
 
-
 # Installation
 Unpack the zip file to any location in the file system.  
 Go to the program directory and start the program directly or by script.
-
 
 # Manual
 - [Description](manual/description.md)
@@ -108,7 +102,6 @@ Go to the program directory and start the program directly or by script.
 - [Starting and Stopping](manual/starting-and-stopping.md)
 - [Control and Monitoring](manual/control-and-monitoring.md)
 - [Development](manual/development.md)
-
 
 # Changes
 ## 5.7.0 20241214  
@@ -125,7 +118,6 @@ CR: Test: Review and Integration in build.xml (preparation for automation)
 CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.0.0)  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
-
 
 # Contact
 [Issues](https://github.com/seanox/devwex/issues)  

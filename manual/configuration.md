@@ -58,6 +58,9 @@ Sections, keys and values also support a hexadecimal notation, starting with
 `0x...` followed by the hexadecimal string, which can only be used for the
 complete element.
 
+For better readability, spaces can be inserted before the keys, which will be
+ignored by the configuration.
+
 > __Example__
 > ```
 > [SECTION] EXTENDS SECTION-A SECTION-B      ;comment

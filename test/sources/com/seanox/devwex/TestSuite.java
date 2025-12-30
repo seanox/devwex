@@ -24,6 +24,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     GeneratorTest.class,
     InitializeTestSuite.class,
+    LoaderTest.class,
     RemoteTestSuite.class,
     SectionTestSuite.class,
     ServerTestSuite.class,

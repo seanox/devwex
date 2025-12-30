@@ -22,7 +22,7 @@ import org.junit.Assert;
  * Simple time measurement and testing.
  *
  * @author  Seanox Software Solutions
- * @version 1.0.1 20220909
+ * @version 1.1.0 20251229
  */
 public class Timing {
 
@@ -103,7 +103,8 @@ public class Timing {
      */
     public void assertTimeOut(final int milliseconds) {
         if (this.timeMillis() < milliseconds)
-            Assert.assertEquals("out of " + milliseconds + " ms", "out of " + this.timeMillis() + " ms");
+            Assert.fail("Expected time out of " + milliseconds + " ms, but was " + this.timeMillis() + " ms");            
+
     }
 
     /**
@@ -116,7 +117,7 @@ public class Timing {
         final long time = this.timeMillis();
         if (time >= millisecondsFrom
                 && time <= millisecondsTo)
-            Assert.assertEquals("out of " + millisecondsFrom + " - " + millisecondsTo + " ms", "out of " + time + " ms");
+            Assert.fail("Expected time out of " + millisecondsFrom + " - " + millisecondsTo + " ms, but was " + time + " ms");            
     } 
 
     /**
@@ -126,7 +127,7 @@ public class Timing {
      */
     public void assertTimeIn(final int milliseconds) {
         if (this.timeMillis() > milliseconds)
-            Assert.assertEquals("in " + milliseconds + " ms", "in " + this.timeMillis() + " ms");
+            Assert.fail("Expected time in " + milliseconds + " ms, but was " + this.timeMillis() + " ms");
     }   
     
     /**
@@ -139,6 +140,6 @@ public class Timing {
         final long time = this.timeMillis();
         if (time < millisecondsFrom
                 || time > millisecondsTo)
-            Assert.assertEquals("in " + millisecondsFrom + " - " + millisecondsTo + " ms", "in " + time + " ms");
-    }   
+            Assert.fail("Expected time in " + millisecondsFrom + " - " + millisecondsTo + " ms, but was " + time + " ms");
+    } 
 }

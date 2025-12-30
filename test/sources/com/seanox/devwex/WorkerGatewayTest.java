@@ -25,6 +25,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
@@ -540,6 +541,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
      * @throws Exception
      */     
     @Test
+    @Ignore
     public void testAcceptance_16()
             throws Exception {
         

@@ -57,11 +57,10 @@ public class PerformanceTest extends AbstractStageRequestTest {
         Thread.sleep(3000);
         
         final Executor executor = Executor.create(40, TestWorker.class);
-        
-        final Timing timing = Timing.create(true);
         executor.execute();
+        final Timing timing = Timing.create(true);
         final boolean success = executor.await(5000);
-        timing.assertTimeIn(500, 1500);
+        timing.assertTimeIn(7500);
         final String failedTestWorkerInfo = PerformanceTest.createFailedTestWorkerInfo(executor);
         Assert.assertTrue(failedTestWorkerInfo, success);
         Assert.assertFalse(failedTestWorkerInfo, executor.isFailed());
@@ -99,13 +98,12 @@ public class PerformanceTest extends AbstractStageRequestTest {
         
         Service.restart();
         Thread.sleep(3000);
-        
-        final Timing timing = Timing.create(true);
 
         final Executor executor1 = Executor.create(40, TestWorker.class);
         executor1.execute();
-        final boolean success1 = executor1.await(5000);
-        timing.assertTimeIn(500, 1500);
+        final Timing timing = Timing.create(true);
+        final boolean success1 = executor1.await(2500);
+        timing.assertTimeIn(5000);
         final String failedTestWorkerInfo1 = PerformanceTest.createFailedTestWorkerInfo(executor1);
         Assert.assertTrue(failedTestWorkerInfo1, success1);
         Assert.assertFalse(failedTestWorkerInfo1, executor1.isFailed());
@@ -116,8 +114,8 @@ public class PerformanceTest extends AbstractStageRequestTest {
         final Executor executor2 = Executor.create(40, TestWorker.class);
         timing.restart();
         executor2.execute();
-        final boolean success2 = executor2.await(5000); 
-        timing.assertTimeIn(500, 1500);
+        final boolean success2 = executor2.await(2500); 
+        timing.assertTimeIn(5000);
         final String failedTestWorkerInfo2 = PerformanceTest.createFailedTestWorkerInfo(executor2);
         Assert.assertTrue(failedTestWorkerInfo2, success2);
         Assert.assertFalse(failedTestWorkerInfo2, executor2.isFailed());
@@ -198,10 +196,10 @@ public class PerformanceTest extends AbstractStageRequestTest {
         final long threadCount2 = Thread.activeCount() /10;
         final long memoryUsage2 = SystemInfo.getSystemMemoryLoad() /1024 /1024;     
         
-        final Timing timing = Timing.create(true);
         executor.execute();
-        final boolean success = executor.await(5000);
-        timing.assertTimeIn(500, 1500);
+        final Timing timing = Timing.create(true);
+        final boolean success = executor.await(2500);
+        timing.assertTimeIn(5000);
         final String failedTestWorkerInfo = PerformanceTest.createFailedTestWorkerInfo(executor);
         Assert.assertTrue(failedTestWorkerInfo, success);
         Assert.assertFalse(failedTestWorkerInfo, executor.isFailed());

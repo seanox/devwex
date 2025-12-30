@@ -361,6 +361,7 @@
             <!-- static test cases -->
             <include name="**/Generator*Test.java"/>
             <include name="**/Initialize*Test.java"/>
+            <include name="**/Loader*Test.java"/>
             <include name="**/Section*Test.java"/>
             <!-- dynamic stage test cases -->
             <include name="**/Performance*Test.java"/>

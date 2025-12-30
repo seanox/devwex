@@ -509,7 +509,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         } catch (Throwable throwable) {
                             continue;
                         }
-                        string = string.concat("\r\n").concat(files[loop].getPath());
+                        string = string.concat("\r\n- ").concat(files[loop].getPath());
                     }
                 }
                 
@@ -856,7 +856,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * Output of the string value of an object line by line, prefixed with a
      * timestamp, to the standard IO. The content of the output is determined by
      * {@code Object.toString()}. For error objects the StackTrace is logged.
-     * Line breaks in the content are summarized and output indented.
+     * Line breaks in the content are summarized.
      * @param object Object that is to be output
      */
     public static void print(Object object) {
@@ -867,13 +867,16 @@ public class Service implements Runnable, UncaughtExceptionHandler {
      * Output of the string value of an object line by line, prefixed with a
      * timestamp, to the standard IO. The content of the output is determined by
      * {@code Object.toString()}. For error objects the StackTrace is logged.
-     * Line breaks in the content are summarized and output indented.
+     * Line breaks in the content are summarized.
      * @param object Object that is to be output
      * @param plain {@code false} Suppresses the output of the timestamp, as
      *     well as the optimization.
      */
     public static void print(Object object, boolean plain) {
-        
+
+        if (object == null)
+            return;
+
         Throwable throwable = null;
         if (object instanceof Throwable) {
             throwable = ((Throwable)object);
@@ -886,18 +889,13 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
         String string = String.valueOf(object);
         synchronized (System.out) {
-            if (object == null
-                    || (string.matches("\\s*")
-                            && !string.matches("\\s*\\R\\s*")))
+            if (!string.matches("\\s*\\R\\s*")
+                    && string.trim().length() <= 0)
                 return;
             string = string.trim();
             if (!plain) {
-                // timestamp is determined
-                // if necessary, following lines are indented
                 string = String.format("%tF %<tT %s", new Date(), string);
-                if (throwable == null
-                        && string.matches("(?s).*\\R\\S.*"))
-                    string = string.replaceAll("(\\R+)", "$1\t");
+                string = string.replaceAll("\\s*(\\R)", System.lineSeparator());
             }
             System.out.println(string);
         }        

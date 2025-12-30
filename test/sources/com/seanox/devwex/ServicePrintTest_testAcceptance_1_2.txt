@@ -1,6 +1,6 @@
 2000-01-01 14:00:00 Peter und der Wolf
-	 Peter und der Wolf
-		Peter und der Wolf
-	123
-	456
-	-- Attention: Tabs!!!
+ Peter und der Wolf
+	Peter und der Wolf
+123
+456
+-- Attention: Tabs!!!

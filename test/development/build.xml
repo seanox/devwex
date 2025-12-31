@@ -358,13 +358,21 @@
         <formatter type="plain" usefile="false"/>
         <batchtest>
           <fileset dir="${workspace.sources}">
+            <!-- performance test cases -->
+            <include name="**/Performance*Test.java"/>
+          </fileset>
+        </batchtest>
+        <batchtest>
+          <fileset dir="${workspace.sources}">
             <!-- static test cases -->
             <include name="**/Generator*Test.java"/>
             <include name="**/Initialize*Test.java"/>
             <include name="**/Loader*Test.java"/>
             <include name="**/Section*Test.java"/>
-            <!-- performance test cases -->
-            <include name="**/Performance*Test.java"/>
+          </fileset>
+        </batchtest>
+        <batchtest>
+          <fileset dir="${workspace.sources}">
             <!-- dynamic stage test cases -->
             <include name="**/Remote*Test.java"/>
             <include name="**/Server*Test.java"/>

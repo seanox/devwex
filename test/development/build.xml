@@ -363,8 +363,9 @@
             <include name="**/Initialize*Test.java"/>
             <include name="**/Loader*Test.java"/>
             <include name="**/Section*Test.java"/>
-            <!-- dynamic stage test cases -->
+            <!-- performance test cases -->
             <include name="**/Performance*Test.java"/>
+            <!-- dynamic stage test cases -->
             <include name="**/Remote*Test.java"/>
             <include name="**/Server*Test.java"/>
             <include name="**/Service*Test.java"/>

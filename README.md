@@ -85,8 +85,8 @@ specific language governing permissions and limitations under the License.
 - Java Runtime 8.x or higher
 
 # Downloads
-[Seanox Devwex 5.7.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0.zip)  
-[Seanox Devwex 5.7.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.7.0-win.zip)  
+[Seanox Devwex 5.8.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.8.0.zip)  
+[Seanox Devwex 5.8.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.8.0-win.zip)  
 
 # Installation
 Unpack the zip file to any location in the file system.  
@@ -104,18 +104,13 @@ Go to the program directory and start the program directly or by script.
 - [Development](manual/development.md)
 
 # Changes
-## 5.7.0 20241214  
-BF: Unix/Linux: Correction of the missing second start parameter in the bash script  
-BF: Windows: Correction of the missing second start parameter in the batch script  
-BF: HTTP(S): Correction of the Accept header when using CGI  
-BF: Service: Optimization of automatic resource clean-up  
-BF: Service: Optimization for UTF-8  
-CR: Unix/Linux: Optimization of bash scripts and runtime directory handling  
-CR: Windows: Optimization of batch scripts and runtime directory handling  
-CR: HTTP(S): Optimization of the composition of the UNIQUE_ID  
-CR: Documentation: Switch to Markdown  
-CR: Test: Review and Integration in build.xml (preparation for automation)  
-CR: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.0.0)  
+## 5.8.0 20251231  
+NT: Competition: 25 years Devwex -- raffle one of 10x 3.5" disks.  
+BF: Review: Optimization and corrections  
+BF: HTTP(S): Update / standardization of HTTP status messages  
+BF: HTTP(S): Omission of status 424, which was simply incorrect  
+CR: Test: Integration of JaCoCo (Java Code Coverage)  
+CR: Service: Optimization of logging output  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

@@ -1612,13 +1612,16 @@ class Worker implements Runnable {
         script = script.replace('\\', File.separatorChar);
         script = script.replace('/', File.separatorChar);
 
-        target = target.replaceAll("(?i)\\[C\\]", script);
+        target = target.replace("[c]", "[C]");
+        target = target.replace("[C]", script);
 
         String directory = script.replaceAll("[^\\\\/]+$", "");
-        target = target.replaceAll("(?i)\\[D\\]", directory);
+        target = target.replace("[d]", "[D]");
+        target = target.replace("[D]", directory);
 
         String name = script.replaceAll("(^.*[\\\\/])|(\\..*$)", "");
-        target = target.replaceAll("(?i)\\[N\\]", name);
+        target = target.replace("[n]", "[N]");
+        target = target.replace("[N]", name);
         
         target = Worker.cleanOptions(target);
         

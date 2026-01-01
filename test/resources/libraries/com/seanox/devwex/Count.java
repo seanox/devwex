@@ -40,7 +40,7 @@ public class Count implements Runnable {
             context = "";
         context = context.trim();
 
-        Section options = ((Initialize)data).get(context + ":ini");
+        Section options = ((Settings)data).get(context + ":ini");
 
         int port = 0;
         try {port = Integer.parseInt(options.get("port"));

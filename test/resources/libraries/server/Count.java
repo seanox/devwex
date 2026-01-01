@@ -23,9 +23,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import com.seanox.devwex.Initialize;
 import com.seanox.devwex.Section;
 import com.seanox.devwex.Service;
+import com.seanox.devwex.Settings;
 
 public class Count implements Runnable {
 
@@ -44,7 +44,7 @@ public class Count implements Runnable {
             context = "";
         context = context.trim();
 
-        Section options = ((Initialize)data).get(context + ":ini");
+        Section options = ((Settings)data).get(context + ":ini");
 
         int port = 0;
         try {port = Integer.parseInt(options.get("port"));

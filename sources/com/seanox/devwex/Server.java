@@ -37,7 +37,7 @@ import javax.net.ssl.TrustManagerFactory;
 public class Server implements Runnable {
 
     /** Configuration of the server */
-    private final Initialize initialize;
+    private final Settings settings;
     
     /** Socket of the server */
     private final ServerSocket socket;
@@ -54,21 +54,21 @@ public class Server implements Runnable {
     /**
      * Constructor, establishes the server corresponding to the configuration.
      * @param  context    Server name
-     * @param  initialize Configuration of the server
+     * @param  settings Configuration of the server
      * @throws Throwable
      *     In case of incorrect server configuration/setup.
      */
-    public Server(String context, Initialize initialize)
+    public Server(String context, Settings settings)
             throws Throwable {
 
         if (context == null)
             context = "";
         this.context = context.trim();
 
-        this.initialize = (Initialize)initialize.clone();
+        this.settings = (Settings) settings.clone();
 
         // SERVER:INI - Loading the server configuration
-        Section options = this.initialize.get(this.context.concat(":ini"));
+        Section options = this.settings.get(this.context.concat(":ini"));
 
         // SERVER:INI:ADDRESS - Host address of the server socket
         InetAddress address = null;
@@ -96,10 +96,10 @@ public class Server implements Runnable {
 
         // SERVER:SSL - If the SSL section is present, a secure socket is used.
         context = this.context.concat(":ssl");
-        if (this.initialize.contains(context)) {
+        if (this.settings.contains(context)) {
 
             // SERVER:SSL - Loading SSL configuration
-            options = this.initialize.get(context);
+            options = this.settings.get(context);
 
             // SERVER:SSL:PASSWORD - Keystore and truststore are the same and
             // so only one password is used.
@@ -175,7 +175,7 @@ public class Server implements Runnable {
         Service.print(("SERVER ").concat(this.caption).concat(" READY"));
 
         // The server configuration is loaded.
-        Section options = this.initialize.get(this.context.concat(":ini"));
+        Section options = this.settings.get(this.context.concat(":ini"));
 
         // SERVER:INI:MAXACCESS - max. number of concurrent connections
         int maxaccess = 0;
@@ -227,7 +227,7 @@ public class Server implements Runnable {
                     // The worker is established, registered
                     // and started as a daemon thread.
 
-                    Worker worker = new Worker(this.context, this.socket, (Initialize)this.initialize.clone());
+                    Worker worker = new Worker(this.context, this.socket, (Settings)this.settings.clone());
                     Thread thread = new Thread(worker);
                     this.worker.add(new Object[] {worker, thread});
                     thread.start();

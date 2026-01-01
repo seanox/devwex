@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 /**
- * Section is a dictionary of keys and values used by {@link Initialize}, which
+ * Section is a dictionary of keys and values used by {@link Settings}, which
  * processes configuration data in INI format.<br>
  * <br>
  * The INI format used for configuration is a compatible. extension to the
@@ -197,7 +197,7 @@ public class Section implements Cloneable {
      *
      * @param  text  String to parse
      * @param  smart Activates smart mode
-     * @return the determined sections as initialize
+     * @return the determined sections as Section
      */
     public static Section parse(String text, boolean smart) {
         

@@ -44,8 +44,8 @@ import java.util.Vector;
  * 
  * <h3>Server (SAPI)</h3>
  * SAPI is based on the implementation of {@link Runnable}. The initialization
- * takes place via the constructor {@code Server(String name, Initialize
- *     initialize)} or {@code Server(String name, Object initialize)}. The order
+ * takes place via the constructor {@code Server(String name, Settings
+ *     settings)} or {@code Server(String name, Object settings)}. The order
  * of initialization is defined by the order of the server configurations in the
  * configuration file. The created server instances are started by the runtime
  * container (Service) with the method {@code Server.run()} and are triggerted
@@ -71,7 +71,8 @@ import java.util.Vector;
  * configuration file is determined with the sequence of the modules within the
  * {@code INITIALIZE} section, or the initialization is carried out with the
  * first request of a module at runtime. The configuration is only passed to a
- * module if it is initially loaded via the {@code INITIALIZE} section. 
+ * module if it is initially loaded via the {@code INITIALIZE} section.<br>
+ * <br>
  * Modules are triggered for termination via {@code Module.destroy()}. The
  * runtime container does not monitor the termination and discards the modules
  * by unloading them from the ClassLoader. Optionally, the implementation of the
@@ -141,12 +142,12 @@ import java.util.Vector;
  *     All servers are determined by searching for sections that end in
  *     {@code INI} and to which an implementation can be found in the class
  *     path, which are loaded, registered, and initialized via constructor
- *     {@code Server(String name, Initialize initialize)} or
- *     {@code Server(String name, Object initialize)}. To do this, each server
- *     is given the name of the detected section and a complete copy of the
- *     central configuration as an initialize object. After successful
- *     initialization, the server is started as a thread and can start its work
- *     in method {@code Server.run()}.
+ *     {@code Server(String name, Settings settings)} or {@code
+ *         Server(String name, Object settings)}. To do this, each server is
+ *     given the name of the detected section and a complete copy of the central
+ *     configuration as a Settings object. After successful initialization, the
+ *     server is started as a thread and can start its work in method {@code
+ *         Server.run()}.
  *   </li>
  * </ul>
  * 
@@ -193,11 +194,11 @@ import java.util.Vector;
  *     All servers are determined by searching for sections that end in
  *     {@code INI} and to which an implementation can be found in the class
  *     path, which are loaded, registered, and initialized via constructor
- *     {@code Server(String name, Initialize initialize)} or {@code
- *         Server(String name, Object initialize)}. To do this, each server is
+ *     {@code Server(String name, Settings settings)} or {@code
+ *         Server(String name, Object settings)}. To do this, each server is
  *     given the name of the detected section and a complete copy of the central
- *     configuration as an initialize object. After successful initialization,
- *     the server is started as a thread and can start its work in method {@code
+ *     configuration as a Settings object. After successful initialization, the
+ *     server is started as a thread and can start its work in method {@code
  *         Server.run()}.
  *   </li>
  * </ul>
@@ -230,7 +231,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     private volatile ClassLoader loader;
 
     /** Configuration of the service */
-    private volatile Initialize initialize;
+    private volatile Settings settings;
 
     /** Operating status of the service */
     private volatile int status;
@@ -267,7 +268,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
 
     /** Constructor, creates the service. */
     private Service() {
-        this.initialize = new Initialize(true);
+        this.settings = new Settings(true);
         this.servers    = new Vector();
         this.modules    = new Hashtable();
     }
@@ -521,7 +522,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 loader = service.loader;
                 
                 // current configuration is loaded
-                try {service.initialize = Initialize.parse(new String(Files.readAllBytes(service.configuration.toPath())), true);
+                try {service.settings = Settings.parse(new String(Files.readAllBytes(service.configuration.toPath())), true);
                 } catch (Throwable throwable) {
                     Service.print("SERVICE CONFIGURATION FAILED");
                     Service.print(throwable);
@@ -530,7 +531,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 Service.print("SERVICE INITIATE MODULES");                
 
                 // base options are determined
-                Section section = service.initialize.get("initialize");
+                Section section = service.settings.get("initialize");
                 Enumeration initialize = section.elements();
                 while (initialize.hasMoreElements()) {
 
@@ -551,7 +552,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                 }
                 
                 // configured servers are detected
-                Enumeration enumeration = service.initialize.elements();
+                Enumeration enumeration = service.settings.elements();
                 while (enumeration.hasMoreElements()) {
 
                     // server scope is determined for the configuration
@@ -567,7 +568,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         Service.print(String.format("SERVICE INITIATE %s", context));
                         
                         // server class is loaded
-                        scope = service.initialize.get(context.concat(":ini")).get("scope", "com.seanox.devwex");
+                        scope = service.settings.get(context.concat(":ini")).get("scope", "com.seanox.devwex");
                         scope = scope.replaceAll("\\s*>.*$", "");
                         try {source = loader.loadClass(scope);
                         } catch (ClassNotFoundException exception1) {
@@ -586,12 +587,12 @@ public class Service implements Runnable, UncaughtExceptionHandler {
                         // because of the restricted size of the binary.
 
                         source.getMethod("destroy");
-                        try {object = source.getConstructor(String.class, Initialize.class);
+                        try {object = source.getConstructor(String.class, Settings.class);
                         } catch (NoSuchMethodException exception) {
                             object = source.getConstructor(String.class, Object.class);
                         }
                             
-                        object = ((Constructor)object).newInstance(context, service.initialize.clone());
+                        object = ((Constructor)object).newInstance(context, service.settings.clone());
                         
                         // Implementation of Runnable is optional. Servers can
                         // also be initialized by other modules, e.g. if the
@@ -946,7 +947,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         
         while (this.status < Service.STOP) {
 
-            Section section = this.initialize.get("common");
+            Section section = this.settings.get("common");
 
             if (section.get("cleanup").toLowerCase().equals("on")) {
                 count = Thread.activeCount();

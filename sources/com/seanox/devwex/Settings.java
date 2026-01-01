@@ -23,8 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 /**
- * Initialize, processes configuration data in INI format and provides it as
- * {@link Section}.<br>
+ * Settings, processes configuration data in INI format and provides it as
+ * {@link Settings} and {@link Section}.<br>
  * <br>
  * The INI format used for configuration is a compatible. extension to the
  * classic format. It is also line-based and uses sections in which keys with
@@ -125,7 +125,7 @@ import java.util.StringTokenizer;
  * Like the examples from <i>lines 1 - 6</i>, the hexadecimal notation is used
  * for sections, keys and values.
  */
-public class Initialize implements Cloneable {
+public class Settings implements Cloneable {
 
     /** Map of sections */
     private final LinkedHashMap entries;
@@ -133,18 +133,18 @@ public class Initialize implements Cloneable {
     /** Option to activate smart mode */
     private final boolean smart;
 
-    /** Constructor, creates Initialize. */
-    public Initialize() {
+    /** Constructor, creates Settings. */
+    public Settings() {
         this(false);
     }
     
     /** 
-     * Constructor, creates Initialize.
+     * Constructor, creates Settings.
      * Optionally, smart behavior can be enabled, which changes the behavior of
      * some methods.
      * @param smart activates smart mode
      */
-    public Initialize(boolean smart) {
+    public Settings(boolean smart) {
         this.entries = new LinkedHashMap();
         this.smart   = smart;
     }
@@ -166,18 +166,18 @@ public class Initialize implements Cloneable {
     /**
      * Determines the contained sections from the string.
      * Parsing ignores invalid sections, keys and values and returns the
-     * determined sections as Initialize.
+     * determined sections as Settings.
      * @param  text String to parse
-     * @return the determined sections as Initialize
+     * @return the determined sections as Settings
      */
-    public static Initialize parse(String text) {
-        return Initialize.parse(text, false);
+    public static Settings parse(String text) {
+        return Settings.parse(text, false);
     }
     
     /**
      * Determines the contained sections from the string.
      * Parsing ignores invalid sections, keys and values and returns the
-     * determined sections as Initialize.
+     * determined sections as Settings.
      * 
      * Optionally, smart behavior can be enabled, which changes the behavior of
      * some methods.
@@ -193,20 +193,20 @@ public class Initialize implements Cloneable {
      * If {@code null} is passed as the value of a section key, the method
      * behaves like {@link #remove(String)} and deletes the section.    
      * 
-     *     <dir>{@link #merge(Initialize)}</dir>
+     *     <dir>{@link #merge(Settings)}</dir>
      * Only sections that are not empty are applied. If a section contain value
      * {@code null}, the method behaves like {@link #remove(String)}.
      * 
      * @param  text  String to parse
      * @param  smart Activates smart mode
-     * @return the determined sections as initialize
+     * @return the determined sections as Settings
      */
-    public static Initialize parse(String text, boolean smart) {
+    public static Settings parse(String text, boolean smart) {
 
-        Initialize initialize = new Initialize(smart);
+        Settings settings = new Settings(smart);
 
         if (text == null)
-            return initialize;
+            return settings;
 
         LinkedHashMap entries = new LinkedHashMap();
         StringBuffer  buffer  = null;
@@ -228,7 +228,7 @@ public class Initialize implements Cloneable {
                 
                 // The section will be decoded and optimized if necessary but
                 // only valid sections will be loaded
-                String section = Initialize.decode(strings[0]);
+                String section = Settings.decode(strings[0]);
                 if (section.length() <= 0)
                     continue;
                 entries.put(section, buffer);
@@ -236,7 +236,7 @@ public class Initialize implements Cloneable {
                 // Any existing derivations are registered and loaded
                 strings = strings[1].split("\\s+");
                 for (int index = 0; index < strings.length; index++) {
-                    section = Initialize.decode(strings[index]);
+                    section = Settings.decode(strings[index]);
                     if (entries.containsKey(section))
                         buffer.append("\r\n").append(entries.get(section));
                 }
@@ -254,10 +254,10 @@ public class Initialize implements Cloneable {
             String value   = ((StringBuffer)entries.get(section)).toString().trim();
             if (value.length() > 0
                     || !smart)
-                initialize.entries.put(section, Section.parse(value, smart));
+                settings.entries.put(section, Section.parse(value, smart));
         }
 
-        return initialize;
+        return settings;
     }
 
     /**
@@ -333,7 +333,7 @@ public class Initialize implements Cloneable {
     }
 
     /**
-     * Removes the specified section from Initialize.
+     * Removes the specified section from Settings.
      * @param  key Name of the section to be removed
      * @return previously assigned section, otherwise {@code null}
      */
@@ -351,19 +351,19 @@ public class Initialize implements Cloneable {
      * sections are created. In smart mode, only sections that are not empty are
      * applied. If a section contain value {@code null}, the method behaves like
      * {@link #remove(String)}.
-     * @param  initialize Sections to be applied
+     * @param  settings Sections to be applied
      * @return the current instance with the merged sections
      */
-    public synchronized Initialize merge(Initialize initialize) {
+    public synchronized Settings merge(Settings settings) {
         
-        if (initialize == null)
+        if (settings == null)
             return this;
 
         // Sections are combined or, if necessary, newly created
         Enumeration enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
             String entry = (String)enumeration.nextElement();
-            Section section = initialize.get(entry);
+            Section section = settings.get(entry);
             this.set(entry, section.merge(this.get(entry)));
         }
         
@@ -378,19 +378,19 @@ public class Initialize implements Cloneable {
         return this.entries.size();
     }
 
-    /** Resets Initialize completely and discards all sections. */
+    /** Resets Settings completely and discards all sections. */
     public synchronized void clear() {
         this.entries.clear();
     }
 
     @Override
     public synchronized Object clone() {
-        Initialize initialize = new Initialize(this.smart);
+        Settings settings = new Settings(this.smart);
         Enumeration enumeration = Collections.enumeration(this.entries.keySet());
         while (enumeration.hasMoreElements()) {
             String entry = (String)enumeration.nextElement();
-            initialize.entries.put(entry, ((Section)this.entries.get(entry)).clone());
+            settings.entries.put(entry, ((Section)this.entries.get(entry)).clone());
         }
-        return initialize;
+        return settings;
     }
 }

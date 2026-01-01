@@ -42,11 +42,11 @@ public class Remote implements Runnable {
     /**
      * Constructor, establishes the server corresponding to the configuration.
      * @param  context    Server name
-     * @param  initialize Configuration of the server
+     * @param  settings Configuration of the server
      * @throws Throwable
      *     In case of incorrect server configuration/setup.
      */
-    public Remote(String context, Initialize initialize)
+    public Remote(String context, Settings settings)
             throws Throwable {
 
         if (context == null)
@@ -54,7 +54,7 @@ public class Remote implements Runnable {
         context = context.trim();
         
         // REMOTE:INI - Loading the server configuration
-        Section options = initialize.get(context.concat(":ini"));
+        Section options = settings.get(context.concat(":ini"));
         
         // REMOTE:INI:ADDRESS - Host address of the server socket
         InetAddress address = null;

@@ -64,7 +64,7 @@ class Worker implements Runnable {
     private final String context;
 
     /** Server configuration */
-    private final Initialize initialize;
+    private final Settings settings;
 
     /** Socket of the server */
     private ServerSocket socket;
@@ -153,13 +153,13 @@ class Worker implements Runnable {
      * Constructor, establishes the worker with socket and configuration.
      * @param context    Server context
      * @param socket     Socket with the accepted request
-     * @param initialize Server configuration
+     * @param settings Server configuration
      */
-    Worker(String context, ServerSocket socket, Initialize initialize) {
+    Worker(String context, ServerSocket socket, Settings settings) {
 
         this.context    = context;
         this.socket     = socket;
-        this.initialize = initialize;
+        this.settings = settings;
         
         // MEDIATYPES - The media types are rewritten for faster access. For
         // configuration, it is easier to use the media type as the key, but at
@@ -167,7 +167,7 @@ class Worker implements Runnable {
 
         // Mapping in a Dictionary, incomplete entries are ignored.
         Section section = new Section(true);
-        Section mediatypes = this.initialize.get("mediatypes");
+        Section mediatypes = this.settings.get("mediatypes");
         if (mediatypes != null) {
             Enumeration enumeration = mediatypes.elements();
             while (enumeration.hasMoreElements()) {
@@ -1170,19 +1170,19 @@ class Worker implements Runnable {
         if (host.length() > 0) {
             
             String  context = ("virtual:").concat(host);
-            Section section = this.initialize.get(context.concat(":ini"));
+            Section section = this.settings.get(context.concat(":ini"));
             String  server  = section.get("server").toLowerCase();
 
             // options are determined or extended with all inheritances if a
             // virtual host exists for the server
             if ((" ").concat(server).concat(" ").contains((" ").concat(this.context.toLowerCase()).concat(" "))
                     || server.length() <= 0) {
-                this.access.merge(this.initialize.get(context.concat(":acc")));
-                this.environment.merge(this.initialize.get(context.concat(":env")));
-                this.filters.merge(this.initialize.get(context.concat(":flt")));
-                this.interfaces.merge(this.initialize.get(context.concat(":cgi")));
-                this.options.merge(this.initialize.get(context.concat(":ini")));
-                this.references.merge(this.initialize.get(context.concat(":ref")));
+                this.access.merge(this.settings.get(context.concat(":acc")));
+                this.environment.merge(this.settings.get(context.concat(":env")));
+                this.filters.merge(this.settings.get(context.concat(":flt")));
+                this.interfaces.merge(this.settings.get(context.concat(":cgi")));
+                this.options.merge(this.settings.get(context.concat(":ini")));
+                this.references.merge(this.settings.get(context.concat(":ref")));
             }
         }
         
@@ -2635,18 +2635,18 @@ class Worker implements Runnable {
             // fields from the header are configured
             this.fields = new Section(true);
             
-            Initialize initialize = (Initialize)this.initialize.clone();
+            Settings settings = (Settings)this.settings.clone();
 
             // configuration is loaded
-            this.access      = initialize.get(this.context.concat(":acc"));
-            this.environment = initialize.get(this.context.concat(":env"));
-            this.filters     = initialize.get(this.context.concat(":flt"));
-            this.interfaces  = initialize.get(this.context.concat(":cgi"));
-            this.options     = initialize.get(this.context.concat(":ini"));
-            this.references  = initialize.get(this.context.concat(":ref"));
+            this.access      = settings.get(this.context.concat(":acc"));
+            this.environment = settings.get(this.context.concat(":env"));
+            this.filters     = settings.get(this.context.concat(":flt"));
+            this.interfaces  = settings.get(this.context.concat(":cgi"));
+            this.options     = settings.get(this.context.concat(":ini"));
+            this.references  = settings.get(this.context.concat(":ref"));
 
-            this.mediatypes  = initialize.get("mediatypes");
-            this.statuscodes = initialize.get("statuscodes");
+            this.mediatypes  = settings.get("mediatypes");
+            this.statuscodes = settings.get("statuscodes");
 
             try {this.timeout = socket.getSoTimeout();
             } catch (Throwable throwable) {

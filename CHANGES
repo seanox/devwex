@@ -1,7 +1,8 @@
 5.9.0 20260411
 NT: End of active development.
     Support and maintenance remain active.
-BF: Review: Optimization and corrections    
+BF: Review: Optimization and corrections
+CR: Review: Initialize refactored in Settings
 ??: Facelift: Status / Index / Templates
 ??: Review: Optimization and corrections
 ??: Service: devwex start [directory] (read all ini files from directory)

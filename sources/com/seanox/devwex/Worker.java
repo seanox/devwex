@@ -1821,6 +1821,7 @@ class Worker implements Runnable {
         } finally {
             
             try {
+
                 // data buffer is established
                 byte[] bytes = new byte[this.blocksize];
 
@@ -1836,11 +1837,17 @@ class Worker implements Runnable {
                 
             } finally {
                 
-                // the termination of the process is forced, in order to also
-                // terminate the processes whose processing was faulty
-                try {process.destroy();
-                } catch (Throwable throwable) {
-                }
+                // The process is forcibly terminated in order to also terminate
+                // those processes whose processing was faulty. If termination
+                // must be forced or the process ends with an error, status 502
+                // is set, even if the header has already been sent, so that the
+                // error is logged in the log file as a status code, if the
+                // status is not already a class 5xx error.
+                process.destroyForcibly();
+                process.waitFor();
+                if (process.exitValue() != 0
+                        && this.status / 100 != 5)
+                    this.status = 502;
             }
         }
     }

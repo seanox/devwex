@@ -1612,26 +1612,23 @@ class Worker implements Runnable {
         script = script.replace('\\', File.separatorChar);
         script = script.replace('/', File.separatorChar);
 
-        target = target.replace("[c]", "[C]");
-        target = target.replace("[C]", script);
+        target = target.replaceAll("(?i)\\[C\\]", script);
 
         String directory = script.replaceAll("[^\\\\/]+$", "");
-        target = target.replace("[d]", "[D]");
-        target = target.replace("[D]", directory);
+        target = target.replaceAll("(?i)\\[D\\]", directory);
 
         String name = script.replaceAll("(^.*[\\\\/])|(\\..*$)", "");
-        target = target.replace("[n]", "[N]");
-        target = target.replace("[N]", name);
+        target = target.replaceAll("(?i)\\[N\\]", name);
         
         target = Worker.cleanOptions(target);
         
-        // maximum process run time is determined
+        // determines the maximum allowed runtime for the process
         long isolation = 0;
         try {isolation = Long.parseLong(this.options.get("isolation"));
         } catch (Throwable throwable) {
         }
 
-        // the time limit of the process is determined
+        // determines the timeout for the process runtime
         long timeout = 0;
         if (isolation > 0)
             timeout = System.currentTimeMillis() +isolation;

@@ -4,7 +4,7 @@ var SimpleDateFormat = Java.type("java.text.SimpleDateFormat");
 var Locale = Java.type("java.util.Locale");
 
 System.out.print("HTTP/1.0 200\r\n\r\n");
-var file = System.getenv().get("HTTP_FILE");
+var file = System.getenv().get("HTTP_FILE") || "";
 file = file.matches("^[^\\\\/].*$") ? new File(new File("../../.."), file) : new File(file);
 file = file.getCanonicalFile()
 if (file.exists()) {

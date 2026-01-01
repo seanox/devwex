@@ -23,7 +23,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     GeneratorTest.class,
-    InitializeTestSuite.class,
+    SettingsTestSuite.class,
     LoaderTest.class,
     RemoteTestSuite.class,
     SectionTestSuite.class,

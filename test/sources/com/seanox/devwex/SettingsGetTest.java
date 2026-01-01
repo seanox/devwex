@@ -19,58 +19,58 @@ package com.seanox.devwex;
 import org.junit.Assert;
 import org.junit.Test;
 
-/** Test cases for {@link com.seanox.devwex.Initialize}. */
-public class InitializeGetTest extends AbstractTest {
+/** Test cases for {@link com.seanox.devwex.Settings}. */
+public class SettingsGetTest extends AbstractTest {
     
     @Test
     public void testAcceptance_01() {
-        final Initialize initialize = new Initialize();
+        final Settings settings = new Settings();
         for (final String key : new String[] {null, "", " ", " \t ", " \r ", " \n ", " \7 "}) {
-            final Section section = initialize.get(key);
+            final Section section = settings.get(key);
             Assert.assertNull(section);
         }
     }
     
     @Test
     public void testAcceptance_02() {
-        final Initialize initialize = new Initialize(false);
+        final Settings settings = new Settings(false);
         for (final String key : new String[] {null, "", " ", " \t ", " \r ", " \n ", " \7 "}) {
-            final Section section = initialize.get(key);
+            final Section section = settings.get(key);
             Assert.assertNull(section);
         }
     }    
     
     @Test
     public void testAcceptance_03() {
-        final Initialize initialize = new Initialize(true);
+        final Settings settings = new Settings(true);
         for (final String key : new String[] {null, "", " ", " \t ", " \r ", " \n ", " \7 "}) {
-            final Section section = initialize.get(key);
+            final Section section = settings.get(key);
             Assert.assertNull(section);
         }
     }
     
     @Test
     public void testAcceptance_04() {
-        final Initialize initialize = new Initialize();
-        final Section section = initialize.get("x");
+        final Settings settings = new Settings();
+        final Section section = settings.get("x");
         Assert.assertNull(section);
     }
     
     @Test
     public void testAcceptance_05() {
-        final Initialize initialize = new Initialize(false);
-        final Section section = initialize.get("x");
+        final Settings settings = new Settings(false);
+        final Section section = settings.get("x");
         Assert.assertNull(section);
     }    
     
     @Test
     public void testAcceptance_06() {
-        final Initialize initialize = new Initialize(true);
-        final Section section1 = initialize.get("x");
+        final Settings settings = new Settings(true);
+        final Section section1 = settings.get("x");
         Assert.assertNotNull(section1);
-        Assert.assertEquals(1, initialize.size());
+        Assert.assertEquals(1, settings.size());
         section1.set("a", "1");
-        final Section section2 = initialize.get("x");
+        final Section section2 = settings.get("x");
         Assert.assertNotNull(section2);
         Assert.assertEquals(1, section2.size());
         Assert.assertEquals("1", section2.get("a"));

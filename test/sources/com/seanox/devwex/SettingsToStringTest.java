@@ -21,34 +21,34 @@ import org.junit.Test;
 
 import com.seanox.test.MockUtils;
 
-/** Test cases for {@link com.seanox.devwex.Initialize}. */
-public class InitializeToStringTest extends AbstractTest {
+/** Test cases for {@link Settings}. */
+public class SettingsToStringTest extends AbstractTest {
     
     @Test
     public void testAcceptance_1()
             throws Exception {
-        final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
     }
     
     @Test
     public void testAcceptance_2()
             throws Exception {
-        final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
     }
     
     @Test
     public void testAcceptance_3()
             throws Exception {
-        final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
     }
     
     @Test
     public void testAcceptance_4()
             throws Exception {
-        final Initialize initialize = Initialize.parse(MockUtils.readTestContent(1));
-        Assert.assertEquals(MockUtils.readTestContent(2), InitializeTestSuite.toString(initialize));
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
     }
 }

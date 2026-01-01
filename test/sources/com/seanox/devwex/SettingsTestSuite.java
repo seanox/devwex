@@ -24,22 +24,22 @@ import java.util.Map;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/** TestSuite for {@link com.seanox.devwex.Initialize}. */
+/** TestSuite for {@link Settings}. */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    InitializeContainsTest.class,
-    InitializeGetTest.class,
-    InitializeParseTest.class,
-    InitializeSetTest.class,
-    InitializeToStringTest.class
+    SettingsContainsTest.class,
+    SettingsGetTest.class,
+    SettingsParseTest.class,
+    SettingsSetTest.class,
+    SettingsToStringTest.class
 })
-public class InitializeTestSuite extends AbstractTestSuite {
+public class SettingsTestSuite extends AbstractTestSuite {
     
     @SuppressWarnings("unchecked")
-    static String toString(final Initialize initialize) {
+    static String toString(final Settings settings) {
         
         final Map<String, Section> entries;
-        try {entries = (Map<String, Section>)AbstractTestInternalAccess.getFieldValue(initialize, "entries");
+        try {entries = (Map<String, Section>)AbstractTestInternalAccess.getFieldValue(settings, "entries");
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }

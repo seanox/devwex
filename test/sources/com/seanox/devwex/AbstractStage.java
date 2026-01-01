@@ -293,12 +293,12 @@ abstract class AbstractStage {
         });
         
         final String content = new String(Files.readAllBytes(AbstractStage.getRootStageProgramConfiguration().toPath()));
-        final Initialize initialize = Initialize.parse(content);
-        final List<String> sectionList = Collections.list(initialize.elements());
+        final Settings settings = Settings.parse(content);
+        final List<String> sectionList = Collections.list(settings.elements());
         for (final String sectionName : sectionList) {
             if (!sectionName.matches("(?i)server:.*:ssl$"))
                 continue;
-            final Section section = initialize.get(sectionName);
+            final Section section = settings.get(sectionName);
             if (!section.contains("keystore")
                     || !section.contains("password"))
                 continue;

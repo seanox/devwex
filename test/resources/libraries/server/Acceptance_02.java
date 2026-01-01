@@ -16,8 +16,8 @@
  */
 package server;
 
-import com.seanox.devwex.Initialize;
 import com.seanox.devwex.Section;
+import com.seanox.devwex.Settings;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -38,7 +38,7 @@ public class Acceptance_02 implements Runnable {
             context = "";
         context = context.trim();
 
-        Section options = ((Initialize)data).get(context + ":ini");
+        Section options = ((Settings)data).get(context + ":ini");
 
         int port = 0;
         try {port = Integer.parseInt(options.get("port"));

@@ -49,12 +49,12 @@ unloading of modules are fixed sequences of the server engine.
   registered via constructor `Module(String options)`.
 - All servers are determined by searching for sections that end in `INI` and to
   which an implementation can be found in the class path, which are loaded,
-  registered, and initialized via constructor `Server(String name, Initialize
-      initialize)` or `Server(String name, Object initialize)`. To do this, each
+  registered, and initialized via constructor `Server(String name, Settings
+      settings)` or `Server(String name, Object settings)`. To do this, each
   server is given the name of the detected section and a complete copy of the
-  central configuration as an initialize object. After successful
-  initialization, the server is started as a thread and can start its work in 
-  method `Server.run()`.
+  central configuration as a Settings object. After successful initialization,
+  the server is started as a thread and can start its work in method
+  `Server.run()`.
 
 
 ### Module Call
@@ -80,12 +80,12 @@ This sequence is the combination of [Stop](#stop) and [Start](#start).
   registered via constructor `Module(String options)`.
 - All servers are determined by searching for sections that end in `INI` and to
   which an implementation can be found in the class path, which are loaded,
-  registered, and initialized via constructor `Server(String name, Initialize
-      initialize)` or `Server(String name, Object initialize)`. To do this, each
+  registered, and initialized via constructor `Server(String name, Settings
+      settings)` or `Server(String name, Object settings)`. To do this, each
   server is given the name of the detected section and a complete copy of the
-  central configuration as an initialize object. After successful
-  initialization, the server is started as a thread and can start its work in
-  method `Server.run()`.
+  central configuration as a Settings object. After successful initialization,
+  the server is started as a thread and can start its work in method
+  `Server.run()`.
 
 
 ### Stop
@@ -136,12 +136,12 @@ which returns general information such as protocol and network connection.
 ```java
 public class Server implements Runnable {
 
-    public Server(String name, Initialize initialize) {
+    public Server(String name, Setting settings) {
 
         // A server is initiated by server engine via the constructor. If the
         // constructor is not available, the server is considered incompatible
-        // and is not loaded. The configuration is passed next to the name as an
-        // Initialize object.
+        // and is not loaded. The configuration is passed next to the name as a
+        // Settings object.
     }
 
     public String expose() {

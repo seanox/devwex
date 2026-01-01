@@ -362,9 +362,9 @@
           <fileset dir="${workspace.sources}">
             <!-- static test cases -->
             <include name="**/Generator*Test.java"/>
-            <include name="**/Initialize*Test.java"/>
             <include name="**/Loader*Test.java"/>
             <include name="**/Section*Test.java"/>
+            <include name="**/Settings*Test.java"/>
           </fileset>
         </batchtest>
         <batchtest>

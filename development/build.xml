@@ -16,6 +16,7 @@
   <property name="workspace" value="${basedir}"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
   <property name="workspace.program" value="${workspace}/program"/>
+  <property name="workspace.program.classes" value="${workspace.program}/classes"/>
   <property name="workspace.development" value="${workspace}/development"/>
   <property name="workspace.extras" value="${workspace.development}/extras"/>
   <property name="workspace.release" value="${workspace}/release"/>
@@ -27,10 +28,17 @@
   
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
-  <property name="compile.debug" value="off"/>
+  <property name="xcompile.debug" value="off"/>
   <property name="compile.optimize" value="on"/>
   <property name="compile.deprecation" value="on"/>
-  
+
+  <condition property="compile.debug" value="on" else="off">
+    <or>
+      <equals casesensitive="false" arg1="${debug}" arg2="on"/>
+      <equals casesensitive="false" arg1="${debug}" arg2="true"/>
+    </or>
+  </condition>
+
   <macrodef name="release-locate">
     <sequential>
       <copy file="${workspace}/CHANGES" tofile="${workspace}/CHANGES.tmp" overwrite="true"/>
@@ -220,6 +228,11 @@
     <antcall target="compress"/>
     <length file="${workspace.program}/${ant.project.name}.jar" property="build.binary.length"/>
     <echo>---&gt; ${ant.project.name}.jar: ${build.binary.length} bytes</echo>
+    <delete dir="${workspace.program.classes}"/>
+    <mkdir dir="${workspace.program.classes}"/>
+    <copy todir="${workspace.program.classes}">
+      <fileset dir="${build.classes}"/>
+    </copy>
     <delete dir="${build}"/>
   </target>  
   
@@ -263,12 +276,12 @@
     <include name="program/service-64.license"/>
     <include name="sources/com/seanox/devwex/Bootstrap.java"/>
     <include name="sources/com/seanox/devwex/Generator.java"/>
-    <include name="sources/com/seanox/devwex/Initialize.java"/>
     <include name="sources/com/seanox/devwex/Loader.java"/>
     <include name="sources/com/seanox/devwex/Remote.java"/>
     <include name="sources/com/seanox/devwex/Section.java"/>
     <include name="sources/com/seanox/devwex/Server.java"/>
     <include name="sources/com/seanox/devwex/Service.java"/>
+    <include name="sources/com/seanox/devwex/Settings.java"/>
     <include name="sources/com/seanox/devwex/Worker.java"/>
     <include name="storage"/>
     <include name="system/common.css"/>

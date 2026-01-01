@@ -41,6 +41,7 @@ public class Scripting {
             engine.eval(Files.newBufferedReader(pathTranslated));            
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
+            System.exit(1);
         }
     }
 }

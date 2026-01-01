@@ -903,5 +903,47 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_405));
-    }    
+    }
+    
+    /** 
+     * Test case for a CGI error.
+     * The CGI process ends with an error and an exit code != 0, which must
+     * cause status 502.
+     * @throws Exception
+     */       
+    @Test
+    public void testAcceptance_25()
+            throws Exception {
+
+        final String request = "GET /cgi_error.jsx HTTP/1.0\r\n"
+                + "Host: vHa\r\n"
+                + "\r\n";
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request);
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_502));
+        
+        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_502));   
+    } 
+
+    /** 
+     * Test case for acceptance.
+     * Configuration: {@code [VIRTUAL:VHA:REF] /lastmodified.jsx > .../lastmodified.jsx [A]}
+     * The virtual path is defined as 'absolute'. The request must be responded
+     * with status 200, event with a dot at the end.
+     * @throws Exception
+     */       
+    @Test
+    public void testAcceptance_28()
+            throws Exception {
+        
+        final String request = "GET \\lastmodified.jsx. HTTP/1.0\r\n"
+                + "Host: vHa\r\n"
+                + "\r\n";
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
+        final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
+        Assert.assertTrue(header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        
+        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));
+    }
 }

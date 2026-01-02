@@ -2263,6 +2263,11 @@ class Worker implements Runnable {
     private void doStatus()
             throws Exception {
         
+        // connection is marked as used
+        if (!this.control)
+            return;
+        this.control = false;
+        
         String method = this.fields.get("req_method").toLowerCase();
         if (method.equals("options")
                 && (this.status == 302 || this.status == 404))
@@ -2358,9 +2363,6 @@ class Worker implements Runnable {
         
         // header is composed for the output
         string = this.header(this.status, (String[])headers.toArray(new String[0])).concat("\r\n\r\n");
-
-        // connection is marked as used
-        this.control = false;         
 
         if (this.timeout > 0)
             this.timelock = System.currentTimeMillis();
@@ -2574,10 +2576,13 @@ class Worker implements Runnable {
      */
     boolean available() {
         if (this.timelock > 0
-                && System.currentTimeMillis() -this.timelock > this.timeout)
+                && System.currentTimeMillis() -this.timelock > this.timeout) {
+            if (this.status / 100 != 5)
+                this.status = 504;
             try {this.accept.close();
             } catch (Throwable throwable) {
             }
+        }
         return this.socket != null && this.accept == null;
     }
     

@@ -1993,7 +1993,7 @@ class Worker implements Runnable {
         
         query = query.concat(reverse ? "d" : "a");
         if (list.size() <= 0)
-            query = query.concat(" empty");
+            query = query.concat(" x");
         values.put("sort", query);
 
         values.put("file", list);

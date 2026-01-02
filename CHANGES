@@ -10,7 +10,6 @@ CR: HTTP(S) CGI: Optimization and corrections
 CR: HTTP(S) Directory Index: Optimization and corrections
 CR: Review: Initialize refactored in Settings
 ??: Facelift: Status / Index / Templates
-??: Review: Optimization and corrections
 ??: Service: devwex start [directory] (read all ini files from directory)
 ??: Automation (build, test, release) via GitHub actions
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)

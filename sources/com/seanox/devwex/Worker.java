@@ -1836,6 +1836,15 @@ class Worker implements Runnable {
                     Service.print(("GATEWAY ").concat(message));
                 
             } finally {
+
+                // The operating system must be given time (time slice) so that
+                // the process can execute a pending termination itself. This is
+                // only a best-effort attempt and does not guarantee that the
+                // process will actually receive CPU time or complete its own
+                // shutdown before forced termination -- Race Condition.
+                try {Thread.sleep(this.interrupt);
+                } catch (Exception exception) {
+                }
                 
                 // The process is forcibly terminated in order to also terminate
                 // those processes whose processing was faulty. If termination
@@ -1843,7 +1852,7 @@ class Worker implements Runnable {
                 // is set, even if the header has already been sent, so that the
                 // error is logged in the log file as a status code, if the
                 // status is not already a class 5xx error.
-                process.destroyForcibly();
+                process.destroy();
                 process.waitFor();
                 if (process.exitValue() != 0
                         && this.status / 100 != 5)

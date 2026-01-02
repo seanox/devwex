@@ -1883,35 +1883,6 @@ class Worker implements Runnable {
             values.put(entry, this.environment.get(entry));
         }
         
-        // assignment of the fields for sorting is defined
-        if (query.length() <= 0)
-            query = "n";
-        query = query.substring(0, 1);
-        
-        char order = query.charAt(0);
-        boolean reverse = order >= 'A' && order <= 'Z';
-        
-        query = query.toLowerCase(); 
-        order = query.charAt(0);
-         
-        // case, name, date, size, type
-        int[] assign = new int[] {0, 1, 2, 3, 4};
-        
-        // sorting is determined by the query and works according to: case,
-        // query and name, the entries are put into an array to achieve a simple
-        // and flexible assignment of the sort order
-        // 0 - case, 1 - name, 3 - date, 4 - size, 5 - type
-        if (order == 'd') {
-            // case, date, name, size, type
-            assign = new int[] {0, 2, 1, 3, 4};
-        } else if (order == 's') {
-            // case, size, name, date, type
-            assign = new int[] {0, 3, 1, 2, 4};
-        } else if (order == 't') {
-            // case, type, name, date, size
-            assign = new int[] {0, 4, 1, 2, 3};
-        } else query = "n";
-        
         // default template for the INDEX is determined and loaded
         File file = new File(this.sysroot.concat("/index.html"));
         Generator generator = Generator.parse(Worker.fileRead(file));
@@ -1921,8 +1892,8 @@ class Worker implements Runnable {
             path = path.concat("/");
         values.put("path_url", path);
         
-        // path is generated as breadcrumb navigation.
-        // each subpath is generated as a clickable path.
+        // path is generated as breadcrumb navigation
+        // each subpath is generated as a clickable path
         StringTokenizer tokenizer = new StringTokenizer(path, "/");
         for (String chain = "", entry; tokenizer.hasMoreTokens();) {
             entry = tokenizer.nextToken();
@@ -1932,89 +1903,86 @@ class Worker implements Runnable {
             generator.set("location", values);
         }
         
+        if (query.length() <= 0)
+            query = "n";
+        query = query.substring(0, 1);
+        
+        char order = query.charAt(0);
+        boolean reverse = order >= 'A' && order <= 'Z';
+        
+        query = query.toLowerCase(); 
+        order = query.charAt(0);
+        
         // file list is determined
         File[] files = directory.listFiles();
         if (files == null)
             files = new File[0];
-        ArrayList storage = new ArrayList(Arrays.asList(files));
+        ArrayList filelist = new ArrayList(Arrays.asList(files));
 
         // with the option [S] hidden files are not displayed
         boolean hidden = this.options.get("index").toUpperCase().contains("[S]");
 
         // file information is assembled
-        String[] columns = new String[5];
-        for (int loop = 0, cursor; loop < storage.size(); loop++) {
+        for (int loop = 0; loop < filelist.size(); loop++) {
 
             // physical file is determined
-            file = (File)storage.get(loop);
+            file = (File)filelist.get(loop);
             
-            // the entries are put into an array to achieve a simple and
-            // flexible assignment of the sort order
-            // 0 - base, 1 - name, 2 - date, 3 - size, 4 - type
-
-            // data type is determined
-            columns[0] = file.isDirectory() ? "directory" : "file";
+            String fileType = file.isDirectory() ? "directory" : "file";
+            String fileName = file.getName();
+            String fileModified = String.format("%tF %<tT", new Date(file.lastModified()));
             
-            // name is determined
-            columns[1] = file.getName();
-            
-            // timestamp of the last change is determined
-            columns[2] = String.format("%tF %<tT", new Date(file.lastModified()));
-
-            // size is determined, but not for directories
-            columns[3] = file.isDirectory() ? "-" : String.valueOf(file.length());
-            
-            // size is extended at the first position with the character which
+            // length is extended at the first position with the character which
             // results from the length of the size to sort it by numerical size
-            columns[3] = String.valueOf((char)columns[3].length()).concat(columns[3]);
+            String fileLength = file.isDirectory() ? "-" : String.valueOf(file.length());
+            fileLength = String.valueOf((char)fileLength.length()).concat(fileLength);
 
-            // file type is determined, but not for directories
-            cursor = columns[1].lastIndexOf(".");
-            columns[4] = cursor >= 0 ? columns[1].substring(cursor +1) : "";
-            columns[4] = file.isDirectory() ? "-" : columns[4].toLowerCase().trim();
+            // file extension is determined, but not for directories
+            int cursor = fileName.lastIndexOf(".");
+            String fileExtension = cursor >= 0 ? fileName.substring(cursor +1) : "";
+            fileExtension = file.isDirectory() ? "-" : fileExtension.toLowerCase().trim();
+            
+            String fileOrder = fileName;
+            if (order == 'd')
+                fileOrder = fileModified;  
+            else if (order == 's')
+                fileOrder = fileLength;
+            else if (order == 't')
+                fileOrder = fileType; 
             
             // files and directories of the "hidden" option are marked
-            String row = String.join("\00 ", new String[] {columns[assign[0]], columns[assign[1]],
-                    columns[assign[2]], columns[assign[3]], columns[assign[4]]});
+            String row = String.join("\00 ", new String[] {
+                    fileType, fileOrder, fileName, fileModified, fileLength, fileExtension});
             if (hidden && file.isHidden())
                 row = "";
-            storage.set(loop, row);
+            filelist.set(loop, row);
         }
 
         // file list is sorted
-        Collections.sort(storage, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(filelist, String.CASE_INSENSITIVE_ORDER);
         if (reverse)
-            Collections.reverse(storage);
+            Collections.reverse(filelist);
         
         // file information is collected
         ArrayList list = new ArrayList();
-        for (int loop = 0; loop < storage.size(); loop++) {
-            
+        for (int loop = 0; loop < filelist.size(); loop++) {
+
             // unrecognized files are suppressed
-            tokenizer = new StringTokenizer((String)storage.get(loop), "\00");
+            tokenizer = new StringTokenizer((String)filelist.get(loop), "\00");
             if (tokenizer.countTokens() <= 0)
                 continue;
             
             Hashtable data = new Hashtable(values);
             list.add(data);
             
-            // the entries are put into an array to achieve a simple and
-            // flexible assignment of the sort order
-            // 0 - base, 1 - name, 2 - date, 3 - size, 4 - type
-
-            columns[assign[0]] = tokenizer.nextToken();
-            columns[assign[1]] = tokenizer.nextToken().substring(1);
-            columns[assign[2]] = tokenizer.nextToken().substring(1);
-            columns[assign[3]] = tokenizer.nextToken().substring(1);
-            columns[assign[4]] = tokenizer.nextToken().substring(1);
+            data.put("case", tokenizer.nextToken());
+            tokenizer.nextToken();
+            data.put("name", tokenizer.nextToken().substring(1));
+            data.put("date", tokenizer.nextToken().substring(1));
+            data.put("size", tokenizer.nextToken().substring(2));
+            data.put("type", tokenizer.nextToken().substring(1));
             
-            data.put("case", columns[0]);
-            data.put("name", columns[1]);
-            data.put("date", columns[2]);
-            data.put("size", columns[3].substring(1));
-            data.put("type", columns[4]);
-            
-            String mime = columns[4];
+            String mime = (String)data.get("type");
             if (!mime.equals("-")) {
                 mime = this.mediatypes.get(mime);
                 if (mime.length() <= 0)
@@ -2025,7 +1993,7 @@ class Worker implements Runnable {
         
         query = query.concat(reverse ? "d" : "a");
         if (list.size() <= 0)
-            query = query.concat(" x");
+            query = query.concat(" empty");
         values.put("sort", query);
 
         values.put("file", list);

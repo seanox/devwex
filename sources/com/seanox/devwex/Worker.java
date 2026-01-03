@@ -150,6 +150,9 @@ class Worker implements Runnable {
     /** Amount of transmitted data */
     private volatile long volume;
 
+    /** Established CGI process */
+    private volatile Process process;
+
     /**
      * Constructor, establishes the worker with socket and configuration.
      * @param context    Server context
@@ -1625,31 +1628,32 @@ class Worker implements Runnable {
         target = target.replace("[N]", name);
         
         target = Worker.cleanOptions(target);
-        
+
+        // environment variables are determined
+        String[] environment = this.getEnvironment();
+
         // determines the maximum allowed runtime for the process
         long isolation = 0;
         try {isolation = Long.parseLong(this.options.get("isolation"));
         } catch (Throwable throwable) {
         }
 
+        // process is started
+        // data is read until the process is terminated or an error occurs
+        this.process = Runtime.getRuntime().exec(target.trim(), environment);
+
         // determines the timeout for the process runtime
         long timeout = 0;
         if (isolation > 0)
-            timeout = System.currentTimeMillis() +isolation;
-
-        // environment variables are determined
-        String[] environment = this.getEnvironment();
-        
-        // process is started
-        // data is read until the process is terminated or an error occurs
-        Process process = Runtime.getRuntime().exec(target.trim(), environment);
+            timeout = -System.currentTimeMillis() -isolation;
+        this.timelock = timeout;
 
         try {
 
             // data streams are established
             // data stream of StdErr is opened only when needed
-            InputStream input = process.getInputStream();
-            OutputStream output = process.getOutputStream();
+            InputStream input = this.process.getInputStream();
+            OutputStream output = this.process.getOutputStream();
 
             // data buffer is established
             byte[] bytes = new byte[this.blocksize];
@@ -1669,6 +1673,9 @@ class Worker implements Runnable {
             // the amount of data is limited by CONTENT-LENGTH
             while (length > 0) {
 
+                if (!this.process.isAlive())
+                    break;
+
                 long size = this.input.read(bytes);
                 if (size < 0)
                     break;
@@ -1679,18 +1686,11 @@ class Worker implements Runnable {
                 // remaining amount of data is calculated
                 length -= size;
                 
-                // maximum process run time is verified
-                if (timeout > 0
-                        && timeout < System.currentTimeMillis()) {
-                    this.status = 504;
-                    break;
-                }
-
                 Thread.sleep(this.interrupt);
             }        
 
             // data stream is closed
-            if (process.isAlive())
+            if (this.process.isAlive())
                 output.close();
             
             // if the status is not 200, the termination of the process is
@@ -1795,24 +1795,17 @@ class Worker implements Runnable {
                             this.output.write(header.concat("\r\n\r\n").getBytes());
                         header = null;
                         this.output.write(bytes, offset, length -offset);
-                        this.timelock = 0;
+                        this.timelock = timeout;
                         
                         // volume of sent data is registered
                         this.volume += length -offset;
                     }
                 }
 
-                // maximum process run time is verified
-                if (timeout > 0
-                        && timeout < System.currentTimeMillis()) {
-                    this.status = 504;
-                    break;
-                 }
-                
                 // data stream is verified for present data
                 // and the process is verified for its end
                 if (input.available() <= 0
-                        && !process.isAlive())
+                        && !this.process.isAlive())
                     break;
                 
                 Thread.sleep(this.interrupt);
@@ -1826,7 +1819,7 @@ class Worker implements Runnable {
                 byte[] bytes = new byte[this.blocksize];
 
                 String message = "";
-                InputStream error = process.getErrorStream();
+                InputStream error = this.process.getErrorStream();
                 while (error.available() > 0) {
                     int length = error.read(bytes);
                     message = message.concat(new String(bytes, 0, length));
@@ -1852,11 +1845,16 @@ class Worker implements Runnable {
                 // is set, even if the header has already been sent, so that the
                 // error is logged in the log file as a status code, if the
                 // status is not already a class 5xx error.
-                process.destroy();
-                process.waitFor();
-                if (process.exitValue() != 0
-                        && this.status / 100 != 5)
-                    this.status = 502;
+                try {
+                    this.process.destroy();
+                    this.process.waitFor();
+                    if (this.process.exitValue() != 0
+                            && this.status / 100 != 5)
+                        this.status = 502;
+                } catch (Exception exception) {
+                }
+                
+                this.process = null;
             }
         }
     }
@@ -2470,13 +2468,12 @@ class Worker implements Runnable {
             
         } finally {
 
-            this.timelock = 0;               
+            this.timelock = 0;
             
             // STATUS/ERROR/METHOD:OPTIONS - will be executed if necessary
-            if (this.control)
-                try {this.doStatus();            
-                } catch (IOException exception) {
-                }
+            try {this.doStatus();            
+            } catch (IOException exception) {
+            }
         }
     }
    
@@ -2572,11 +2569,18 @@ class Worker implements Runnable {
      */
     boolean available() {
         long timelock = this.timelock;
-        if (this.timeout > 0 && timelock > 0
+        if (timelock > 0 && this.timeout > 0
                 && System.currentTimeMillis() -timelock > this.timeout) {
             if (this.status / 100 != 5)
                 this.status = 504;
             try {this.accept.close();
+            } catch (Throwable throwable) {
+            }
+            this.timelock = 0;
+        } else if (timelock < 0 && System.currentTimeMillis() >= -timelock) {
+            if (this.status / 100 != 5)
+                this.status = 504;
+            try {this.process.destroy();
             } catch (Throwable throwable) {
             }
             this.timelock = 0;

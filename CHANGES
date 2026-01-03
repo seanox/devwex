@@ -3,10 +3,13 @@ NT: End of active development.
     Support and maintenance remain active.
 BF: Review: Optimization and corrections
 CR: HTTP(S) CGI: Optimization and corrections
+    - Optimization in handling blocking CGI processes
     - Optimization in enforcing the end of the process
     - Optimization in the analysis of the exit code now consistently leads to
       status 502 in the access log and, if no header has been sent yet, also as
-      HTTP status.   
+      HTTP status.
+CR: HTTP(S): Optimization and corrections
+    - Optimization in handling blocking I/O streams
 CR: HTTP(S) Directory Index: Optimization and corrections
 CR: Review: Initialize refactored in Settings
 ??: Facelift: Status / Index / Templates

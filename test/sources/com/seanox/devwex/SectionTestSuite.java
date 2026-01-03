@@ -30,7 +30,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     SectionContainsTest.class,
     SectionParseTest.class,
-    SectionTest_Set.class,
+    SectionTestSet.class,
     SectionGetTest.class,
     SectionToStringTest.class
 })

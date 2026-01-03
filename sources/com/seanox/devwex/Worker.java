@@ -123,31 +123,32 @@ class Worker implements Runnable {
     /** System directory of the server */
     private String sysroot;
 
-    /** Data flow control */
-    private boolean control;
-
     /** Block size for data access */
     private int blocksize;
-
-    /** Status code of the response */
-    private int status;
-
+    
     /** Interrupt for system processes in milliseconds */
     private long interrupt;
 
-    /** 
-     * Timelock is a timestamp with start from write and will be used to detect
-     * blocking data streams when the time exceeds a threshold value (timeout).
-     * If the stream is still reacting after writing, the timestamp is reset.
-     * There is no SO_TIMEOUT for outgoing data streams, therefore this approach. 
-     */
-    private long timelock;
-
     /** Timeout for sockets, request, streams in milliseconds */
     private long timeout;
+    
+    /** Status code of the response */
+    private volatile int status;
+
+    /** Data flow control */
+    private volatile boolean control;
+
+    /** 
+     * Timelock is a timestamp that starts when writing and reading begins and
+     * is used to detect blocked data streams when the time exceeds a threshold
+     * (timeout). If the stream is still reacting after writing, the timestamp
+     * is reset. There is no SO_TIMEOUT for outgoing data streams, therefore
+     * this approach. 
+     */
+    private volatile long timelock;
 
     /** Amount of transmitted data */
-    private long volume;
+    private volatile long volume;
 
     /**
      * Constructor, establishes the worker with socket and configuration.
@@ -1789,8 +1790,7 @@ class Worker implements Runnable {
                         // streams, because there is no socket-based timeout.
                         // If the stream is still reacting at the end, the time
                         // is reset.
-                        if (this.timeout > 0)
-                            this.timelock = System.currentTimeMillis();
+                        this.timelock = System.currentTimeMillis();
                         if (header != null)
                             this.output.write(header.concat("\r\n\r\n").getBytes());
                         header = null;
@@ -2037,8 +2037,7 @@ class Worker implements Runnable {
                 // timeout is used to detect blocking data streams, because
                 // there is no socket-based timeout. If the stream is still
                 // reacting at the end, the time is reset.
-                if (this.timeout > 0)
-                    this.timelock = System.currentTimeMillis();
+                this.timelock = System.currentTimeMillis();
                 this.output.write(header.getBytes());
                 this.output.write(bytes);
                 this.timelock = 0;
@@ -2131,8 +2130,7 @@ class Worker implements Runnable {
         // connection is marked as used
         this.control = false;
 
-        if (this.timeout > 0)
-            this.timelock = System.currentTimeMillis();
+        this.timelock = System.currentTimeMillis();
         this.output.write(header.getBytes());
         this.timelock = 0;
         
@@ -2156,8 +2154,7 @@ class Worker implements Runnable {
                             && (offset +this.volume +size > limit))
                         size = limit -(offset +this.volume);
 
-                    if (this.timeout > 0)
-                        this.timelock = System.currentTimeMillis();
+                    this.timelock = System.currentTimeMillis();
                     this.output.write(bytes, 0, Math.max(0, (int)size));
                     this.timelock = 0;
 
@@ -2364,13 +2361,12 @@ class Worker implements Runnable {
         // header is composed for the output
         string = this.header(this.status, (String[])headers.toArray(new String[0])).concat("\r\n\r\n");
 
-        if (this.timeout > 0)
-            this.timelock = System.currentTimeMillis();
         if (this.output != null) {
+            this.timelock = System.currentTimeMillis();
             this.output.write(string.getBytes());
             this.output.write(bytes);
+            this.timelock = 0;
         }
-        this.timelock = 0;
         
         // volume of sent data is registered
         this.volume += bytes.length;  
@@ -2575,13 +2571,15 @@ class Worker implements Runnable {
      * @return {@code true} if the worker is active and available
      */
     boolean available() {
-        if (this.timelock > 0
-                && System.currentTimeMillis() -this.timelock > this.timeout) {
+        long timelock = this.timelock;
+        if (this.timeout > 0 && timelock > 0
+                && System.currentTimeMillis() -timelock > this.timeout) {
             if (this.status / 100 != 5)
                 this.status = 504;
             try {this.accept.close();
             } catch (Throwable throwable) {
             }
+            this.timelock = 0;
         }
         return this.socket != null && this.accept == null;
     }

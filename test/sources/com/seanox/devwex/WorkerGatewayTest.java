@@ -17,7 +17,6 @@
 package com.seanox.devwex;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +24,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
@@ -537,62 +535,52 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
     /** 
      * Test case for acceptance.
      * The CGI reads the data very slowly.
-     * The request is canceled with status 502.
+     * The request is canceled with status 504.
      * @throws Exception
      */     
     @Test
-    @Ignore
-    public void testAcceptance_16()
+    public void testAcceptance_016()
             throws Exception {
-        
         String content = "x";
-        while (content.length() < 1024 *1024)
+        while (content.length() < 250)
             content += content;
-        
         final String request = "POST /cgi_read_slow.jsx HTTP/1.0\r\n"
                 + "Host: vHa\r\n"
                 + "Content-Length: " + content.length() + "\r\n"
                 + "\r\n"
                 + content;
-        
-        String response = "HTTP/1.0 502 xxx\r\n\r\n";
-        try {response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
-        } catch (IOException exception) {
-        }
-        
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_502));
-        
+        final Timing timing = Timing.create(true);
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
+        timing.assertTimeIn(31000);
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_504));
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
-        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_502));      
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_504));      
     }
     
     /** 
      * Test case for acceptance.
-     * An invalid {@code DOCROOT} has been configured for VHC.
-     * The server uses an alternative working directory as {@code DOCROOT}.
+     * The CGI reads the data very slowly.
+     * The request is canceled with status 504.
      * @throws Exception
      */     
     @Test
-    public void testAcceptance_17()
+    public void testAcceptance_017()
             throws Exception {
-        
-        final String request = "GET \\stage\\documents\\cgi_environment.jsx HTTP/1.0\r\n"
-                + "Host: vHc\r\n"
-                + "\r\n";
-        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request);
-        
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
-        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE_DIFFUSE));
-        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_LENGTH_DIFFUSE));
-        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));
-        
-        final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header.trim().length() > 0);
-        final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        
-        final String stage = AbstractStage.getRootStage().getParentFile().toString().replace('\\', '/');
-        Assert.assertTrue(body.matches("(?si)^.*\r\nDOCUMENT_ROOT=\\Q" + stage + "\\E\r\n.*$"));
-    } 
+        String content = "x";
+        while (content.length() < 250)
+            content += content;
+        final String request = "POST /cgi_read_blocking.jsx HTTP/1.0\r\n"
+                + "Host: vHa\r\n"
+                + "Content-Length: " + content.length() + "\r\n"
+                + "\r\n"
+                + content;
+        final Timing timing = Timing.create(true);
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
+        timing.assertTimeIn(31000);
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_504));
+        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_504));      
+    }
     
     /** 
      * Test case for acceptance.
@@ -924,7 +912,35 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_502));   
     } 
-
+    
+    /** 
+     * Test case for acceptance.
+     * An invalid {@code DOCROOT} has been configured for VHC.
+     * The server uses an alternative working directory as {@code DOCROOT}.
+     * @throws Exception
+     */     
+    @Test
+    public void testAcceptance_26()
+            throws Exception {
+        
+        final String request = "GET \\stage\\documents\\cgi_environment.jsx HTTP/1.0\r\n"
+                + "Host: vHc\r\n"
+                + "\r\n";
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request);
+        
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE_DIFFUSE));
+        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_LENGTH_DIFFUSE));
+        Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));
+        
+        final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
+        Assert.assertTrue(header.trim().length() > 0);
+        final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
+        
+        final String stage = AbstractStage.getRootStage().getParentFile().toString().replace('\\', '/');
+        Assert.assertTrue(body.matches("(?si)^.*\r\nDOCUMENT_ROOT=\\Q" + stage + "\\E\r\n.*$"));
+    } 
+    
     /** 
      * Test case for acceptance.
      * Configuration: {@code [VIRTUAL:VHA:REF] /lastmodified.jsx > .../lastmodified.jsx [A]}
@@ -933,7 +949,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
      * @throws Exception
      */       
     @Test
-    public void testAcceptance_28()
+    public void testAcceptance_27()
             throws Exception {
         
         final String request = "GET \\lastmodified.jsx. HTTP/1.0\r\n"

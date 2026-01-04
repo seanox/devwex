@@ -20,10 +20,6 @@ CR: Review: Initialize refactored in Settings
     - https://downloads.apache.org/commons/daemon/binaries/
 ??: Documentation: Update for Unix and Linux
 ??: Documentation: Architecture image
-??: CGI: Watchdog for blocking processes/stdin/stdout
-    - WorkerGatewayTest.testAcceptance_16()
-    - test/resources/documents_vh_A/cgi_read_blocking.jsx
-    - test/resources/documents_vh_A/cgi_read_slow.jsx
 ??: Configuration: Add # as optional/alternavtive comment symbols
 
 5.8.0 20251231

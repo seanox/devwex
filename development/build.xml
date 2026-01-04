@@ -76,80 +76,6 @@
     </sequential>
   </macrodef>
   
-  <macrodef name="compress-markup-insert">
-    <attribute name="file"/>
-    <attribute name="context"/>
-    <attribute name="content"/>
-    <sequential>
-      <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.css)&quot;/&gt;" flags="g" byline="true"
-          replace="\1&lt;style&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/style&gt;"/>
-      <replaceregexp file="@{file}" match="^(\s*)&lt;meta content=&quot;/([^/&quot;]+)/([^/&quot;]+\.js)&quot;/&gt;" flags="g" byline="true"
-          replace="\1&lt;script type=&quot;text/javascript&quot;&gt;${line.separator}:::\2.\3${line.separator}\1&lt;/script&gt;"/>
-      <replace file="@{file}" token=":::@{context}.@{content}" value="${file.@{context}.@{content}}"/>
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-markup-clean">
-    <attribute name="file"/>
-    <sequential>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;script[^&gt;]*?\ssrc=.*?&lt;/script&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+\s*&lt;link[^&gt;]+?&gt;" flags="g" byline="false" replace=""/>
-      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/style&gt;\s*&lt;style[^&lt;]*?&gt;\s*" flags="g" byline="false" replace="\1  "/>
-      <replaceregexp file="@{file}" match="(?s)(\s*)&lt;/script&gt;\s*&lt;script[^&lt;]*?&gt;\s*" flags="g" byline="false" replace="\1  "/>
-    </sequential>
-  </macrodef>
-  
-  <macrodef name="compress-markup">
-    <attribute name="file"/>
-    <sequential>
-      <echo>Compressing: @{file}</echo> 
-      <compress-markup-insert file="@{file}" context="system" content="common.css"/>
-      <compress-markup-insert file="@{file}" context="system" content="media.css"/>     
-      <compress-markup-insert file="@{file}" context="system" content="index.css"/>          
-      <compress-markup-insert file="@{file}" context="system" content="status.css"/>  
-      <compress-markup-insert file="@{file}" context="documents" content="index.css"/>
-      <compress-markup-clean file="@{file}"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>      
-    </sequential>
-  </macrodef>
-
-  <macrodef name="compress-stylesheet">
-    <attribute name="file"/>
-    <attribute name="context"/>
-    <sequential>
-      <echo>Compressing: @{file}</echo> 
-      <replaceregexp file="@{file}" match="(?s)(?&lt;!\\)/\*.*?\*/" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\t+" flags="g" replace=" " byline="true"/>
-      <replaceregexp file="@{file}" match="(?i)\s(!important)" flags="g" replace="\1" byline="true"/>
-      <replaceregexp file="@{file}" match="(?i)(\))\s+(?![a-z\s])" flags="g" replace="\1" byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)\s*[\r\n]+" flags="g" replace="${line.separator}" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(:)\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(\()\s*" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(?i)(\s[a-z]+)\s+(\()" flags="g" replace="\1\2" byline="true"/>
-      <replaceregexp file="@{file}" match="(?i)(\s(?:not|only|and))(\()" flags="g" replace="\1 \2" byline="true"/>
-      <replaceregexp file="@{file}" match="(\))\s+(;)" flags="g" replace="\1\2" byline="true"/>
-      <replaceregexp file="@{file}" match="(?s)(\))\s+(;)" flags="g" replace="\1\2" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(\))\s*" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)\s*(;) +" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?&lt;=[^;\s\{\}])\s*(?=[\r\n]+\s*\})" flags="g" replace=";" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(,)\s*[\r\n]+\s*" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(;)\s*[\r\n]+\s*(?=[a-zA-Z])" flags="g" replace="\1 " byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(;)\s*(\})" flags="g" replace="\1\2" byline="false"/>
-      <replaceregexp file="@{file}" match="(?s)(\{ *)[\r\n]+" flags="g" replace="\1" byline="false"/>
-      <replaceregexp file="@{file}" match="(\{)(\s*.*?\{)" flags="g" replace="\1${line.separator}\2" byline="true"/>      
-      <replaceregexp file="@{file}" match="(\{) +" flags="g" replace="\1" byline="true"/>      
-      <replaceregexp file="@{file}" match="(?s)[\r\n]+[^\r\n]+\{\s*\}" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="^\s+" flags="g" replace="" byline="false"/>
-      <replaceregexp file="@{file}" match="\s+$" flags="g" replace="" byline="true"/>
-      <replaceregexp file="@{file}" match="^(.*)$" flags="g" replace="      \1" byline="true"/>
-      <basename property="@{context}.@{file}" file="@{file}"/>
-      <loadfile property="file.@{context}.${@{context}.@{file}}" srcFile="@{file}"/>
-      <delete file="@{file}"/>
-    </sequential>
-  </macrodef>  
-  
   <target name="changes">
     <release-locate/>
 
@@ -254,8 +180,10 @@
     <include name="development/mediatypes/icons.html"/>
     <include name="development/build.xml"/>
     <include name="development/devwex.ini"/>
-    <include name="documents/index.css"/>
     <include name="documents/index.html"/>
+    <include name="manual/architecture.drawio"/>
+    <include name="manual/architecture.png"/>
+    <include name="manual/architecture.svg"/>
     <include name="manual/configuration.md"/>
     <include name="manual/control-and-monitoring.md"/>
     <include name="manual/description.md"/>
@@ -284,15 +212,11 @@
     <include name="sources/com/seanox/devwex/Settings.java"/>
     <include name="sources/com/seanox/devwex/Worker.java"/>
     <include name="storage"/>
-    <include name="system/common.css"/>
-    <include name="system/index.css"/>
     <include name="system/index.html"/>
-    <include name="system/media.css"/>
     <include name="system/status-2xx.html"/>
     <include name="system/status-3xx.html"/>
     <include name="system/status-4xx.html"/>
     <include name="system/status-5xx.html"/>
-    <include name="system/status.css"/>
     <include name=".classpath"/>
     <include name=".project"/>
     <include name="CHANGES"/>
@@ -301,6 +225,9 @@
   
   <fileset id="fileset.release" dir="${build}/sources">
     <include name="documents/index.html"/>
+    <include name="manual/architecture.drawio"/>
+    <include name="manual/architecture.png"/>
+    <include name="manual/architecture.svg"/>
     <include name="manuals/seanox-devwex/configuration.md"/>
     <include name="manuals/seanox-devwex/control-and-monitoring.md"/>
     <include name="manuals/seanox-devwex/description.md"/>
@@ -349,17 +276,6 @@
       <fileset dir="${build}"/>
     </touch>
 
-    <compress-stylesheet context="documents" file="${build}/sources/documents/index.css"/>
-    <compress-stylesheet context="system" file="${build}/sources/system/common.css"/>
-    <compress-stylesheet context="system" file="${build}/sources/system/media.css"/>
-    <compress-stylesheet context="system" file="${build}/sources/system/index.css"/>
-    <compress-stylesheet context="system" file="${build}/sources/system/status.css"/>
-    <compress-markup file="${build}/sources/documents/index.html"/>
-    <compress-markup file="${build}/sources/system/index.html"/>
-    <compress-markup file="${build}/sources/system/status-2xx.html"/>
-    <compress-markup file="${build}/sources/system/status-3xx.html"/>
-    <compress-markup file="${build}/sources/system/status-4xx.html"/>
-    <compress-markup file="${build}/sources/system/status-5xx.html"/>   
     <release-insert/>
 
     <mkdir dir="${build}/release"/>

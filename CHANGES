@@ -13,13 +13,10 @@ CR: HTTP(S): Optimization and corrections
 CR: HTTP(S) Directory Index: Optimization and corrections
 CR: Review: Initialize refactored in Settings
 ??: Facelift: Status / Index / Templates
-??: Service: devwex start [directory] (read all ini files from directory)
-??: Automation (build, test, release) via GitHub actions
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)
     - https://commons.apache.org/daemon/procrun.html
     - https://downloads.apache.org/commons/daemon/binaries/
 ??: Documentation: Update for Unix and Linux
-??: Documentation: Architecture image
 ??: Configuration: Add # as optional/alternavtive comment symbols
 
 5.8.0 20251231

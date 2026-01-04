@@ -34,7 +34,7 @@ minimum resources and maintain a clean architecture.
 
 
 ## Architecture
-TODO:
+![Architecture](https://raw.githubusercontent.com/seanox/devwex/refs/heads/master/manual/Architecture.svg)
 
 
 ## Sequences

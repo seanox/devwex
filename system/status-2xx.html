@@ -2,44 +2,28 @@
 <html>
   <head>
     <title>Seanox Devwex</title>
-    <link rel="stylesheet" href="common.css"/>
-    <link rel="stylesheet" href="/system/common.css"/>
-    <link rel="stylesheet" href="media.css"/>
-    <link rel="stylesheet" href="/system/media.css"/>
-    <link rel="stylesheet" href="status.css"/>
-    <link rel="stylesheet" href="/system/status.css"/>
-    <meta content="/system/common.css"/>
-    <meta content="/system/media.css"/>
-    <meta content="/system/status.css"/>
+    <style>
+    </style>
   </head>
   <body>
-    <main>
-      <h1>#[http_status_text]</h1>
-      <h2>Status #[http_status]</h2>
-      <p>
-        This class of status code 2xx indicates that the client's request was
-        successfully received, understood, and accepted.
-      </p>
-      <p class="201">
-        The request has been fulfilled and resulted in a new resource being
-        created. The newly created resource can be referenced by the URI(s)
-        returned in the entity of the response, with the most specific URI for
-        the resource given by a Location header field. The response SHOULD
-        include an entity containing a list of resource characteristics and
-        location(s) from which the user or user agent can choose the one most
-        appropriate. The entity format is specified by the media type given in
-        the Content-Type header field. The origin server MUST create the
-        resource before returning the 201 status code. If the action cannot be
-        carried out immediately, the server SHOULD respond with 202 (Accepted)
-        response instead.
-      </p>
-    </main>
-    <footer>
-      <section>
-        <p>Seanox Devwex</p>
-        <p>Experimental Server Engine</p>
-        <p>Seanox Software Solutions</p>
-       </section>
-    </footer>
+    <h1>#[http_status_text]</h1>
+    <h2>Status #[http_status]</h2>
+    <p>
+      This class of status code 2xx indicates that the client's request was
+      successfully received, understood, and accepted.
+    </p>
+    <p class="201">
+      The request has been fulfilled and resulted in a new resource being
+      created. The newly created resource can be referenced by the URI(s)
+      returned in the entity of the response, with the most specific URI for
+      the resource given by a Location header field. The response SHOULD
+      include an entity containing a list of resource characteristics and
+      location(s) from which the user or user agent can choose the one most
+      appropriate. The entity format is specified by the media type given in
+      the Content-Type header field. The origin server MUST create the
+      resource before returning the 201 status code. If the action cannot be
+      carried out immediately, the server SHOULD respond with 202 (Accepted)
+      response instead.
+    </p>
   </body>
 </html>

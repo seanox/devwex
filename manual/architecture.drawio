@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
+  <diagram name="Seite-1" id="W8E7Fu8FmdDjgyTMKueG">
+    <mxGraphModel dx="2340" dy="1660" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-42" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#333333;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="80" width="200" x="430" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-40" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#333333;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="460" width="400" x="90" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-41" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#333333;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="280" width="360" x="110" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-38" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#333333;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="260" width="200" x="510" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-39" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#333333;strokeColor=#666666;" value="" vertex="1">
+          <mxGeometry height="80" width="160" x="530" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="TEIclE4kRjLmWxrp8Rv6-1" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="Interface" vertex="1">
+          <mxGeometry height="40" width="120" x="590" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="TEIclE4kRjLmWxrp8Rv6-2" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;gradientColor=none;strokeColor=#999999;" value="Component" vertex="1">
+          <mxGeometry height="40" width="120" x="590" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="TEIclE4kRjLmWxrp8Rv6-3" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Function" vertex="1">
+          <mxGeometry height="40" width="120" x="590" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-1" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Resource Management" vertex="1">
+          <mxGeometry height="40" width="320" x="90" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-4" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Module Management" vertex="1">
+          <mxGeometry height="40" width="160" x="90" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-5" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Server Management" vertex="1">
+          <mxGeometry height="40" width="160" x="250" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-6" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="ClassLoader" vertex="1">
+          <mxGeometry height="40" width="320" x="90" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-8" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="Module API (XAPI)" vertex="1">
+          <mxGeometry height="40" width="200" x="90" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-9" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="Server API (SAPI)" vertex="1">
+          <mxGeometry height="40" width="400" x="310" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-11" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="Telnet Connector" vertex="1">
+          <mxGeometry height="40" width="160" x="450" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-12" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="Telnet Connector" vertex="1">
+          <mxGeometry height="40" width="160" x="530" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-13" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="HTTPS Connector" vertex="1">
+          <mxGeometry height="40" width="180" x="290" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-14" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="HTTP Connector" vertex="1">
+          <mxGeometry height="40" width="180" x="110" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-15" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="HTTP Module API (XAPI+)" vertex="1">
+          <mxGeometry height="40" width="180" x="270" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-16" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="XCGI" vertex="1">
+          <mxGeometry height="40" width="90" x="270" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-17" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;align=center;spacingLeft=6;" value="CGI" vertex="1">
+          <mxGeometry height="40" width="90" x="360" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-18" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="Worker (Acceptor)" vertex="1">
+          <mxGeometry height="40" width="360" x="110" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-19" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="HTTP Protocol" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-20" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="Remote Client" vertex="1">
+          <mxGeometry height="40" width="200" x="430" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-22" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Virtual Hosting" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-23" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Filter" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-24" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="ACL" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-25" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Aliasing" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-26" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Templating" vertex="1">
+          <mxGeometry height="40" width="120" x="130" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-27" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Connection Pool" vertex="1">
+          <mxGeometry height="40" width="360" x="110" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-29" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="HTTP(S) Server" vertex="1">
+          <mxGeometry height="40" width="400" x="90" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-31" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="Remote Server" vertex="1">
+          <mxGeometry height="40" width="200" x="510" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-33" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Connection Pool" vertex="1">
+          <mxGeometry height="40" width="160" x="530" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-35" parent="1" style="whiteSpace=wrap;strokeWidth=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="Worker (Acceptor)" vertex="1">
+          <mxGeometry height="40" width="160" x="530" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="1cJ_T-XOIKF6GiGcWgVN-37" parent="1" style="whiteSpace=wrap;strokeWidth=1;strokeColor=#999999;" value="Remote Protocol" vertex="1">
+          <mxGeometry height="40" width="120" x="550" y="570" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

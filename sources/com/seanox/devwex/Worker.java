@@ -1931,22 +1931,24 @@ class Worker implements Runnable {
             String fileModified = String.format("%tF %<tT", new Date(file.lastModified()));
             
             // length is extended at the first position with the character which
-            // results from the length of the size to sort it by numerical size
-            String fileLength = file.isDirectory() ? "-" : String.valueOf(file.length());
-            fileLength = String.valueOf((char)fileLength.length()).concat(fileLength);
-
+            // results from the length of the size to sort it by numerical size,
+            // the +1 is important here to prevent unwanted zero-byte that are
+            // used as separators
+            String fileLength = file.isDirectory() ? "" : String.valueOf(file.length());
+            fileLength = String.valueOf((char)fileLength.length() +1).concat(fileLength);
+            
             // file extension is determined, but not for directories
             int cursor = fileName.lastIndexOf(".");
             String fileExtension = cursor >= 0 ? fileName.substring(cursor +1) : "";
-            fileExtension = file.isDirectory() ? "-" : fileExtension.toLowerCase().trim();
+            fileExtension = file.isDirectory() ? "" : fileExtension.toLowerCase().trim();
             
             String fileOrder = fileName;
-            if (order == 'd')
+            if (order == 'm')
                 fileOrder = fileModified;  
             else if (order == 's')
                 fileOrder = fileLength;
             else if (order == 't')
-                fileOrder = fileType; 
+                fileOrder = fileExtension; 
             
             // files and directories of the "hidden" option are marked
             String row = String.join("\00 ", new String[] {
@@ -1973,20 +1975,11 @@ class Worker implements Runnable {
             Hashtable data = new Hashtable(values);
             list.add(data);
             
-            data.put("case", tokenizer.nextToken());
+            data.put("type", tokenizer.nextToken());
             tokenizer.nextToken();
             data.put("name", tokenizer.nextToken().substring(1));
-            data.put("date", tokenizer.nextToken().substring(1));
+            data.put("modified", tokenizer.nextToken().substring(1));
             data.put("size", tokenizer.nextToken().substring(2));
-            data.put("type", tokenizer.nextToken().substring(1));
-            
-            String mime = (String)data.get("type");
-            if (!mime.equals("-")) {
-                mime = this.mediatypes.get(mime);
-                if (mime.length() <= 0)
-                    mime = this.options.get("mediatype");
-            } else mime = "";
-            data.put("mime", mime);
         }
         
         query = query.concat(reverse ? "d" : "a");

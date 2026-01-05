@@ -11,6 +11,9 @@ CR: HTTP(S) CGI: Optimization and corrections
 CR: HTTP(S): Optimization and corrections
     - Optimization in handling blocking I/O streams
 CR: HTTP(S) Directory Index: Optimization and corrections
+    - Template: "case" becomes "type", and the original "type" and "mime" are omitted
+    - Template: "date" becomes "modified" and the sorting changes from d/D to m/M
+    - Generator value "-" for "no data" is omitted
 CR: Review: Initialize refactored in Settings
 ??: Facelift: Status / Index / Templates
 ??: Windows: Update of service-32.exe / service-64.exe (prunsrv.exe 1.4.x)

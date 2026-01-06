@@ -1926,7 +1926,6 @@ class Worker implements Runnable {
             // physical file is determined
             file = (File)filelist.get(loop);
             
-            String fileType = file.isDirectory() ? "directory" : "file";
             String fileName = file.getName();
             String fileModified = String.format("%tF %<tT", new Date(file.lastModified()));
             
@@ -1952,7 +1951,8 @@ class Worker implements Runnable {
             
             // files and directories of the "hidden" option are marked
             String row = String.join("\00 ", new String[] {
-                    fileType, fileOrder, fileName, fileModified, fileLength, fileExtension});
+                    String.valueOf(file.isDirectory()),
+                    fileOrder, fileName, fileModified, fileLength, fileExtension});
             if (hidden && file.isHidden())
                 row = "";
             filelist.set(loop, row);
@@ -1962,6 +1962,8 @@ class Worker implements Runnable {
         Collections.sort(filelist, String.CASE_INSENSITIVE_ORDER);
         if (reverse)
             Collections.reverse(filelist);
+        
+        String mediatype = this.options.get("mediatype");
         
         // file information is collected
         ArrayList list = new ArrayList();
@@ -1975,11 +1977,12 @@ class Worker implements Runnable {
             Hashtable data = new Hashtable(values);
             list.add(data);
             
-            data.put("type", tokenizer.nextToken());
+            tokenizer.nextToken();
             tokenizer.nextToken();
             data.put("name", tokenizer.nextToken().substring(1));
             data.put("modified", tokenizer.nextToken().substring(1));
             data.put("size", tokenizer.nextToken().substring(2));
+            data.put("mime", this.mediatypes.get(tokenizer.nextToken().substring(1), mediatype));
         }
         
         query = query.concat(reverse ? "d" : "a");

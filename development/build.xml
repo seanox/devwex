@@ -198,10 +198,8 @@
     <include name="program/devwex.ini"/>
     <include name="program/devwex.sh"/>
     <include name="program/service.cmd"/>
-    <include name="program/service-32.exe"/>
-    <include name="program/service-32.license"/>
-    <include name="program/service-64.exe"/>
-    <include name="program/service-64.license"/>
+    <include name="program/service.exe"/>
+    <include name="program/service.license"/>
     <include name="sources/com/seanox/devwex/Bootstrap.java"/>
     <include name="sources/com/seanox/devwex/Generator.java"/>
     <include name="sources/com/seanox/devwex/Loader.java"/>
@@ -255,10 +253,8 @@
   
   <fileset id="fileset.release.windows" dir="${build}/sources">
     <include name="program/service.cmd"/> 
-    <include name="program/service-32.exe"/> 
-    <include name="program/service-32.license"/> 
-    <include name="program/service-64.exe"/> 
-    <include name="program/service-64.license"/> 
+    <include name="program/service.exe"/> 
+    <include name="program/service.license"/> 
   </fileset>  
   
   <target name="release" depends="compile,keystore,changes">

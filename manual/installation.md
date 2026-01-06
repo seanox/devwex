@@ -42,10 +42,8 @@ _Overview of directory structure_
     - devwex.jar                        Seanox Devwex binary
     - keystore                          Key and truststore
     - service.cmd                       Service batch script for Windows
-    - service-32.exe                    Service runner for Windows 32 Bit
-    - service-32.license
-    - service-64.exe                    Service runner for Windows 64 Bit
-    - service-64.license
+    - service.exe                       Service runner for Windows 64 Bit
+    - service.license
   + runtime                             Directory for runtime environments and extensions
   + storage                             Directory for data storage incl. log files
   + system                              Directory for system files incl. templates

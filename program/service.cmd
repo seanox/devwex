@@ -15,9 +15,10 @@ rem   jvmx  Maximum memory pool size in MB
 rem
 rem   jdwp  Options for remote debugging (optional)
 rem
-rem Link(s) to used prunsrv.exe (alias service-32.exe/service-64.exe):
+rem Link(s) to used prunsrv.exe (alias service.exe):
 rem   https://commons.apache.org/daemon/procrun.html
 rem   https://commons.apache.org/proper/commons-daemon/procrun.html
+rem   https://downloads.apache.org/commons/daemon/binaries/windows 
 
 echo Seanox Devwex Service [0.0.0 00000000]
 echo Copyright (C) 0000 Seanox Software Solutions
@@ -52,6 +53,7 @@ set DisplayName=%text%
 set Description=%note%
 set Startup=auto
 set ServiceAccount=NetworkService
+set Service=service.exe
 
 set Classpath=devwex.jar
 
@@ -157,9 +159,10 @@ goto exit
   for %%i in ("%jvm%") do echo    %%~fi
 
   echo %label%: Detection of service runner
-  set service=service-32.exe
-  if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
-      set service=service-64.exe
+  if not "%PROCESSOR_ARCHITECTURE:~-2,2%"=="64" (
+    echo.
+    echo ERROR: 64-bit operating system required
+    goto exit
   )
   if not exist "%ServiceHome%\%service%" (
     echo.
@@ -169,6 +172,10 @@ goto exit
   for %%i in ("%ServiceHome%\%service%") do echo    %%~fi
 
 rem ----------------------------------------------------------------------------
+
+  if not exist "%LogPath%" (
+    mkdir "%LogPath%"
+  )
 
   set lastError=
   set lastError=%errorLevel%
@@ -248,9 +255,10 @@ rem ----------------------------------------------------------------------------
   set label=UNINSTALL
 
   echo %label%: Detection of service runner
-  set service=service-32.exe
-  if exist "%PROCESSOR_ARCHITECTURE:~-2,2%" == "64" (
-      set service=service-64.exe
+  if not "%PROCESSOR_ARCHITECTURE:~-2,2%"=="64" (
+    echo.
+    echo ERROR: 64-bit operating system required
+    goto exit
   )
   if not exist "%ServiceHome%\%service%" (
     echo.

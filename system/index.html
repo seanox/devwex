@@ -2,89 +2,130 @@
 <html>
   <head>
     <title>Seanox Devwex</title>
-    <link rel="stylesheet" href="common.css"/>
-    <link rel="stylesheet" href="/system/common.css"/>
-    <link rel="stylesheet" href="media.css"/>
-    <link rel="stylesheet" href="/system/media.css"/>
-    <link rel="stylesheet" href="index.css"/>
-    <link rel="stylesheet" href="/system/index.css"/>
-    <meta content="/system/common.css"/>
-    <meta content="/system/media.css"/>
-    <meta content="/system/index.css"/>
+    <style>
+      /* Table: Content state */
+      table[state*='x'] thead:nth-child(1),
+      table[state*='x'] tbody,
+      table:not([state*='x']) thead:nth-child(2) {
+        display: none
+      }
+
+      /* Table: Header */  
+      table tr th a[href='?n' i]:before {
+        content: 'Name';
+      }
+      table tr th a[href='?t' i]:before {
+        content: 'Type';
+      }
+      table tr th a[href='?s' i]:after {
+        content: 'Size';
+      }
+      table tr th a[href='?m' i]:after {
+        content: 'Modified';
+      }
+      
+      /* Table: Header sorting state */
+      table tr th a:nth-child(2) {
+        display: none;
+      }  
+      table[state='na'] tr th:nth-child(1) a:nth-child(1),
+      table[state='ta'] tr th:nth-child(2) a:nth-child(1),
+      table[state='sa'] tr th:nth-child(3) a:nth-child(1),
+      table[state='ma'] tr th:nth-child(4) a:nth-child(1) {
+        display: none;
+      }  
+      table[state='na'] tr th:nth-child(1) a:nth-child(2),
+      table[state='ta'] tr th:nth-child(2) a:nth-child(2),
+      table[state='sa'] tr th:nth-child(3) a:nth-child(2),
+      table[state='ma'] tr th:nth-child(4) a:nth-child(2) {
+        display: inline;
+      }  
+      table tr th a[href='?n' i]:after,
+      table tr th a[href='?t' i]:after,
+      table tr th a[href='?s' i]:before,
+      table tr th a[href='?m' i]:before {
+        border: 0 solid transparent;
+        content: '';
+        display: inline-block;
+        font-size: 0.75em;
+        margin: 0em 0.5em;
+        position: relative;
+      }
+      table[state='na'] tr th a[href='?N']:after,
+      table[state='ta'] tr th a[href='?T']:after,
+      table[state='sa'] tr th a[href='?S']:before,
+      table[state='ma'] tr th a[href='?M']:before {
+        content: '\25BC';
+      }
+      table[state='nd'] tr th a[href='?n']:after,
+      table[state='td'] tr th a[href='?t']:after,
+      table[state='sd'] tr th a[href='?s']:before,
+      table[state='md'] tr th a[href='?m']:before {
+        content: '\25B2';
+      }
+    </style>
   </head>
   <body>
-    <main>
-      <h1>Index</h1>
-      <h2>
-        <a href="/">#[HTTP_HOST]</a>#[location[[<a href="#[path]">#[name]</a>]]]
-      </h2>
-      <table class="#[sort]">
-        <thead>
-          <tr>
-            <th>
-              <h3>
-                <a href="?n"></a>
-                <a href="?N"></a>
-              </h3>
-            </th>
-            <th>
-              <h3>
-                <a href="?t"></a>
-                <a href="?T"></a>
-              </h3>
-            </th>
-            <th>
-              <h3>
-                <a href="?s"></a>
-                <a href="?S"></a>
-              </h3>
-            </th>
-            <th>
-              <h3>
-                <a href="?d"></a>
-                <a href="?D"></a>
-              </h3>
-            </th>
-          </tr>
-        </thead>
-        <thead>
-          <tr>
-            <th colspan="4">
-              <h3>
-                No entries available
-              </h3>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          #[file[[
-          <tr class="#[case] #[type]" mime="#[mime]">
-            <td>
-              <div></div>
-              <div>
-                <a href="#[name]">#[name]</a>
-              </div>
-            </td>
-            <td>
-              <div text="#[type]"></div>
-            </td>
-            <td>
-              <div text="#[size] Bytes"></div>
-            </td>
-            <td>
-              <div text="#[date]"></div>
-            </td>
-          </tr>
-          ]]]
-        </tbody>
-      </table>
-    </main>
-    <footer>
-      <section>
-        <p>Seanox Devwex</p>
-        <p>Experimental Server Engine</p>
-        <p>Seanox Software Solutions</p>
-       </section>
-    </footer>
+    <h1>Index</h1>
+    <h2>
+      <a href="/">#[HTTP_HOST]</a>#[location[[<a href="#[path]">#[name]</a>]]]
+    </h2>
+    <table state="#[state]">
+      <thead>
+        <tr>
+          <th>
+            <h3>
+              <a href="?n"></a>
+              <a href="?N"></a>
+            </h3>
+          </th>
+          <th>
+            <h3>
+              <a href="?t"></a>
+              <a href="?T"></a>
+            </h3>
+          </th>
+          <th>
+            <h3>
+              <a href="?s"></a>
+              <a href="?S"></a>
+            </h3>
+          </th>
+          <th>
+            <h3>
+              <a href="?m"></a>
+              <a href="?M"></a>
+            </h3>
+          </th>
+        </tr>
+      </thead>
+      <thead>
+        <tr>
+          <th colspan="4">
+            <h3>
+              No entries available
+            </h3>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        #[file[[
+        <tr mime="#[mime]">
+          <td>
+            <a href="#[name]">#[name]</a>
+          </td>
+          <td>
+            <div text="#[name]"></div>
+          </td>
+          <td>
+            <div text="#[size]"></div>
+          </td>
+          <td>
+            <div text="#[modified]"></div>
+          </td>
+        </tr>
+        ]]]
+      </tbody>
+    </table>
   </body>
 </html>

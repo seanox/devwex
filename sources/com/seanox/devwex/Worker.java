@@ -1951,7 +1951,7 @@ class Worker implements Runnable {
             
             // files and directories of the "hidden" option are marked
             String row = String.join("\00 ", new String[] {
-                    String.valueOf(file.isDirectory()),
+                    String.valueOf(!file.isDirectory()),
                     fileOrder, fileName, fileModified, fileLength, fileExtension});
             if (hidden && file.isHidden())
                 row = "";
@@ -1977,18 +1977,19 @@ class Worker implements Runnable {
             Hashtable data = new Hashtable(values);
             list.add(data);
             
-            tokenizer.nextToken();
+            boolean fileDirectory = tokenizer.nextToken().equals("false");
             tokenizer.nextToken();
             data.put("name", tokenizer.nextToken().substring(1));
             data.put("modified", tokenizer.nextToken().substring(1));
             data.put("size", tokenizer.nextToken().substring(2));
-            data.put("mime", this.mediatypes.get(tokenizer.nextToken().substring(1), mediatype));
+            if (!fileDirectory)
+                data.put("mime", this.mediatypes.get(tokenizer.nextToken().substring(1), mediatype));
         }
         
         query = query.concat(reverse ? "d" : "a");
         if (list.size() <= 0)
-            query = query.concat(" x");
-        values.put("sort", query);
+            query = ("x").concat(query);
+        values.put("state", query);
 
         values.put("file", list);
         generator.set(values);

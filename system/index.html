@@ -15,6 +15,14 @@
       table {
         width: 100%;
       }
+      table tr th,
+      table tr td {
+        text-align: right;
+      }
+      table tr th:nth-child(1),
+      table tr td:nth-child(1) {
+        text-align: left;
+      }
 
       /* Table: Content state */
       table[state*='x'] thead:nth-child(1),
@@ -27,23 +35,20 @@
       table tr th a:nth-child(2) {
         display: none;
       }
-
       table[state='na'] tr th:nth-child(1) a:nth-child(1),
       table[state='ta'] tr th:nth-child(2) a:nth-child(1),
       table[state='sa'] tr th:nth-child(3) a:nth-child(1),
       table[state='ma'] tr th:nth-child(4) a:nth-child(1) {
         display: none;
       }
-
       table[state='na'] tr th:nth-child(1) a:nth-child(2),
       table[state='ta'] tr th:nth-child(2) a:nth-child(2),
       table[state='sa'] tr th:nth-child(3) a:nth-child(2),
       table[state='ma'] tr th:nth-child(4) a:nth-child(2) {
         display: inline;
       }
-
       table tr th a[href='?n' i]:after,
-      table tr th a[href='?t' i]:after,
+      table tr th a[href='?t' i]:before,
       table tr th a[href='?s' i]:before,
       table tr th a[href='?m' i]:before {
         border: 0 solid transparent;
@@ -53,19 +58,25 @@
         margin: 0em 0.5em;
         position: relative;
       }
-
       table[state='na'] tr th a[href='?N']:after,
-      table[state='ta'] tr th a[href='?T']:after,
+      table[state='ta'] tr th a[href='?T']:before,
       table[state='sa'] tr th a[href='?S']:before,
       table[state='ma'] tr th a[href='?M']:before {
         content: '\25BC';
       }
-
       table[state='nd'] tr th a[href='?n']:after,
-      table[state='td'] tr th a[href='?t']:after,
+      table[state='td'] tr th a[href='?t']:before,
       table[state='sd'] tr th a[href='?s']:before,
       table[state='md'] tr th a[href='?m']:before {
         content: '\25B2';
+      }
+
+      /* Table: Content */
+      table tr[mime=""] td:nth-child(2)::after {
+        content: "-";
+      }
+      table tr[mime=""] td:nth-child(2) span {
+        display: none;
       }
     </style>
   </head>
@@ -118,7 +129,9 @@
           <td colspan="2">
             <a mime="#[mime]" href="#[name]">#[name]</a>
           </td>
-          <td>#[size] Byte</td>
+          <td>
+            <span>#[size] Byte</span>
+          </td>
           <td>#[modified]</td>
         </tr>
         ]]]

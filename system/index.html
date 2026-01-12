@@ -1,55 +1,115 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Seanox Devwex</title>
     <style>
+      :root {
+        --ui-background-color: Canvas;
+        --ui-text-color: CanvasText;
+        --ui-text-gray-color: GrayText;
+        --ui-accent-color: color-mix(in srgb, Canvas 95%, CanvasText 5%);
+        --ui-accent-text-color: color-mix(in srgb, Canvas 50%, CanvasText 50%);
+        --ui-highlight-color: Highlight;
+        --ui-1-pixel-size: 0.0625rem;
+        --ui-2-pixel-size: 0.125rem;
+
+        --lable-executable-color: linear-gradient(135deg, #E57373, #D32F2F 50%);
+        --lable-executable-border: #9A1F1F;
+        --lable-markup-color: linear-gradient(135deg, #FFB74D, #F57C00 50%);
+        --lable-markup-border: #A84A00;
+        --lable-collection-color: linear-gradient(135deg, #FFF176, #FBC02D 50%);
+        --lable-collection-border: #A67A00;
+        --lable-document-color: linear-gradient(135deg, #81C784, #388E3C 50%);
+        --lable-document-border: #1F5A22;
+        --lable-multimedia-color: linear-gradient(135deg, #64B5F6, #1976D2 50%);
+        --lable-multimedia-border: #0F3F7A;
+        --lable-graphics-color: linear-gradient(135deg, #BA68C8, #8E24AA 50%);
+        --lable-graphics-border: #4E145C;
+        --lable-message-color: linear-gradient(135deg, #8D6E63, #5D4037 50%);
+        --lable-message-border: #3A241F;
+        --lable-file-color: linear-gradient(135deg, #E0E0E0, #BDBDBD 50%);
+        --lable-file-border: #7A7A7A;
+        --lable-text-color: Canvas;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --lable-text-color: CanvasText
+        }
+      }
+
       body {
-        background: Canvas;
-        color: CanvasText;
+        background: var(--ui-background-color);
+        color: var(--ui-text-color);
         font-family: system-ui;
         margin: 0 auto;
-        max-width: 1024px;
-        padding: 0 20px;
+        max-width: 64rem;
+        padding: 0 2rem;
+      }
+      a {
+        text-decoration: none;
+        color: var(--ui-text-color);
+      }
+      h3 {
+        margin-block-start: 0.25rem;
+        margin-block-end: 0.25rem;
       }
 
-      :root {
-        --color-executable: linear-gradient(135deg, #E57373, #D32F2F 50%);
-        --border-executable: #9A1F1F;
-        --color-markup: linear-gradient(135deg, #FFB74D, #F57C00 50%);
-        --border-markup: #A84A00;
-        --color-collection: linear-gradient(135deg, #FFF176, #FBC02D 50%);
-        --border-collection: #A67A00;
-        --color-document: linear-gradient(135deg, #81C784, #388E3C 50%);
-        --border-document: #1F5A22;
-        --color-multimedia: linear-gradient(135deg, #64B5F6, #1976D2 50%);
-        --border-multimedia: #0F3F7A;
-        --color-graphics: linear-gradient(135deg, #BA68C8, #8E24AA 50%);
-        --border-graphics: #4E145C;
-        --color-message: linear-gradient(135deg, #8D6E63, #5D4037 50%);
-        --border-message: #3A241F;
-        --color-file: linear-gradient(135deg, #E0E0E0, #BDBDBD 50%);
-        --border-file: #7A7A7A;
+      /* Breadcrumb navigation */
+      h1 + h2 a + a::before {
+        color: var(--ui-text-gray-color);
+        content: '\25B8';
+        font-size: 1.5rem;
+        opacity: 50%;
       }
 
-      h1 + h2 a + a:before {
-        display: inline-block;
-        margin: 0em 0.5em;
-        content: '\25B6';
-        font-size: 0.75rem;
-        position: relative;
-        top: -0.25rem;
-      }
-
+      /* Table */
       table {
+        border-collapse: collapse;
         width: 100%;
       }
       table tr th,
       table tr td {
         text-align: right;
+        white-space: nowrap;
+        padding: 0rem 0.25rem;
+      }
+      table tr th + th,
+      table tr td + td {
+        padding-left: 1rem;
       }
       table tr th:nth-child(1),
+      table tr th:nth-child(2),
       table tr td:nth-child(1) {
         text-align: left;
+      }
+      table thead th:nth-child(1) {
+        width: 0rem;
+      }
+      table thead th:nth-child(3),
+      table thead th:nth-child(4) {
+        width: 12rem;
+      }
+
+      table tr th a,
+      table tr td a {
+        align-items: center;
+        display: inline-flex;
+      }
+      table tr th,
+      table tr td {
+        height: 2.5rem;
+        box-sizing: border-box;
+      }
+      table tr + tr td {
+        border-top: var(--ui-1-pixel-size) solid lightgray;
+        padding-bottom: var(--ui-2-pixel-size);
+      }
+      table tbody tr:nth-child(even) {
+        background: var(--ui-accent-color);
+      }
+      table thead tr,
+      table tbody tr:last-child {
+        border-bottom: var(--ui-1-pixel-size) solid var(--ui-text-color);
       }
 
       /* Table: Content state */
@@ -73,30 +133,40 @@
       table[state='ta'] tr th:nth-child(2) a:nth-child(2),
       table[state='sa'] tr th:nth-child(3) a:nth-child(2),
       table[state='ma'] tr th:nth-child(4) a:nth-child(2) {
-        display: inline;
+        display: inline-flex;
       }
-      table tr th a[href='?n' i]:after,
-      table tr th a[href='?t' i]:before,
-      table tr th a[href='?s' i]:before,
-      table tr th a[href='?m' i]:before {
-        border: 0 solid transparent;
-        content: '';
-        display: inline-block;
-        font-size: 0.75em;
-        margin: 0em 0.5em;
-        position: relative;
+      table[state] tr th a[href^='?' i]::after,
+      table[state] tr th a[href^='?' i]::before{
+        color: var(--ui-text-gray-color);
+        display: inline-flex;
+        font-size: 1.5rem;
+        opacity: 50%;
       }
-      table[state='na'] tr th a[href='?N']:after,
-      table[state='ta'] tr th a[href='?T']:before,
-      table[state='sa'] tr th a[href='?S']:before,
-      table[state='ma'] tr th a[href='?M']:before {
-        content: '\25BC';
+      table[state$='a'] tr th a[href='?n' i]::after,
+      table[state$='a'] tr th a[href='?t' i]::after,
+      table[state$='a'] tr th a[href='?s' i]::before,
+      table[state$='a'] tr th a[href='?m' i]::before {
+        content: '\25BE';
       }
-      table[state='nd'] tr th a[href='?n']:after,
-      table[state='td'] tr th a[href='?t']:before,
-      table[state='sd'] tr th a[href='?s']:before,
-      table[state='md'] tr th a[href='?m']:before {
-        content: '\25B2';
+      table[state$='d'] tr th a[href='?n' i]::after,
+      table[state$='d'] tr th a[href='?t' i]::after,
+      table[state$='d'] tr th a[href='?s' i]::before,
+      table[state$='d'] tr th a[href='?m' i]::before {
+        content: '\25B4';
+      }
+      table[state^='n'] tr th a[href='?n' i]::after,
+      table[state^='t'] tr th a[href='?t' i]::after,
+      table[state^='s'] tr th a[href='?s' i]::before,
+      table[state^='m'] tr th a[href='?m' i]::before {
+        color: var(--ui-text-color);
+        opacity: 100%;
+      }
+
+      table[state^='n'] tr td:nth-child(1),
+      table[state^='t'] tr td:nth-child(1),
+      table[state^='s'] tr td:nth-child(2),
+      table[state^='m'] tr td:nth-child(3) {
+        background-color: color-mix(in srgb, var(--ui-highlight-color) 5%, transparent);
       }
 
       /* Table: Content */
@@ -108,53 +178,52 @@
       }
 
       /* Table: Content Types */
+      table tr td a::before {
+        align-items: center;
+        border: var(--ui-1-pixel-size) solid;
+        border-radius: var(--ui-2-pixel-size);
+        color: var(--lable-text-color);
+        display: inline-flex;
+        font-size: 0.5rem;
+        font-weight: bolder;
+        height: 1.5rem;
+        justify-content: center;
+        margin-right: 0.25rem;
+        position: relative;
+        text-shadow: 0rem 0rem var(--ui-2-pixel-size) rgba(0,0,0,0.75);
+        text-decoration: none;
+        aspect-ratio: 1 / 1;
+
+        background: var(--lable-file-color);
+        border-color: var(--lable-file-border);
+        content: "RAW";
+      }
+
       table tr[mime^='audio/' i] td a::before {
-        background: var(--color-multimedia);
-        border-color: var(--border-multimedia);
+        background: var(--lable-multimedia-color);
+        border-color: var(--lable-multimedia-border);
         content: 'AUD';
       }
       table tr[mime^='image/' i] td a::before {
-        background: var(--color-multimedia);
-        border-color: var(--border-multimedia);
+        background: var(--lable-multimedia-color);
+        border-color: var(--lable-multimedia-border);
         content: 'IMG';
       }
       table tr[mime^='video/' i] td a::before {
-        background: var(--color-multimedia);
-        border-color: var(--border-multimedia);
+        background: var(--lable-multimedia-color);
+        border-color: var(--lable-multimedia-border);
         content: 'VID';
       }
       table tr[mime^='text/' i] td a::before {
-        background: var(--color-markup);
-        border-color: var(--border-markup);
+        background: var(--lable-markup-color);
+        border-color: var(--lable-markup-border);
         content: 'TXT';
-      }
-
-      table tr td a::before {
-        align-items: center;
-        border: 1px solid;
-        border-radius: 2px;
-        color: Canvas;
-        display: inline-flex;
-        font-size: 0.5em;
-        font-weight: bolder;
-        height: 3em;
-        justify-content: center;
-        margin-right: 0.75em;
-        position: relative;
-        text-shadow: 0 0px 2px rgba(0,0,0,0.75);
-        text-decoration: none;
-        top: -0.25em;
-        width: 3em;
-
-        background: var(--color-file);
-        border-color: var(--border-file);
-        content: "RAW";
       }
 
       /* Collection */
       table tr[mime=''] td a[mime='']::before {
-        background: var(--color-collection);
-        border-color: var(--border-collection);
+        background: var(--lable-collection-color);
+        border-color: var(--lable-collection-border);
         content: "DIR";
       }
       table tr td a:is(
@@ -176,8 +245,8 @@
         [href$='.xpi' i],
         [href$='.zip' i]
       )::before {
-        background: var(--color-collection);
-        border-color: var(--border-collection);
+        background: var(--lable-collection-color);
+        border-color: var(--lable-collection-border);
         content: "ARC";
       }
       table tr td a:is(
@@ -186,8 +255,8 @@
         [href$='.iso' i],
         [href$='.uif' i]
       )::before {
-        background: var(--color-collection);
-        border-color: var(--border-collection);
+        background: var(--lable-collection-color);
+        border-color: var(--lable-collection-border);
         content: 'IMG';
       }
 
@@ -211,8 +280,8 @@
         [href$='.xslt' i],
         [href$='.xml' i]
       )::before {
-        background: var(--color-markup);
-        border-color: var(--border-markup);
+        background: var(--lable-markup-color);
+        border-color: var(--lable-markup-border);
         content: 'MLP';
       }
 
@@ -240,9 +309,9 @@
         [href$='.tcl'],
         [href$='.tk']
       )::before {
+        background: var(--lable-markup-color);
+        border-color: var(--lable-markup-border);
         content: 'SRC';
-        background: var(--color-markup);
-        border-color: var(--border-markup);
       }
       table tr td a:is(
         [href$='.csv' i],
@@ -251,8 +320,8 @@
         [href$='.yml' i],
         [href$='.yaml' i]
       )::before {
-        background: var(--color-markup);
-        border-color: var(--color-markup);
+        background: var(--lable-markup-color);
+        border-color: var(--lable-markup-border);
         content: 'DAT';
       }
 
@@ -275,8 +344,8 @@
         [href$='.war' i]
       )::before {
         content: 'EXE';
-        background: var(--color-executable);
-        border-color: var(--border-executable);
+        background: var(--lable-executable-color);
+        border-color: var(--lable-executable-border);
       }
       table tr td a:is(
         [href$='.a' i],
@@ -293,8 +362,8 @@
         [href$='.so' i],
         [href$='.sys' i]
       )::before {
-        background: var(--color-executable);
-        border-color: var(--border-executable);
+        background: var(--lable-executable-color);
+        border-color: var(--lable-executable-border);
         content: 'SYS';
       }
       table tr td a:is(
@@ -303,8 +372,8 @@
         [href$='.ps1' i],
         [href$='.sh' i]
       )::before {
-        background: var(--color-executable);
-        border-color: var(--border-executable);
+        background: var(--lable-executable-color);
+        border-color: var(--lable-executable-border);
         content: 'SCR';
       }
 
@@ -314,8 +383,8 @@
         [href$='.eps' i],
         [href$='.ps' i]
       )::before {
-        background: var(--color-graphics);
-        border-color: var(--border-graphics);
+        background: var(--lable-graphics-color);
+        border-color: var(--lable-graphics-border);
         content: 'GFX';
       }
       table tr td a:is(
@@ -327,16 +396,16 @@
         [href$='.woff' i],
         [href$='.woff2' i]
       )::before {
-        background: var(--color-graphics);
-        border-color: var(--border-graphics);
+        background: var(--lable-graphics-color);
+        border-color: var(--lable-graphics-border);
         content: 'GFX';
       }
       table tr td a:is(
         [href$='.svg' i],
         [href$='.svgz' i]
       )::before {
-        background: var(--color-graphics);
-        border-color: var(--border-graphics);
+        background: var(--lable-graphics-color);
+        border-color: var(--lable-graphics-border);
         content: 'GFX'!important;
       }
 
@@ -377,8 +446,8 @@
         [href$='.xlt' i],
         [href$='.xlsx' i]
       )::before {
-        background: var(--color-document);
-        border-color: var(--border-document);
+        background: var(--lable-document-color);
+        border-color: var(--lable-document-border);
         content: 'DOC';
       }
 
@@ -390,8 +459,8 @@
         [href$='.mime' i],
         [href$='.msg' i]
       )::before {
-        background: var(--color-message);
-        border-color: var(--border-message);
+        background: var(--lable-message-color);
+        border-color: var(--lable-message-border);
         content: 'MSG';
       }
 
@@ -407,6 +476,7 @@
         content: 'TMP';
       }
     </style>
+    <title>Seanox Devwex</title>
   </head>
   <body>
     <h1>Index</h1>

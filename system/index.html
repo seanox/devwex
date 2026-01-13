@@ -55,11 +55,8 @@
       }
 
       /* Breadcrumb navigation */
-      h1 + h2 a + a::before {
-        color: var(--ui-text-gray-color);
-        content: '\25B8';
-        font-size: 1.5rem;
-        opacity: 50%;
+      h1 + p a {
+        font-weight: bold;
       }
 
       /* Table */
@@ -480,44 +477,38 @@
   </head>
   <body>
     <h1>Index</h1>
-    <h2>
-      <a href="/">#[HTTP_HOST]</a>#[location[[<a href="#[path]">#[name]</a>]]]
-    </h2>
+    <p>
+      <a href="/">#[HTTP_HOST]</a>
+      #[location[[
+        &rsaquo;
+        <a href="#[path]">#[name]</a>
+      ]]]
+    </p>
     <table state="#[state]">
       <thead>
         <tr>
           <th>
-            <h3>
-              <a href="?n">Name</a>
-              <a href="?N">Name</a>
-            </h3>
+            <a href="?n">Name</a>
+            <a href="?N">Name</a>
           </th>
           <th>
-            <h3>
-              <a href="?t">Extension</a>
-              <a href="?T">Extension</a>
-            </h3>
+            <a href="?t">Extension</a>
+            <a href="?T">Extension</a>
           </th>
           <th>
-            <h3>
-              <a href="?s">Size</a>
-              <a href="?S">Size</a>
-            </h3>
+            <a href="?s">Size</a>
+            <a href="?S">Size</a>
           </th>
           <th>
-            <h3>
-              <a href="?m">Modified</a>
-              <a href="?M">Modified</a>
-            </h3>
+            <a href="?m">Modified</a>
+            <a href="?M">Modified</a>
           </th>
         </tr>
       </thead>
       <thead>
         <tr>
           <th colspan="4">
-            <h3>
-              No entries available
-            </h3>
+            No entries available
           </th>
         </tr>
       </thead>

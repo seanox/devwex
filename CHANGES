@@ -20,7 +20,8 @@ CR: HTTP(S) Directory Index: Optimization and corrections
     - Generator value "-" for "no data" is omitted; now it's empty
 CR: Review: Initialize refactored in Settings
 CR: Review: Facelift status / index / templates
-    - Use of system colors and thus support for light and dark mode.
+    - Use of system colors and thus support for light and dark mode
+    - Improved display for HiDPI
 CR: Windows: Omission from the 32-bit service
     - The required 32-bit version of prunsrv.exe can be downloaded manually
       here, renamed, and used to replace service.exe:

@@ -3,12 +3,15 @@
   <head>
     <style>
       :root {
+        color-scheme: light dark;
+
         --ui-background-color: Canvas;
         --ui-text-color: CanvasText;
-        --ui-text-gray-color: GrayText;
+        --ui-highlight-color: Highlight;
+        --ui-highlight-overlay-color: color-mix(in srgb, var(--ui-highlight-color) 5%, transparent);
+        --ui-text-gray-color: color-mix(in srgb, CanvasText 25%, Canvas 75%);
         --ui-accent-color: color-mix(in srgb, Canvas 95%, CanvasText 5%);
         --ui-accent-text-color: color-mix(in srgb, Canvas 50%, CanvasText 50%);
-        --ui-highlight-color: Highlight;
         --ui-1-pixel-size: 0.0625rem;
         --ui-2-pixel-size: 0.125rem;
 
@@ -41,9 +44,10 @@
         background: var(--ui-background-color);
         color: var(--ui-text-color);
         font-family: system-ui;
+        font-variant-numeric: tabular-nums;
         margin: 0 auto;
         max-width: 64rem;
-        padding: 0 2rem;
+        padding: 0 2rem 2rem 2rem;
       }
       a {
         text-decoration: none;
@@ -80,7 +84,7 @@
         text-align: left;
       }
       table thead th:nth-child(1) {
-        width: 0rem;
+        width: 1rem;
       }
       table thead th:nth-child(3),
       table thead th:nth-child(4) {
@@ -98,7 +102,7 @@
         box-sizing: border-box;
       }
       table tr + tr td {
-        border-top: var(--ui-1-pixel-size) solid lightgray;
+        border-top: var(--ui-1-pixel-size) solid var(--ui-text-gray-color);
         padding-bottom: var(--ui-2-pixel-size);
       }
       table tbody tr:nth-child(even) {
@@ -137,7 +141,6 @@
         color: var(--ui-text-gray-color);
         display: inline-flex;
         font-size: 1.5rem;
-        opacity: 50%;
       }
       table[state$='a'] tr th a[href='?n' i]::after,
       table[state$='a'] tr th a[href='?t' i]::after,
@@ -156,14 +159,13 @@
       table[state^='s'] tr th a[href='?s' i]::before,
       table[state^='m'] tr th a[href='?m' i]::before {
         color: var(--ui-text-color);
-        opacity: 100%;
       }
 
       table[state^='n'] tr td:nth-child(1),
       table[state^='t'] tr td:nth-child(1),
       table[state^='s'] tr td:nth-child(2),
       table[state^='m'] tr td:nth-child(3) {
-        background-color: color-mix(in srgb, var(--ui-highlight-color) 5%, transparent);
+        background: var(--ui-highlight-overlay-color);
       }
 
       /* Table: Content */

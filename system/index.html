@@ -10,7 +10,7 @@
         --ui-highlight-color: Highlight;
         --ui-highlight-overlay-color: color-mix(in srgb, var(--ui-highlight-color) 5%, transparent);
         --ui-text-gray-color: color-mix(in srgb, CanvasText 25%, Canvas 75%);
-        --ui-accent-color: color-mix(in srgb, Canvas 95%, CanvasText 5%);
+        --ui-accent-color: color-mix(in srgb, CanvasText 5%, Canvas 95%);
         --ui-accent-text-color: color-mix(in srgb, Canvas 50%, CanvasText 50%);
         --ui-1-pixel-size: 0.0625rem;
         --ui-2-pixel-size: 0.125rem;
@@ -36,7 +36,9 @@
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --lable-text-color: CanvasText
+          --lable-text-color: CanvasText;
+          --ui-highlight-overlay-color: color-mix(in srgb, var(--ui-highlight-color) 15%, transparent);
+          --ui-accent-color: color-mix(in srgb, CanvasText 15%, Canvas 85%);
         }
       }
 
@@ -90,7 +92,6 @@
       table thead th:nth-child(4) {
         width: 12rem;
       }
-
       table tr th a,
       table tr td a {
         align-items: center;

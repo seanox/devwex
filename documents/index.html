@@ -3,25 +3,32 @@
   <head>
     <title>Seanox Devwex</title>
     <style>
+      :root {
+        color-scheme: light dark;
+        --ui-background-color: Canvas;
+        --ui-text-color: CanvasText;
+        --ui-text-accent-color: color-mix(in srgb, CanvasText 50%, Canvas 50%);
+      }
+
       html, body {
         align-items: center;
-        background: Canvas;
-        color: CanvasText;
+        background: var(--ui-background-color);
+        color: var(--ui-text-color);
         display: flex;
-        font-family: system-ui, sans-serif;
+        font-family: system-ui;
         height: 100vh;
         justify-content: center;
-        margin: 0;
+        margin: 0rem;
       }
       body > div > div {
-        font-size: 48px;
+        font-size: 3rem;
         text-transform: uppercase;
         font-weight: bold;
         white-space: nowrap;
       }  
       body > div > div:last-child {
-        color: color-mix(in srgb, CanvasText 75%, Canvas 75%);
-        font-size: 24px;
+        color: var(--ui-text-accent-color);
+        font-size: 1.5rem;
         font-weight: normal;
         text-align: right; 
         text-transform: none;

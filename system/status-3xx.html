@@ -1,8 +1,40 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Seanox Devwex</title>
+    <title>#[HTTP_HOST]</title>
     <style>
+      :root {
+        color-scheme: light dark;
+        --ui-background-color: Canvas;
+        --ui-text-color: CanvasText;
+        --ui-text-accent-color: color-mix(in srgb, CanvasText 50%, Canvas 50%);
+        --ui-1-pixel-size: 0.0625rem;
+      }
+      body {
+        background: var(--ui-background-color);
+        color: var(--ui-text-color);
+        font-family: system-ui;
+        font-variant-numeric: tabular-nums;
+        margin: 0 auto;
+        max-width: 64rem;
+        padding: 0 2rem 2rem 2rem;
+      }
+      body > p {
+        color: var(--ui-text-accent-color);
+      }
+      body > p:not([class]) {
+        border-top: var(--ui-1-pixel-size) solid var(--ui-text-color);
+        padding-top: 1rem;
+      }
+      body > p[class] {
+        border-bottom: var(--ui-1-pixel-size) solid var(--ui-text-color);
+        color: var(--ui-text-color);
+        display: none;
+        padding-bottom: 1rem;
+      }
+      body > p + p[class~='#[http_status]'] {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -11,10 +43,10 @@
     <p>
       This class of status code 3xx indicates that further action needs to be
       taken by the user agent in order to fulfill the request. The action
-      required MAY be carried out by the user agent without interaction with
-      the user if and only if the method used in the second request is GET or
-      HEAD. A client SHOULD detect infinite redirection loops, since such
-      loops generate network traffic for each redirection.
+      required MAY be carried out by the user agent without interaction with the
+      user if and only if the method used in the second request is GET or HEAD.
+      A client SHOULD detect infinite redirection loops, since such loops
+      generate network traffic for each redirection.
     </p>
     <p class="300">
       The requested resource has multiple possibilities, each with different

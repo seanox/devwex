@@ -1,22 +1,53 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Seanox Devwex</title>
+    <title>#[HTTP_HOST]</title>
     <style>
+      :root {
+        color-scheme: light dark;
+        --ui-background-color: Canvas;
+        --ui-text-color: CanvasText;
+        --ui-text-accent-color: color-mix(in srgb, CanvasText 50%, Canvas 50%);
+        --ui-1-pixel-size: 0.0625rem;
+      }
+      body {
+        background: var(--ui-background-color);
+        color: var(--ui-text-color);
+        font-family: system-ui;
+        font-variant-numeric: tabular-nums;
+        margin: 0 auto;
+        max-width: 64rem;
+        padding: 0 2rem 2rem 2rem;
+      }
+      body > p {
+        color: var(--ui-text-accent-color);
+      }
+      body > p:not([class]) {
+        border-top: var(--ui-1-pixel-size) solid var(--ui-text-color);
+        padding-top: 1rem;
+      }
+      body > p[class] {
+        border-bottom: var(--ui-1-pixel-size) solid var(--ui-text-color);
+        color: var(--ui-text-color);
+        display: none;
+        padding-bottom: 1rem;
+      }
+      body > p + p[class~='#[http_status]'] {
+        display: block;
+      }
     </style>
   </head>
   <body>
-    <main>
     <h1>#[http_status_text]</h1>
     <h2>Status #[http_status]</h2>
     <p>
-      Response status codes beginning with the digit "5" indicate cases in
-      which the server is aware that it has erred or is incapable of
-      performing the request. Except when responding to a HEAD request, the
-      server SHOULD include an entity containing an explanation of the error
-      situation, and whether it is a temporary or permanent condition. User
-      agents SHOULD display any included entity to the user. These response
-      codes are applicable to any request method.
+      Response status codes beginning with the digit "5" indicate cases in which
+      the server is aware that it has erred or is incapable of performing the
+      request. Except when responding to a HEAD request, the server SHOULD
+      include an entity containing an explanation of the error situation, and
+      whether it is a temporary or permanent condition. User agents SHOULD
+      display any included entity to the user. These response codes are
+      applicable to any request method.
     </p>
     <p class="500">
       The server encountered an unexpected condition which prevented it from
@@ -30,16 +61,16 @@
     </p>
     <p class="502">
       The server, while acting as a gateway or proxy, received an invalid
-      response from the upstream server it accessed in attempting to fulfill
-      the request.
+      response from the upstream server it accessed in attempting to fulfill the
+      request.
     </p>
     <p class="503">
       The server is currently unable to handle the request due to a temporary
-      overloading or maintenance of the server. The implication is that this
-      is a temporary condition which will be alleviated after some delay. If
-      known, the length of the delay MAY be indicated in a Retry-After header.
-      If no Retry-After is given, the client SHOULD handle the response as it
-      would for a 500 response.
+      overloading or maintenance of the server. The implication is that this is
+      a temporary condition which will be alleviated after some delay. If known,
+      the length of the delay MAY be indicated in a Retry-After header. If no
+      Retry-After is given, the client SHOULD handle the response as it would
+      for a 500 response.
     </p>
     <p class="504">
       The server, while acting as a gateway or proxy, did not receive a timely
@@ -47,6 +78,5 @@
       LDAP) or some other auxiliary server (e.g. DNS) it needed to access in
       attempting to complete the request.
     </p>
-    </main>
   </body>
 </html>

@@ -138,10 +138,10 @@
         display: inline-flex;
       }
       table[state] tr th a[href^='?' i]::after,
-      table[state] tr th a[href^='?' i]::before{
-        color: var(--ui-text-gray-color);
+      table[state] tr th a[href^='?' i]::before {
         display: inline-flex;
         font-size: 1.5rem;
+        opacity: 0%;
       }
       table[state$='a'] tr th a[href='?n' i]::after,
       table[state$='a'] tr th a[href='?t' i]::after,
@@ -159,7 +159,7 @@
       table[state^='t'] tr th a[href='?t' i]::after,
       table[state^='s'] tr th a[href='?s' i]::before,
       table[state^='m'] tr th a[href='?m' i]::before {
-        color: var(--ui-text-color);
+        opacity: 100%;
       }
 
       table[state^='n'] tr td:nth-child(1),

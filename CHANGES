@@ -26,7 +26,8 @@ CR: Windows: Omission from the 32-bit service
     - The required 32-bit version of prunsrv.exe can be downloaded manually
       here, renamed, and used to replace service.exe:
       https://downloads.apache.org/commons/daemon/binaries/windows/
-??: Documentation: Update for Unix and Linux
+CR: Documentation: Added installation as a service for Linux
+??: Documentation: Update for Unix
 ??: Configuration: Add # as optional/alternavtive comment symbols
 
 5.8.0 20251231

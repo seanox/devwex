@@ -155,7 +155,80 @@ _Overview of commands_
 
 
 ## Linux Service
-TODO:
+To install Seanox Devwex as a Linux service, no separate package is provided.
+The installation is performed based on the Java binary by creating a systemd
+service definition. This allows the service to be started, stopped and monitored
+like any other system service.
+
+The Linux package is also unpacked at an arbitrary location in the file system.
+Because the service should run with a system account and appropriate access
+rights, a location outside user profiles is recommended for unpacking and
+installation. A dedicated system user can be used for operating the service.
+Alternatively, the existing system user `www-data` may be used. In both cases,
+the required access rights for the program directory must be configured before
+installation.
+
+The parameters for configuring the service are centralized in the service
+definition and are easily accessible.
+
+To install the service, a systemd service file is created. For this purpose, a
+file named `devwex.service` is created in the directory `/etc/systemd/system`
+and filled with the desired configuration.
+
+```
+[Unit]
+Description=Seanox Devwex Service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/devwex/program
+ExecStart=/opt/devwex/program/devwex.sh start
+ExecStop=/opt/devwex/program/devwex.sh stop
+Restart=on-failure
+User=www-data
+Group=www-data
+
+KillMode=none
+
+[Install]
+WantedBy=multi-user.target
+```
+
+After creating the file, systemd must be reloaded and the service enabled:
+
+```
+systemctl daemon-reload
+systemctl enable devwex
+```
+
+_Overview of commands_
+<table>
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>systemctl start devwex</code></td>
+    <td>Starts the service</td>
+  </tr>
+  <tr>
+    <td><code>systemctl status devwex</code></td>
+    <td>Outputs the status of the running service</td>
+  </tr>
+  <tr>
+    <td><code>systemctl restart devwex</code></td>
+    <td>Stops the service and restarts it</td>
+  </tr>
+  <tr>
+    <td><code>systemctl stop devwex</code></td>
+    <td>Stops the service</td>
+  </tr>
+  <tr>
+    <td><code>journalctl -u devwex -f</code></td>
+    <td>Outputs the log of the running service</td>
+  </tr>
+</table>
 
 
 ## MacOS Service

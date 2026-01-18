@@ -31,6 +31,12 @@ __Each decision always considers the size of the binary.__
   maintained 
 - Even with all the quirks, keep the code simple, understandable and clean  
 
+# CSS
+- Use of rem for better HiDPI support
+- Calculation basis: 1 rem = 16px normal resolution (FHD)
+- Use system fonts: system-ui
+- Use system colors: Canvas, CanvasText, ...  
+  https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/system-color
 
 # What can/should be ignored during code analysis?
 - Java | Compiler issues | Unchecked warning  

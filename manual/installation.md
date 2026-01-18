@@ -160,13 +160,13 @@ The installation is performed based on the Java binary by creating a systemd
 service definition. This allows the service to be started, stopped and monitored
 like any other system service.
 
-The Linux package is also unpacked at an arbitrary location in the file system.
-Because the service should run with a system account and appropriate access
-rights, a location outside user profiles is recommended for unpacking and
-installation. A dedicated system user can be used for operating the service.
-Alternatively, the existing system user `www-data` may be used. In both cases,
-the required access rights for the program directory must be configured before
-installation.
+The archive file from the Seanox Devwex release can be unpacked at any suitable
+location in the file system. Because the service should run with a system
+account and appropriate access rights, a location outside user profiles is
+recommended for unpacking and installation. A dedicated system user can be used
+for operating the service. Alternatively, the existing system user `www-data`
+may be used. In both cases, the required access rights for the program director
+must be configured before installation.
 
 The parameters for configuring the service are centralized in the service
 definition and are easily accessible.
@@ -232,6 +232,26 @@ _Overview of commands_
 
 
 ## MacOS Service
+To install Seanox Devwex as a service on macOS, no separate package is provided.
+The installation is performed using the Java binary by creating a launchd
+service definition. This allows the service to be started, stopped, and
+monitored like any other system service on macOS.
+
+The archive file from the Seanox Devwex release can be unpacked at any suitable
+location in the file system. Because the service should run under a system
+account with appropriate access rights, a location outside user profiles is
+recommended for unpacking and installation. A dedicated system user may be used
+to run the service. Alternatively, the existing system user `www-data` may be
+used. In both cases, the required access rights for the program directory must
+be configured before installation.
+
+The parameters for configuring the service are centralized in the service
+definition and are easily accessible.
+
+To install the service, a launchd service definition is created. For this
+purpose, a file named `devwex.plist` is placed in the directory
+`/Library/LaunchDaemons` and filled with the desired configuration.
+
 TODO:
 
 

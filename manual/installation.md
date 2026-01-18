@@ -195,6 +195,13 @@ KillMode=none
 WantedBy=multi-user.target
 ```
 
+> [!IMPORTANT]  
+> Only __absolute paths__ should be used in `devwex.sh`. This is necessary
+> because services under Linux (systemd) are started without a defined working
+> directory and without typical shell environment variables. Absolute paths
+> ensure that Seanox Devwex can reliably access all necessary files regardless
+> of the call context.
+
 After creating the file, systemd must be reloaded and the service enabled:
 
 ```
@@ -251,6 +258,15 @@ definition and are easily accessible.
 To install the service, a launchd service definition is created. For this
 purpose, a file named `devwex.plist` is placed in the directory
 `/Library/LaunchDaemons` and filled with the desired configuration.
+
+TODO:
+
+> [!IMPORTANT]  
+> Only __absolute paths__ should be used in `devwex.sh`. This is necessary
+> because services under macOS (launchd) are started without a defined working
+> directory and without typical shell environment variables. Absolute paths
+> ensure that Seanox Devwex can reliably access all necessary files regardless
+> of the call context.
 
 TODO:
 

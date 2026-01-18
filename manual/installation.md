@@ -259,7 +259,72 @@ To install the service, a launchd service definition is created. For this
 purpose, a file named `devwex.plist` is placed in the directory
 `/Library/LaunchDaemons` and filled with the desired configuration.
 
-TODO:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>devwex</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/opt/devwex/program/devwex.sh</string>
+      <string>start</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/opt/devwex/program</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>UserName</key>
+    <string>www-data</string>
+
+    <key>GroupName</key>
+    <string>www-data</string>
+
+    <key>StandardOutPath</key>
+    <string>/opt/devwex/storage/output.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/opt/devwex/storage/error.log</string>
+  </dict>
+</plist>
+```
+
+After creating the file, the service must be loaded and enabled:
+
+```
+launchctl load /Library/LaunchDaemons/devwex.plist
+launchctl enable system/devwex
+```
+
+_Overview of commands_
+<table>
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>launchctl start devwex</code></td>
+    <td>Starts the service</td>
+  </tr>
+  <tr>
+    <td><code>launchctl print system/devwex</code></td>
+    <td>Outputs the status of the running service</td>
+  </tr>
+  <tr>
+    <td><code>launchctl stop devwex</code></td>
+    <td>Stops the service</td>
+  </tr>
+  <tr>
+    <td><code>log stream --predicate 'process == "devwex"'</code></td>
+    <td>Outputs the log of the running service</td>
+  </tr>
+</table>
 
 > [!IMPORTANT]  
 > Only __absolute paths__ should be used in `devwex.sh`. This is necessary
@@ -267,8 +332,6 @@ TODO:
 > directory and without typical shell environment variables. Absolute paths
 > ensure that Seanox Devwex can reliably access all necessary files regardless
 > of the call context.
-
-TODO:
 
 
 

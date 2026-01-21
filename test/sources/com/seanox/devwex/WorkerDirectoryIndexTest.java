@@ -156,16 +156,16 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
                     + "\r\n";
             final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request);
             if (loop == 1) {
-                Assert.assertTrue(response.contains("\r\norder by: na x\r\n"));
-                Assert.assertFalse(response.contains("case:file"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
+                Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 2) {
                 Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
-                Assert.assertTrue(response.contains("case:file"));
+                Assert.assertTrue(response.contains("mime"));
             }
             if (loop == 3) {
                 Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
-                Assert.assertTrue(response.contains("case:file"));
+                Assert.assertTrue(response.contains("mime"));
             }
         }
     }
@@ -186,16 +186,16 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
                     + "\r\n";
             final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18182", request);
             if (loop == 1) {
-                Assert.assertTrue(response.contains("\r\norder by: na x\r\n"));
-                Assert.assertFalse(response.contains("case:file"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
+                Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 2) {
-                Assert.assertTrue(response.contains("\r\norder by: na x\r\n"));
-                Assert.assertFalse(response.contains("case:file"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
+                Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 3) {
                 Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
-                Assert.assertTrue(response.contains("case:file"));
+                Assert.assertTrue(response.contains("mime"));
             }
         }
     }    

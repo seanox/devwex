@@ -35,11 +35,19 @@
       body > p + p[class~='#[http_status]'] {
         display: block;
       }
+
+      h1 + h2 {
+        margin-top: 0.5rem;
+      }
+
     </style>
   </head>
   <body>
-    <h1>#[http_status_text]</h1>
-    <h2>Status #[http_status]</h2>
+    <div>
+      <h1>#[http_status_text]</h1>
+      <h2>Status #[http_status]</h2>
+
+    </div>
     <p>
       The 4xx class of status code is intended for cases in which the client
       seems to have erred. Except when responding to a HEAD request, the server

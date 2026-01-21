@@ -5,6 +5,7 @@ NT: Celebrating 25 years of Devwex!
     Unit tests are run annually using the current Java LTS version.
     Corrections and minor requests will continue to be addressed.
 BF: Review: Optimization and corrections
+    And the binary becomes a bit smaller again :-)
 BF: Windows: Correction in the determination of platform architecture
 CR: HTTP(S) CGI: Optimization and corrections
     - Optimization in handling blocking CGI processes

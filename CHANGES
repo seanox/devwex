@@ -30,7 +30,10 @@ CR: Windows: Omission from the 32-bit service
       here, renamed, and used to replace service.exe:
       https://downloads.apache.org/commons/daemon/binaries/windows/
 CR: Documentation: Added installation as a service for Linux and macOS
-??: Configuration: Add # as optional/alternavtive comment symbols
+CR: Configuration: Added support of # as alternative comment symbol
+    The configuration now supports both ; and # as comment characters, which
+    improves compatibility with common INI dialects and makes editing easier in
+    modern editors.
 
 5.8.0 20251231
 NT: Competition: 25 years Devwex -- raffle one of 10x 3.5" disks.

@@ -219,22 +219,22 @@ public class Section implements Cloneable {
             if (!line.startsWith("+")) {
 
                 option = 0;
-                if (line.matches("^[^;=]+\\[\\s*\\+\\s*\\].*$"))
+                if (line.matches("^[^#;=]+\\[\\s*\\+\\s*\\].*$"))
                     option |= 1;
-                if (line.matches("^[^;=]+\\[\\s*\\?\\s*\\].*$"))
+                if (line.matches("^[^#;=]+\\[\\s*\\?\\s*\\].*$"))
                     option |= 2;
                 
                 // Comment part will be removed if necessary
-                if ((option & 1) == 0 && line.contains(";"))
-                    line = line.substring(0, line.indexOf(';')).trim();
-                
+                if ((option & 1) == 0)
+                    line = line.replaceAll("[#;].*$", "").trim();
+
                 buffer = null;
 
                 String value;
                 String label;
 
                 // Key is determined, decoded if necessary and optimized
-                label = line.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
+                label = line.replaceAll("^([^#;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$1");
                 label = Section.decode(label).toUpperCase();
                 
                 // Only valid keys are applied
@@ -277,7 +277,7 @@ public class Section implements Cloneable {
                 
                 // Value is determined, decoded if necessary and optimized
                 value = line.trim();
-                value = value.replaceAll("^([^;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
+                value = value.replaceAll("^([^#;=]+?)?((?:\\s*\\[\\s*.?\\s*\\])+)?(?:\\s*=\\s*(.*))?\\s*$", "$3");
                 value = Section.decode(value);
                 
                 buffer = new StringBuffer(value);
@@ -288,8 +288,8 @@ public class Section implements Cloneable {
                 // Content is processed only with valid key
 
                 // Comment part will be removed if necessary
-                if ((option & 1) == 0 && line.contains(";"))
-                    line = line.substring(0, Math.max(0, line.indexOf(';'))).trim();
+                if ((option & 1) == 0)
+                    line = line.replaceAll("[#;][^#;]*$", "").trim();
 
                 line = line.substring(1).trim();
                 if (line.length() > 0)

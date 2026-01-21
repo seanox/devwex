@@ -224,7 +224,7 @@ public class Settings implements Cloneable {
                 //   - the comment part is removed
                 //   - inadmissible subsequent sections are removed
                 //   - if necessary existing derivations are loaded
-                String[] strings = line.replaceAll("^(?i)(?:\\[\\s*([^\\[\\]\\;]+)\\s*\\]\\s*(?:extends\\s+([^\\[\\]\\;]+))*)*.*$", "$1 \00 $2").split("\00");
+                String[] strings = line.replaceAll("^(?i)(?:\\[\\s*([^\\[\\]\\#;]+)\\s*\\]\\s*(?:extends\\s+([^\\[\\]\\#;]+))*)*.*$", "$1 \00 $2").split("\00");
                 
                 // The section will be decoded and optimized if necessary but
                 // only valid sections will be loaded

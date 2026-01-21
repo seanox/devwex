@@ -1,6 +1,9 @@
 5.9.0 20260411
-NT: End of active development.
-    Support and maintenance remain active.
+NT: Celebrating 25 years of Devwex!
+    Active development of new features has ended.
+    Support and maintenance remain ongoing.
+    Unit tests are run annually using the current Java LTS version.
+    Corrections and minor requests will continue to be addressed.
 BF: Review: Optimization and corrections
 BF: Windows: Correction in the determination of platform architecture
 CR: HTTP(S) CGI: Optimization and corrections
@@ -26,7 +29,7 @@ CR: Windows: Omission from the 32-bit service
     - The required 32-bit version of prunsrv.exe can be downloaded manually
       here, renamed, and used to replace service.exe:
       https://downloads.apache.org/commons/daemon/binaries/windows/
-??: Documentation: Update for Unix and Linux
+CR: Documentation: Added installation as a service for Linux and macOS
 ??: Configuration: Add # as optional/alternavtive comment symbols
 
 5.8.0 20251231

@@ -79,7 +79,28 @@ public class SectionParseTest extends AbstractTest {
             throws Exception {
         final Section section = Section.parse(MockUtils.readTestContent(1));
         Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
-    }    
+    }
+    
+    @Test
+    public void testAcceptance_11()
+            throws Exception {
+        final Section section = Section.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
+    }
+    
+    @Test
+    public void testAcceptance_12()
+            throws Exception {
+        final Section section = Section.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
+    }
+    
+    @Test
+    public void testAcceptance_13()
+            throws Exception {
+        final Section section = Section.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SectionTestSuite.toString(section));
+    }
     
     @Test
     public void testOverride_1()

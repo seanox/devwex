@@ -49,6 +49,20 @@ of the Java runtime environment. If no suitable value is found, an optionally
 specified value is used. Without a value, these keys are interpreted as
 non-existent and ignored.
 
+
+Comments begin with a semicolon or, more commonly, a hash. They are optional and
+can appear anywhere in a line; all characters following them are then no longer
+part of the section, key, or value. The `[+]` option at the end of a key can be
+used to disable the comment function for that key, allowing a semicolon or hash
+in the value.
+
+> [!NOTE]
+> __The semicolon (`;`) is the original comment character for this format. The
+> hash (`#`) is also supported, which is common in many modern configuration
+> formats. Both characters have the same function. For simplicity, the following
+> documentation uses the semicolon throughout; however, the hash can be used
+> interchangeably.__
+
 Comments begin with a semicolon, are optional and can be used anywhere in a
 line, so the following characters are not part of section, key or value. With
 the option `[+]` at the end of a key, the use of comments for that key can be

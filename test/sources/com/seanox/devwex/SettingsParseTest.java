@@ -71,5 +71,19 @@ public class SettingsParseTest extends AbstractTest {
             throws Exception {
         final Settings settings = Settings.parse(MockUtils.readTestContent(1));
         Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
-   } 
+   }
+
+    @Test
+    public void testAcceptance_8()
+            throws Exception {
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
+    }
+
+    @Test
+    public void testAcceptance_9()
+            throws Exception {
+        final Settings settings = Settings.parse(MockUtils.readTestContent(1));
+        Assert.assertEquals(MockUtils.readTestContent(2), SettingsTestSuite.toString(settings));
+    }
 }

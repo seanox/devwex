@@ -59,9 +59,9 @@ in the value.
 > [!NOTE]
 > __The semicolon (`;`) is the original comment character for this format. The
 > hash (`#`) is also supported, which is common in many modern configuration
-> formats. Both characters have the same function. For simplicity, the following
-> documentation uses the semicolon throughout; however, the hash can be used
-> interchangeably.__
+> formats. Both characters have the same function. For simplicity, the original
+> semicolon is used throughout the following documentation; however, the hash
+> sign can be used interchangeably.__
 
 Comments begin with a semicolon, are optional and can be used anywhere in a
 line, so the following characters are not part of section, key or value. With

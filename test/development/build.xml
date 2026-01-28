@@ -31,12 +31,34 @@
     <echo>               then runs the unit tests                        </echo>
   </target>
 
+  <macrodef name="release-locate">
+    <sequential>
+      <copy file="${parent}/CHANGES" tofile="${parent}/CHANGES.tmp" overwrite="true"/>
+      <replaceregexp file="${parent}/CHANGES.tmp"
+         match="(?s)^\s*([\d\.x]+) (\d{4})([\dx]+).*$" flags="g" byline="false"
+         replace="release.version=\1&#x000D;release.year=\2&#x000D;release.date=\2\3&#x000D;"/>
+      <replaceregexp file="${parent}/CHANGES.tmp" match="x+" replace="0000" flags="g" byline="false"/>
+      <loadproperties srcfile="${parent}/CHANGES.tmp"/>
+      <delete file="${parent}/CHANGES.tmp"/>
+    </sequential>
+  </macrodef>
+
   <target name="compile">
     <ant antfile="build.xml" target="compile"
         dir="${parent.development}" useNativeBasedir="true"
         inheritAll="false" inheritRefs="true">
       <property name="debug" value="on"/>
     </ant>
+
+    <release-locate/>
+
+    <property name="devwex.classpath" value="devwex-${release.version}-debug.jar"/>
+
+    <delete>
+      <fileset dir="${workspace.libraries}" includes="devwex-*.jar"/>
+    </delete>
+    <copy file="${parent.program}/devwex.jar"
+        tofile="${workspace.libraries}/${devwex.classpath}" overwrite="true"/>
 
     <delete dir="${workspace.classes}"/>
     <mkdir dir="${workspace.classes}"/>
@@ -45,7 +67,7 @@
       <classpath>
         <pathelement location="${workspace.libraries}/junit-4.13.2.jar"/>
         <pathelement location="${workspace.libraries}/hamcrest-2.2.jar"/>
-        <pathelement location="${parent.program.classes}"/>
+        <pathelement location="${workspace.libraries}/${devwex.classpath}"/>
       </classpath>
     </javac>
     <copy todir="${workspace.classes}">
@@ -352,7 +374,7 @@
           printsummary="true" haltonfailure="true" showoutput="true">
         <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
         <classpath>
-          <pathelement location="${parent.program.classes}"/>
+          <pathelement location="${workspace.libraries}/${devwex.classpath}"/>
           <pathelement location="${workspace.libraries}/junit-4.13.2.jar"/>
           <pathelement location="${workspace.libraries}/hamcrest-2.2.jar"/>
           <pathelement location="${workspace.classes}"/>
@@ -384,7 +406,7 @@
       </executiondata>
       <structure name="com.seanox.devwex">
         <classfiles>
-          <fileset dir="${parent.program.classes}"/>
+          <fileset dir="${workspace.libraries}" includes="${devwex.classpath}"/>
         </classfiles>
         <sourcefiles>
           <fileset dir="${parent.sources}"/>

@@ -141,8 +141,8 @@ public class LoaderTest {
     @Test
     public void testLoadClass_zip_exists()
             throws Exception {
-        final byte[] bytes = Files.readAllBytes(
-                Paths.get(Loader.class.getResource("Loader.class").toURI()));
+        final byte[] bytes = StreamUtils.read(
+                Loader.class.getResourceAsStream("Loader.class"));
         final File zip = LoaderTest.createZip(
                 Collections.singletonMap("com/seanox/devwex/PerformanceTest.class", bytes));
         final Loader loader = new Loader(Collections.singletonList(zip));

@@ -18,7 +18,6 @@
   <property name="workspace.program" value="${workspace}/program"/>
   <property name="workspace.program.classes" value="${workspace.program}/classes"/>
   <property name="workspace.development" value="${workspace}/development"/>
-  <property name="workspace.extras" value="${workspace.development}/extras"/>
   <property name="workspace.release" value="${workspace}/release"/>
   
   <property name="build" value="${workspace}/build"/>
@@ -28,7 +27,6 @@
   
   <property name="compile.target" value="5"/>
   <property name="compile.source" value="5"/>
-  <property name="xcompile.debug" value="off"/>
   <property name="compile.optimize" value="on"/>
   <property name="compile.deprecation" value="on"/>
 
@@ -112,7 +110,7 @@
   
   <target name="compress" if="windows">
     <delete file="${workspace.program}/${ant.project.name}.jar"/>
-    <unzip src="${workspace.extras}/compress.zip" dest="${build}"/>
+    <unzip src="${workspace.development}/compress.zip" dest="${build}"/>
     <property name="compress1" value="a ${workspace.program}/${ant.project.name}.jar"/>
     <property name="compress2" value="-tzip -mm=Deflate -mx9 -md=64k -mfb=128 -mpass=10"/>
     <property name="compress3" value="${build.classes}/com"/>
@@ -175,7 +173,7 @@
   
   <fileset id="fileset.sources" dir="${workspace}">
     <include name=".settings/org.eclipse.jdt.core.prefs"/> 
-    <include name="development/extras/compress.zip"/>
+    <include name="development/compress.zip"/>
     <include name="development/mediatypes/* File/* File.*"/>
     <include name="development/mediatypes/icons.html"/>
     <include name="development/build.xml"/>

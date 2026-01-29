@@ -16,14 +16,14 @@
  */
 package com.seanox.devwex;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /** Abstract class to implement a test. */
 abstract class AbstractTest {
@@ -35,9 +35,12 @@ abstract class AbstractTest {
         if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$"))
             throw new RuntimeException("Character encoding ISO-8859-1 required");
 
-        final String version = System.getProperty("java.version");
-        if (!version.matches("^1\\.8\\..*$"))
-            throw new RuntimeException("Java 1.8.x is required");
+        final String enforce = System.getProperty("java.version.enforce", "false").trim();
+        if (enforce.matches("(?i)^(1|true|on)$")) {
+            final String version = System.getProperty("java.version");
+            if (!version.matches("^1\\.8\\..*$"))
+                throw new RuntimeException("Java 8 is required");
+        }
     }
 
     @Rule

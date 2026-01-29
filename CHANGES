@@ -1,3 +1,7 @@
+5.9.1 2027xxxx
+??: Test: Docker runtime environment for LTS compatibility tests
+??: Test: GitHub Action (Scheduler) for performing LTE testing
+
 5.9.0 20260411
 NT: Celebrating 25 years of Devwex!
     Active development of new features has ended.

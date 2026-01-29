@@ -388,8 +388,6 @@
             printsummary="true" haltonfailure="true" showoutput="true">
           <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
           <jvmarg value="-Djava.version.enforce=${java.version.enforce}"/>
-          <jvmarg value="-Duser.language=en"/>
-          <jvmarg value="-Duser.country=US"/>
           <classpath>
             <pathelement location="${workspace.libraries}/${workspace.devwex.debug.jar}"/>
             <pathelement location="${workspace.libraries}/junit-4.13.2.jar"/>

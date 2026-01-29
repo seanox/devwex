@@ -293,7 +293,7 @@
       <fileset refid="fileset.release.windows"/>
     </copy>
     <delete>
-      <fileset  dir="${build}/release" includes="**/*.sh"/>
+      <fileset dir="${build}/release" includes="**/*.sh"/>
     </delete>
     <release-insert/>
     <touch datetime="${release.date}" pattern="yyyyMMdd">

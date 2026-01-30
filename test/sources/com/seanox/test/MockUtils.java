@@ -139,6 +139,7 @@ public class MockUtils {
         final String resourcePath = stackTraceElement.getClassName()
                 .replace('.', '/') + String.format("_%s.txt", source);
         final ClassLoader classLoader = Class.forName(stackTraceElement.getClassName()).getClassLoader();
-        return new String(StreamUtils.read(classLoader.getResourceAsStream(resourcePath)));
+        return new String(StreamUtils.read(classLoader.getResourceAsStream(resourcePath)))
+                .replaceAll("(\r\n)|(\n\r)|[\r\n]", System.lineSeparator());
     }
 }

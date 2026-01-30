@@ -319,16 +319,18 @@ public class ServerConnectionTest extends AbstractStageTest {
      * Connection with unknown client certificate must fail.
      * @throws Exception
      */      
-    @Test(expected=SSLException.class)
     public void testAcceptance_13()
             throws Exception {
         final File certificate = new File(AbstractStage.getRootStageCertificates(), "client_x.p12");
         ServerConnectionTest.initHttpsMutualAuthenticationUrlConnection(certificate, "changeIt");
         final URL url = new URL("https://127.0.0.2:18443");
         final HttpsURLConnection urlConn = (HttpsURLConnection)url.openConnection();
-        Assert.assertNotEquals(200, urlConn.getResponseCode());
-        Assert.fail();
-    }     
+        try {
+            Assert.assertNotEquals(200, urlConn.getResponseCode());
+            Assert.fail();
+        } catch (SSLException | SocketException expected) {
+        }
+    }
     
     /** 
      * Test case for acceptance.

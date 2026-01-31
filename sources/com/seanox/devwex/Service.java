@@ -807,18 +807,20 @@ public class Service implements Runnable, UncaughtExceptionHandler {
             return;
         }
 
-        // In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit US-ASCII
-        // and in extension ISO-8859-1/Windows-1252/CP-1252 are supported.
-        // Therefore DefaultCharset must be ISO-8859-1 compatible! Windows-1252
-        // and CP-1252 are only required for development. A clean solution is to
-        // decouple the web server logic and the network communication.
-        if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$")) {
-            Service.print("ISO-8859-1 is required as standard encoding.", true);
-            return;
-        }
-        
         // START - start the server services
         if (string.matches("start")) {
+
+            // In relation to RFC 20, RFC 1345, RFC 2616, RFC 7230: 7-bit
+            // US-ASCII and in extension ISO-8859-1/Windows-1252/CP-1252 are
+            // supported. Therefore, DefaultCharset must be compatible with
+            // ISO?8859?1. Windows?1252 and CP?1252 are required only during
+            // development. A clean architecture separates web?server logic from
+            // network communication.
+            if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$")) {
+                Service.print("ISO-8859-1 is required as standard encoding.", true);
+                return;
+            }
+
             Service.initiate(Service.START, options[1]);
             return;
         }
@@ -878,7 +880,7 @@ public class Service implements Runnable, UncaughtExceptionHandler {
         if (object == null)
             return;
 
-        Throwable throwable = null;
+        Throwable throwable;
         if (object instanceof Throwable) {
             throwable = ((Throwable)object);
             while (throwable instanceof InvocationTargetException

@@ -21,9 +21,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
@@ -362,6 +364,16 @@ abstract class AbstractStage {
                 this.setDaemon(true);
                 this.start();
             }};
+
+        // Paths in Linux/Unix consistently expect a slash. Only Windows is more
+        // tolerant. Therefore, this is corrected here for Linux/Unix.
+        if (!System.getProperty("os.name")
+                .matches("(?i).*\\bwin(dows)?\\b.*")) {
+            final Path path = Paths.get(PATH_STAGE_PROGRAM_CONFIGURATION);
+            final String configuration = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
+                    .replace("\\", "/");
+            Files.write(path, configuration.getBytes(StandardCharsets.UTF_8));
+        }
 
         Service.main(new String[] {"start", AbstractStage.getRootStageProgramConfiguration().toString()});
         

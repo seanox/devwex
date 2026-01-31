@@ -47,4 +47,9 @@ abstract class AbstractStageTest extends AbstractTest {
             throws InterruptedException {
         AbstractStage.cleanTest();
     }
+
+    boolean isWindows() {
+        return System.getProperty("os.name")
+                .matches("(?i).*\\bwin(dows)?\\b.*");
+    }
 }

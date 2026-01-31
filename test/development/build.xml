@@ -16,7 +16,7 @@
   <property name="workspace.resources.libraries" value="${workspace.resources}/libraries"/>
   <property name="workspace.resources.certificates" value="${workspace.resources}/certificates"/>
   <property name="workspace.sources" value="${workspace}/sources"/>
-  
+
   <property name="compiler.level" value="8"/>
 
   <target name="usage">
@@ -97,7 +97,11 @@
 
     <javac srcdir="${workspace.resources.libraries}" destdir="${workspace.resources.libraries}"
         classpath="${workspace}/../program/devwex.jar"
-        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true"/>
+        source="${compiler.level}" target="${compiler.level}" includeantruntime="false" debug="true">
+      <classpath>
+        <pathelement location="${workspace.libraries}/mozilla-rhino-1.9.0.jar"/>
+      </classpath>
+    </javac>
 
     <jar destfile="${workspace.resources.libraries}/workerModule_A.jar"
         basedir="${workspace.resources.libraries}"
@@ -243,15 +247,20 @@
         includes="module/Acceptance*20.class"/>
     <jar destfile="${workspace.resources.libraries}/module-acceptance_21.jar"
         basedir="${workspace.resources.libraries}"
-        includes="module/Acceptance*21.class"/>                
-    
-    <jar destfile="${workspace.resources.libraries}/scripting.jar"
-        basedir="${workspace.resources.libraries}"
-        includes="extras/Scripting.class">
-      <manifest>
-        <attribute name="Main-Class" value="extras.Scripting"/>
-      </manifest>      
-    </jar>
+        includes="module/Acceptance*21.class"/>
+
+    <mkdir dir="${workspace.libraries}/scripting"/>
+    <unzip src="${workspace.libraries}/mozilla-rhino-engine-1.7.15.1.jar"
+        dest="${workspace.libraries}/scripting" overwrite="true"/>
+    <unzip src="${workspace.libraries}/mozilla-rhino-1.7.15.1.jar"
+        dest="${workspace.libraries}/scripting" overwrite="true"/>
+    <copy file="${workspace.resources.libraries}/extras/Scripting.class"
+        todir="${workspace.libraries}/scripting/extras"/>
+    <replaceregexp file="${workspace.libraries}/scripting/META-INF/MANIFEST.MF"
+        match="(?m)^Main-Class:.*$" replace="Main-Class: extras.Scripting" byline="true"/>
+    <zip level="9" destfile="${workspace.resources.libraries}/scripting.jar"
+        basedir="${workspace.libraries}/scripting"/>
+    <delete dir="${workspace.libraries}/scripting"/>
 
     <jar destfile="${workspace.resources}/documents_vh_A/parameter.jex"
         basedir="${workspace.resources.libraries}"

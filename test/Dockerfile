@@ -13,6 +13,10 @@ RUN printf "%b" "#!/bin/sh\n" \
     "ant test-lts -f test/development/build.xml\n" > $START_SCRIPT
 RUN chmod +x $START_SCRIPT
 
+# Compatibility for the primarily Windows-based test
+ENV SystemDrive=C:
+ENV SystemRoot=C:\\WINDOWS
+
 WORKDIR /opt
 CMD ["/usr/local/bin/start.sh"]
 

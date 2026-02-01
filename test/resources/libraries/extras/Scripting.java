@@ -16,19 +16,21 @@
  */
 package extras;
 
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import java.io.FileReader;
+import java.io.IOException;
 
 /** Very simple command line interface for scripting, based on the CGI. */
 public class Scripting {
     
     /**
      * Main method of application.
-     * Reads and execute the script file of the environment variable
+     * Reads and executes the script file of the environment variable
      * {@code PATH_TRANSLATED}.
      * @param options
      */
@@ -36,9 +38,14 @@ public class Scripting {
         try {
             final Path pathTranslated = Paths.get(System.getenv("PATH_TRANSLATED"));
             System.setProperty("user.dir", pathTranslated.getParent().toRealPath().toString());
-            final ScriptEngineManager factory = new ScriptEngineManager();
-            final ScriptEngine engine = factory.getEngineByName("rhino");
-            engine.eval(Files.newBufferedReader(pathTranslated));
+            final Context context = Context.enter();
+            try {
+                final Scriptable scope = context.initStandardObjects();
+                final FileReader scriptReader = new FileReader(pathTranslated.toFile());
+                context.evaluateReader(scope, scriptReader, pathTranslated.toString(), 1, null);
+            } finally {
+                Context.exit();
+            }
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
             System.exit(1);

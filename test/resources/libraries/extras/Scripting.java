@@ -37,8 +37,8 @@ public class Scripting {
             final Path pathTranslated = Paths.get(System.getenv("PATH_TRANSLATED"));
             System.setProperty("user.dir", pathTranslated.getParent().toRealPath().toString());
             final ScriptEngineManager factory = new ScriptEngineManager();
-            final ScriptEngine engine = factory.getEngineByName("JavaScript");
-            engine.eval(Files.newBufferedReader(pathTranslated));            
+            final ScriptEngine engine = factory.getEngineByName("rhino");
+            engine.eval(Files.newBufferedReader(pathTranslated));
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
             System.exit(1);

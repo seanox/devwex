@@ -1,11 +1,11 @@
-var System = Java.type("java.lang.System");
-var Iterator = Java.type("java.util.Iterator");
-var TreeSet = Java.type("java.util.TreeSet");
+var System = java.lang.System;
+var TreeSet = java.util.TreeSet;
 
 System.out.print("HTTP/1.0 200\r\n\r\n");
-var keyIterator = new TreeSet(System.getenv().keySet()).iterator();
+var environment = System.getenv();
+var keyIterator = new TreeSet(environment.keySet()).iterator();
 while (keyIterator.hasNext()) {
     var key = keyIterator.next();
-    System.out.print(key + "=" + System.getenv().get(key) + "\r\n");
+    System.out.print(key + "=" + environment.get(key) + "\r\n");
     System.out.flush();
 }

@@ -75,7 +75,6 @@ if not exist "%JAVA%\java.exe" (
 for %%f in (%RUNTIME%\*.bat %RUNTIME%\*.cmd) do call %RUNTIME%\%%f
 
 set OPTIONS=%OPTIONS% -Dlibraries=%LIBRARIES%
-set OPTIONS=%OPTIONS% -Dfile.encoding=ISO-8859-1
 
 "%JAVA%\java.exe" -cp devwex.jar %OPTIONS% com.seanox.devwex.Service %1 %2
 

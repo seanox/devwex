@@ -80,7 +80,6 @@ then
 fi
 
 OPTIONS="-Dlibraries=\"$LIBRARIES\" $OPTIONS"
-OPTIONS="-Dfile.encoding=\"ISO-8859-1\" $OPTIONS"
 
 OPTIONS="-cp devwex.jar $OPTIONS com.seanox.devwex.Service $1 $2"
 

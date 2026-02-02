@@ -33,7 +33,7 @@ import com.seanox.test.SystemInfo;
 import com.seanox.test.Timing;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
-public class PerformanceTest extends AbstractStageRequestTest {
+public class WorkerBenchmark extends AbstractStageRequestTest {
     
     private static String createFailedTestWorkerInfo(final Executor executor) {
         String result = "";
@@ -51,10 +51,10 @@ public class PerformanceTest extends AbstractStageRequestTest {
         
         Service.restart();
         Thread.sleep(3000);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         
-        PerformanceTest.threadCount = Thread.activeCount();
-        PerformanceTest.memoryUsage = SystemInfo.getSystemMemoryLoad();     
+        WorkerBenchmark.threadCount = Thread.activeCount();
+        WorkerBenchmark.memoryUsage = SystemInfo.getSystemMemoryLoad();
     }
     
     /** 
@@ -70,13 +70,13 @@ public class PerformanceTest extends AbstractStageRequestTest {
         
         Service.restart();
         Thread.sleep(3000);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         
         final Executor executor = Executor.create(40, TestWorker.class);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         executor.execute();
         final boolean success = executor.await(7500);
-        final String failedTestWorkerInfo = PerformanceTest.createFailedTestWorkerInfo(executor);
+        final String failedTestWorkerInfo = WorkerBenchmark.createFailedTestWorkerInfo(executor);
         Assert.assertTrue(failedTestWorkerInfo, success);
         Assert.assertFalse(failedTestWorkerInfo, executor.isFailed());
         Assert.assertFalse(failedTestWorkerInfo, executor.isInterrupted());
@@ -113,24 +113,24 @@ public class PerformanceTest extends AbstractStageRequestTest {
         
         Service.restart();
         Thread.sleep(3000);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         
         final Executor executor1 = Executor.create(40, TestWorker.class);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         executor1.execute();
         final boolean success1 = executor1.await(2500);
-        final String failedTestWorkerInfo1 = PerformanceTest.createFailedTestWorkerInfo(executor1);
+        final String failedTestWorkerInfo1 = WorkerBenchmark.createFailedTestWorkerInfo(executor1);
         Assert.assertTrue(failedTestWorkerInfo1, success1);
         Assert.assertFalse(failedTestWorkerInfo1, executor1.isFailed());
         Assert.assertFalse(failedTestWorkerInfo1, executor1.isInterrupted());
         
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         
         final Executor executor2 = Executor.create(40, TestWorker.class);
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         executor2.execute();
         final boolean success2 = executor2.await(2500); 
-        final String failedTestWorkerInfo2 = PerformanceTest.createFailedTestWorkerInfo(executor2);
+        final String failedTestWorkerInfo2 = WorkerBenchmark.createFailedTestWorkerInfo(executor2);
         Assert.assertTrue(failedTestWorkerInfo2, success2);
         Assert.assertFalse(failedTestWorkerInfo2, executor2.isFailed());
         Assert.assertFalse(failedTestWorkerInfo2, executor2.isInterrupted());
@@ -201,10 +201,10 @@ public class PerformanceTest extends AbstractStageRequestTest {
     public void testAcceptance_3()
             throws Exception {
         
-        PerformanceTest.waitRuntimeReady();
+        WorkerBenchmark.waitRuntimeReady();
         
-        final long threadCount1 = Math.floorDiv(PerformanceTest.threadCount, 10) *10;
-        final long memoryUsage1 = Math.floorDiv(PerformanceTest.memoryUsage, 10) *10; 
+        final long threadCount1 = Math.floorDiv(WorkerBenchmark.threadCount, 10) *10;
+        final long memoryUsage1 = Math.floorDiv(WorkerBenchmark.memoryUsage, 10) *10;
         final long threadCount2 = Math.floorDiv(Thread.activeCount(), 10) *10;
         final long memoryUsage2 = Math.floorDiv(SystemInfo.getSystemMemoryLoad(), 10) *10; 
         
@@ -234,9 +234,9 @@ public class PerformanceTest extends AbstractStageRequestTest {
                 throws IOException {
             this.requestList = new ArrayList<>();
             this.responseList = new ArrayList<>();
-            final File resources = new File(AbstractStage.getRootStage(), "documents/performance");
+            final File resources = new File(AbstractStage.getRootStage(), "documents/benchmark");
             for (final File file : resources.listFiles())
-                this.requestList.add("GET /performance/" + file.getName() + " HTTP/1.0\r\n\r\n");
+                this.requestList.add("GET /benchmark/" + file.getName() + " HTTP/1.0\r\n\r\n");
         }
         
         @Override

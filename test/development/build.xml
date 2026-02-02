@@ -451,7 +451,7 @@
     <junit-run javaVersionEnforce="true"/>
   </target>
 
-  <target name="test-performance" depends="compile">
+  <target name="benchmark" depends="compile">
     <junit dir="${workspace}" fork="true"
         printsummary="true" haltonfailure="true" showoutput="true">
       <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
@@ -464,7 +464,8 @@
       <formatter type="plain" usefile="false"/>
       <batchtest>
         <fileset dir="${workspace.sources}">
-          <include name="**/Performance*Test.java"/>
+          <include name="**/Generator*Benchmark.java"/>
+          <include name="**/Worker*Benchmark.java"/>
         </fileset>
       </batchtest>
     </junit>

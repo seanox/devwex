@@ -16,17 +16,15 @@
  */
 package com.seanox.devwex;
 
+import com.seanox.test.MockUtils;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import com.seanox.test.MockUtils;
-import com.seanox.test.Timing;
 
 /** Test cases for {@link com.seanox.devwex.Generator}. */
 public class GeneratorTest extends AbstractTest {
@@ -87,48 +85,7 @@ public class GeneratorTest extends AbstractTest {
         generator.set(values);
         Assert.assertEquals(MockUtils.readTestContent(), new String(generator.extract()));
     }
-    
-    @Test
-    public void testAcceptance_6()
-            throws Exception {
-        final Generator generator = Generator.parse(MockUtils.readTestContent("testAcceptance_0_1").getBytes());
-        final Hashtable<String, Object> values = new Hashtable<>();
-        values.put("name", "A");
-        values.put("date", "B");
-        values.put("size", "C");
-        values.put("type", "D");
-        values.put("mime", "E");
-        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        final Timing timing = Timing.create(true);
-        for (long loop = 1; loop < 10000; loop++) {
-            values.put("case", "X" + loop);
-            buffer.write(generator.extract("file", values));
-        }
-        values.put("file", buffer.toByteArray());
-        generator.set("file", values);
-        generator.extract();
-        timing.assertTimeIn(3000);
-    }    
-    
-    @Test
-    public void testAcceptance_7()
-            throws Exception {
-        final Generator generator = Generator.parse(MockUtils.readTestContent("testAcceptance_0_1").getBytes());
-        final Hashtable<String, Object> values = new Hashtable<>();
-        values.put("name", "A");
-        values.put("date", "B");
-        values.put("size", "C");
-        values.put("type", "D");
-        values.put("mime", "E");
-        final Timing timing = Timing.create(true);
-        for (long loop = 1; loop < 2500; loop++) {
-            values.put("case", "X" + loop);
-            generator.set("file", values);
-        }
-        generator.extract();
-        timing.assertTimeIn(3000);
-    }
-    
+
     @Test
     public void testAcceptance_8()
             throws Exception {

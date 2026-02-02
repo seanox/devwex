@@ -236,7 +236,6 @@ rem ----------------------------------------------------------------------------
   %service% //US/%ServiceName% ++JvmOptions='-Dpath="%path%"'
   %service% //US/%ServiceName% ++JvmOptions='-Dlibraries="..\libraries"'
   %service% //US/%ServiceName% ++JvmOptions='-Dlibraries=true'
-  %service% //US/%ServiceName% ++JvmOptions='-Dfile.encoding=ISO-8859-1'
 
   if not "%jdwp%" == "" (
     %service% //US/%ServiceName% ++JvmOptions='-Xdebug'

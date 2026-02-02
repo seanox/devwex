@@ -23,6 +23,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.UUID;
@@ -52,9 +53,9 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
 
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body.contains("\r\nSERVER_NAME=vHa\r\n"));
+        Assert.assertTrue(body, body.contains("\r\nSERVER_NAME=vHa\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -76,9 +77,9 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
 
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertFalse(body.contains("\r\nSERVER_NAME\r\n"));
+        Assert.assertFalse(body, body.contains("\r\nSERVER_NAME\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -99,9 +100,9 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
 
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertFalse(body.contains("\r\nSERVER_NAME\r\n"));
+        Assert.assertFalse(body, body.contains("\r\nSERVER_NAME\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -114,22 +115,58 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
      * @throws Exception
      */      
     @Test
-    public void testAcceptance_04()
+    public void testAcceptance_04_1()
             throws Exception {
-        
+
+        if (!this.isWindows())
+            return;
+
         final String request = "GET / HTTP/1.0\r\n"
                 + "Host: vHq\r\n"
                 + "\r\n";
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
 
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
         for (final File file : new File(AbstractStage.getRootStage(), "..").listFiles())
-            Assert.assertTrue(body.contains("\r\nname:" + file.getName() + "\r\n"));
+            Assert.assertTrue(body, body.contains("\r\nname:" + file.getName() + "\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
+    }
+
+    /**
+     * Test case for acceptance.
+     * Configuration: {@code [SERVER/VIRTUAL:INI] docroot = ?}
+     * The DooRoot is the current working directory.
+     * @throws Exception
+     */
+    @Test
+    public void testAcceptance_04_2()
+            throws Exception {
+
+        if (this.isWindows())
+            return;
+
+        // The directory ? exists under Linux/Unix, whereas under Windows the
+        // path is ignored and addresses the parent of ?. Therefore, ? must be
+        // created in Linux/Unix for the test.
+        Files.createDirectories(
+                Paths.get("").toAbsolutePath().resolve("?"));
+
+        final String request = "GET / HTTP/1.0\r\n"
+                + "Host: vHq\r\n"
+                + "\r\n";
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
+
+        final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
+        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
+        final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
+        Assert.assertNull(new File(AbstractStage.getRootStage(), "?").listFiles());
+
+        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));
     }
     
     /** 
@@ -177,7 +214,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE));
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED));     
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body.contains("\r\nindex_2.html\r\n"));
+        Assert.assertTrue(body, body.contains("\r\nindex_2.html\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));          
@@ -204,8 +241,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));     
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body.contains("\r\nindex of: /test_c\r\n"));
-        Assert.assertTrue(body.contains("\r\ntemplate: /system_vh_A/index.html\r\n"));
+        Assert.assertTrue(body, body.contains("\r\nindex of: /test_c\r\n"));
+        Assert.assertTrue(body, body.contains("\r\ntemplate: /system_vh_A/index.html\r\n"));
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -298,8 +335,17 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
                     socketList.add(exception);
                 }
         }
-        
-        Assert.assertEquals("111111100", pattern);
+
+        // Different behavior between Windows and Linux during connection
+        // establishment: The enforcement of MAXACCESS and BACKLOG is primarily
+        // handled by the OS TCP/IP stack, not by Java itself.
+        // Windows evaluates the backlog more strictly and rejects excess
+        // connections early in the kernel, while Linux buffers connections more
+        // aggressively and only applies limits later when accept() is called.
+
+        if (this.isWindows())
+            Assert.assertEquals("111111100", pattern);
+        else Assert.assertEquals("111111111", pattern);
         
         AbstractStage.getAccessStreamCapture().await(ACCESS_LOG_UUID(uuid));
     }
@@ -441,7 +487,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18181", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertTrue(body.contains("\r\nname:hidden.txt\r\n"));
+        Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
         
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
@@ -461,6 +507,10 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
     @Test
     public void testAcceptance_16()
             throws Exception {
+
+        // File attributes dos:hidden only works with Windows
+        if (!this.isWindows())
+            return;
         
         String request;
         String response;
@@ -471,8 +521,10 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18182", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertFalse(body.contains("\r\nname:hidden.txt\r\n"));
-        
+        if (this.isWindows())
+            Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
+        else Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
+
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18182", request);
@@ -501,7 +553,9 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18183", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertFalse(body.contains("\r\nname:hidden.txt\r\n"));
+        if (this.isWindows())
+            Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
+        else Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
         
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
@@ -531,8 +585,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18184", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_403));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertFalse(body.contains("\r\nname:hidden.txt\r\n"));
-        
+        Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
+
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18184", request);

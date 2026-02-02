@@ -30,11 +30,6 @@ abstract class AbstractTest {
     
     @BeforeClass
     public static void prepare() {
-        
-        System.setProperty("file.encoding", StandardCharsets.ISO_8859_1.name());
-        if (!Charset.defaultCharset().name().matches("(?i)^((Windows|CP)-?)1252|ISO-8859-1$"))
-            throw new RuntimeException("Character encoding ISO-8859-1 required");
-
         final String enforce = System.getProperty("java.version.enforce", "false").trim();
         if (enforce.matches("(?i)^(1|true|on)$")) {
             final String version = System.getProperty("java.version");

@@ -180,6 +180,10 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
     @Test
     public void testAcceptance_05()
             throws Exception {
+
+        // Hidden files only work in Windows.
+        if (!this.isWindows())
+            return;
         
         for (int loop = 1; loop <= 3; loop++) {
             final String request = "GET /empty/" + loop + "/ HTTP/1.0\r\n"

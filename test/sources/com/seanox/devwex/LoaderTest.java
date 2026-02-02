@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -144,11 +142,11 @@ public class LoaderTest {
         final byte[] bytes = StreamUtils.read(
                 Loader.class.getResourceAsStream("Loader.class"));
         final File zip = LoaderTest.createZip(
-                Collections.singletonMap("com/seanox/devwex/PerformanceTest.class", bytes));
+                Collections.singletonMap("com/seanox/devwex/WorkerBenchmark.class", bytes));
         final Loader loader = new Loader(Collections.singletonList(zip));
-        final Class<?> source = loader.loadClass("com.seanox.devwex.PerformanceTest", false);
+        final Class<?> source = loader.loadClass("com.seanox.devwex.WorkerBenchmark", false);
         Assert.assertNotNull(source);
-        Assert.assertEquals("com.seanox.devwex.PerformanceTest", source.getName());
+        Assert.assertEquals("com.seanox.devwex.WorkerBenchmark", source.getName());
     }
 
     @Test(expected = ClassNotFoundException.class)

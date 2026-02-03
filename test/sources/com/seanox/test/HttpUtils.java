@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -344,7 +345,7 @@ public class HttpUtils {
         try (final Socket socket = HttpUtils.createSocket(address, keystore, timeout)) {
             if (request != null) {
                 final OutputStream output = socket.getOutputStream();
-                output.write(request.getBytes());
+                output.write(request.getBytes(StandardCharsets.ISO_8859_1));
                 output.flush();
                 if (data != null)
                     StreamUtils.forward(data, output);

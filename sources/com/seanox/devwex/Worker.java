@@ -16,6 +16,8 @@
  */
 package com.seanox.devwex;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,9 +47,6 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLSocket;
 
 /**
  * Worker, waits for incoming HTTP request, evaluates it, responds to it
@@ -1048,7 +1047,7 @@ class Worker implements Runnable {
                         && offset > 0
                         && buffer.size() > 0) {
 
-                    String header = new String(buffer.toByteArray(), offset, buffer.size() -offset);
+                    String header = new String(buffer.toByteArray(), offset, buffer.size() -offset, "ISO-8859-1");
                     offset = header.indexOf(':');
                     String value = header.substring(offset < 0 ? header.length() : offset +1).trim();
                     header = header.substring(0, offset < 0 ? header.length() : offset).trim();
@@ -1097,7 +1096,7 @@ class Worker implements Runnable {
         }
         
         // header is set primarily for the interfaces
-        this.header = buffer.toString().trim();
+        this.header = buffer.toString("ISO-8859-1").trim();
 
         // Part 2 - The request header is parsed, validated and the environment
         //is prepared for the HTTP method.
@@ -1726,7 +1725,7 @@ class Worker implements Runnable {
                     if (this.control
                             && header != null) {
                         
-                        header = header.concat(new String(bytes, 0, length));
+                        header = header.concat(new String(bytes, 0, length, "ISO-8859-1"));
                         int cursor = header.indexOf("\r\n\r\n");
                         if (cursor >= 0) {
                             offset = length -(header.length() -cursor -4); 

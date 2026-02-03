@@ -16,20 +16,35 @@
  */
 package com.seanox.devwex;
 
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
 /** Abstract class to implement a test. */
 abstract class AbstractTest {
     
     @BeforeClass
     public static void prepare() {
+
+        // Force UTF-8 as the default character set / encoding prior to Java 18,
+        // as this will be the standard later on.
+        System.setProperty("file.encoding", StandardCharsets.UTF_8.name());
+        try {
+            final Field field = Charset.class.getDeclaredField("defaultCharset");
+            field.setAccessible(true);
+            field.set(null, null);
+        } catch (Exception exception) {
+        }
+        final String defaultCharsetName = Charset.defaultCharset().name();
+        Assert.assertEquals(defaultCharsetName, StandardCharsets.UTF_8.name());
+
         final String enforce = System.getProperty("java.version.enforce", "false").trim();
         if (enforce.matches("(?i)^(1|true|on)$")) {
             final String version = System.getProperty("java.version");
@@ -41,7 +56,7 @@ abstract class AbstractTest {
     @Rule
     public TestRule watcher = new TestWatcher() {
         protected void starting(final Description description) {
-            System.out.printf("Starting %s:%s%n", description.getClassName(), description.getMethodName());
+            System.out.printf("Starting %s::%s%n", description.getClassName(), description.getMethodName());
         }
     };
 }

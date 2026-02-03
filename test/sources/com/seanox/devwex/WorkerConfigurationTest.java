@@ -115,11 +115,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
      * @throws Exception
      */      
     @Test
-    public void testAcceptance_04_1()
+    public void testAcceptance_04()
             throws Exception {
-
-        if (!this.isWindows())
-            return;
 
         final String request = "GET / HTTP/1.0\r\n"
                 + "Host: vHq\r\n"
@@ -136,39 +133,6 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
     }
 
-    /**
-     * Test case for acceptance.
-     * Configuration: {@code [SERVER/VIRTUAL:INI] docroot = ?}
-     * The DooRoot is the current working directory.
-     * @throws Exception
-     */
-    @Test
-    public void testAcceptance_04_2()
-            throws Exception {
-
-        if (this.isWindows())
-            return;
-
-        // The directory ? exists under Linux/Unix, whereas under Windows the
-        // path is ignored and addresses the parent of ?. Therefore, ? must be
-        // created in Linux/Unix for the test.
-        Files.createDirectories(
-                Paths.get("").toAbsolutePath().resolve("?"));
-
-        final String request = "GET / HTTP/1.0\r\n"
-                + "Host: vHq\r\n"
-                + "\r\n";
-        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
-
-        final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
-        final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertNull(new File(AbstractStage.getRootStage(), "?").listFiles());
-
-        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
-        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));
-    }
-    
     /** 
      * Test case for acceptance.
      * Configuration: {@code [SERVER/VIRTUAL:INI] DEFAULT = index_1.html, index_2.html}

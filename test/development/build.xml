@@ -393,7 +393,6 @@
       <jacoco:coverage destfile="${workspace.reports}/jacoco.exec">
         <junit dir="${workspace}" fork="true"
             printsummary="true" haltonfailure="true" showoutput="true">
-          <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
           <jvmarg value="-Djava.version.enforce=${java.version.enforce}"/>
           <classpath>
             <pathelement location="${workspace.libraries}/${workspace.devwex.debug.jar}"/>
@@ -454,7 +453,6 @@
   <target name="benchmark" depends="compile">
     <junit dir="${workspace}" fork="true"
         printsummary="true" haltonfailure="true" showoutput="true">
-      <jvmarg value="-Dfile.encoding=ISO-8859-1"/>
       <classpath>
         <pathelement location="${parent.program.classes}"/>
         <pathelement location="${workspace.libraries}/junit-4.13.2.jar"/>

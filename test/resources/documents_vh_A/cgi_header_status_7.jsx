@@ -1,4 +1,4 @@
-var System = Java.type("java.lang.System");
+var System = java.lang.System;
 
 System.out.print("HTTP/STATUS AAA\r\n\r\n");
 System.out.print("Berlin, Berlin ...\r\n");

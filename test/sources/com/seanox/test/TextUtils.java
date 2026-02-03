@@ -16,14 +16,16 @@
  */
 package com.seanox.test;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-/**
- * Utilities for text and strings.
- *
- * @author  Seanox Software Solutions
- * @version 1.2.1 20220828
- */
+/** Utilities for text and strings. */
 public class TextUtils {
     
     private TextUtils() {
@@ -136,5 +138,44 @@ public class TextUtils {
             } else cache[count++] = (byte)code;
         }
         return new String(Arrays.copyOfRange(cache, 0, count));          
+    }
+
+    /**
+     * Normalize a {@link String} for encoding into the specified {@link
+     *     Charset}.
+     *
+     * This method encodes the provided {@code string} using a {@link
+     *     java.nio.charset.CharsetEncoder} configured with {@link
+     *     java.nio.charset.CodingErrorAction#REPLACE} for both malformed input
+     * and unmappable characters. Characters that cannot be represented in the
+     * target {@code charset} are replaced with the encoder's replacement byte
+     * sequence (by default the ASCII question mark {@code '?'} for single?byte
+     * charsets such as ISO?8859?1). The resulting bytes are then used to
+     * construct and return a new {@link String} using the same {@code charset}.
+     *
+     * The method simulates the encoding behavior before UTF?8 was introduced as
+     * the default character set in Java.
+     *
+     * @param string the input string to normalize; must not be {@code null}
+     * @param charset the target charset used for encoding and for
+     *     reconstructing the returned string; must not be {@code null}
+     * @return a {@link String} that represents the byte sequence produced by
+     *     encoding {@code string} with the given {@code charset} and
+     *     replacement policy; non?representable characters have been replaced
+     *     according to the encoder's replacement byte sequence
+     * @throws CharacterCodingException if an encoding error occurs during the
+     *     conversion using {@link java.nio.charset.CodingErrorAction#REPLACE},
+     *     but declared for callers that wish to handle encoding failures
+     *     explicitly
+     */
+     public static String normalize(final String string, final Charset charset)
+            throws CharacterCodingException {
+        final CharsetEncoder encoder = charset.newEncoder()
+                .onUnmappableCharacter(CodingErrorAction.REPLACE)
+                .onMalformedInput(CodingErrorAction.REPLACE);
+        final ByteBuffer buffer = encoder.encode(CharBuffer.wrap(string));
+        final byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        return new String(bytes, charset);
     }
 }

@@ -23,12 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 
-/**
- * Utilities for streams.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220827
- */
+/** Utilities for streams. */
 public class StreamUtils {
     
     private StreamUtils() {

@@ -65,10 +65,6 @@ import com.seanox.test.Executor.Worker.Filter;
  *         ...
  *     }
  * }
- * </pre>
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220906
  */
 public class Executor {
 

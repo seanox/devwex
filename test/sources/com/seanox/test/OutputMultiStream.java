@@ -29,9 +29,6 @@ import java.util.regex.Matcher;
  * this output stream are multiplied to all subscribed output streams.
  * Subscribers can be flexibly added and removed at runtime. In addition, data
  * stream can also be captured partially.
- *
- * @author  Seanox Software Solutions
- * @version 1.2.0 20220910
  */
 public class OutputMultiStream extends OutputStream {
     

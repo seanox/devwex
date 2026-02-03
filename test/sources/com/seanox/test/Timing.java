@@ -18,12 +18,7 @@ package com.seanox.test;
 
 import org.junit.Assert;
 
-/** 
- * Simple time measurement and testing.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20251229
- */
+/** Simple time measurement and testing. */
 public class Timing {
 
     /** start time */

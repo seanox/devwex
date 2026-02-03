@@ -16,12 +16,7 @@
  */
 package com.seanox.test;
 
-/**
- * Pattern for regular expressions.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220911
- */
+/** Pattern for regular expressions. */
 public class Pattern {
     
     /**

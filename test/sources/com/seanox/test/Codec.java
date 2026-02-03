@@ -18,12 +18,7 @@ package com.seanox.test;
 
 import java.util.Base64;
 
-/**
- * Codec utilities for encoding and decoding.
- *
- * @author  Seanox Software Solutions
- * @version 1.0.1 20220828
- */
+/** Codec utilities for encoding and decoding. */
 public class Codec {
     
     private Codec() {

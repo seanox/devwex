@@ -23,9 +23,6 @@ import com.sun.management.OperatingSystemMXBean;
 /**
  * Platform-specific information about the operating system where the Java
  * virtual machine is running.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220907
  */
 public class SystemInfo {
 

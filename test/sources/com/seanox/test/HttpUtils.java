@@ -36,12 +36,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-/**
- * Utilities for HTTP(S) connections.
- *
- * @author  Seanox Software Solutions
- * @version 1.1.0 20220907
- */
+/** Utilities for HTTP(S) connections. */
 public class HttpUtils {
     
     /** Constructor, creates a new HttpUtils object. */

@@ -1,5 +1,5 @@
-var System = Java.type("java.lang.System");
-var Thread = Java.type("java.lang.Thread");
+var System = java.lang.System;
+var Thread = java.lang.Thread;
 
 System.out.print("HTTP/1.0 200\r\n\r\n");
 System.out.flush();

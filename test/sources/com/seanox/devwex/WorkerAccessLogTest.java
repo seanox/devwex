@@ -18,6 +18,7 @@ package com.seanox.devwex;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 import com.seanox.test.Pattern;
+import com.seanox.test.TextUtils;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
 public class WorkerAccessLogTest extends AbstractStageRequestTest {
@@ -126,8 +128,8 @@ public class WorkerAccessLogTest extends AbstractStageRequestTest {
     @Test
     public void testAcceptance_5()
             throws Exception {
-        
-        final String request = "GET /nix_xxx_zzz\ud801\udc00 HTTP/1.0\r\n";
+
+        final String request = TextUtils.normalize("GET /nix_xxx_zzz\ud801\udc00 HTTP/1.0\r\n", StandardCharsets.ISO_8859_1);
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request + "\r\n");
         
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));

@@ -6,7 +6,9 @@ NT: Celebrating 25 years of Devwex!
     Corrections and minor requests will continue to be addressed.
 BF: Review: Optimization and corrections
     And the binary becomes a bit smaller again :-)
+    TODO: 31354/31313/31151/31188
 BF: Windows: Correction in the determination of platform architecture
+BF: Service: Omission of the restriction imposed by ISO-8859-1
 CR: HTTP(S) CGI: Optimization and corrections
     - Optimization in handling blocking CGI processes
     - Optimization in enforcing the end of the process

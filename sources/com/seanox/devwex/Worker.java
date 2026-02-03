@@ -1597,6 +1597,13 @@ class Worker implements Runnable {
         
         return (String[])list.toArray(new String[0]);
     }
+
+    private static int streamAvailable(InputStream input) {
+        try {return input.available();
+        } catch (IOException exception) {
+            return 0;
+        }
+    }
     
     private void doGateway()
             throws Exception {
@@ -1712,7 +1719,7 @@ class Worker implements Runnable {
                     break;
                 }
                 
-                if (input.available() > 0) {
+                if (Worker.streamAvailable(input) > 0) {
                 
                     // data is read from the StdIO
                     length = input.read(bytes);
@@ -1803,7 +1810,7 @@ class Worker implements Runnable {
 
                 // data stream is verified for present data
                 // and the process is verified for its end
-                if (input.available() <= 0
+                if (Worker.streamAvailable(input) <= 0
                         && !this.process.isAlive())
                     break;
                 
@@ -1819,7 +1826,7 @@ class Worker implements Runnable {
 
                 String message = "";
                 InputStream error = this.process.getErrorStream();
-                while (error.available() > 0) {
+                while (Worker.streamAvailable(error) > 0) {
                     int length = error.read(bytes);
                     message = message.concat(new String(bytes, 0, length));
                 }

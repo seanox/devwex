@@ -194,7 +194,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
         
         Thread.sleep(AbstractStageRequestTest.SLEEP);
         final String outputLog = AbstractStage.getOutputStreamCapture().toString().trim();
-        Assert.assertTrue(outputLog.matches("(?si)^.*\\Q\"xxx.xxx\": CreateProcess error=2,\\E.*$"));
+        Assert.assertTrue(outputLog.matches("(?si)^.*\\Q\"xxx.xxx\": Exec failed, error: 2\\E.*$"));
     } 
     
     /** 
@@ -216,7 +216,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
         
         request = "GET \\cgi_environment.jsx?parameter=SERVER_PORT,SERVER_PROTOCOL,"
                + "GATEWAY_INTERFACE,CONTENT_LENGTH,CONTENT_TYPE,QUERY_STRING,REQUEST_METHOD,"
-               + "REMOTE_ADDR&a=123+456\u00A9\u00FF%00ff\\/#123 456 HTTP/1.0\r\n"
+               + "REMOTE_ADDR&a=123+456\\u00A9\\u00FF%00ff\\/#123 456 HTTP/1.0\r\n"
                + "Host: vHa\r\n"
                + "Content-Length: 10\r\n"
                + "Content-Type: xxx/test\r\n"
@@ -237,7 +237,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
         Assert.assertTrue(body.matches("(?si)^.*\r\n\\QGATEWAY_INTERFACE=CGI/1.1\\E\r\n.*$"));
         Assert.assertTrue(body.matches("(?si)^.*\r\n\\QCONTENT_LENGTH=10\\E\r\n.*$"));
         Assert.assertTrue(body.matches("(?si)^.*\r\n\\QCONTENT_TYPE=xxx/test\\E\r\n.*$"));
-        Assert.assertTrue(body.matches("(?si)^.*\r\n\\QQUERY_STRING=parameter=SERVER_PORT,SERVER_PROTOCOL,GATEWAY_INTERFACE,CONTENT_LENGTH,CONTENT_TYPE,QUERY_STRING,REQUEST_METHOD,REMOTE_ADDR&a=123+456\u00A9\u00FF%00ff\\/#123\\E\r\n.*$"));
+        Assert.assertTrue(body.matches("(?si)^.*\r\n\\QQUERY_STRING=parameter=SERVER_PORT,SERVER_PROTOCOL,GATEWAY_INTERFACE,CONTENT_LENGTH,CONTENT_TYPE,QUERY_STRING,REQUEST_METHOD,REMOTE_ADDR&a=123+456\\u00A9\\u00FF%00ff\\/#123\\E\r\n.*$"));
         Assert.assertTrue(body.matches("(?si)^.*\r\n\\QREQUEST_METHOD=GET\\E\r\n.*$"));
         Assert.assertTrue(body.matches("(?si)^.*\r\n\\QREMOTE_ADDR=127.0.0.1\\E\r\n.*$"));
         

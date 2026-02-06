@@ -276,7 +276,8 @@ class Worker implements Runnable {
      * @param  string String to be decoded
      * @return the decoded string
      */
-    private static String textDecode(String string) {
+    private static String textDecode(String string, String charset)
+            throws Exception {
         
         if (string == null)
             string = "";
@@ -375,7 +376,7 @@ class Worker implements Runnable {
             }
         }
         
-        return new String(bytes, 0, count);
+        return new String(bytes, 0, count, charset);
     }
     
     /**
@@ -922,7 +923,7 @@ class Worker implements Runnable {
                     // variable to be verified is determined
                     // and their value to be verified is determined
                     String valueA = this.environment.get(words.nextToken()).toLowerCase();
-                    String valueB = Worker.textDecode(valueA);
+                    String valueB = Worker.textDecode(valueA, "ISO-8859-1");
                     
                     // comparative value is determined
                     // and the comparison is done
@@ -1142,7 +1143,7 @@ class Worker implements Runnable {
 
         // path is decoded
         // and normalized /abc/./def/../ghi/ -> /abc/ghi
-        String destination = Worker.textDecode(uri);
+        String destination = Worker.textDecode(uri, "ISO-8859-1");
         String path = Worker.fileNormalize(destination);
         if (destination.endsWith("/")
                 && !path.endsWith("/"))

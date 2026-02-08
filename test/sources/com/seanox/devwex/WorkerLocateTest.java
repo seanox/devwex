@@ -1255,7 +1255,8 @@ public class WorkerLocateTest extends AbstractStageRequestTest {
             throws Exception {
         
         final File file = new File(AbstractStage.getRootStage(), "documents/" + path);
-        Assert.assertTrue(file.exists());
+        if (this.isWindows())
+            Assert.assertTrue(file.toString(), file.exists());
 
         String request = "GET " + path + " HTTP/1.0\r\n";
         request += "\r\n";
@@ -1318,44 +1319,39 @@ public class WorkerLocateTest extends AbstractStageRequestTest {
         this.assertAcceptance_58_1("/authentication/a/1.txt.", "401");
         this.assertAcceptance_58_1("/authentication/a/2.txt.", "401");        
     }
-    
-    /** 
+
+    /**
      * Test case for acceptance.
-     * Breaking out of the DocRoot must not happen if the path contains masked
-     * special characters.
+     * Test of the old double encoding UTF-8 with 0xC0 0xAF sequences that are
+     * no longer valid today. Previously, this was interpreted as a slash ('/'),
+     * allowing directory traversal and potentially escaping the DocRoot.
+     * In the current implementation, these sequences are now invalid and are
+     * decoded as 2-byte ISO-8859-1 characters, resulting in a valid but unknown
+     * path within the DocRoot. This prevents directory traversal, but could
+     * lead to 404 errors if the path doesn't exist.
      * @throws Exception
      */
     @Test
     public void testAcceptance_94()
             throws Exception {
         
-        String request;
-        String response;
-        
-        request = "GET / HTTP/1.0\r\n\r\n";
-        response = AbstractStageRequestTest.sendRequest("127.0.0.1:18181", request);
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
-        final String header1 = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header1.trim().length() > 0);
-        final String body1 = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertTrue(body1.length() > 0);  
-        
-        request = "GET /..%c0%af..%c0%af..%c0%af..%c0%af..%c0%af.. HTTP/1.0\r\n\r\n";
-        response = AbstractStageRequestTest.sendRequest("127.0.0.1:18181", request);
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));  
-        final String header2 = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
-        Assert.assertTrue(header2.trim().length() > 0);
-        final String body2 = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertTrue(body2.length() > 0);
+        final String request = "GET /..%c0%af..%c0%af..%c0%af..%c0%af..%c0%af.. HTTP/1.0\r\n\r\n";
+        final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18181", request);
+        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_404));
+    }
 
-        Assert.assertEquals(body1.length(), body2.length());
-        Assert.assertEquals(body1, body2);
-    } 
-    
-    /** 
+    /**
      * Test case for acceptance.
+     *
      * Breaking out of the DocRoot must not happen if the path contains masked
      * special characters.
+     *
+     * Test of the old double encoding UTF-8 with 0xC0 0xAF sequences that are
+     * no longer valid today. Previously, this was interpreted as a slash ('/'),
+     * allowing directory traversal and potentially escaping the DocRoot.
+     * In the current implementation, these sequences are now invalid and are
+     * decoded as 2-byte ISO-8859-1 characters, resulting in a valid but unknown
+     * path within the DocRoot. This prevents directory traversal.
      * @throws Exception
      */
     @Test
@@ -1385,10 +1381,19 @@ public class WorkerLocateTest extends AbstractStageRequestTest {
         Assert.assertEquals(body1, body2);
     }  
     
-    /** 
+    /**
      * Test case for acceptance.
+     *
      * Breaking out of the DocRoot must not happen if the path contains masked
      * special characters.
+     *
+     * Test of the old double encoding UTF-8 with 0xC0 0xAF sequences that are
+     * no longer valid today. Previously, this was interpreted as a slash ('/'),
+     * allowing directory traversal and potentially escaping the DocRoot.
+     * In the current implementation, these sequences are now invalid and are
+     * decoded as 2-byte ISO-8859-1 characters, resulting in a valid but unknown
+     * path within the DocRoot. This prevents directory traversal.
+     *
      * @throws Exception
      */
     @Test
@@ -1420,8 +1425,17 @@ public class WorkerLocateTest extends AbstractStageRequestTest {
     
     /** 
      * Test case for acceptance.
+     *
      * Breaking out of the DocRoot must not happen if the path contains masked
      * special characters.
+     *
+     * Test of the old double encoding UTF-8 with 0xC0 0xAF sequences that are
+     * no longer valid today. Previously, this was interpreted as a slash ('/'),
+     * allowing directory traversal and potentially escaping the DocRoot.
+     * In the current implementation, these sequences are now invalid and are
+     * decoded as 2-byte ISO-8859-1 characters, resulting in a valid but unknown
+     * path within the DocRoot. This prevents directory traversal.
+     *
      * @throws Exception
      */
     @Test

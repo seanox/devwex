@@ -16,8 +16,6 @@
  */
 package com.seanox.devwex;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLSocket;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,6 +45,9 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
 
 /**
  * Worker, waits for incoming HTTP request, evaluates it, responds to it
@@ -154,8 +155,8 @@ class Worker implements Runnable {
 
     /**
      * Constructor, establishes the worker with socket and configuration.
-     * @param context    Server context
-     * @param socket     Socket with the accepted request
+     * @param context  Server context
+     * @param socket   Socket with the accepted request
      * @param settings Server configuration
      */
     Worker(String context, ServerSocket socket, Settings settings) {
@@ -276,8 +277,7 @@ class Worker implements Runnable {
      * @param  string String to be decoded
      * @return the decoded string
      */
-    private static String textDecode(String string, String charset)
-            throws Exception {
+    private static String textDecode(String string) {
         
         if (string == null)
             string = "";
@@ -286,15 +286,13 @@ class Worker implements Runnable {
         // Non-compliant sequences do cause an error, instead they remain as
         // unknown encoding
         
-        int length = string.length();
+        byte[] bytes = new byte[string.length() *2];
         
-        byte[] bytes = new byte[length *2];
-        
-        int count = 0;
-        for (int loop = 0; loop < length; loop++) {
+        int cursor = 0;
+        for (int index = 0; index < string.length(); index++) {
             
             // ASCII code is determined
-            int code = string.charAt(loop);
+            int code = string.charAt(index);
 
             // Plus sign is converted to space.
             if (code == 43)
@@ -302,81 +300,101 @@ class Worker implements Runnable {
 
             // Hexadecimal sequences are converted to ASCII character
             if (code == 37) {
-                loop += 2;
-                try {code = Integer.parseInt(string.substring(loop -1, loop +1), 16);
+                index += 2;
+                try {code = Integer.parseInt(string.substring(index -1, index +1), 16);
                 } catch (Throwable throwable) {
-                    loop -= 2;
+                    index -= 2;
                 }
             }
 
-            bytes[count++] = (byte)code;
+            bytes[cursor++] = (byte)code;
         }
         
         // Part 2: UTF-8 decoding
         // Non-compliant sequences do cause an error, instead they remain as
         // unknown encoding
-        
-        bytes  = Arrays.copyOfRange(bytes, 0, count);
-        length = bytes.length;
-        
-        int cursor = 0;
-        int digit  = 0;
-        
-        boolean control = false; 
-        
-        for (int loop = count = 0; loop < length; loop++) {
-            
-            // ASCII code is determined
-            int code = bytes[loop] & 0xFF;
 
-            if (code >= 0xC0 && code <= 0xC3)
-                control = true;
+        bytes = Arrays.copyOfRange(bytes, 0, cursor);
 
-            // decoding of the bytes as UTF-8.
-            // pattern 10xxxxxx is extended by the 6Bits
-            if ((code & 0xC0) == 0x80) {
+        StringBuilder builder = new StringBuilder(bytes.length *2);
+        for (int index = 0; index < bytes.length;) {
 
-                digit = (digit << 0x06) | (code & 0x3F);
+            int code = bytes[index] & 0xFF;
 
-                if (--cursor == 0) {
-                    bytes[count++] = (byte)digit;
-                    control = false;
-                }
-
-            } else {
-
-                digit  = 0;
-                cursor = 0;
-
-                // 0xxxxxxx (7Bit/0Byte) are used directly
-                if (((code & 0x80) == 0x00) || !control) {
-                    bytes[count++] = (byte)code;
-                    control = false;
-                }
-                
-                // 110xxxxx (5Bit/1Byte), 1110xxxx (4Bit/2Byte),
-                // 11110xxx (3Bit/3Byte), 111110xx (2Bit/4Byte),
-                // 1111110x (1Bit/5Byte)                
-                if ((code & 0xE0) == 0xC0) {
-                    cursor = 1;
-                    digit  = code & 0x1F;
-                } else if ((code & 0xF0) == 0xE0) {
-                    cursor = 2;
-                    digit  = code & 0x0F;
-                } else if ((code & 0xF8) == 0xF0) {
-                    cursor = 3;
-                    digit  = code & 0x07;
-                } else if ((code & 0xFC) == 0xF8) {
-                    cursor = 4;
-                    digit  = code & 0x03;
-                } else if ((code & 0xFE) == 0xFC) {
-                    cursor = 5;
-                    digit  = code & 0x01;
-                }
+            // 0xxxxxxx -> ASCII accept directly
+            if (code <= 0x7F) {
+                builder.append((char)code);
+                index++;
+                continue;
             }
+
+            int continuation;
+            int value;
+
+            if ((code & 0xE0) == 0xC0) {
+                // 110xxxxx -> 2-byte sequence with 1 continuation bytes
+                continuation = 2;
+                value = code & 0x1F;
+            } else if ((code & 0xF0) == 0xE0) {
+                // 1110xxxx -> 3-byte sequence with continuation bytes
+                continuation = 3;
+                value = code & 0x0F;
+            } else if ((code & 0xF8) == 0xF0) {
+                // 11110xxx -> 4-byte sequence with 3 continuation bytes
+                continuation = 4;
+                value = code & 0x07;
+            } else {
+                // If sequence is invalid, fallback to ISO-8859-1
+                builder.append((char)code);
+                index++;
+                continue;
+            }
+
+            // Check whether there are enough bytes available for continuation
+            // otherwise fallback to ISO-8859-1
+            if (index + continuation > bytes.length) {
+                builder.append((char)code);
+                index++;
+                continue;
+            }
+
+            // Check the continuation bytes
+            boolean valid = true;
+            for (int offset = 1; offset < continuation; offset++) {
+                int data = bytes[index + offset] & 0xFF;
+                // 10xxxxxx is expected
+                if ((data & 0xC0) != 0x80) {
+                    valid = false;
+                    break;
+                }
+                value = (value << 6) | (data & 0x3F);
+            }
+
+            // RFC compliant validation
+            // otherwise fallback to ISO-8859-1
+            if (!valid
+                    || value > 0x10FFFF
+                    || (value >= 0xD800 && value <= 0xDFFF)
+                    || (continuation == 2 && value < 0x80)
+                    || (continuation == 3 && value < 0x800)
+                    || (continuation == 4 && value < 0x10000)) {
+                builder.append((char)code);
+                index++;
+                continue;
+            }
+
+            // Surrogate pair for supplementary characters
+            // otherwise BMP (Basic Multilingual Plane)
+            if (value > 0xFFFF) {
+                value -= 0x10000;
+                builder.append((char)((value >> 10) + 0xD800));
+                builder.append((char)((value & 0x3FF) + 0xDC00));
+            } else builder.append((char)value);
+
+            index += continuation;
         }
-        
-        return new String(bytes, 0, count, charset);
+
+        return builder.toString();
     }
     
     /**
@@ -923,7 +941,7 @@ class Worker implements Runnable {
                     // variable to be verified is determined
                     // and their value to be verified is determined
                     String valueA = this.environment.get(words.nextToken()).toLowerCase();
-                    String valueB = Worker.textDecode(valueA, "ISO-8859-1");
+                    String valueB = Worker.textDecode(valueA);
                     
                     // comparative value is determined
                     // and the comparison is done
@@ -1143,7 +1161,7 @@ class Worker implements Runnable {
 
         // path is decoded
         // and normalized /abc/./def/../ghi/ -> /abc/ghi
-        String destination = Worker.textDecode(uri, "ISO-8859-1");
+        String destination = Worker.textDecode(uri);
         String path = Worker.fileNormalize(destination);
         if (destination.endsWith("/")
                 && !path.endsWith("/"))

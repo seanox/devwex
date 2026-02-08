@@ -146,10 +146,11 @@ public class WorkerHeadTest extends AbstractStageRequestTest {
             throws Exception {
         
         String request;
-        String response;        
-        
+        String response;
+
+        final File file = new File("./stage/documents_vh_A/method_file.txt").getCanonicalFile();
         request = "Get /documents/commons/lastmodified.jsx HTTP/1.0\r\n"
-                + "File: ./stage/documents_vh_A/method_file.txt\r\n"
+                + "File: " + file + "\r\n"
                 + "Host: vHa\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
@@ -202,10 +203,11 @@ public class WorkerHeadTest extends AbstractStageRequestTest {
             throws Exception {
 
         String request;
-        String response;        
-        
+        String response;
+
+        final File file = new File("./stage/documents_vh_A/method_file.txt").getCanonicalFile();
         request = "Get /documents/commons/lastmodified.jsx HTTP/1.0\r\n"
-                + "File: ./stage/documents_vh_A/method_file.txt\r\n"
+                + "File: " + file + "\r\n"
                 + "Host: vHa\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);

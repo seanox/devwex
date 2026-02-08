@@ -22,6 +22,8 @@ import org.junit.Test;
 import com.seanox.test.MockUtils;
 import com.seanox.test.TextUtils;
 
+import java.nio.charset.StandardCharsets;
+
 /** Test cases for {@link com.seanox.devwex.Worker}. */
 public class WorkerTextTest extends AbstractTest {
     
@@ -59,7 +61,7 @@ public class WorkerTextTest extends AbstractTest {
     
     /** 
      * Test case for acceptance.
-     * Test method {@link Worker#textHash(String, String, String)}
+     * Test method {@link Worker#textHash(String)}
      * @throws Exception
      */    
     @Test
@@ -75,13 +77,13 @@ public class WorkerTextTest extends AbstractTest {
     
     /** 
      * Test case for acceptance.
-     * Test method {@link Worker#textDecode(String, String, String)}
+     * Test method {@link Worker#textDecode(String)}
      * @throws Exception
      */    
     @Test
     public void testAcceptance_4()
             throws Exception {
-        final String content = MockUtils.readTestContent();
+        final String content = MockUtils.readTestContent(StandardCharsets.ISO_8859_1);
         final String[] lines = content.split("\\R"); 
         for (int loop = 0; loop < lines.length; loop += 2) {
             Assert.assertEquals("#" + (loop +1) + ": " + lines[loop], lines[loop +1],

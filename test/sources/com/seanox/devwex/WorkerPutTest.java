@@ -123,10 +123,16 @@ public class WorkerPutTest extends AbstractStageRequestTest {
                 + "Host: vHa\r\n"
                 + "\r\n";
         final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18185", request);
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_500));
-        
-        final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
-        Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_500));
+
+        if (this.isWindows()) {
+            Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_500));
+            final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+            Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_500));
+        } else {
+            Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_201));
+            final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
+            Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_201));
+        }
     }
     
     /** 

@@ -37,10 +37,10 @@ public class Scripting {
     public static void main(final String... options) {
         try {
             final Path pathTranslated = Paths.get(System.getenv("PATH_TRANSLATED"));
-            System.setProperty("user.dir", pathTranslated.getParent().toRealPath().toString());
             final Context context = Context.enter();
             try {
                 final Scriptable scope = context.initStandardObjects();
+                scope.put("__base_dir__", scope, pathTranslated.getParent().toRealPath().toString());
                 final FileReader scriptReader = new FileReader(pathTranslated.toFile());
                 context.evaluateReader(scope, scriptReader, pathTranslated.toString(), 1, null);
             } finally {

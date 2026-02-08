@@ -6,12 +6,14 @@ NT: Celebrating 25 years of Devwex!
     Corrections and minor requests will continue to be addressed.
 BF: Review: Optimization and corrections
     And the binary becomes a bit smaller again :-)
-    TODO: 31354/31313/31151/31188
+    TODO: 31354/31313/31151/31188/31217
 BF: Windows: Correction in the determination of platform architecture
-BF: Service: Omission of the restriction imposed by ISO-8859-1
+BF: Review: Removed ISO-8859-1 encoding dependency
 CR: HTTP(S) CGI: Optimization and corrections
+    - Optimization when accessing data streams
     - Optimization in handling blocking CGI processes
     - Optimization in enforcing the end of the process
+    - Optimization when reading error information
     - Optimization in the analysis of the exit code now consistently leads to
       status 502 in the access log and, if no header has been sent yet, also as
       HTTP status.
@@ -28,7 +30,7 @@ CR: Review: Initialize refactored in Settings
 CR: Review: Facelift status / index / templates
     - Use of system colors and thus support for light and dark mode
     - Improved display for HiDPI
-CR: Windows: Omission from the 32-bit service
+CR: Windows: Removal of the 32-bit service
     - The required 32-bit version of prunsrv.exe can be downloaded manually
       here, renamed, and used to replace service.exe:
       https://downloads.apache.org/commons/daemon/binaries/windows/
@@ -44,7 +46,7 @@ NT: Competition: 25 years Devwex -- raffle one of 10x 3.5" disks.
     The outcome of the raffle is final and not subject to legal appeal. 
 BF: Review: Optimization and corrections
 BF: HTTP(S): Update / standardization of HTTP status messages
-BF: HTTP(S): Omission of status 424, which was simply incorrect
+BF: HTTP(S): Removal of status 424, which was simply incorrect
     Status 400 and 500 are now used correctly.
 CR: Test: Integration of JaCoCo (Java Code Coverage)
 CR: Service: Optimization of logging output
@@ -172,7 +174,7 @@ CR: HTTP(S) CGI: Change of the option [P] to [D]
 CR: HTTP(S) Directory Index: Optimization / reduction of code
     Generation of the file list in the Generator instead of the Worker.
 CR: HTTP(S) Directory Index: Change from placeholder 'files' to 'file'
-CR: HTTP(S) Directory Index: Omission of the formatting of the file size
+CR: HTTP(S) Directory Index: Removal of the formatting of the file size
     Approach: The directory index should only provide locale independent data.
     The formatting can later be done with CSS.      
 CR: HTTP(S) Directory Index: Realignment of the column 'type' 
@@ -193,8 +195,8 @@ BF: HTTP(S) Request: Optimization/correction for invalid requests/connections wi
 CR: Generator: Optimization / Review
     - Optimization: Handling of segments/scopes/fragements
       Improvement of dedicated and partial use
-    - Omission of namespaces, replacement by the dedicated/partial use of segments
-    - Change of syntax, omission of character ':' for segments   
+    - Removal of namespaces, replacement by the dedicated/partial use of segments
+    - Change of syntax, removal of character ':' for segments
       old: #[foo:[[...]]], new: #[foo[[...]]]
     - Enhancement by a deep/recursive processing of Hashtable + Collections  
     - Change of the parser/renderer:

@@ -18,6 +18,7 @@ package com.seanox.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /** Utilities for mock data. */
@@ -90,24 +91,38 @@ public class MockUtils {
     /**
      * Reads a text file based on the package and the file name of the calling
      * class and method. The filename of the text file is composed like this:
-     * {@code <package>/<class> ... <method>.txt} 
+     * {@code <package>/<class> ... <method>.txt}
      * @return the content of the resource file as string
      * @throws Exception
      *     If the resource file cannot be found in the ClassPath.
      */
     public static String readTestContent()
             throws Exception {
-        final StackTraceElement stackTraceElement = Arrays.stream(new Throwable().getStackTrace())
-                .filter(fetch -> !MockUtils.class.getName().equals(fetch.getClassName()))
-                .findFirst().get();
-        final String source = String.format("%s", stackTraceElement.getMethodName());
-        return MockUtils.readTestContent(source);
+        return MockUtils.readTestContent(Charset.defaultCharset());
     }
 
     /**
      * Reads a text file based on the package and the file name of the calling
      * class and method. The filename of the text file is composed like this:
-     * {@code <package>/<class> ... <method>_<index>.txt} 
+     * {@code <package>/<class> ... <method>.txt}
+     * @param  charset
+     * @return the content of the resource file as string
+     * @throws Exception
+     *     If the resource file cannot be found in the ClassPath.
+     */
+    public static String readTestContent(final Charset charset)
+            throws Exception {
+        final StackTraceElement stackTraceElement = Arrays.stream(new Throwable().getStackTrace())
+                .filter(fetch -> !MockUtils.class.getName().equals(fetch.getClassName()))
+                .findFirst().get();
+        final String source = String.format("%s", stackTraceElement.getMethodName());
+        return MockUtils.readTestContent(source, charset);
+    }
+
+    /**
+     * Reads a text file based on the package and the file name of the calling
+     * class and method. The filename of the text file is composed like this:
+     * {@code <package>/<class> ... <method>_<index>.txt}
      * @param  index
      * @return the content of the resource file as string
      * @throws Exception
@@ -115,17 +130,32 @@ public class MockUtils {
      */
     public static String readTestContent(final int index)
             throws Exception {
+        return MockUtils.readTestContent(index, Charset.defaultCharset());
+    }
+
+    /**
+     * Reads a text file based on the package and the file name of the calling
+     * class and method. The filename of the text file is composed like this:
+     * {@code <package>/<class> ... <method>_<index>.txt}
+     * @param  index
+     * @param  charset
+     * @return the content of the resource file as string
+     * @throws Exception
+     *     If the resource file cannot be found in the ClassPath.
+     */
+    public static String readTestContent(final int index, final Charset charset)
+            throws Exception {
         final StackTraceElement stackTraceElement = Arrays.stream(new Throwable().getStackTrace())
                 .filter(fetch -> !MockUtils.class.getName().equals(fetch.getClassName()))
                 .findFirst().get();
         final String source = String.format("%s_%d", stackTraceElement.getMethodName(), index);
-        return MockUtils.readTestContent(source);
+        return MockUtils.readTestContent(source, charset);
     }
 
     /**
      * Reads a text file based on the package and the file name of the calling
      * class. The filename of the text file is composed like this:
-     * {@code <package>/<class> ... <source>.txt} 
+     * {@code <package>/<class> ... <source>.txt}
      * @param  source
      * @return the content of the resource file as string
      * @throws Exception
@@ -133,13 +163,28 @@ public class MockUtils {
      */
     public static String readTestContent(final String source)
             throws Exception {
+        return MockUtils.readTestContent(source, Charset.defaultCharset());
+    }
+
+    /**
+     * Reads a text file based on the package and the file name of the calling
+     * class. The filename of the text file is composed like this:
+     * {@code <package>/<class> ... <source>.txt}
+     * @param  source
+     * @param  charset
+     * @return the content of the resource file as string
+     * @throws Exception
+     *     If the resource file cannot be found in the ClassPath.
+     */
+    public static String readTestContent(final String source, final Charset charset)
+            throws Exception {
         final StackTraceElement stackTraceElement = Arrays.stream(new Throwable().getStackTrace())
                 .filter(fetch -> !MockUtils.class.getName().equals(fetch.getClassName()))
                 .findFirst().get();
         final String resourcePath = stackTraceElement.getClassName()
                 .replace('.', '/') + String.format("_%s.txt", source);
         final ClassLoader classLoader = Class.forName(stackTraceElement.getClassName()).getClassLoader();
-        return new String(StreamUtils.read(classLoader.getResourceAsStream(resourcePath)))
+        return new String(StreamUtils.read(classLoader.getResourceAsStream(resourcePath)), charset)
                 .replaceAll("(\r\n)|(\n\r)|[\r\n]", System.lineSeparator());
     }
 }

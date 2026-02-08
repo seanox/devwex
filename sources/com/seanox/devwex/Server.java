@@ -53,7 +53,7 @@ public class Server implements Runnable {
 
     /**
      * Constructor, establishes the server corresponding to the configuration.
-     * @param  context    Server name
+     * @param  context  Server name
      * @param  settings Configuration of the server
      * @throws Throwable
      *     In case of incorrect server configuration/setup.

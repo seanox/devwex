@@ -269,8 +269,8 @@ public class Service implements Runnable, UncaughtExceptionHandler {
     /** Constructor, creates the service. */
     private Service() {
         this.settings = new Settings(true);
-        this.servers    = new Vector();
-        this.modules    = new Hashtable();
+        this.servers  = new Vector();
+        this.modules  = new Hashtable();
     }
 
     /**

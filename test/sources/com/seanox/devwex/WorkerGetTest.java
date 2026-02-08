@@ -140,10 +140,11 @@ public class WorkerGetTest extends AbstractStageRequestTest {
             throws Exception {
         
         String request;
-        String response;  
-        
+        String response;
+
+        final File file = new File("./stage/documents_vh_A/method_file.txt").getCanonicalFile();
         request = "Get /documents/commons/lastmodified.jsx HTTP/1.0\r\n"
-                + "File: ./stage/documents_vh_A/method_file.txt\r\n"
+                + "File: " + file + "\r\n"
                 + "Host: vHa\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
@@ -196,20 +197,21 @@ public class WorkerGetTest extends AbstractStageRequestTest {
         
         String request;
         String response;  
-        
+
+        final File file = new File("./stage/documents_vh_A/method_file.txt").getCanonicalFile();
         request = "Get /documents/commons/lastmodified.jsx HTTP/1.0\r\n"
-                + "File: ./stage/documents_vh_A/method_file.txt\r\n"
+                + "File: " + file + "\r\n"
                 + "Host: vHa\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
-        String lastModified = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");        
+        String lastModified = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
 
         request = "Get /method_file.txt HTTP/1.0\r\n"
                 + "If-Modified-Since: " + lastModified + "; xxx; length=15\r\n"
                 + "Host: vHa\r\n"
                 + "\r\n";
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18180", request);
-        Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_304));
+        Assert.assertTrue(response, response.matches(Pattern.HTTP_RESPONSE_STATUS_304));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_LENGTH_DIFFUSE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE_DIFFUSE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));

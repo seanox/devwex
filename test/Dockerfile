@@ -5,14 +5,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/seanox/devwex.git
+ARG DEVWEX_HOME=/opt/devwex
+ARG DEVWEX_TEST=$DEVWEX_HOME/test
+
+RUN git clone https://github.com/seanox/devwex.git $DEVWEX_HOME
 
 # For local development/testing only
 # COPY . /opt/devwex/test
 # COPY CHANGES /opt/devwex
-
-ARG DEVWEX_HOME=/opt/devwex
-ARG DEVWEX_TEST=$DEVWEX_HOME/test
 
 # Compatibility for the primarily Windows-based test
 ENV SystemDrive=C:

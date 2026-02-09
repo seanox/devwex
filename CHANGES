@@ -5,8 +5,6 @@ NT: Celebrating 25 years of Devwex!
     Unit tests are run annually using the current Java LTS version.
     Corrections and minor requests will continue to be addressed.
 BF: Review: Optimization and corrections
-    And the binary becomes a bit smaller again :-)
-    TODO: 31354/31313/31151/31188/31217
 BF: Windows: Correction in the determination of platform architecture
 BF: Review: Removal of dependency on ISO-8859-1
     - Optimization and correction of partial UTF-8 decoding, which is now

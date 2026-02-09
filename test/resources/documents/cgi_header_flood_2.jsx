@@ -1,5 +1,5 @@
-var PrintWriter = Java.type("java.io.PrintWriter");
-var System = Java.type("java.lang.System");
+var PrintWriter = java.io.PrintWriter;
+var System = java.lang.System;
 
 var writer = new PrintWriter(System.out);
 var text = " ";

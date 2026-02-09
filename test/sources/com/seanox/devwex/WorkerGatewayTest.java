@@ -194,8 +194,11 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
         
         Thread.sleep(AbstractStageRequestTest.SLEEP);
         final String outputLog = AbstractStage.getOutputStreamCapture().toString().trim();
-        Assert.assertTrue(outputLog.matches("(?si)^.*\\Q\"xxx.xxx\": Exec failed, error: 2\\E.*$"));
-    } 
+        if (this.isWindows())
+            Assert.assertTrue(outputLog.matches("(?si)^.*\\Q\"xxx.xxx\": CreateProcess error=2\\E.*$"));
+        else
+            Assert.assertTrue(outputLog.matches("(?si)^.*\\Q\"xxx.xxx\": Exec failed, error: 2\\E.*$"));
+    }
     
     /** 
      * Test case for acceptance.
@@ -539,7 +542,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
      * @throws Exception
      */     
     @Test
-    public void testAcceptance_016()
+    public void testAcceptance_16()
             throws Exception {
         String content = "x";
         while (content.length() < 250)
@@ -564,7 +567,7 @@ public class WorkerGatewayTest extends AbstractStageRequestTest {
      * @throws Exception
      */     
     @Test
-    public void testAcceptance_017()
+    public void testAcceptance_17()
             throws Exception {
         String content = "x";
         while (content.length() < 250)

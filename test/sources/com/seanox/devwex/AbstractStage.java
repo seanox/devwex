@@ -293,6 +293,19 @@ abstract class AbstractStage {
                 return FileVisitResult.CONTINUE;
             }
         });
+
+        // Preparing the configuration file
+        // - ISO-8859-1 -> UTF-8, because the project uses ISO-8859-1 for the
+        //   source and the tests enforce UTF-8 (Java 18+ UFT-8 first)
+        // - Paths in Linux/Unix consistently expect a slash.
+        //   Only Windows is more tolerant. Therefore, this is corrected here
+        //   for Linux/Unix.
+        final Path path = Paths.get(PATH_STAGE_PROGRAM_CONFIGURATION);
+        final String configuration = new String(Files.readAllBytes(path), StandardCharsets.ISO_8859_1);
+        if (!System.getProperty("os.name")
+                .matches("(?i).*\\bwin(dows)?\\b.*"))
+            Files.write(path, configuration.replace("\\", "/").getBytes(StandardCharsets.UTF_8));
+        else Files.write(path, configuration.getBytes(StandardCharsets.UTF_8));
         
         final String content = new String(Files.readAllBytes(AbstractStage.getRootStageProgramConfiguration().toPath()));
         final Settings settings = Settings.parse(content);
@@ -364,16 +377,6 @@ abstract class AbstractStage {
                 this.setDaemon(true);
                 this.start();
             }};
-
-        // Paths in Linux/Unix consistently expect a slash. Only Windows is more
-        // tolerant. Therefore, this is corrected here for Linux/Unix.
-        if (!System.getProperty("os.name")
-                .matches("(?i).*\\bwin(dows)?\\b.*")) {
-            final Path path = Paths.get(PATH_STAGE_PROGRAM_CONFIGURATION);
-            final String configuration = new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
-                    .replace("\\", "/");
-            Files.write(path, configuration.getBytes(StandardCharsets.UTF_8));
-        }
 
         Service.main(new String[] {"start", AbstractStage.getRootStageProgramConfiguration().toString()});
         

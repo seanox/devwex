@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /** Test cases for {@link com.seanox.devwex.Section#set(String, String)}. */
-public class SectionTestSet extends AbstractTest {
+public class SectionSetTest extends AbstractTest {
     
     @Test
     public void testKeyInvalid_1() {

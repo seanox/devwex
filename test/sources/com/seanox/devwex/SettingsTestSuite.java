@@ -31,7 +31,9 @@ import org.junit.runners.Suite;
     SettingsGetTest.class,
     SettingsParseTest.class,
     SettingsSetTest.class,
-    SettingsToStringTest.class
+    SettingsToStringTest.class,
+    SettingsRemoveTest.class,
+    SettingsMergeTest.class
 })
 public class SettingsTestSuite extends AbstractTestSuite {
     

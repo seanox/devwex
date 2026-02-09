@@ -30,9 +30,12 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     SectionContainsTest.class,
     SectionParseTest.class,
-    SectionTestSet.class,
+    SectionSetTest.class,
     SectionGetTest.class,
-    SectionToStringTest.class
+    SectionToStringTest.class,
+    SectionRemoveTest.class,
+    SectionMergeTest.class
+    
 })
 public class SectionTestSuite extends AbstractTestSuite {
     

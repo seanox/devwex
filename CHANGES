@@ -11,6 +11,7 @@ BF: Windows: Correction in the determination of platform architecture
 BF: Review: Removal of dependency on ISO-8859-1
     - Optimization and correction of partial UTF-8 decoding, which is now
       partial ISO-8859-1 decoding.
+BF: Settings: Correction of the merge method
 CR: HTTP(S) CGI: Optimization and corrections
     - Optimization when accessing data streams
     - Optimization in handling blocking CGI processes

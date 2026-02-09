@@ -22,6 +22,7 @@ RUN ln -s $DEVWEX_TEST/ "$DEVWEX_TEST/?"
 WORKDIR $DEVWEX_HOME
 CMD ["ant", "-f", "/opt/devwex/test/development/build.xml", "test-lts"]
 
+# Usage:
 # docker build -t seanox:devwex-test . && docker run seanox:devwex-test
 # cls && ant compile -f development\build.xml && docker build -t seanox:devwex-test . && docker run seanox:devwex-test
 

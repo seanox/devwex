@@ -9,6 +9,8 @@ BF: Review: Optimization and corrections
     TODO: 31354/31313/31151/31188/31217
 BF: Windows: Correction in the determination of platform architecture
 BF: Review: Removal of dependency on ISO-8859-1
+    - Optimization and correction of partial UTF-8 decoding, which is now
+      partial ISO-8859-1 decoding.
 CR: HTTP(S) CGI: Optimization and corrections
     - Optimization when accessing data streams
     - Optimization in handling blocking CGI processes

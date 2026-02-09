@@ -360,11 +360,17 @@ public class Settings implements Cloneable {
             return this;
 
         // Sections are combined or, if necessary, newly created
-        Enumeration enumeration = Collections.enumeration(this.entries.keySet());
+        Enumeration enumeration = Collections.enumeration(settings.entries.keySet());
         while (enumeration.hasMoreElements()) {
             String entry = (String)enumeration.nextElement();
-            Section section = settings.get(entry);
-            this.set(entry, section.merge(this.get(entry)));
+            Section source = (Section)settings.get(entry).clone();
+            Section target = this.get(entry);
+            if (target == null)
+                target = new Section(this.smart);
+            this.set(entry, target.merge(source));
+            if (target.size() <= 0
+                    && this.smart)
+                this.remove(entry);
         }
         
         return this;

@@ -429,9 +429,10 @@ public class Section implements Cloneable {
          while (enumeration.hasMoreElements()) {
              String entry = (String)enumeration.nextElement();
              String value = section.get(entry);
-             if (value.length() > 0
-                     || !this.smart)             
-                 this.set(entry, value);
+             this.set(entry, value);
+             if (value.length() <= 0
+                     && this.smart)
+                 this.remove(entry);
          }
          
          return this;

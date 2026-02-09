@@ -5,8 +5,7 @@ var Locale = java.util.Locale;
 
 System.out.print("HTTP/1.0 200\r\n\r\n");
 var file = new java.lang.String(System.getenv().get("HTTP_FILE") || "");
-file = file.matches("^[^\\\\/].*$") ? new File(new File("../../.."), file) : new File(file);
-file = file.getCanonicalFile();
+file = new File(file).getCanonicalFile();
 if (file.exists()) {
     var format = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.US);
     System.out.print(format.format(file.lastModified()));

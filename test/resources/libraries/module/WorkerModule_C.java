@@ -38,7 +38,7 @@ public class WorkerModule_C extends AbstractWorkerModule {
         
         worker.status = 3;
         
-        //the header is built and written out
+        // header is built and written out
         String string = ("HTTP/1.0 ").concat("003 Test ok").concat("\r\n");
         string = string.concat("Server: ").concat(worker.environmentMap.get("SERVER_SOFTWARE")).concat("\r\n");
         String method = new Throwable().getStackTrace()[1].getMethodName();
@@ -66,7 +66,7 @@ public class WorkerModule_C extends AbstractWorkerModule {
                 && worker.environmentMap.containsKey(value))
             string = string.concat(worker.environmentMap.get(value));            
 
-        //the connection is marked as closed
+        // connection is marked as closed
         worker.control = false;
         worker.output.write(string.getBytes());
     }

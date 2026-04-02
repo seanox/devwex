@@ -208,69 +208,69 @@ public class ServiceServerTest extends AbstractStageTest {
         
         final String output = AbstractStage.getOutputStreamCapture().toString();
         
-        //Server 11 has no logic, but the API is implemented correctly
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_11"));
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_11"));
+        // Server 11 has no logic, but the API is implemented correctly
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_11"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_11"));
         
-        //Server 12 the destroy-method is not implemented correctly
-        Assert.assertTrue(output.contains("java.lang.NoSuchMethodException: Invalid interface"));
+        // Server 12 the destroy-method is not implemented correctly
+        Assert.assertTrue(output, output.contains("java.lang.NoSuchMethodException: Invalid interface"));
         
-        //Server 13 the expose-method has a different but compatible return type
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_13"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_13"));
+        // Server 13 the expose-method has a different but compatible return type
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_13"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_13"));
         
-        //Server 14 the constructor is not implemented correctly
-        Assert.assertTrue(output.contains("java.lang.NoSuchMethodException: Invalid interface"));        
+        // Server 14 the constructor is not implemented correctly
+        Assert.assertTrue(output, output.contains("java.lang.NoSuchMethodException: Invalid interface"));
         
-        //Server 15 the constructor is not implemented correctly, looks compatible but is it not
-        Assert.assertTrue(output.contains("java.lang.NoSuchMethodException: Invalid interface"));          
+        // Server 15 the constructor is not implemented correctly, looks compatible but is it not
+        Assert.assertTrue(output, output.contains("java.lang.NoSuchMethodException: Invalid interface"));
         
-        //Server 16 the constructor is not implemented correctly
-        Assert.assertTrue(output.contains("java.lang.NoSuchMethodException: Invalid interface"));  
+        // Server 16 the constructor is not implemented correctly
+        Assert.assertTrue(output, output.contains("java.lang.NoSuchMethodException: Invalid interface"));
         
-        //Server 17 has not implemented java.lang.Runnable, but it's allowed
-        Assert.assertTrue(output.matches("(?si)^.*\\QSERVICE INITIATE ACCEPTANCE_17\\E[\\r\\n]+[\\d\\- :]+SERVICE INITIATE ACCEPTANCE_18.*$"));
+        // Server 17 has not implemented java.lang.Runnable, but it's allowed
+        Assert.assertTrue(output, output.matches("(?si)^.*\\QSERVICE INITIATE ACCEPTANCE_17\\E[\\r\\n]+[\\d\\- :]+SERVICE INITIATE ACCEPTANCE_18.*$"));
         
-        //Server 18 has implemented java.lang.Thread, not nice but it is ok
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_18"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_18"));
+        // Server 18 has implemented java.lang.Thread, not nice but it is ok
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_18"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_18"));
         
-        //Server 19 has implemented java.lang.Thread, but  not the run-method, but this is default implemented in java.lang.Thread
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_19"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_19"));   
+        // Server 19 has implemented java.lang.Thread, but  not the run-method, but this is default implemented in java.lang.Thread
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_19"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_19"));
         
-        //Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_20"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_20"));         
+        // Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_20"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_20"));
 
-        //Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_21"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_21"));         
+        // Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_21"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_21"));
         
-        //Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
-        //    optionally the destroy-method can have a return value/type, this is ignored
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_22"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_22")); 
+        // Server 21 the implementation of the expose-method is optional, errors in the signature are tolerated
+        //     optionally the destroy-method can have a return value/type, this is ignored
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_22"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_22"));
         
-        //Server 31 the definition of the scope is a class and supported
-        Assert.assertFalse(output.contains("Exception: server.Acceptance_30"));        
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_3X"));
+        // Server 31 the definition of the scope is a class and supported
+        Assert.assertFalse(output, output.contains("Exception: server.Acceptance_30"));
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_3X"));
         
-        //Server 32 the definition of the scope is not clean, it must be a valid package
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_31"));
-        Assert.assertTrue(output.contains("ClassNotFoundException: server.Acceptance_31x"));
+        // Server 32 the definition of the scope is not clean, it must be a valid package
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_31"));
+        Assert.assertTrue(output, output.contains("ClassNotFoundException: server.Acceptance_31x"));
 
-        //Server 33 the definition of the scope is not clean, it must be a valid package
-        Assert.assertTrue(output.contains("SERVICE INITIATE ACCEPTANCE_32"));
-        Assert.assertTrue(output.contains("ClassNotFoundException: server."));
+        // Server 33 the definition of the scope is not clean, it must be a valid package
+        Assert.assertTrue(output, output.contains("SERVICE INITIATE ACCEPTANCE_32"));
+        Assert.assertTrue(output, output.contains("ClassNotFoundException: server."));
         
-        //servers and virtuals must be detected correctly
-        //even if the use of blanks in the section is unclean
-        Assert.assertTrue(output.matches("(?is).*SERVICE\\s+INITIATE\\s+ACCEPTANCE.*"));
-        Assert.assertFalse(output.matches("(?is).*SERVICE\\s+INITIATE\\s+VIRTUAL.*"));
-        Assert.assertTrue(output.matches("(?is).*:182[0-9][0-9].*"));
-        Assert.assertTrue(output.matches("(?is).*:1831[3-5].*"));
-        Assert.assertFalse(output.matches("(?is).*:1831[0-26-9].*"));
-        Assert.assertFalse(output.matches("(?is).*:1832[0-9].*"));        
+        // servers and virtuals must be detected correctly
+        // even if the use of blanks in the section is unclean
+        Assert.assertTrue(output, output.matches("(?is).*SERVICE\\s+INITIATE\\s+ACCEPTANCE.*"));
+        Assert.assertFalse(output, output.matches("(?is).*SERVICE\\s+INITIATE\\s+VIRTUAL.*"));
+        Assert.assertTrue(output, output.matches("(?is).*:182[0-9][0-9].*"));
+        Assert.assertTrue(output, output.matches("(?is).*:1831[3-5].*"));
+        Assert.assertFalse(output, output.matches("(?is).*:1831[0-26-9].*"));
+        Assert.assertFalse(output, output.matches("(?is).*:1832[0-9].*"));
     }
 }

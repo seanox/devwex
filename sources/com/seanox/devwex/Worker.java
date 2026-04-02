@@ -1118,7 +1118,7 @@ class Worker implements Runnable {
         this.header = buffer.toString("ISO-8859-1").trim();
 
         // Part 2 - The request header is parsed, validated and the environment
-        //is prepared for the HTTP method.
+        // is prepared for the HTTP method.
 
         // The additional header fields are primarily determined for filters and
         // are not part of the (X)CGI, but only the relevant parameters like

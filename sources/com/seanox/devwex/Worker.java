@@ -1228,7 +1228,11 @@ class Worker implements Runnable {
         }
         
         // SO timeout is set for the ServerSocket final
-        this.accept.setSoTimeout((int)this.timeout);
+        // Starting with Java 11, it is possible that the socket has already
+        // been closed at this point due to a SocketTimeoutException, which
+        // could otherwise cause an error.
+        if (!this.accept.isClosed())
+            this.accept.setSoTimeout((int)this.timeout);
         
         File file;
 

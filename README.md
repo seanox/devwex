@@ -68,7 +68,7 @@ __Seanox__.
 
 This software is licensed under the __Apache License, Version 2.0__.
 
-__Copyright (C) 2026 Seanox Software Solutions__
+__Copyright (C) 2025 Seanox Software Solutions__
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
@@ -85,8 +85,8 @@ specific language governing permissions and limitations under the License.
 - Java Runtime 8.x or higher
 
 # Downloads
-[Seanox Devwex 5.9.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.9.0.zip)  
-[Seanox Devwex 5.9.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.9.0-win.zip)  
+[Seanox Devwex 5.8.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.8.0.zip)  
+[Seanox Devwex 5.8.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.8.0-win.zip)  
 
 # Installation
 Unpack the zip file to any location in the file system.  
@@ -104,20 +104,13 @@ Go to the program directory and start the program directly or by script.
 - [Development](manual/development.md)
 
 # Changes
-## 5.9.0 20260411  
-NT: Celebrating 25 years of Devwex!  
+## 5.8.0 20251231  
+NT: Competition: 25 years Devwex -- raffle one of 10x 3.5" disks.  
 BF: Review: Optimization and corrections  
-BF: Windows: Correction in the determination of platform architecture  
-BF: Review: Removal of dependency on ISO-8859-1  
-BF: Settings: Correction of the merge method  
-CR: HTTP(S) CGI: Optimization and corrections  
-CR: HTTP(S): Optimization and corrections  
-CR: HTTP(S) Directory Index: Optimization and corrections  
-CR: Review: Initialize refactored in Settings  
-CR: Review: Facelift status / index / templates  
-CR: Windows: Removal of the 32-bit service  
-CR: Documentation: Added installation as a service for Linux and macOS  
-CR: Configuration: Added support of # as alternative comment symbol  
+BF: HTTP(S): Update / standardization of HTTP status messages  
+BF: HTTP(S): Omission of status 424, which was simply incorrect  
+CR: Test: Integration of JaCoCo (Java Code Coverage)  
+CR: Service: Optimization of logging output  
 
 [Read more](https://raw.githubusercontent.com/seanox/devwex/master/CHANGES)
 

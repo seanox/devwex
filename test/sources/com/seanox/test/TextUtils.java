@@ -23,7 +23,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.Arrays;
-import java.util.Objects;
 
 /** Utilities for text and strings. */
 public class TextUtils {
@@ -177,28 +176,5 @@ public class TextUtils {
         final byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return new String(bytes, charset);
-    }
-
-    /**
-     * Checks whether the given text contains a subsequence that matches
-     * the provided regular expression.
-     *
-     * In contrast to {@link String#matches(String)}, this method does no
-     * require the entire string to match the pattern. Instead, it uses {@link
-     *     java.util.regex.Matcher#find()} to search for any occurrence of the
-     * pattern within the text.
-     *
-     * @param text  text to search
-     * @param regex regular expression to search
-     * @return {@code true} if any part of the text matches the regular
-     *     expression, otherwise {@code false}
-     */
-    public static boolean contains(final String text, final String regex) {
-        if (Objects.isNull(text)
-                || Objects.isNull(regex))
-            return false;
-        return java.util.regex.Pattern.compile(regex)
-                .matcher(text)
-                .find();
     }
 }

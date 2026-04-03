@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 import com.seanox.test.Pattern;
-import com.seanox.test.TextUtils;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
 public class WorkerConfigurationTest extends AbstractStageRequestTest {
@@ -55,7 +54,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
         Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body, TextUtils.contains(body, "\\RSERVER_NAME=vHa\\R"));
+        Assert.assertTrue(body, body.contains("\r\nSERVER_NAME=vHa\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -79,7 +78,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
         Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertFalse(body, TextUtils.contains(body, "\\RSERVER_NAME\\R"));
+        Assert.assertFalse(body, body.contains("\r\nSERVER_NAME\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -102,7 +101,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         final String header = response.replaceAll(Pattern.HTTP_RESPONSE, "$1");
         Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertFalse(body, TextUtils.contains(body, "\\RSERVER_NAME\\R"));
+        Assert.assertFalse(body, body.contains("\r\nSERVER_NAME\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -127,7 +126,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(header, header.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
         for (final File file : new File(AbstractStage.getRootStage(), "..").listFiles())
-            Assert.assertTrue(body, TextUtils.contains(body, "\\Rname:\\Q" + file.getName() + "\\E\\R"));
+            Assert.assertTrue(body, body.contains("\r\nname:" + file.getName() + "\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -178,7 +177,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE));
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED));     
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body, TextUtils.contains(body, "\\Rindex_2\\.html\\R"));
+        Assert.assertTrue(body, body.contains("\r\nindex_2.html\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));          
@@ -205,8 +204,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));     
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body, TextUtils.contains(body, "\\Rindex of: /test_c\\R"));
-        Assert.assertTrue(body, TextUtils.contains(body, "\\Rtemplate: /system_vh_A/index\\.html\\R"));
+        Assert.assertTrue(body, body.contains("\r\nindex of: /test_c\r\n"));
+        Assert.assertTrue(body, body.contains("\r\ntemplate: /system_vh_A/index.html\r\n"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
@@ -457,7 +456,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18181", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertTrue(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
+        Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
 
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
@@ -492,8 +491,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
         if (this.isWindows())
-            Assert.assertFalse(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
-        else Assert.assertTrue(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
+            Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
+        else Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
 
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
@@ -524,8 +523,8 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_200));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
         if (this.isWindows())
-            Assert.assertFalse(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
-        else Assert.assertTrue(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
+            Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
+        else Assert.assertTrue(body, body.contains("\r\nname:hidden.txt\r\n"));
         
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";
@@ -555,7 +554,7 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         response = AbstractStageRequestTest.sendRequest("127.0.0.1:18184", request);
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_STATUS_403));
         body = response.replaceAll(Pattern.HTTP_RESPONSE, "$2");
-        Assert.assertFalse(body, TextUtils.contains(body, "\\Rname:hidden\\.txt\\R"));
+        Assert.assertFalse(body, body.contains("\r\nname:hidden.txt\r\n"));
 
         request = "GET /commons/hidden.txt HTTP/1.0\r\n"
                 + "\r\n";

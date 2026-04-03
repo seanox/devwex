@@ -30,7 +30,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.seanox.test.Pattern;
-import com.seanox.test.TextUtils;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
 public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
@@ -76,8 +75,8 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
         Assert.assertFalse(header.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));
 
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(TextUtils.contains(body, "\\Rindex of: \\R"));
-        Assert.assertTrue(TextUtils.contains(body, "\\Rorder by: na\\R"));
+        Assert.assertTrue(body.contains("\r\nindex of: \r\n"));
+        Assert.assertTrue(body.contains("\r\norder by: na\r\n"));
         Assert.assertFalse(body.contains("?"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
@@ -104,8 +103,8 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
         Assert.assertFalse(header.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));
 
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(TextUtils.contains(body, "\\Rindex of: \\R"));
-        Assert.assertTrue(TextUtils.contains(body, "\\Rorder by: da\\R"));
+        Assert.assertTrue(body.contains("\r\nindex of: \r\n"));
+        Assert.assertTrue(body.contains("\r\norder by: da\r\n"));
         Assert.assertFalse(body.contains("?"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
@@ -133,8 +132,8 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
         Assert.assertFalse(header.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));
 
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(TextUtils.contains(body, "\\Rindex of: /test_a/test\\R"));
-        Assert.assertTrue(TextUtils.contains(body, "\\Rorder by: na\\R"));
+        Assert.assertTrue(body.contains("\r\nindex of: /test_a/test\r\n"));
+        Assert.assertTrue(body.contains("\r\norder by: na\r\n"));
         Assert.assertFalse(body.contains("?"));
 
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
@@ -157,15 +156,15 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
                     + "\r\n";
             final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18080", request);
             if (loop == 1) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: xna\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
                 Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 2) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: na\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
                 Assert.assertTrue(response.contains("mime"));
             }
             if (loop == 3) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: na\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
                 Assert.assertTrue(response.contains("mime"));
             }
         }
@@ -191,15 +190,15 @@ public class WorkerDirectoryIndexTest extends AbstractStageRequestTest {
                     + "\r\n";
             final String response = AbstractStageRequestTest.sendRequest("127.0.0.1:18182", request);
             if (loop == 1) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: xna\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
                 Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 2) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: xna\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: xna\r\n"));
                 Assert.assertFalse(response.contains("mime"));
             }
             if (loop == 3) {
-                Assert.assertTrue(TextUtils.contains(response, "\\Rorder by: na\\R"));
+                Assert.assertTrue(response.contains("\r\norder by: na\r\n"));
                 Assert.assertTrue(response.contains("mime"));
             }
         }

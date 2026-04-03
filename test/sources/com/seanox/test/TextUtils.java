@@ -22,8 +22,8 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 
 /** Utilities for text and strings. */
 public class TextUtils {
@@ -37,33 +37,33 @@ public class TextUtils {
      * hexadecimal ({@code \u0000-\uFFFF}) after a backslash. The method works
      * tolerant and keeps incorrect sequences. If {@code null} is passed,
      * {@code null} is returned.
-     * @param  string string to be decoded 
-     * @return the decoded string
+     * @param  text text to be decoded
+     * @return the decoded text
      */
-    public static String unescape(String string) {
+    public static String unescape(String text) {
 
-        if (string == null)
+        if (text == null)
             return null;
         
         final byte[] codex = ("\"'\\bfnrt\"'\\\b\f\n\r\t").getBytes();
-        final int length = string.length();
+        final int length = text.length();
         final byte[] bytes = new byte[length *2];
         
         int count = 0;
         for (int loop = 0; loop < length; loop++) {
-            int code = string.charAt(loop);
+            int code = text.charAt(loop);
             if (code == '\\') {
                 if (loop +1 < length) {
-                    int index = Arrays.binarySearch(codex, (byte)string.charAt(loop +1));
+                    int index = Arrays.binarySearch(codex, (byte)text.charAt(loop +1));
                     if (index >= 0
                             && index < 8) {
                         code = codex[index +8];                    
                         loop += 1;
                     } else if (loop +5 < length
-                            && string.charAt(loop +1) == 'u') {
+                            && text.charAt(loop +1) == 'u') {
                         loop += 5;
                         try {
-                            index = Integer.parseInt(string.substring(loop -4, loop), 16);
+                            index = Integer.parseInt(text.substring(loop -4, loop), 16);
                             if (index > 0xFF)
                                 bytes[count++] = (byte)((index >>> 8) & 0xFF);
                             bytes[count++] = (byte)(index & 0xFF);
@@ -74,11 +74,11 @@ public class TextUtils {
                     } else {
                         int cache = 0;
                         for (index = 0; index < 3 && loop +1 < length; index++) {
-                            if (string.charAt(loop +1) < '0'
-                                    || string.charAt(loop +1) > '7'
-                                    || (cache << 3) +string.charAt(loop +1) - '0' > 0xFF)
+                            if (text.charAt(loop +1) < '0'
+                                    || text.charAt(loop +1) > '7'
+                                    || (cache << 3) +text.charAt(loop +1) - '0' > 0xFF)
                                 break;
-                            cache = (cache << 3) +string.charAt(loop +1) - '0';
+                            cache = (cache << 3) +text.charAt(loop +1) - '0';
                             code  = cache;
                             loop++;
                         }
@@ -101,22 +101,22 @@ public class TextUtils {
      *   <li>slash + four bytes hexadecimal (0x100-0xFFFF)</li>
      * </ul>
      * If {@code null} is passed, {@code null} is returned.
-     * @param  string string to be escaped
-     * @return the escaped string
+     * @param  text text to be escaped
+     * @return the escaped text
      */
-    public static String escape(String string) {
+    public static String escape(String text) {
         
-        if (string == null)
+        if (text == null)
             return null;   
         
         final byte[] codec = ("0123456789ABCDEF").getBytes();
         final byte[] codex = ("\b\t\n\f\r\"'\\btnfr\"'\\").getBytes();
-        final int length = string.length();
+        final int length = text.length();
         final byte[] cache = new byte[length *6];
         
         int count = 0;
         for (int loop = 0; loop < length; loop++) {
-            final int code = string.charAt(loop);
+            final int code = text.charAt(loop);
             final int cursor = Arrays.binarySearch(codex, (byte)code);
             if (cursor >= 0
                     && cursor < 8) {
@@ -144,7 +144,7 @@ public class TextUtils {
      * Normalize a {@link String} for encoding into the specified {@link
      *     Charset}.
      *
-     * This method encodes the provided {@code string} using a {@link
+     * This method encodes the provided {@code text} using a {@link
      *     java.nio.charset.CharsetEncoder} configured with {@link
      *     java.nio.charset.CodingErrorAction#REPLACE} for both malformed input
      * and unmappable characters. Characters that cannot be represented in the
@@ -156,11 +156,11 @@ public class TextUtils {
      * The method simulates the encoding behavior before UTF?8 was introduced as
      * the default character set in Java.
      *
-     * @param string the input string to normalize; must not be {@code null}
-     * @param charset the target charset used for encoding and for
-     *     reconstructing the returned string; must not be {@code null}
+     * @param text input text to normalize; must not be {@code null}
+     * @param charset target charset used for encoding and for
+     *     reconstructing the returned text; must not be {@code null}
      * @return a {@link String} that represents the byte sequence produced by
-     *     encoding {@code string} with the given {@code charset} and
+     *     encoding {@code text} with the given {@code charset} and
      *     replacement policy; non?representable characters have been replaced
      *     according to the encoder's replacement byte sequence
      * @throws CharacterCodingException if an encoding error occurs during the
@@ -168,14 +168,37 @@ public class TextUtils {
      *     but declared for callers that wish to handle encoding failures
      *     explicitly
      */
-     public static String normalize(final String string, final Charset charset)
+     public static String normalize(final String text, final Charset charset)
             throws CharacterCodingException {
         final CharsetEncoder encoder = charset.newEncoder()
                 .onUnmappableCharacter(CodingErrorAction.REPLACE)
                 .onMalformedInput(CodingErrorAction.REPLACE);
-        final ByteBuffer buffer = encoder.encode(CharBuffer.wrap(string));
+        final ByteBuffer buffer = encoder.encode(CharBuffer.wrap(text));
         final byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return new String(bytes, charset);
+    }
+
+    /**
+     * Checks whether the given text contains a subsequence that matches
+     * the provided regular expression.
+     *
+     * In contrast to {@link String#matches(String)}, this method does no
+     * require the entire string to match the pattern. Instead, it uses {@link
+     *     java.util.regex.Matcher#find()} to search for any occurrence of the
+     * pattern within the text.
+     *
+     * @param text  text to search
+     * @param regex regular expression to search
+     * @return {@code true} if any part of the text matches the regular
+     *     expression, otherwise {@code false}
+     */
+    public static boolean contains(final String text, final String regex) {
+        if (Objects.isNull(text)
+                || Objects.isNull(regex))
+            return false;
+        return java.util.regex.Pattern.compile(regex)
+                .matcher(text)
+                .find();
     }
 }

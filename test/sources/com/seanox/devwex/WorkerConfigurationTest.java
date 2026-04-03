@@ -33,6 +33,7 @@ import org.junit.Test;
 
 import com.seanox.test.HttpUtils;
 import com.seanox.test.Pattern;
+import com.seanox.test.TextUtils;
 
 /** Test cases for {@link com.seanox.devwex.Worker}. */
 public class WorkerConfigurationTest extends AbstractStageRequestTest {
@@ -205,9 +206,9 @@ public class WorkerConfigurationTest extends AbstractStageRequestTest {
         Assert.assertTrue(response.matches(Pattern.HTTP_RESPONSE_CONTENT_TYPE));
         Assert.assertFalse(response.matches(Pattern.HTTP_RESPONSE_LAST_MODIFIED_DIFFUSE));     
         final String body = "\r\n" + response.replaceAll(Pattern.HTTP_RESPONSE, "$2") + "\r\n";
-        Assert.assertTrue(body, body.contains("\r\nindex of: /test_c\r\n"));
-        Assert.assertTrue(body, body.contains("\r\ntemplate: /system_vh_A/index.html\r\n"));
-        
+        Assert.assertTrue(body, TextUtils.contains(body, "\\Rindex of: /test_c\\R"));
+        Assert.assertTrue(body, TextUtils.contains(body, "\\Rtemplate: /system_vh_A/index\\.html\\R"));
+
         final String accessLog = AbstractStage.getAccessStreamCapture().fetch(ACCESS_LOG_RESPONSE_UUID(response));
         Assert.assertTrue(accessLog, accessLog.matches(Pattern.ACCESS_LOG_STATUS_200));  
     }    

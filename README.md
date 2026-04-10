@@ -85,8 +85,8 @@ specific language governing permissions and limitations under the License.
 - Java Runtime 8.x or higher
 
 # Downloads
-[Seanox Devwex 5.9.0](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.9.0.zip)  
-[Seanox Devwex 5.9.0 Windows](https://github.com/seanox/devwex/releases/download/5.4.0/seanox-devwex-5.9.0-win.zip)  
+[Seanox Devwex 5.9.0](https://github.com/seanox/devwex/releases/download/5.9.0/seanox-devwex-5.9.0.zip)  
+[Seanox Devwex 5.9.0 Windows](https://github.com/seanox/devwex/releases/download/5.9.0/seanox-devwex-5.9.0-win.zip)  
 
 # Installation
 Unpack the zip file to any location in the file system.  

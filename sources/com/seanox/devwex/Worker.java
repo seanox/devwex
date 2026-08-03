@@ -1814,8 +1814,8 @@ class Worker implements Runnable {
                     // and the response does not start with HTTP/STATUS
                     if (!this.control) {
                         
-                        // Isolation defines the time from the last output
-                        // when strict timeout is used to detect blocking data
+                        // Timelock defines the time from the last output when
+                        // strict timeout is used to detect blocking data
                         // streams, because there is no socket-based timeout.
                         // If the stream is still reacting at the end, the time
                         // is reset.
@@ -2057,7 +2057,7 @@ class Worker implements Runnable {
                 // connection is marked as used
                 this.control = false;
                 
-                // Isolation defines the time from the last output when strict
+                // Timelock defines the time from the last output when strict
                 // timeout is used to detect blocking data streams, because
                 // there is no socket-based timeout. If the stream is still
                 // reacting at the end, the time is reset.
@@ -2581,7 +2581,7 @@ class Worker implements Runnable {
     }
     
     /** Marks the worker for disposable in case of inactivity. */
-    void isolate() {
+    void retire() {
         if (this.accept == null
                 && this.socket != null)
             this.socket = null;

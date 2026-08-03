@@ -192,7 +192,7 @@ public class Server implements Runnable {
 
                 // Registered workers are monitored
                 // - expired workers are removed
-                // - unused / excess workers are isolated and then terminated
+                // - unused / excess workers are retired and then disposed
                 // - workers without running thread are removed
 
                 Enumeration enumeration = ((Vector)this.worker.clone()).elements();
@@ -206,7 +206,7 @@ public class Server implements Runnable {
                     Worker worker = (Worker)objects[0];
                     if (worker.available()
                             && control)
-                        worker.isolate();
+                        worker.retire();
                     if (worker.available()
                             && thread.isAlive())
                         control = true;

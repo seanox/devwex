@@ -93,15 +93,12 @@ Unpack the zip file to any location in the file system.
 Go to the program directory and start the program directly or by script.
 
 # Manual
-- [Description](manual/description.md)
-- [License Terms](manual/license-terms.md)
-- [Features](manual/features.md)
-- [System Requirement](manual/system-requirement.md)
-- [Installation](manual/installation.md)
-- [Configuration](manual/configuration.md)
-- [Starting and Stopping](manual/starting-and-stopping.md)
-- [Control and Monitoring](manual/control-and-monitoring.md)
-- [Development](manual/development.md)
+- [Description](https://seanox.github.io/devwex/manual/description.html)
+- [Installation](https://seanox.github.io/devwex/manual/installation.html)
+- [Configuration](https://seanox.github.io/devwex/manual/configuration.html)
+- [Starting and Stopping](https://seanox.github.io/devwex/manual/starting-and-stopping.html)
+- [Control and Monitoring](https://seanox.github.io/devwex/manual/control-and-monitoring.html)
+- [Development](https://seanox.github.io/devwex/manual/development.html)
 
 # Changes
 ## 5.9.0 20260411  

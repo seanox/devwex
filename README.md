@@ -93,7 +93,6 @@ Unpack the zip file to any location in the file system.
 Go to the program directory and start the program directly or by script.
 
 # Manual
-- [Description](https://seanox.github.io/devwex/manual/description.html)
 - [Installation](https://seanox.github.io/devwex/manual/installation.html)
 - [Configuration](https://seanox.github.io/devwex/manual/configuration.html)
 - [Starting and Stopping](https://seanox.github.io/devwex/manual/starting-and-stopping.html)
